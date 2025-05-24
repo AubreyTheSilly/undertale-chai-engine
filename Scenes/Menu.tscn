@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://cwiv62vvs8py0"]
+
+[ext_resource type="Script" path="res://Scripts/Scenes/Menu.gd" id="1_8gt1t"]
+[ext_resource type="Texture2D" uid="uid://ymrj2ed6thyq" path="res://Sprites/Title.png" id="1_85vit"]
+[ext_resource type="PackedScene" uid="uid://dmxvgtrvudiby" path="res://Scenes/Objects/Button.tscn" id="2_rtq80"]
+[ext_resource type="PackedScene" uid="uid://emsk3e8l8hao" path="res://Scenes/NewProject.tscn" id="4_pssre"]
+[ext_resource type="PackedScene" uid="uid://b8sq8elly8sgi" path="res://Scenes/OpenProject.tscn" id="5_sovwg"]
+
+[node name="Menu" type="Node2D"]
+script = ExtResource("1_8gt1t")
+
+[node name="Title" type="Sprite2D" parent="."]
+position = Vector2(160, 55)
+scale = Vector2(3, 3)
+texture = ExtResource("1_85vit")
+
+[node name="New" parent="." instance=ExtResource("2_rtq80")]
+position = Vector2(160, 115)
+size = Vector2(120, 40)
+text = "New project"
+
+[node name="Open" parent="." instance=ExtResource("2_rtq80")]
+position = Vector2(160, 165)
+size = Vector2(120, 40)
+text = "Open project"
+
+[node name="Quit" parent="." instance=ExtResource("2_rtq80")]
+position = Vector2(160, 215)
+size = Vector2(120, 40)
+text = "Quit"
+
+[node name="NewProject" parent="." instance=ExtResource("4_pssre")]
+visible = false
+
+[node name="OpenProject" parent="." instance=ExtResource("5_sovwg")]
+visible = false
+
+[connection signal="click" from="New" to="." method="_on_new_click"]
+[connection signal="click" from="Open" to="." method="_on_open_click"]
+[connection signal="click" from="Quit" to="." method="_on_quit_click"]

@@ -1,0 +1,17 @@
+extends GPUParticles2D
+
+func _ready() -> void:
+	one_shot = true
+
+func start() -> void:
+	restart()
+	emitting = true
+	var frac: float = 0.8
+	set_progress(0.0)
+
+	var tween := create_tween()
+	tween.tween_method(set_progress, 0.0, 1.0, lifetime * (1.0 - frac))
+	#tween.tween_callback(start).set_delay(lifetime * frac)
+
+func set_progress(value: float):
+	process_material.set_shader_parameter("progress", value)

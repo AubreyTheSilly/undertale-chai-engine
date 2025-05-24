@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://51lu7uaohc4j"]
+
+[ext_resource type="Script" path="res://Scripts/Objects/BattleButton.gd" id="1_vo1yi"]
+[ext_resource type="Texture2D" uid="uid://bky2jtllx2sm2" path="res://Sprites/Battle/Buttons/spr_emptybt_0.png" id="2_xcq4v"]
+
+[node name="BattleButton" type="Node2D"]
+script = ExtResource("1_vo1yi")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_xcq4v")

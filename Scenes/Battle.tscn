@@ -1,0 +1,252 @@
+[gd_scene load_steps=28 format=3 uid="uid://d3s7r8bmqm08b"]
+
+[ext_resource type="Script" path="res://Scripts/Scenes/Battle.gd" id="1_qxqxx"]
+[ext_resource type="Script" path="res://Scripts/Objects/BattleDialogueBox.gd" id="2_3g107"]
+[ext_resource type="Texture2D" uid="uid://bpn2e0kssrbga" path="res://Sprites/Battle/spr_battlebg_0.png" id="3_is2k6"]
+[ext_resource type="Texture2D" uid="uid://ciiui7kmdomoi" path="res://Sprites/UIBox.png" id="3_mf2ya"]
+[ext_resource type="Script" path="res://Scripts/Objects/AttackBox.gd" id="5_dllax"]
+[ext_resource type="AudioStream" uid="uid://jhwcijrtbjav" path="res://Audio/BGM/mus_prebattle1.ogg" id="5_nu686"]
+[ext_resource type="PackedScene" uid="uid://51lu7uaohc4j" path="res://Scenes/Objects/BattleButton.tscn" id="8_j2fg1"]
+[ext_resource type="Texture2D" uid="uid://db3xb8pxayasp" path="res://Sprites/Battle/Buttons/spr_fightbt_0.png" id="9_1iuas"]
+[ext_resource type="Texture2D" uid="uid://c462oie8gqmdf" path="res://Sprites/Battle/Buttons/spr_fightbt_1.png" id="10_3xx1h"]
+[ext_resource type="Texture2D" uid="uid://bh4rc4a22qrwc" path="res://Sprites/Battle/Buttons/spr_actbt_0.png" id="11_fdlm1"]
+[ext_resource type="Texture2D" uid="uid://dc02kscou060m" path="res://Sprites/Battle/Buttons/spr_actbt_1.png" id="12_btnny"]
+[ext_resource type="Texture2D" uid="uid://cp2oh7dq8dros" path="res://Sprites/Battle/Buttons/spr_itembt_0.png" id="13_6f4sl"]
+[ext_resource type="Texture2D" uid="uid://bol3elqfquojh" path="res://Sprites/Battle/Buttons/spr_itembt_1.png" id="14_nko56"]
+[ext_resource type="Texture2D" uid="uid://dmg3qfdeg52bs" path="res://Sprites/Battle/Buttons/spr_mercybt_0.png" id="15_u7jef"]
+[ext_resource type="FontFile" uid="uid://oijfl8puq15f" path="res://Fonts/undertale-mars-needs-cunnilingus.otf" id="15_wceb6"]
+[ext_resource type="Texture2D" uid="uid://cp1uj3uh033w1" path="res://Sprites/Battle/Buttons/spr_mercybt_1.png" id="16_hcrc1"]
+[ext_resource type="Texture2D" uid="uid://bhwyf8lqg06du" path="res://Sprites/Battle/spr_hpname_0.png" id="16_itjnc"]
+[ext_resource type="Texture2D" uid="uid://cjxulcjcodig0" path="res://Sprites/Battle/spr_health_1.png" id="17_sx1gs"]
+[ext_resource type="Texture2D" uid="uid://c6gy64rfkuyaq" path="res://Sprites/Battle/spr_health_0.png" id="18_hioeg"]
+[ext_resource type="Texture2D" uid="uid://b0rk7jclh5ydd" path="res://Sprites/Battle/spr_heart_0.png" id="21_hn3x6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iwfsq"]
+size = Vector2(3, 70.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cxxln"]
+size = Vector2(3, 70.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8s1ob"]
+size = Vector2(288, 3)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_28qgs"]
+size = Vector2(288, 3)
+
+[sub_resource type="LabelSettings" id="LabelSettings_durc4"]
+font_size = 13
+
+[sub_resource type="FontVariation" id="FontVariation_gind8"]
+base_font = ExtResource("15_wceb6")
+
+[sub_resource type="LabelSettings" id="LabelSettings_kfxkq"]
+font = SubResource("FontVariation_gind8")
+font_size = 10
+
+[node name="Battle" type="Node2D"]
+script = ExtResource("1_qxqxx")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 320.0
+offset_bottom = 240.0
+color = Color(0, 0, 0, 1)
+
+[node name="background" type="Sprite2D" parent="."]
+position = Vector2(159.25, 63.5)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_is2k6")
+
+[node name="DialoguePlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="FlavorBox" type="Node2D" parent="."]
+position = Vector2(15.5, 124.5)
+script = ExtResource("2_3g107")
+
+[node name="DialogueRect" type="NinePatchRect" parent="FlavorBox"]
+offset_right = 288.0
+offset_bottom = 70.5
+texture = ExtResource("3_mf2ya")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+metadata/_edit_use_anchors_ = true
+
+[node name="AttackBox" type="StaticBody2D" parent="."]
+position = Vector2(15.5, 124.5)
+script = ExtResource("5_dllax")
+rect = Rect2(0, 0, 70.5, 70.5)
+
+[node name="AttackRect" type="NinePatchRect" parent="AttackBox"]
+offset_right = 288.0
+offset_bottom = 70.5
+texture = ExtResource("3_mf2ya")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackBox"]
+position = Vector2(1.5, 35.25)
+shape = SubResource("RectangleShape2D_iwfsq")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="AttackBox"]
+position = Vector2(286.5, 35.25)
+shape = SubResource("RectangleShape2D_cxxln")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="AttackBox"]
+position = Vector2(144, 1.5)
+shape = SubResource("RectangleShape2D_8s1ob")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="AttackBox"]
+position = Vector2(144, 69)
+shape = SubResource("RectangleShape2D_28qgs")
+
+[node name="ChoiceBox" type="Node2D" parent="."]
+visible = false
+position = Vector2(15.5, 124.5)
+
+[node name="DialogueRect" type="NinePatchRect" parent="ChoiceBox"]
+offset_right = 288.0
+offset_bottom = 70.5
+texture = ExtResource("3_mf2ya")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+metadata/_edit_use_anchors_ = true
+
+[node name="Choice0" type="Label" parent="ChoiceBox"]
+offset_left = 33.5
+offset_top = 9.5
+offset_right = 88.5
+offset_bottom = 29.5
+text = "* Check"
+label_settings = SubResource("LabelSettings_durc4")
+
+[node name="Choice1" type="Label" parent="ChoiceBox"]
+offset_left = 161.5
+offset_top = 9.5
+offset_right = 255.5
+offset_bottom = 29.5
+text = "* Compliment
+"
+label_settings = SubResource("LabelSettings_durc4")
+
+[node name="Choice2" type="Label" parent="ChoiceBox"]
+offset_left = 33.5
+offset_top = 25.5
+offset_right = 88.5
+offset_bottom = 45.5
+text = "* Threat"
+label_settings = SubResource("LabelSettings_durc4")
+
+[node name="Choice3" type="Label" parent="ChoiceBox"]
+offset_left = 161.5
+offset_top = 25.5
+offset_right = 255.5
+offset_bottom = 45.5
+text = "* Ribbit
+"
+label_settings = SubResource("LabelSettings_durc4")
+
+[node name="Choice4" type="Label" parent="ChoiceBox"]
+offset_left = 33.5
+offset_top = 41.5
+offset_right = 96.5
+offset_bottom = 61.5
+text = "* Flirt"
+label_settings = SubResource("LabelSettings_durc4")
+
+[node name="Choice5" type="Label" parent="ChoiceBox"]
+offset_left = 161.5
+offset_top = 41.5
+offset_right = 255.5
+offset_bottom = 61.5
+text = "* Die
+"
+label_settings = SubResource("LabelSettings_durc4")
+
+[node name="HeartChoice" type="Sprite2D" parent="ChoiceBox"]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(20, 18.5)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("21_hn3x6")
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_nu686")
+autoplay = true
+
+[node name="FightButton" parent="." instance=ExtResource("8_j2fg1")]
+position = Vector2(43, 226.5)
+NormalSprite = ExtResource("9_1iuas")
+SelectSprite = ExtResource("10_3xx1h")
+selected = true
+
+[node name="ActButton" parent="." instance=ExtResource("8_j2fg1")]
+position = Vector2(119.5, 226.5)
+NormalSprite = ExtResource("11_fdlm1")
+SelectSprite = ExtResource("12_btnny")
+
+[node name="ItemButton" parent="." instance=ExtResource("8_j2fg1")]
+position = Vector2(199.5, 226.5)
+NormalSprite = ExtResource("13_6f4sl")
+SelectSprite = ExtResource("14_nko56")
+
+[node name="MercyButton" parent="." instance=ExtResource("8_j2fg1")]
+position = Vector2(277, 226.5)
+NormalSprite = ExtResource("15_u7jef")
+SelectSprite = ExtResource("16_hcrc1")
+
+[node name="PlayerName" type="Label" parent="."]
+offset_left = 15.0
+offset_top = 200.0
+offset_right = 63.0
+offset_bottom = 220.0
+scale = Vector2(0.74, 0.74)
+text = "AAAAAA"
+label_settings = SubResource("LabelSettings_kfxkq")
+
+[node name="LV" type="Label" parent="."]
+offset_left = 73.0
+offset_top = 200.0
+offset_right = 121.0
+offset_bottom = 220.0
+scale = Vector2(0.74, 0.74)
+text = "LV 1"
+label_settings = SubResource("LabelSettings_kfxkq")
+
+[node name="HP" type="Label" parent="."]
+offset_left = 156.0
+offset_top = 200.0
+offset_right = 204.0
+offset_bottom = 220.0
+scale = Vector2(0.74, 0.74)
+text = "20 / 20"
+label_settings = SubResource("LabelSettings_kfxkq")
+
+[node name="HPText" type="Sprite2D" parent="."]
+position = Vector2(127.25, 205)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("16_itjnc")
+
+[node name="HPBar" type="TextureProgressBar" parent="."]
+offset_left = 137.0
+offset_top = 200.0
+offset_right = 149.5
+offset_bottom = 210.5
+max_value = 20.0
+value = 20.0
+rounded = true
+nine_patch_stretch = true
+texture_under = ExtResource("17_sx1gs")
+texture_progress = ExtResource("18_hioeg")
+
+[node name="HeartButtonChoice" type="Sprite2D" parent="."]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(23.5, 227)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("21_hn3x6")
+
+[node name="MenuSound" type="AudioStreamPlayer" parent="."]

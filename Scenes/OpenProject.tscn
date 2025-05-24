@@ -1,0 +1,63 @@
+[gd_scene load_steps=6 format=3 uid="uid://b8sq8elly8sgi"]
+
+[ext_resource type="Script" path="res://Scripts/Scenes/OpenProject.gd" id="1_veyqk"]
+[ext_resource type="PackedScene" uid="uid://dmxvgtrvudiby" path="res://Scenes/Objects/Button.tscn" id="2_0s5w2"]
+[ext_resource type="PackedScene" uid="uid://qwchgxq58tm1" path="res://Scenes/Objects/MouseArea.tscn" id="3_viir2"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_fwgci"]
+font_size = 13
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_2dl4f"]
+font_size = 13
+font_color = Color(100, 0, 0, 1)
+
+[node name="OpenProject" type="Window"]
+title = "Open  Project"
+initial_position = 2
+size = Vector2i(480, 240)
+transient = true
+exclusive = true
+popup_window = true
+script = ExtResource("1_veyqk")
+
+[node name="LineEdit" type="LineEdit" parent="."]
+offset_left = 40.0
+offset_top = 60.0
+offset_right = 440.0
+offset_bottom = 88.0
+tooltip_text = "Enter a directory. Must be valid."
+text = "C:/"
+
+[node name="Label" type="Label" parent="."]
+offset_top = 20.0
+offset_right = 480.0
+offset_bottom = 40.0
+text = "Choose a directory for the new project."
+label_settings = SubResource("LabelSettings_fwgci")
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="."]
+visible = false
+offset_top = 190.0
+offset_right = 480.0
+offset_bottom = 225.0
+text = "There was an error. Make sure the directory entered
+is correct!"
+label_settings = SubResource("LabelSettings_2dl4f")
+horizontal_alignment = 1
+
+[node name="Create" parent="." instance=ExtResource("2_0s5w2")]
+position = Vector2(150, 160)
+size = Vector2(120, 40)
+text = "Open"
+
+[node name="Back" parent="." instance=ExtResource("2_0s5w2")]
+position = Vector2(330, 160)
+size = Vector2(120, 40)
+text = "Back"
+
+[node name="MouseArea" parent="." instance=ExtResource("3_viir2")]
+
+[connection signal="click" from="Create" to="." method="_on_create_click"]
+[connection signal="click" from="Back" to="." method="_on_back_click"]

@@ -1,0 +1,1 @@
+{"enemyName":"Dummy","sprite":"spr_dummybattle_0","hurtSprite":"spr_dummybattle_1","hp":15,"atk":0,"def":0,"acts":["Check","Talk"],"randomdialogs":["* Dummy looks like it's going to[newline]  fall over.","* Dummy stands around absentmindedly."],"check":["* DUMMY - ATK 0 DEF 0[wait 2][newline]  A cotton heart and a button eye[newline]  You are the apple of my eye"]}

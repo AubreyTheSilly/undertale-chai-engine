@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://bniq2qap32r4q"]
+
+[ext_resource type="Texture2D" uid="uid://ciiui7kmdomoi" path="res://Sprites/UIBox.png" id="1_q084c"]
+[ext_resource type="Script" path="res://Scripts/Objects/DialogueHandler.gd" id="1_toi2p"]
+
+[node name="DialogueHandler" type="CanvasLayer"]
+visible = false
+script = ExtResource("1_toi2p")
+
+[node name="DialoguePlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="Box" type="Node2D" parent="."]
+position = Vector2(16, 160)
+
+[node name="DialogueRect" type="NinePatchRect" parent="Box"]
+offset_right = 289.0
+offset_bottom = 76.0
+texture = ExtResource("1_q084c")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+metadata/_edit_use_anchors_ = true
+
+[node name="Face" type="Sprite2D" parent="Box"]
+position = Vector2(36.5, 35)
