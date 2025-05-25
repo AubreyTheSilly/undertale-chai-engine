@@ -8,5 +8,8 @@ extends Resource
 @export var ATK := 0
 @export var DEF := 0
 @export var acts := ["Check","Talk"]
-@export var RandomDialogs = ["* Example text"]
+@export var RandomDialogs = ["Dialog[newline]test."]
 @export var Check := ["* DUMMY - ATK 0 DEF 0[wait 2][newline]  A cotton heart and a button eye,[newline]  you are the apple of my eye"]
+@export var InstantSpare := false
+@export var FlavorText = ["* Example text"]
+@export var BubbleType := "Small Right"

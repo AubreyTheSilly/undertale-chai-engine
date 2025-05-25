@@ -1,10 +1,10 @@
-[gd_scene load_steps=19 format=3 uid="uid://ghjeqv20751v"]
+[gd_scene load_steps=29 format=3 uid="uid://ghjeqv20751v"]
 
-[ext_resource type="Script" path="res://Scripts/Objects/enemy.gd" id="1_f7ytk"]
+[ext_resource type="Script" uid="uid://b8hxmfu6ccyo5" path="res://Scripts/Objects/enemy.gd" id="1_f7ytk"]
 [ext_resource type="Texture2D" uid="uid://cdlpvwckj8axf" path="res://Sprites/Battle/Enemies/spr_dummybattle_0.png" id="1_yatfw"]
 [ext_resource type="Texture2D" uid="uid://bivb2xgl84yyl" path="res://Sprites/Battle/Enemies/spr_dummybattle_1.png" id="2_062ny"]
-[ext_resource type="Script" path="res://Scripts/Objects/EnemyVaporiseScript.gd" id="3_25xbn"]
-[ext_resource type="Script" path="res://Scripts/Classes/EnemyData.gd" id="4_4viex"]
+[ext_resource type="Script" uid="uid://dbm4dcgmhncr7" path="res://Scripts/Objects/EnemyVaporiseScript.gd" id="3_25xbn"]
+[ext_resource type="Script" uid="uid://csgs8685itd2x" path="res://Scripts/Classes/EnemyData.gd" id="4_4viex"]
 [ext_resource type="Texture2D" uid="uid://8csu3ix8uq7v" path="res://Sprites/Battle/spr_enemyhealth_1.png" id="6_sn47w"]
 [ext_resource type="Texture2D" uid="uid://d35dhp0c418nn" path="res://Sprites/Battle/spr_enemyhealth_0.png" id="7_pcqe5"]
 [ext_resource type="Texture2D" uid="uid://buwkjvpkescsr" path="res://Sprites/Battle/spr_slice_o_0.png" id="7_ylfye"]
@@ -14,6 +14,10 @@
 [ext_resource type="Texture2D" uid="uid://ye5spsstmqik" path="res://Sprites/Battle/spr_slice_o_3.png" id="10_bswbq"]
 [ext_resource type="Texture2D" uid="uid://c1bmw4s6h0w2k" path="res://Sprites/Battle/spr_slice_o_4.png" id="11_16syu"]
 [ext_resource type="Texture2D" uid="uid://kibhhmpgde1f" path="res://Sprites/Battle/spr_slice_o_5.png" id="12_86awf"]
+[ext_resource type="AudioStream" uid="uid://csqr67tcdlo84" path="res://Audio/Sounds/SND_TXT1.wav" id="15_fvwyc"]
+[ext_resource type="FontFile" uid="uid://cvrg1o3nedg0c" path="res://Fonts/undertale-dotumche.otf" id="16_fvwyc"]
+[ext_resource type="Texture2D" uid="uid://81hi2vabuvw8" path="res://Sprites/Battle/SpeechBubbles/spr_blconabove_0.png" id="16_xmk3q"]
+[ext_resource type="Script" uid="uid://l4x4f6y1ba4e" path="res://Scripts/Objects/SpeechBubble.gd" id="17_fvwyc"]
 
 [sub_resource type="Resource" id="Resource_kakgx"]
 script = ExtResource("4_4viex")
@@ -24,8 +28,11 @@ HP = 15
 ATK = 0
 DEF = 0
 acts = ["Check", "Talk"]
-RandomDialogs = ["* Example text"]
+RandomDialogs = ["Dialog[newline]test."]
 Check = ["* DUMMY - ATK 0 DEF 0[wait 2][newline]  A cotton heart and a button eye,[newline]  you are the apple of my eye"]
+InstantSpare = false
+FlavorText = ["* Example text"]
+BubbleType = "Small Right"
 
 [sub_resource type="Shader" id="Shader_a5gqt"]
 code = "// NOTE: Shader automatically converted from Godot Engine 4.4.dev3's ParticleProcessMaterial.
@@ -72,10 +79,13 @@ uniform vec3 velocity_pivot = vec3(0.0);
 uniform vec3 emission_box_extents;
 uniform vec3 gravity;
 uniform sampler2D alpha_curve : repeat_disable;
+uniform sampler2D color_ramp : repeat_disable;
 uniform sampler2D sprite;
 uniform float progress : hint_range(0.0, 1.0, 0.01);
 uniform float particle_lifetime_fraction : hint_range(0.0, 1.0, 0.01);
 uniform bool connect_lines = false;
+
+const float fade = 1.0;
 
 vec4 rotate_hue(vec4 current_color, float hue_rot_angle) {
 	float hue_rot_c = cos(hue_rot_angle);
@@ -182,7 +192,7 @@ void calculate_initial_display_params(inout DisplayParameters params, inout uint
 void process_display_param(inout DisplayParameters parameters, float lifetime) {
 	// Compile-time add textures.
 	parameters.color.a *= texture(alpha_curve, vec2(lifetime)).r;
-	//parameters.color = rotate_hue(parameters.color, parameters.hue_rotation);
+	//parameters.color.a -= lifetime;
 }
 
 ivec2 calculate_initial_position(inout uint base_number) {
@@ -400,6 +410,17 @@ void process() {
 	}
 }"
 
+[sub_resource type="Gradient" id="Gradient_fvwyc"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_xmk3q"]
+gradient = SubResource("Gradient_fvwyc")
+
+[sub_resource type="Gradient" id="Gradient_6wei6"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_fvwyc"]
+gradient = SubResource("Gradient_6wei6")
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wl211"]
 shader = SubResource("Shader_a5gqt")
 shader_parameter/direction = Vector3(0, -1, 0)
@@ -414,8 +435,8 @@ shader_parameter/angular_velocity_min = 0.0
 shader_parameter/angular_velocity_max = 0.0
 shader_parameter/orbit_velocity_min = 0.0
 shader_parameter/orbit_velocity_max = 0.0
-shader_parameter/radial_velocity_min = null
-shader_parameter/radial_velocity_max = null
+shader_parameter/radial_velocity_min = 0.0
+shader_parameter/radial_velocity_max = 0.0
 shader_parameter/linear_accel_min = 0.0
 shader_parameter/linear_accel_max = 0.0
 shader_parameter/radial_accel_min = 0.0
@@ -438,12 +459,14 @@ shader_parameter/lifetime_randomness = 0.5
 shader_parameter/emission_shape_offset = Vector3(0, 0, 0)
 shader_parameter/emission_shape_scale = Vector3(1, 1, 1)
 shader_parameter/velocity_pivot = Vector3(0, 0, 0)
-shader_parameter/emission_box_extents = null
+shader_parameter/emission_box_extents = Vector3(0, 0, 0)
 shader_parameter/gravity = Vector3(0, -80, 0)
-shader_parameter/progress = 0.0
-shader_parameter/particle_lifetime_fraction = null
-shader_parameter/connect_lines = false
+shader_parameter/alpha_curve = SubResource("GradientTexture1D_xmk3q")
+shader_parameter/color_ramp = SubResource("GradientTexture1D_fvwyc")
 shader_parameter/sprite = ExtResource("1_yatfw")
+shader_parameter/progress = 0.0
+shader_parameter/particle_lifetime_fraction = 0.17
+shader_parameter/connect_lines = false
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_qkdun"]
 animations = [{
@@ -474,6 +497,15 @@ animations = [{
 "speed": 7.0
 }]
 
+[sub_resource type="FontVariation" id="FontVariation_eqdrc"]
+base_font = ExtResource("16_fvwyc")
+spacing_glyph = 1
+
+[sub_resource type="LabelSettings" id="LabelSettings_704u3"]
+font = SubResource("FontVariation_eqdrc")
+font_size = 12
+font_color = Color(0, 0, 0, 1)
+
 [node name="Enemy" type="Node2D"]
 script = ExtResource("1_f7ytk")
 enemy_data = SubResource("Resource_kakgx")
@@ -487,13 +519,14 @@ position = Vector2(-24, -26)
 scale = Vector2(0.5, 0.5)
 emitting = false
 amount = 12288
-process_material = SubResource("ShaderMaterial_wl211")
-lifetime = 5.0
+lifetime = 3.0
 one_shot = true
 explosiveness = 1.0
+process_material = SubResource("ShaderMaterial_wl211")
 script = ExtResource("3_25xbn")
 
 [node name="HPBar" type="TextureProgressBar" parent="."]
+visible = false
 offset_left = -24.0
 offset_top = -34.5
 offset_right = 27.0
@@ -505,10 +538,31 @@ texture_under = ExtResource("6_sn47w")
 texture_progress = ExtResource("7_pcqe5")
 
 [node name="DamageText" parent="." instance=ExtResource("8_1o3so")]
-visible = true
 position = Vector2(-48.5, -53)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.75, 0.75)
 sprite_frames = SubResource("SpriteFrames_qkdun")
 frame = 6
 frame_progress = 1.0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("15_fvwyc")
+
+[node name="SpeechBubble" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(0, -60)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("16_xmk3q")
+script = ExtResource("17_fvwyc")
+bubbleType = "Above"
+
+[node name="Label" type="Label" parent="SpeechBubble"]
+offset_left = -78.0
+offset_top = -43.0
+offset_right = 61.0
+offset_bottom = 29.0
+text = "Test dialogue."
+label_settings = SubResource("LabelSettings_704u3")

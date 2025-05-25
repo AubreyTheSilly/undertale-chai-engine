@@ -59,9 +59,17 @@ func newProject(newpath : String) -> Error:
 	createDirectory("Audio\\BGM")
 	createDirectory("Audio\\Sounds")
 	createDirectory("Data")
+	createDirectory("Data\\Enemies")
 	createDirectory("Scripts")
 	createDirectory("Sprites")
 	createDirectory("Sprites\\Character")
-	createDirectory("Sprites\\Character/Frisk")
+	createDirectory("Sprites\\Character\\Player")
 	print("New project successfully created at "+Path+"!")
 	return OK
+
+func _process(_delta) -> void:
+	if Input.is_action_just_pressed("Fullscreen"):
+		if get_window().mode == get_window().MODE_FULLSCREEN:
+			get_window().mode = get_window().MODE_WINDOWED
+		else:
+			get_window().mode = get_window().MODE_FULLSCREEN

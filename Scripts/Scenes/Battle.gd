@@ -17,6 +17,7 @@ var playerenemychoice = 0
 var playeractchoice = 0
 var playermercychoice = 0
 var firstTurn = true
+var EnemyDialogStarted = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -25,7 +26,20 @@ func _ready():
 		enemyindex += 1
 		var enemyData = Undermaker.loadJsonAsDictionary("Data/Enemies/"+i+".json")
 		var enemyObj = preload("res://Scenes/Objects/Enemy.tscn").instantiate()
-		enemyObj.position = Vector2(132,94.5)
+		if Battle.loadedBattle["enemies"].size() == 2:
+			if enemyindex == 0:
+				enemyObj.position = Vector2(111,88)
+			else:
+				enemyObj.position = Vector2(199,88)
+		elif Battle.loadedBattle["enemies"].size() == 3:
+			if enemyindex == 0:
+				enemyObj.position = Vector2(58,88)
+			elif enemyindex == 1:
+				enemyObj.position = Vector2(160,88)
+			else:
+				enemyObj.position = Vector2(260,88)
+		else:
+			enemyObj.position = Vector2(160,88)
 		enemyObj.enemy_data = Battle.DictionaryToEnemyData(enemyData)
 		enemyObj.name = "Enemy"+str(enemyindex)
 		add_child(enemyObj)
@@ -78,6 +92,12 @@ func _process(_delta):
 			$ChoiceBox/Choice3.visible = false
 			$ChoiceBox/Choice4.visible = false
 			$ChoiceBox/Choice5.visible = false
+			if enemies.size() >= 2:
+				$ChoiceBox/Choice2.text = "* "+enemies[1].enemy_data.EnemyName
+				$ChoiceBox/Choice2.visible = true
+			if enemies.size() == 3:
+				$ChoiceBox/Choice4.text = "* "+enemies[2].enemy_data.EnemyName
+				$ChoiceBox/Choice4.visible = true
 			if Input.is_action_just_pressed("Move Up") and playerenemychoice != 0:
 				MenuSound.stream = preload("res://Audio/Sounds/snd_squeak.wav")
 				MenuSound.play()
@@ -102,6 +122,12 @@ func _process(_delta):
 			$ChoiceBox/Choice3.visible = false
 			$ChoiceBox/Choice4.visible = false
 			$ChoiceBox/Choice5.visible = false
+			if enemies.size() >= 2:
+				$ChoiceBox/Choice2.text = "* "+enemies[1].enemy_data.EnemyName
+				$ChoiceBox/Choice2.visible = true
+			if enemies.size() == 3:
+				$ChoiceBox/Choice4.text = "* "+enemies[2].enemy_data.EnemyName
+				$ChoiceBox/Choice4.visible = true
 			if Input.is_action_just_pressed("Move Up") and playerenemychoice != 0:
 				MenuSound.stream = preload("res://Audio/Sounds/snd_squeak.wav")
 				MenuSound.play()
@@ -116,6 +142,11 @@ func _process(_delta):
 				MenuSound.stream = preload("res://Audio/Sounds/snd_select.wav")
 				MenuSound.play()
 				state = PLAYER_ATTACK
+				var dmg = await $FightBox._attack(enemies[playerenemychoice].enemy_data)
+				enemies[playerenemychoice]._damage(dmg)
+				await enemies[playerenemychoice].damage_done
+				$FightBox._close()
+				state = ENEMY_DIALOGUE
 		PLAYER_MERCY_CHOICE:
 			$HeartButtonChoice.visible = false
 			$ChoiceBox.visible = true
@@ -184,6 +215,28 @@ func _process(_delta):
 		PLAYER_ACT:
 			$HeartButtonChoice.visible = false
 			$ChoiceBox.visible = false
+		PLAYER_ATTACK:
+			$HeartButtonChoice.visible = false
+			$ChoiceBox.visible = false
+			$FlavorBox.visible = false
+			$FightBox.visible = true
+		ENEMY_DIALOGUE:
+			$ChoiceBox.visible = false
+			$FlavorBox.visible = false
+			$FightBox.visible = false
+			$AttackBox.visible = true
+			$AttackBox.rect.size = Vector2(70.5,70.5)
+			if EnemyDialogStarted == false:
+				EnemyDialogStarted = true
+				for i in enemies:
+					if i.state == 1:
+						i.dialogue()
+			var donetalking = true
+			for i in enemies:
+				if i.talking == true:
+					donetalking = false
+			if donetalking:
+				state = ENEMY_ATTACK
 		_:
 			pass
 	$HeartButtonChoice.position.x = buttons[playerbuttonchoice].position.x-19.5

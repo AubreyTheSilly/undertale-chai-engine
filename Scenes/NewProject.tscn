@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://emsk3e8l8hao"]
 
 [ext_resource type="PackedScene" uid="uid://dmxvgtrvudiby" path="res://Scenes/Objects/Button.tscn" id="1_3xtl5"]
-[ext_resource type="Script" path="res://Scripts/Scenes/NewProject.gd" id="1_4ti85"]
+[ext_resource type="Script" uid="uid://pk3njn0sodrf" path="res://Scripts/Scenes/NewProject.gd" id="1_4ti85"]
 [ext_resource type="PackedScene" uid="uid://qwchgxq58tm1" path="res://Scenes/Objects/MouseArea.tscn" id="2_sb1fx"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_fwgci"]

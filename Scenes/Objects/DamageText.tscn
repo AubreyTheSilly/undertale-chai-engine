@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://7vrentaetxo2"]
 
 [ext_resource type="FontFile" uid="uid://j7iofu0jkpk3" path="res://Fonts/undertale-hachicro.otf" id="1_hsmpt"]
-[ext_resource type="Script" path="res://Scripts/Objects/DamageText.gd" id="1_t0f14"]
+[ext_resource type="Script" uid="uid://d1mlb0ewpir74" path="res://Scripts/Objects/DamageText.gd" id="1_t0f14"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ypfi4"]
 font = ExtResource("1_hsmpt")

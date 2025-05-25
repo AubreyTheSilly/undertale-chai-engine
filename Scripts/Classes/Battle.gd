@@ -5,8 +5,8 @@ enum SOULMODES {RED=0,BLUE=1}
 signal battleEnd(bad : bool)
 
 var loadedBattle = {
-	"encounterText":"* You encountered the Dummy.",
-	"enemies":["dummy"]
+	"encounterText":"* deAR GOD THE DUMMIES ARE[newline]  MULTIPLYING",
+	"enemies":["dummy","dummy","dummy"]
 }
 
 func _startBattle(id : String):
@@ -23,4 +23,6 @@ func DictionaryToEnemyData(dict : Dictionary) -> EnemyData:
 	enemydata.acts = dict["acts"]
 	enemydata.RandomDialogs = dict["randomdialogs"]
 	enemydata.Check = dict["check"]
+	enemydata.InstantSpare = dict["spareable"]
+	enemydata.BubbleType = dict["bubble_type"]
 	return enemydata

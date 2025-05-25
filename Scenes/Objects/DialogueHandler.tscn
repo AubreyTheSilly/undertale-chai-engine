@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bniq2qap32r4q"]
 
 [ext_resource type="Texture2D" uid="uid://ciiui7kmdomoi" path="res://Sprites/UIBox.png" id="1_q084c"]
-[ext_resource type="Script" path="res://Scripts/Objects/DialogueHandler.gd" id="1_toi2p"]
+[ext_resource type="Script" uid="uid://cey17ub0nnpy2" path="res://Scripts/Objects/DialogueHandler.gd" id="1_toi2p"]
 
 [node name="DialogueHandler" type="CanvasLayer"]
 visible = false

@@ -10,11 +10,11 @@ config_version=5
 
 [application]
 
-config/name="undermaker"
+config/name="UNDERTALE - CHAI ENGINE"
 run/main_scene="res://Scenes/Menu.tscn"
-config/features=PackedStringArray("4.3", "GL Compatibility")
+config/features=PackedStringArray("4.4", "GL Compatibility")
 run/max_fps=30
-config/icon="res://icon.svg"
+config/icon="uid://ljj2u1c01std"
 
 [autoload]
 
@@ -22,12 +22,13 @@ MouseArea="*res://Scenes/Objects/MouseArea.tscn"
 Undermaker="*res://Scripts/Classes/GlobalFunc.gd"
 DialogueHandler="*res://Scenes/Objects/DialogueHandler.tscn"
 Battle="*res://Scripts/Classes/Battle.gd"
+Items="*res://Scripts/Classes/Items.gd"
+PlayerData="*res://Scripts/Classes/PlayerData.gd"
 
 [display]
 
 window/size/viewport_width=320
 window/size/viewport_height=240
-window/size/mode=3
 window/size/resizable=false
 window/size/window_width_override=640
 window/size/window_height_override=480
@@ -106,4 +107,4 @@ Fullscreen={
 textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
-environment/defaults/default_clear_color=Color(0.9, 0.9, 0.9, 1)
+environment/defaults/default_clear_color=Color(0.6, 0.6, 0.6, 1)

@@ -1,11 +1,15 @@
-[gd_scene load_steps=28 format=3 uid="uid://d3s7r8bmqm08b"]
+[gd_scene load_steps=35 format=3 uid="uid://d3s7r8bmqm08b"]
 
-[ext_resource type="Script" path="res://Scripts/Scenes/Battle.gd" id="1_qxqxx"]
-[ext_resource type="Script" path="res://Scripts/Objects/BattleDialogueBox.gd" id="2_3g107"]
+[ext_resource type="Script" uid="uid://co2guxtvgjejm" path="res://Scripts/Scenes/Battle.gd" id="1_qxqxx"]
+[ext_resource type="Script" uid="uid://ckik5x0yqgxeb" path="res://Scripts/Objects/BattleDialogueBox.gd" id="2_3g107"]
 [ext_resource type="Texture2D" uid="uid://bpn2e0kssrbga" path="res://Sprites/Battle/spr_battlebg_0.png" id="3_is2k6"]
 [ext_resource type="Texture2D" uid="uid://ciiui7kmdomoi" path="res://Sprites/UIBox.png" id="3_mf2ya"]
-[ext_resource type="Script" path="res://Scripts/Objects/AttackBox.gd" id="5_dllax"]
-[ext_resource type="AudioStream" uid="uid://jhwcijrtbjav" path="res://Audio/BGM/mus_prebattle1.ogg" id="5_nu686"]
+[ext_resource type="Script" uid="uid://bih6ay7xkmep3" path="res://Scripts/Objects/AttackBox.gd" id="5_dllax"]
+[ext_resource type="Script" uid="uid://d2qur5365yacj" path="res://Scripts/Objects/FightBox.gd" id="5_u5lwd"]
+[ext_resource type="Texture2D" uid="uid://qbf0w8bbkphm" path="res://Sprites/Battle/spr_target_0.png" id="6_dfi4p"]
+[ext_resource type="AudioStream" uid="uid://dis0583kl3o5j" path="res://Audio/BGM/mus_battle2.ogg" id="7_7i387"]
+[ext_resource type="Texture2D" uid="uid://ouagx58qj8vj" path="res://Sprites/Battle/spr_targetchoice_0.png" id="7_yahm3"]
+[ext_resource type="Texture2D" uid="uid://bhyupb4bxnm4f" path="res://Sprites/Battle/spr_targetchoice_1.png" id="8_1s3yx"]
 [ext_resource type="PackedScene" uid="uid://51lu7uaohc4j" path="res://Scenes/Objects/BattleButton.tscn" id="8_j2fg1"]
 [ext_resource type="Texture2D" uid="uid://db3xb8pxayasp" path="res://Sprites/Battle/Buttons/spr_fightbt_0.png" id="9_1iuas"]
 [ext_resource type="Texture2D" uid="uid://c462oie8gqmdf" path="res://Sprites/Battle/Buttons/spr_fightbt_1.png" id="10_3xx1h"]
@@ -20,18 +24,33 @@
 [ext_resource type="Texture2D" uid="uid://cjxulcjcodig0" path="res://Sprites/Battle/spr_health_1.png" id="17_sx1gs"]
 [ext_resource type="Texture2D" uid="uid://c6gy64rfkuyaq" path="res://Sprites/Battle/spr_health_0.png" id="18_hioeg"]
 [ext_resource type="Texture2D" uid="uid://b0rk7jclh5ydd" path="res://Sprites/Battle/spr_heart_0.png" id="21_hn3x6"]
+[ext_resource type="Script" uid="uid://cqf0y3fl2hdwj" path="res://Scripts/Objects/BattleHeart.gd" id="25_1s3yx"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_mugwg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_yahm3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_1s3yx")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_iwfsq"]
-size = Vector2(3, 70.5)
+size = Vector2(3, 240)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cxxln"]
-size = Vector2(3, 70.5)
+size = Vector2(3, 240)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8s1ob"]
-size = Vector2(288, 3)
+size = Vector2(320, 3)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_28qgs"]
-size = Vector2(288, 3)
+size = Vector2(320, 3)
 
 [sub_resource type="LabelSettings" id="LabelSettings_durc4"]
 font_size = 13
@@ -42,6 +61,9 @@ base_font = ExtResource("15_wceb6")
 [sub_resource type="LabelSettings" id="LabelSettings_kfxkq"]
 font = SubResource("FontVariation_gind8")
 font_size = 10
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yahm3"]
+size = Vector2(8, 8)
 
 [node name="Battle" type="Node2D"]
 script = ExtResource("1_qxqxx")
@@ -72,10 +94,38 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 metadata/_edit_use_anchors_ = true
 
+[node name="FightBox" type="Node2D" parent="."]
+visible = false
+position = Vector2(15.5, 124.5)
+script = ExtResource("5_u5lwd")
+
+[node name="Rect" type="NinePatchRect" parent="FightBox"]
+offset_right = 288.0
+offset_bottom = 70.5
+texture = ExtResource("3_mf2ya")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+metadata/_edit_use_anchors_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="FightBox"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(144, 35)
+scale = Vector2(0.01, 0.5)
+texture = ExtResource("6_dfi4p")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="FightBox"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(6.5, 35.25)
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_mugwg")
+autoplay = "default"
+
 [node name="AttackBox" type="StaticBody2D" parent="."]
+visible = false
 position = Vector2(15.5, 124.5)
 script = ExtResource("5_dllax")
-rect = Rect2(0, 0, 70.5, 70.5)
 
 [node name="AttackRect" type="NinePatchRect" parent="AttackBox"]
 offset_right = 288.0
@@ -175,7 +225,7 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("21_hn3x6")
 
 [node name="BGM" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("5_nu686")
+stream = ExtResource("7_7i387")
 autoplay = true
 
 [node name="FightButton" parent="." instance=ExtResource("8_j2fg1")]
@@ -250,3 +300,15 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("21_hn3x6")
 
 [node name="MenuSound" type="AudioStreamPlayer" parent="."]
+
+[node name="BattleHeart" type="CharacterBody2D" parent="."]
+position = Vector2(159.5, 159.75)
+script = ExtResource("25_1s3yx")
+
+[node name="Soul" type="Sprite2D" parent="BattleHeart"]
+modulate = Color(1, 0, 0, 1)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("21_hn3x6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BattleHeart"]
+shape = SubResource("RectangleShape2D_yahm3")

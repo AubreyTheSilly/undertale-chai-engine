@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://dl5uydevw3a0n" path="res://Sprites/Character/Frisk/spr_maincharau_1.png" id="10_cg7lw"]
 [ext_resource type="Texture2D" uid="uid://cao5ngvripkls" path="res://Sprites/Character/Frisk/spr_maincharau_3.png" id="11_w5hio"]
 [ext_resource type="Texture2D" uid="uid://du1bsfsonc81i" path="res://Sprites/Character/Frisk/spr_maincharau_2.png" id="12_0ppja"]
-[ext_resource type="Script" path="res://Scripts/Classes/CharacterSprite.gd" id="13_2q02j"]
+[ext_resource type="Script" uid="uid://cw83i3o8jodo5" path="res://Scripts/Classes/CharacterSprite.gd" id="13_2q02j"]
 
 [resource]
 script = ExtResource("13_2q02j")

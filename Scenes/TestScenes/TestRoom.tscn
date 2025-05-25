@@ -1,17 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://brsf5mna60qsa"]
+[gd_scene load_steps=6 format=3 uid="uid://brsf5mna60qsa"]
 
-[ext_resource type="Script" path="res://Scripts/Scenes/TestingRoomScript.gd" id="1_2ftxh"]
+[ext_resource type="Script" uid="uid://c18u0wlapspul" path="res://Scripts/Scenes/TestingRoomScript.gd" id="1_2ftxh"]
 [ext_resource type="PackedScene" uid="uid://c500t7ga4syg2" path="res://Scenes/Objects/Character.tscn" id="1_aihhj"]
 [ext_resource type="Resource" uid="uid://fe8gmcrviks1" path="res://Data/FriskSprite.tres" id="5_3vaax"]
 [ext_resource type="Resource" uid="uid://djub6043uykfc" path="res://Data/CloverSprite.tres" id="5_5k4aq"]
 [ext_resource type="PackedScene" uid="uid://txeqj7p6n33l" path="res://Scenes/Objects/Player.tscn" id="16_3lqki"]
-
-[sub_resource type="Gradient" id="Gradient_ngp5u"]
-colors = PackedColorArray(0.312121, 0.517673, 0.541309, 1, 0.581001, 0.763831, 0.593989, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_luuaf"]
-gradient = SubResource("Gradient_ngp5u")
-fill_to = Vector2(1, 1)
 
 [node name="Node2D" type="Node2D"]
 y_sort_enabled = true
@@ -26,9 +19,3 @@ Speed = 10
 position = Vector2(160, 120)
 Character_Sprite = ExtResource("5_3vaax")
 direction = "up"
-
-[node name="TextureRect" type="TextureRect" parent="."]
-z_index = -1
-offset_right = 320.0
-offset_bottom = 240.0
-texture = SubResource("GradientTexture2D_luuaf")

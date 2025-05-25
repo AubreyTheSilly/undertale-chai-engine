@@ -20,6 +20,3 @@ func _process(_delta):
 		$Label.position.y = 0
 	if applyGravity:
 		velocity += GRAVITY
-
-func _ready():
-	bounce()
