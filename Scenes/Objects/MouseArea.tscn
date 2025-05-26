@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://qwchgxq58tm1"]
 
-[ext_resource type="Script" uid="uid://r6l4g4pmrr" path="res://Scripts/Objects/MouseArea.gd" id="1_5x3wi"]
+[ext_resource type="Script" uid="uid://r6l4g4pmrr" path="res://Scripts/Engine/Objects/MouseArea.gd" id="1_5x3wi"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6h844"]
 size = Vector2(2, 2)

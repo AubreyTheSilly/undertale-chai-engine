@@ -4,6 +4,7 @@ extends Resource
 @export var EnemyName := "Dummy"
 @export var EnemySprite : Texture2D = preload("res://Sprites/Battle/Enemies/spr_dummybattle_0.png")
 @export var EnemyHurtSprite : Texture2D = preload("res://Sprites/Battle/Enemies/spr_dummybattle_1.png")
+@export var EnemySpareSprite : Texture2D = preload("res://Sprites/Battle/Enemies/spr_dummybattle_0.png")
 @export var HP := 100
 @export var ATK := 0
 @export var DEF := 0

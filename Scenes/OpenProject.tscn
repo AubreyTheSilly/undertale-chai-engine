@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://b8sq8elly8sgi"]
 
-[ext_resource type="Script" uid="uid://dp3njxsglqmgv" path="res://Scripts/Scenes/OpenProject.gd" id="1_veyqk"]
+[ext_resource type="Script" uid="uid://dp3njxsglqmgv" path="res://Scripts/Engine/Scenes/OpenProject.gd" id="1_veyqk"]
 [ext_resource type="PackedScene" uid="uid://dmxvgtrvudiby" path="res://Scenes/Objects/Button.tscn" id="2_0s5w2"]
 [ext_resource type="PackedScene" uid="uid://qwchgxq58tm1" path="res://Scenes/Objects/MouseArea.tscn" id="3_viir2"]
 

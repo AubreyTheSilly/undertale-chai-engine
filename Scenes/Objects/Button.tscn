@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://dmxvgtrvudiby"]
 
-[ext_resource type="Script" uid="uid://2xvdriyujv3i" path="res://Scripts/Objects/button.gd" id="1_h8c5m"]
+[ext_resource type="Script" uid="uid://2xvdriyujv3i" path="res://Scripts/Engine/Objects/button.gd" id="1_h8c5m"]
 [ext_resource type="Texture2D" uid="uid://8s3m0bpibdfr" path="res://Sprites/Button.png" id="1_j0lwu"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_3yybf"]

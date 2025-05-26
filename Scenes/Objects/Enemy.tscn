@@ -1,10 +1,10 @@
 [gd_scene load_steps=29 format=3 uid="uid://ghjeqv20751v"]
 
-[ext_resource type="Script" uid="uid://b8hxmfu6ccyo5" path="res://Scripts/Objects/enemy.gd" id="1_f7ytk"]
+[ext_resource type="Script" uid="uid://b8hxmfu6ccyo5" path="res://Scripts/Engine/Objects/enemy.gd" id="1_f7ytk"]
 [ext_resource type="Texture2D" uid="uid://cdlpvwckj8axf" path="res://Sprites/Battle/Enemies/spr_dummybattle_0.png" id="1_yatfw"]
 [ext_resource type="Texture2D" uid="uid://bivb2xgl84yyl" path="res://Sprites/Battle/Enemies/spr_dummybattle_1.png" id="2_062ny"]
-[ext_resource type="Script" uid="uid://dbm4dcgmhncr7" path="res://Scripts/Objects/EnemyVaporiseScript.gd" id="3_25xbn"]
-[ext_resource type="Script" uid="uid://csgs8685itd2x" path="res://Scripts/Classes/EnemyData.gd" id="4_4viex"]
+[ext_resource type="Script" uid="uid://dbm4dcgmhncr7" path="res://Scripts/Engine/Objects/EnemyVaporiseScript.gd" id="3_25xbn"]
+[ext_resource type="Script" uid="uid://csgs8685itd2x" path="res://Scripts/Engine/Classes/EnemyData.gd" id="4_4viex"]
 [ext_resource type="Texture2D" uid="uid://8csu3ix8uq7v" path="res://Sprites/Battle/spr_enemyhealth_1.png" id="6_sn47w"]
 [ext_resource type="Texture2D" uid="uid://d35dhp0c418nn" path="res://Sprites/Battle/spr_enemyhealth_0.png" id="7_pcqe5"]
 [ext_resource type="Texture2D" uid="uid://buwkjvpkescsr" path="res://Sprites/Battle/spr_slice_o_0.png" id="7_ylfye"]
@@ -17,13 +17,14 @@
 [ext_resource type="AudioStream" uid="uid://csqr67tcdlo84" path="res://Audio/Sounds/SND_TXT1.wav" id="15_fvwyc"]
 [ext_resource type="FontFile" uid="uid://cvrg1o3nedg0c" path="res://Fonts/undertale-dotumche.otf" id="16_fvwyc"]
 [ext_resource type="Texture2D" uid="uid://81hi2vabuvw8" path="res://Sprites/Battle/SpeechBubbles/spr_blconabove_0.png" id="16_xmk3q"]
-[ext_resource type="Script" uid="uid://l4x4f6y1ba4e" path="res://Scripts/Objects/SpeechBubble.gd" id="17_fvwyc"]
+[ext_resource type="Script" uid="uid://l4x4f6y1ba4e" path="res://Scripts/Engine/Objects/SpeechBubble.gd" id="17_fvwyc"]
 
 [sub_resource type="Resource" id="Resource_kakgx"]
 script = ExtResource("4_4viex")
 EnemyName = "Dummy"
 EnemySprite = ExtResource("1_yatfw")
 EnemyHurtSprite = ExtResource("2_062ny")
+EnemySpareSprite = ExtResource("1_yatfw")
 HP = 15
 ATK = 0
 DEF = 0

@@ -4,7 +4,7 @@ extends Node2D
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Undermaker.player_can_move = false
-	await DialogueHandler.StartDialogue(["* waow"])
+	await DialogueHandler.StartDialogue(["* Hello Frisk.[wait 2][newline]  It's me, [color 255 255 0]Clover[color 255 255 255].","* Goodbye forever"])
 	await $Character.move(1,Vector2.UP)
 	await get_tree().create_timer(1).timeout
 	await $Character.move(1,Vector2.DOWN)

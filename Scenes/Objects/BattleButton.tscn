@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://51lu7uaohc4j"]
 
-[ext_resource type="Script" uid="uid://crbt0bhbaxfm0" path="res://Scripts/Objects/BattleButton.gd" id="1_vo1yi"]
+[ext_resource type="Script" uid="uid://crbt0bhbaxfm0" path="res://Scripts/Engine/Objects/BattleButton.gd" id="1_vo1yi"]
 [ext_resource type="Texture2D" uid="uid://bky2jtllx2sm2" path="res://Sprites/Battle/Buttons/spr_emptybt_0.png" id="2_xcq4v"]
 
 [node name="BattleButton" type="Node2D"]

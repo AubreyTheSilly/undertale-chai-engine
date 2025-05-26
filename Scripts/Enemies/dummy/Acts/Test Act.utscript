@@ -1,0 +1,8 @@
+set spare true
+if spared true -not
+dialog "* you can spare the enemy[newline]  now!"
+end
+if spared true
+dialog "* you can STILL spare the [newline]  enemy"
+end
+set spared true

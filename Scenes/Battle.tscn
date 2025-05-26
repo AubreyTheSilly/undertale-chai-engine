@@ -1,11 +1,11 @@
-[gd_scene load_steps=35 format=3 uid="uid://d3s7r8bmqm08b"]
+[gd_scene load_steps=40 format=3 uid="uid://d3s7r8bmqm08b"]
 
-[ext_resource type="Script" uid="uid://co2guxtvgjejm" path="res://Scripts/Scenes/Battle.gd" id="1_qxqxx"]
-[ext_resource type="Script" uid="uid://ckik5x0yqgxeb" path="res://Scripts/Objects/BattleDialogueBox.gd" id="2_3g107"]
+[ext_resource type="Script" uid="uid://co2guxtvgjejm" path="res://Scripts/Engine/Scenes/Battle.gd" id="1_qxqxx"]
+[ext_resource type="Script" uid="uid://ckik5x0yqgxeb" path="res://Scripts/Engine/Objects/BattleDialogueBox.gd" id="2_3g107"]
 [ext_resource type="Texture2D" uid="uid://bpn2e0kssrbga" path="res://Sprites/Battle/spr_battlebg_0.png" id="3_is2k6"]
 [ext_resource type="Texture2D" uid="uid://ciiui7kmdomoi" path="res://Sprites/UIBox.png" id="3_mf2ya"]
-[ext_resource type="Script" uid="uid://bih6ay7xkmep3" path="res://Scripts/Objects/AttackBox.gd" id="5_dllax"]
-[ext_resource type="Script" uid="uid://d2qur5365yacj" path="res://Scripts/Objects/FightBox.gd" id="5_u5lwd"]
+[ext_resource type="Script" uid="uid://bih6ay7xkmep3" path="res://Scripts/Engine/Objects/AttackBox.gd" id="5_dllax"]
+[ext_resource type="Script" uid="uid://d2qur5365yacj" path="res://Scripts/Engine/Objects/FightBox.gd" id="5_u5lwd"]
 [ext_resource type="Texture2D" uid="uid://qbf0w8bbkphm" path="res://Sprites/Battle/spr_target_0.png" id="6_dfi4p"]
 [ext_resource type="AudioStream" uid="uid://dis0583kl3o5j" path="res://Audio/BGM/mus_battle2.ogg" id="7_7i387"]
 [ext_resource type="Texture2D" uid="uid://ouagx58qj8vj" path="res://Sprites/Battle/spr_targetchoice_0.png" id="7_yahm3"]
@@ -24,7 +24,7 @@
 [ext_resource type="Texture2D" uid="uid://cjxulcjcodig0" path="res://Sprites/Battle/spr_health_1.png" id="17_sx1gs"]
 [ext_resource type="Texture2D" uid="uid://c6gy64rfkuyaq" path="res://Sprites/Battle/spr_health_0.png" id="18_hioeg"]
 [ext_resource type="Texture2D" uid="uid://b0rk7jclh5ydd" path="res://Sprites/Battle/spr_heart_0.png" id="21_hn3x6"]
-[ext_resource type="Script" uid="uid://cqf0y3fl2hdwj" path="res://Scripts/Objects/BattleHeart.gd" id="25_1s3yx"]
+[ext_resource type="Script" uid="uid://cqf0y3fl2hdwj" path="res://Scripts/Engine/Objects/BattleHeart.gd" id="25_1s3yx"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_mugwg"]
 animations = [{
@@ -52,7 +52,22 @@ size = Vector2(320, 3)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_28qgs"]
 size = Vector2(320, 3)
 
-[sub_resource type="LabelSettings" id="LabelSettings_durc4"]
+[sub_resource type="LabelSettings" id="LabelSettings_1s3yx"]
+font_size = 13
+
+[sub_resource type="LabelSettings" id="LabelSettings_mugwg"]
+font_size = 13
+
+[sub_resource type="LabelSettings" id="LabelSettings_d13iw"]
+font_size = 13
+
+[sub_resource type="LabelSettings" id="LabelSettings_4nbmx"]
+font_size = 13
+
+[sub_resource type="LabelSettings" id="LabelSettings_3quo0"]
+font_size = 13
+
+[sub_resource type="LabelSettings" id="LabelSettings_d5dbc"]
 font_size = 13
 
 [sub_resource type="FontVariation" id="FontVariation_gind8"]
@@ -173,7 +188,7 @@ offset_top = 9.5
 offset_right = 88.5
 offset_bottom = 29.5
 text = "* Check"
-label_settings = SubResource("LabelSettings_durc4")
+label_settings = SubResource("LabelSettings_1s3yx")
 
 [node name="Choice1" type="Label" parent="ChoiceBox"]
 offset_left = 161.5
@@ -182,7 +197,7 @@ offset_right = 255.5
 offset_bottom = 29.5
 text = "* Compliment
 "
-label_settings = SubResource("LabelSettings_durc4")
+label_settings = SubResource("LabelSettings_mugwg")
 
 [node name="Choice2" type="Label" parent="ChoiceBox"]
 offset_left = 33.5
@@ -190,7 +205,7 @@ offset_top = 25.5
 offset_right = 88.5
 offset_bottom = 45.5
 text = "* Threat"
-label_settings = SubResource("LabelSettings_durc4")
+label_settings = SubResource("LabelSettings_d13iw")
 
 [node name="Choice3" type="Label" parent="ChoiceBox"]
 offset_left = 161.5
@@ -199,7 +214,7 @@ offset_right = 255.5
 offset_bottom = 45.5
 text = "* Ribbit
 "
-label_settings = SubResource("LabelSettings_durc4")
+label_settings = SubResource("LabelSettings_4nbmx")
 
 [node name="Choice4" type="Label" parent="ChoiceBox"]
 offset_left = 33.5
@@ -207,7 +222,7 @@ offset_top = 41.5
 offset_right = 96.5
 offset_bottom = 61.5
 text = "* Flirt"
-label_settings = SubResource("LabelSettings_durc4")
+label_settings = SubResource("LabelSettings_3quo0")
 
 [node name="Choice5" type="Label" parent="ChoiceBox"]
 offset_left = 161.5
@@ -216,7 +231,7 @@ offset_right = 255.5
 offset_bottom = 61.5
 text = "* Die
 "
-label_settings = SubResource("LabelSettings_durc4")
+label_settings = SubResource("LabelSettings_d5dbc")
 
 [node name="HeartChoice" type="Sprite2D" parent="ChoiceBox"]
 modulate = Color(1, 0, 0, 1)

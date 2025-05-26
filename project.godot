@@ -19,11 +19,11 @@ config/icon="uid://ljj2u1c01std"
 [autoload]
 
 MouseArea="*res://Scenes/Objects/MouseArea.tscn"
-Undermaker="*res://Scripts/Classes/GlobalFunc.gd"
+Undermaker="*res://Scripts/Engine/Classes/GlobalFunc.gd"
 DialogueHandler="*res://Scenes/Objects/DialogueHandler.tscn"
-Battle="*res://Scripts/Classes/Battle.gd"
-Items="*res://Scripts/Classes/Items.gd"
-PlayerData="*res://Scripts/Classes/PlayerData.gd"
+Battle="*res://Scripts/Engine/Classes/Battle.gd"
+Items="*res://Scripts/Engine/Classes/Items.gd"
+PlayerData="*res://Scripts/Engine/Classes/PlayerData.gd"
 
 [display]
 

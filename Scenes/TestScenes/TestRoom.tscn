@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://brsf5mna60qsa"]
 
-[ext_resource type="Script" uid="uid://c18u0wlapspul" path="res://Scripts/Scenes/TestingRoomScript.gd" id="1_2ftxh"]
+[ext_resource type="Script" uid="uid://c18u0wlapspul" path="res://Scripts/Engine/Scenes/TestingRoomScript.gd" id="1_2ftxh"]
 [ext_resource type="PackedScene" uid="uid://c500t7ga4syg2" path="res://Scenes/Objects/Character.tscn" id="1_aihhj"]
 [ext_resource type="Resource" uid="uid://fe8gmcrviks1" path="res://Data/FriskSprite.tres" id="5_3vaax"]
 [ext_resource type="Resource" uid="uid://djub6043uykfc" path="res://Data/CloverSprite.tres" id="5_5k4aq"]

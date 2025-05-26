@@ -47,10 +47,10 @@ func newProject(newpath : String) -> Error:
 	Path = newpath
 	if Path[-1] != "\\":
 		Path += "\\"
-	if loadJsonAsDictionary("project.umproject") != {}:
+	if loadJsonAsDictionary("project.json") != {}:
 		print("Project file already exists there.")
 		return ERR_ALREADY_EXISTS
-	if createJsonFromDictionary("project.umproject",baseJson) == FAILED:
+	if createJsonFromDictionary("project.json",baseJson) == FAILED:
 		print("Project file could not be created due to malformed path!")
 		return FAILED
 	Project = loadJsonAsDictionary("project.umproject")

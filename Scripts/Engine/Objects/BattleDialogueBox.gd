@@ -15,6 +15,7 @@ func StartFlavorDialogue(dialogue : String) -> void:
 	var textcolor := Color(1,1,1)
 	var mode = "normal"
 	var speed = 1
+	skiptext = false
 	for j in dialogbox.get_children():
 		j.queue_free()
 	for j in dialogue:
