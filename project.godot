@@ -14,7 +14,7 @@ config/name="UNDERTALE - CHAI ENGINE"
 run/main_scene="res://Scenes/Menu.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 run/max_fps=30
-config/icon="uid://ljj2u1c01std"
+config/icon="uid://cld6yyq8mvbqs"
 
 [autoload]
 

@@ -7,15 +7,14 @@ func _init(scr:Array[Function]=[]):
 	data = scr
 
 func loadScript(path:StringName) -> Error:
-	print("Loading script at "+Undermaker.Path+"Scripts/"+path)
 	if FileAccess.file_exists(Undermaker.Path+"Scripts/"+path):
 		var script : Array[Function]
 		var scriptFile = FileAccess.open(Undermaker.Path+"Scripts/"+path,FileAccess.READ)
 		while scriptFile.get_position() < scriptFile.get_length():
 			var line := scriptFile.get_line()
 			var funct := ""
-			var params : Array[String] = []
-			var flags : Array[String] = []
+			var params : Array[StringName] = []
+			var flags : Array[StringName] = []
 			var string = false
 			var sub = ""
 			for i in line:
@@ -34,6 +33,7 @@ func loadScript(path:StringName) -> Error:
 						sub = ""
 					elif i == '"':
 						string = !string
+						sub += '"'
 					else:
 						sub += i
 			if sub != "":
@@ -46,7 +46,6 @@ func loadScript(path:StringName) -> Error:
 						params.append(sub)
 			script.append(Function.new(funct,params,flags))
 		data = script
-		print("Successfully loaded script!")
 		return OK
 	print("Script does not exist")
 	return FAILED

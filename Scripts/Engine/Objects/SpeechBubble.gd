@@ -3,6 +3,8 @@ extends Sprite2D
 
 @export_enum("Above","Small Left","Short Left","Small Right","Short Right","Wide Right","Wide Left") var bubbleType = "Small Right"
 
+@export var pos := Vector2(0,0)
+
 var sprites := {
 	"Above":preload("res://Sprites/Battle/SpeechBubbles/spr_blconabove_0.png"),
 	"Small Left":preload("res://Sprites/Battle/SpeechBubbles/spr_blconsm2_0.png"),
@@ -38,3 +40,4 @@ func _process(delta):
 		"Short Right":
 			position = Vector2(52,-0.5)
 			$Label.position = Vector2(-30,-23)
+	position += pos

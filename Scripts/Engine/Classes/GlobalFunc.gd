@@ -1,6 +1,9 @@
 extends Node
 
-var Project : Dictionary = {}
+var Project : Dictionary = {
+	"projectName":"UNDERTALE",
+	"gameName":"UNDERTALE"
+}
 var Path : String = "res://"
 
 var player_can_move = true
@@ -68,6 +71,7 @@ func newProject(newpath : String) -> Error:
 	return OK
 
 func _process(_delta) -> void:
+	get_window().title = Project["gameName"]
 	if Input.is_action_just_pressed("Fullscreen"):
 		if get_window().mode == get_window().MODE_FULLSCREEN:
 			get_window().mode = get_window().MODE_WINDOWED

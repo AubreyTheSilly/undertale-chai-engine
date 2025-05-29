@@ -6,7 +6,7 @@ func _ready() -> void:
 func start() -> void:
 	restart()
 	emitting = true
-	var frac: float = 0.8
+	var frac: float = 0.7
 	set_progress(0.0)
 
 	var tween := create_tween()

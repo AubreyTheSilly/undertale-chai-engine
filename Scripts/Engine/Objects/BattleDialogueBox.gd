@@ -33,6 +33,8 @@ func StartFlavorDialogue(dialogue : String) -> void:
 						textpos.x = 0
 						textpos.y += 1
 					"wait":
+						if skiptext2 or skiptext:
+							continue
 						for k in range(int(cmand[1])):
 							await get_tree().process_frame
 					"color":
@@ -90,6 +92,8 @@ func StartBattleDialogue(dialogue : Array) -> void:
 							textpos.x = 0
 							textpos.y += 1
 						"wait":
+							if skiptext2 or skiptext:
+								continue
 							for k in range(int(cmand[1])):
 								await get_tree().process_frame
 						"color":

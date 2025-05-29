@@ -2,19 +2,20 @@ extends Node
 
 enum SOULMODES {RED=0,BLUE=1}
 
-signal battleEnd(bad : bool)
-
 var loadedBattle = {
-	"encounterText":"* deAR GOD THE DUMMIES ARE[newline]  MULTIPLYING",
-	"enemies":["dummy","dummy","dummy"]
+	"encounterText":"* WOAH A DOGGY!!![wait 2] ...and[newline]  a dummy too i guess",
+	"enemies":["dummy","dog"],
+	"state":0,
+	"music":"mus_dogsong"
 }
 
-func _startBattle(id : String):
+func Encounter(id : String):
 	pass
 
 func DictionaryToEnemyData(dict : Dictionary) -> EnemyData:
 	var enemydata = EnemyData.new()
 	enemydata.EnemyName = dict["enemyName"]
+	enemydata.name = dict["name"]
 	enemydata.EnemySprite = load("res://Sprites/Battle/Enemies/"+dict["sprite"]+".png")
 	enemydata.EnemyHurtSprite = load("res://Sprites/Battle/Enemies/"+dict["hurtSprite"]+".png")
 	enemydata.EnemySpareSprite = load("res://Sprites/Battle/Enemies/"+dict["spareSprite"]+".png")
@@ -26,4 +27,10 @@ func DictionaryToEnemyData(dict : Dictionary) -> EnemyData:
 	enemydata.Check = dict["check"]
 	enemydata.InstantSpare = dict["spareable"]
 	enemydata.BubbleType = dict["bubble_type"]
+	enemydata.EXP = dict["exp"]
+	enemydata.GOLD = dict["gold"]
+	enemydata.autodialog = dict["autodialog"]
+	enemydata.FlavorText = dict["flavortext"]
+	enemydata.offset = Vector2(dict["offsetx"],dict["offsety"])
+	enemydata.BubbleOffset = Vector2(dict["bubbleoffsetx"],dict["bubbleoffsety"])
 	return enemydata

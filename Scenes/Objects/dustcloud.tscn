@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://dd2tft7ab7b80"]
+
+[ext_resource type="Texture2D" uid="uid://dahke6vd3jw13" path="res://Sprites/Battle/spr_dustcloud_0.png" id="1_bs5cp"]
+[ext_resource type="Texture2D" uid="uid://j5or4omsp24u" path="res://Sprites/Battle/spr_dustcloud_1.png" id="2_yk7a6"]
+[ext_resource type="Texture2D" uid="uid://bkndneqi6ppj5" path="res://Sprites/Battle/spr_dustcloud_2.png" id="3_83iek"]
+[ext_resource type="Script" uid="uid://d3h2t63x4klyk" path="res://Scripts/Engine/Objects/dustcloud.gd" id="4_yk7a6"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0sxrd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_bs5cp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_yk7a6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_83iek")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": false,
+"name": &"default",
+"speed": 8.0
+}]
+
+[node name="dustcloud" type="AnimatedSprite2D"]
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_0sxrd")
+autoplay = "default"
+script = ExtResource("4_yk7a6")

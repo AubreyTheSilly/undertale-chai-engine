@@ -2,6 +2,7 @@ class_name EnemyData
 extends Resource
 
 @export var EnemyName := "Dummy"
+@export var name := "dummy"
 @export var EnemySprite : Texture2D = preload("res://Sprites/Battle/Enemies/spr_dummybattle_0.png")
 @export var EnemyHurtSprite : Texture2D = preload("res://Sprites/Battle/Enemies/spr_dummybattle_1.png")
 @export var EnemySpareSprite : Texture2D = preload("res://Sprites/Battle/Enemies/spr_dummybattle_0.png")
@@ -14,3 +15,8 @@ extends Resource
 @export var InstantSpare := false
 @export var FlavorText = ["* Example text"]
 @export var BubbleType := "Small Right"
+@export var EXP := 0
+@export var GOLD := 0
+@export var autodialog := true
+@export var offset := Vector2.ZERO
+@export var BubbleOffset := Vector2.ZERO

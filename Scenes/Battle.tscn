@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://d3s7r8bmqm08b"]
+[gd_scene load_steps=41 format=3 uid="uid://d3s7r8bmqm08b"]
 
 [ext_resource type="Script" uid="uid://co2guxtvgjejm" path="res://Scripts/Engine/Scenes/Battle.gd" id="1_qxqxx"]
 [ext_resource type="Script" uid="uid://ckik5x0yqgxeb" path="res://Scripts/Engine/Objects/BattleDialogueBox.gd" id="2_3g107"]
@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://c462oie8gqmdf" path="res://Sprites/Battle/Buttons/spr_fightbt_1.png" id="10_3xx1h"]
 [ext_resource type="Texture2D" uid="uid://bh4rc4a22qrwc" path="res://Sprites/Battle/Buttons/spr_actbt_0.png" id="11_fdlm1"]
 [ext_resource type="Texture2D" uid="uid://dc02kscou060m" path="res://Sprites/Battle/Buttons/spr_actbt_1.png" id="12_btnny"]
+[ext_resource type="Texture2D" uid="uid://d35dhp0c418nn" path="res://Sprites/Battle/spr_enemyhealth_0.png" id="12_mugwg"]
 [ext_resource type="Texture2D" uid="uid://cp2oh7dq8dros" path="res://Sprites/Battle/Buttons/spr_itembt_0.png" id="13_6f4sl"]
 [ext_resource type="Texture2D" uid="uid://bol3elqfquojh" path="res://Sprites/Battle/Buttons/spr_itembt_1.png" id="14_nko56"]
 [ext_resource type="Texture2D" uid="uid://dmg3qfdeg52bs" path="res://Sprites/Battle/Buttons/spr_mercybt_0.png" id="15_u7jef"]
@@ -239,6 +240,39 @@ position = Vector2(20, 18.5)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("21_hn3x6")
 
+[node name="EnemyHealth1" type="TextureProgressBar" parent="ChoiceBox"]
+visible = false
+offset_left = 119.0
+offset_top = 15.5
+offset_right = 169.5
+offset_bottom = 24.0
+value = 50.0
+nine_patch_stretch = true
+texture_under = ExtResource("17_sx1gs")
+texture_progress = ExtResource("12_mugwg")
+
+[node name="EnemyHealth2" type="TextureProgressBar" parent="ChoiceBox"]
+visible = false
+offset_left = 119.0
+offset_top = 31.5
+offset_right = 169.5
+offset_bottom = 40.0
+value = 50.0
+nine_patch_stretch = true
+texture_under = ExtResource("17_sx1gs")
+texture_progress = ExtResource("12_mugwg")
+
+[node name="EnemyHealth3" type="TextureProgressBar" parent="ChoiceBox"]
+visible = false
+offset_left = 119.0
+offset_top = 47.5
+offset_right = 169.5
+offset_bottom = 56.0
+value = 50.0
+nine_patch_stretch = true
+texture_under = ExtResource("17_sx1gs")
+texture_progress = ExtResource("12_mugwg")
+
 [node name="BGM" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_7i387")
 autoplay = true
@@ -327,3 +361,5 @@ texture = ExtResource("21_hn3x6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BattleHeart"]
 shape = SubResource("RectangleShape2D_yahm3")
+
+[node name="Sounds" type="AudioStreamPlayer" parent="."]

@@ -40,6 +40,8 @@ func StartDialogue(dialogue : Array[String],position : int = DOWN) -> void:
 							textpos.x = 0
 							textpos.y += 1
 						"wait":
+							if skiptext:
+								continue
 							for k in range(int(cmand[1])):
 								await get_tree().process_frame
 						"face":

@@ -7,9 +7,15 @@ extends Node2D
 @onready var sprite = $Sprite2D
 @onready var flavorbox = get_parent().get_node("FlavorBox")
 
-# enemy variables
+# generic variables. can be altered and accessed via scripts
 var spare := false
-var talking = false
+var talking := false
+var nextdialogue := ""
+var frame := 0
+var damaging = false
+
+# important variables related to scripts
+var hasUpdateScript := false
 
 # state of the enemy
 enum ENEMY_STATE {DEAD,ALIVE,SPARED}
@@ -24,12 +30,22 @@ signal damage_done
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# setup
-	sprite.texture = enemy_data.EnemySprite
+	position += enemy_data.offset
+	$SpeechBubble.pos = enemy_data.BubbleOffset
 	spare = enemy_data.InstantSpare
 	$SpeechBubble.bubbleType = enemy_data.BubbleType
 	$GPUParticles2D.process_material.set_shader_parameter("sprite",enemy_data.EnemyHurtSprite)
+	var sprite_size = $GPUParticles2D.process_material.get_shader_parameter("sprite").get_size()
+	$GPUParticles2D.position = -(sprite_size/2)
+	$GPUParticles2D.amount = (sprite_size.x*sprite_size.y)
 	$HPBar.max_value = enemy_data.HP
 	$HPBar.value = enemy_data.HP
+	if UTScript.new().loadScript("Enemies/"+enemy_data.name+"/Create.utscript") == OK:
+		var scr = UTScript.new()
+		scr.loadScript("Enemies/"+enemy_data.name+"/Create.utscript")
+		await runScript(scr)
+	if UTScript.new().loadScript("Enemies/"+enemy_data.name+"/Update.utscript") == OK:
+		hasUpdateScript = true
 
 func _dust():
 	# so long gay bowser
@@ -41,6 +57,7 @@ func _dust():
 
 func Shudder():
 	# enemy shake
+	damaging = true
 	var shudder = 16
 	sprite.texture = enemy_data.EnemyHurtSprite
 	while shudder != 0:
@@ -61,6 +78,7 @@ func Shudder():
 	else:
 		# make it not hurt
 		sprite.texture = enemy_data.EnemySprite
+	damaging = false
 	damage_done.emit()
 
 func _spare():
@@ -68,6 +86,9 @@ func _spare():
 		state = ENEMY_STATE.SPARED
 		modulate.a = 0.5
 		sprite.texture = enemy_data.EnemySpareSprite
+		for i in range(14):
+			var cloud = preload("res://Scenes/Objects/dustcloud.tscn").instantiate()
+			add_child(cloud)
 		$AudioStreamPlayer.stream = preload("res://Audio/Sounds/snd_vaporized.wav")
 		$AudioStreamPlayer.play()
 
@@ -112,9 +133,9 @@ func act(Act : String) -> void:
 		await flavorbox.StartBattleDialogue(enemy_data.Check)
 	else:
 		# run script
-		if UTScript.new().loadScript("Enemies/"+enemy_data.EnemyName.to_lower()+"/Acts/"+Act+".utscript") == OK:
+		if UTScript.new().loadScript("Enemies/"+enemy_data.name+"/Acts/"+Act+".utscript") == OK:
 			var scr = UTScript.new()
-			scr.loadScript("Enemies/"+enemy_data.EnemyName.to_lower()+"/Acts/"+Act+".utscript")
+			scr.loadScript("Enemies/"+enemy_data.name+"/Acts/"+Act+".utscript")
 			await runScript(scr)
 		else:
 			await flavorbox.StartBattleDialogue(["* Error!"])
@@ -124,6 +145,9 @@ func dialogue() -> void:
 	$SpeechBubble.visible = true
 	$SpeechBubble/Label.text = ""
 	var Dialogue = enemy_data.RandomDialogs.pick_random()
+	if nextdialogue != "":
+		Dialogue = nextdialogue
+		nextdialogue = ""
 	for i in Dialogue:
 		match i:
 			"&":
@@ -134,7 +158,11 @@ func dialogue() -> void:
 					$AudioStreamPlayer2.play()
 		await get_tree().process_frame
 		await get_tree().process_frame
-	await get_tree().create_timer(0.5).timeout
+	if enemy_data.autodialog:
+		await get_tree().create_timer(0.5).timeout
+	else:
+		while !Input.is_action_just_pressed("Select"):
+			await get_tree().process_frame
 	$SpeechBubble.visible = false
 	talking = false
 
@@ -149,40 +177,67 @@ func runScript(scr : UTScript):
 			"print":
 				var text = ""
 				for j in i.parameters:
-					text += j+" "
+					if get(j):
+						text += str(get(j))+" "
+					else:
+						text += j+" "
 				print(text)
 			"dialog":
-				await flavorbox.StartBattleDialogue(i.parameters)
+				var dialog = []
+				for j in i.parameters:
+					dialog.append(str(str_to_var(j)))
+				await flavorbox.StartBattleDialogue(dialog)
 			"set":
 				if get(i.parameters[0]) != null:
-					if i.parameters[1].is_valid_int():
-						set(i.parameters[0],int(i.parameters[1]))
-					elif i.parameters[1] == "true" and get(i.parameters[0]) is bool:
-						set(i.parameters[0],true)
-					elif i.parameters[1] == "false" and get(i.parameters[0]) is bool:
-						set(i.parameters[0],false)
-					else:
-						set(i.parameters[0],i.parameters[1])
+					set(i.parameters[0],str_to_var(i.parameters[1]))
 				else:
-					if i.parameters[1].is_valid_int():
-						vars[i.parameters[0]] = int(i.parameters[1])
+					vars[i.parameters[0]] = str_to_var(i.parameters[1])
+			"set_enemydata":
+				if enemy_data.get(i.parameters[0]) != null:
+					if str(i.parameters[0]) == "EnemySprite" or str(i.parameters[0]) == "EnemyHurtSprite" or str(i.parameters[0]) == "EnemySpareSprite":
+						enemy_data.set(i.parameters[0],load("res://Sprites/Battle/Enemies/"+i.parameters[1]+".png"))
 					else:
-						vars[i.parameters[0]] = i.parameters[1]
+						enemy_data.set(i.parameters[0],str_to_var(i.parameters[1]))
 			"add":
 				if vars[i.parameters[0]] is int:
 					vars[i.parameters[0]] += int(i.parameters[1])
 			"if":
-				var compare = i.parameters[0]
+				var compare = str(i.parameters[0])
 				if i.flags.has("-not"):
+					if get(compare):
+						if i.parameters.size() == 1:
+							runNext = false
+						elif get(compare) == str_to_var(i.parameters[1]):
+							runNext = false
+						continue
 					if !vars.has(compare):
 						continue
-					if vars[compare] == i.parameters[1]:
+					if vars[compare] == str_to_var(i.parameters[1]):
 						runNext = false
 				else:
+					if get(compare):
+						if i.parameters.size() == 1:
+							runNext = true
+						elif get(compare) == str_to_var(i.parameters[1]):
+							runNext = true
+						else:
+							runNext = false
+						continue
 					if !vars.has(compare):
 						runNext = false
 						continue
-					if vars[compare] != i.parameters[1]:
+					if vars[compare] != str_to_var(i.parameters[1]):
 						runNext = false
 			"stop":
 				break
+
+func _process(_delta):
+	frame += 1
+	if hasUpdateScript:
+		var scr = UTScript.new()
+		scr.loadScript("Enemies/"+enemy_data.name+"/Update.utscript")
+		await runScript(scr)
+	if damaging:
+		sprite.texture = enemy_data.EnemyHurtSprite
+	else:
+		sprite.texture = enemy_data.EnemySprite
