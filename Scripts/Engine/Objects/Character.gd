@@ -53,7 +53,7 @@ func handleAnimation(dir : Vector2) -> String:
 
 func move(steps : int,dir : Vector2) -> void:
 	for i in range(steps):
-		for j in range(20):
+		for j in range(20/(Speed)):
 			velocity = dir*(30*Speed)
 			await get_tree().process_frame
 	velocity = Vector2.ZERO

@@ -3,14 +3,25 @@ extends Node
 enum SOULMODES {RED=0,BLUE=1}
 
 var loadedBattle = {
-	"encounterText":"* WOAH A DOGGY!!![wait 2] ...and[newline]  a dummy too i guess",
-	"enemies":["dummy","dog"],
+	"encounterText":"* WOAH A DOGGY!!!",
+	"enemies":["dog"],
 	"state":0,
 	"music":"mus_dogsong"
 }
 
 func Encounter(id : String):
-	pass
+	Undermaker.player_can_move = false
+	var encounterFile = FileAccess.open(Undermaker.Path+"Data/Encounters/"+id+".txt",FileAccess.READ)
+	var encounter = encounterFile.get_line().split(":")
+	encounterFile.close()
+	loadedBattle["encounterText"] = encounter[0]
+	loadedBattle["enemies"] = []
+	for i in range(3):
+		if encounter[i+1] != "none":
+			loadedBattle["enemies"].append(encounter[i+1])
+	loadedBattle["state"] = int(encounter[4])
+	loadedBattle["music"] = encounter[5]
+	get_tree().get_root().add_child(preload("res://Scenes/Objects/BattleStarter.tscn").instantiate())
 
 func DictionaryToEnemyData(dict : Dictionary) -> EnemyData:
 	var enemydata = EnemyData.new()

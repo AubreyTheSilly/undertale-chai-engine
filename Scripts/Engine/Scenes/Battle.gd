@@ -353,6 +353,8 @@ func _process(_delta):
 				$FlavorBox.visible = true
 				var Exp = 0
 				var gold = 0
+				PlayerData.EXP += Exp
+				PlayerData.GOLD += gold
 				for i in enemies:
 					if i.state == 0:
 						Exp += i.enemy_data.EXP

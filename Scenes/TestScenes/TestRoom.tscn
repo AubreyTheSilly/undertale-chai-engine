@@ -13,7 +13,6 @@ script = ExtResource("1_2ftxh")
 [node name="Character" parent="." instance=ExtResource("1_aihhj")]
 position = Vector2(160, 80)
 Character_Sprite = ExtResource("5_5k4aq")
-Speed = 10
 
 [node name="Player" parent="." instance=ExtResource("16_3lqki")]
 position = Vector2(160, 120)

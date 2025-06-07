@@ -13,6 +13,8 @@ var talking := false
 var nextdialogue := ""
 var frame := 0
 var damaging = false
+var sin : float = 0
+var cos : float = 0
 
 # important variables related to scripts
 var hasUpdateScript := false
@@ -26,6 +28,8 @@ var vars : Dictionary = {}
 
 # fires when enemy has stopped shaking and/or dies
 signal damage_done
+# fired by battle scene
+signal next
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -161,8 +165,7 @@ func dialogue() -> void:
 	if enemy_data.autodialog:
 		await get_tree().create_timer(0.5).timeout
 	else:
-		while !Input.is_action_just_pressed("Select"):
-			await get_tree().process_frame
+		await next
 	$SpeechBubble.visible = false
 	talking = false
 
@@ -198,6 +201,19 @@ func runScript(scr : UTScript):
 						enemy_data.set(i.parameters[0],load("res://Sprites/Battle/Enemies/"+i.parameters[1]+".png"))
 					else:
 						enemy_data.set(i.parameters[0],str_to_var(i.parameters[1]))
+			"create_sprite":
+				var sprite = Sprite2D.new()
+				sprite.name = str(i.parameters[0])
+				sprite.position = Vector2(int(i.parameters[1]),int(i.parameters[2]))
+				sprite.texture = load("res://Sprites/"+str(i.parameters[3]))
+				if i.parameters.size() >= 5:
+					sprite.z_index = int(i.parameters[4])
+				if i.parameters.size() >= 7:
+					sprite.offset = Vector2(int(i.parameters[5]),int(i.parameters[6]))
+				if i.flags.has("-scene"):
+					get_tree().current_scene.add_child(sprite)
+				else:
+					add_child(sprite)
 			"add":
 				if vars[i.parameters[0]] is int:
 					vars[i.parameters[0]] += int(i.parameters[1])
@@ -233,11 +249,15 @@ func runScript(scr : UTScript):
 
 func _process(_delta):
 	frame += 1
+	sin = sin(frame)
+	cos = cos(frame)
 	if hasUpdateScript:
 		var scr = UTScript.new()
 		scr.loadScript("Enemies/"+enemy_data.name+"/Update.utscript")
 		await runScript(scr)
 	if damaging:
 		sprite.texture = enemy_data.EnemyHurtSprite
+	elif state == 2:
+		sprite.texture = enemy_data.EnemySpareSprite
 	else:
 		sprite.texture = enemy_data.EnemySprite
