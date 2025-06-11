@@ -1,5 +1,5 @@
 set spare true
-if spared true -not
+if spared false
 dialog "* you can spare the enemy[newline]  now!"
 set nextdialogue "hey that's cool&you can spare me&now"
 end

@@ -20,3 +20,4 @@ extends Resource
 @export var autodialog := true
 @export var offset := Vector2.ZERO
 @export var BubbleOffset := Vector2.ZERO
+@export var Attacks : Array

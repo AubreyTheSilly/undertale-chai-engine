@@ -29,8 +29,11 @@ var attackStarted := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	fader.fadeIn()
 	$BGM.stream = load("res://Audio/BGM/"+Battle.loadedBattle["music"]+".ogg")
 	$BGM.play()
+	if !Battle.loadedBattle["bg"]:
+		$background.visible = false
 	var enemyindex = -1
 	var occurences = {}
 	for i in Battle.loadedBattle["enemies"]:
@@ -292,7 +295,7 @@ func _process(_delta):
 				MenuSound.stream = preload("res://Audio/Sounds/snd_squeak.wav")
 				MenuSound.play()
 				playeractchoice -= 1
-			if Input.is_action_just_pressed("Move Right") and (playeractchoice != 1 and playeractchoice != 3 and playeractchoice != 5):
+			if Input.is_action_just_pressed("Move Right") and (playeractchoice != 1 and playeractchoice != 3 and playeractchoice != 5) and enemies[playerenemychoice].enemy_data.acts.size() != 1:
 				MenuSound.stream = preload("res://Audio/Sounds/snd_squeak.wav")
 				MenuSound.play()
 				playeractchoice += 1
@@ -336,6 +339,19 @@ func _process(_delta):
 		ENEMY_ATTACK:
 			if !attackStarted:
 				attackStarted = true
+				var attacksLeft := 0
+				for i in enemies:
+					if i.state == 1:
+						attacksLeft += 1
+						$AttackBox.runScript(i.getAttack(),i.enemy_data)
+				while attacksLeft != 0:
+					await $AttackBox.attack_over
+					attacksLeft -= 1
+				for i in $AttackBox/attacks.get_children():
+					if i.name != "bounding":
+						i.queue_free()
+				for i in $AttackBox/attacks/bounding.get_children():
+					i.queue_free()
 				state = ENEMY_ATTACK_END
 				$AttackBox.rect = Rect2(Vector2.ZERO,Vector2(288,70.5))
 				await get_tree().create_timer(0.25).timeout
@@ -353,13 +369,15 @@ func _process(_delta):
 				$FlavorBox.visible = true
 				var Exp = 0
 				var gold = 0
-				PlayerData.EXP += Exp
-				PlayerData.GOLD += gold
 				for i in enemies:
 					if i.state == 0:
 						Exp += i.enemy_data.EXP
 					gold += i.enemy_data.GOLD
+				PlayerData.EXP += Exp
+				PlayerData.GOLD += gold
 				await $FlavorBox.StartBattleDialogue(["* YOU WON![wait 2][newline]* You got "+str(Exp)+" EXP and "+str(gold)+" GOLD."])
+				await fader.fadeOut()
+				Undermaker.load_scene(PlayerData.room)
 		PLAYER_ITEM_CHOICE:
 			$HeartButtonChoice.visible = false
 			$ChoiceBox.visible = true
@@ -434,7 +452,6 @@ func _process(_delta):
 				state = PLAYER_ITEM_USE
 				match PlayerData.inventory[playeritemchoice+(4*itemmenu)].type:
 					Item.HEALING:
-						var hp = PlayerData.HP
 						PlayerData.HP += PlayerData.inventory[playeritemchoice+(4*itemmenu)].value
 						PlayerData.HP = clamp(PlayerData.HP,0,PlayerData.MaxHP)
 						$Sounds.stream = preload("res://Audio/Sounds/snd_heal_c.wav")
@@ -473,7 +490,7 @@ func _PlayerTurn():
 		FlavorBox.StartFlavorDialogue(Battle.loadedBattle["encounterText"])
 		firstTurn = false
 	else:
-		var enem : Enemy
+		var enem : Node2D
 		enem = enemies.pick_random()
 		while enem.state != 1:
 			enem = enemies.pick_random()

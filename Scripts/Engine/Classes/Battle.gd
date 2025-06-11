@@ -3,10 +3,11 @@ extends Node
 enum SOULMODES {RED=0,BLUE=1}
 
 var loadedBattle = {
-	"encounterText":"* WOAH A DOGGY!!!",
-	"enemies":["dog"],
+	"encounterText":"* . . .",
+	"enemies":["dust"],
 	"state":0,
-	"music":"mus_dogsong"
+	"music":"mus_dustsans",
+	"bg":false
 }
 
 func Encounter(id : String):
@@ -21,6 +22,10 @@ func Encounter(id : String):
 			loadedBattle["enemies"].append(encounter[i+1])
 	loadedBattle["state"] = int(encounter[4])
 	loadedBattle["music"] = encounter[5]
+	if encounter[6] == "yes":
+		loadedBattle["bg"] = true
+	else:
+		loadedBattle["bg"] = false
 	get_tree().get_root().add_child(preload("res://Scenes/Objects/BattleStarter.tscn").instantiate())
 
 func DictionaryToEnemyData(dict : Dictionary) -> EnemyData:
@@ -44,4 +49,5 @@ func DictionaryToEnemyData(dict : Dictionary) -> EnemyData:
 	enemydata.FlavorText = dict["flavortext"]
 	enemydata.offset = Vector2(dict["offsetx"],dict["offsety"])
 	enemydata.BubbleOffset = Vector2(dict["bubbleoffsetx"],dict["bubbleoffsety"])
+	enemydata.Attacks = dict["attacks"]
 	return enemydata

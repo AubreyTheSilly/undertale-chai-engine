@@ -26,7 +26,9 @@ func loadScript(path:StringName) -> Error:
 						sub += i
 				else:
 					if i == " " and !string:
-						if sub[0] == "-":
+						if sub.length() == 0:
+							continue
+						if sub[0] == "_":
 							flags.append(sub)
 						else:
 							params.append(sub)
@@ -40,7 +42,7 @@ func loadScript(path:StringName) -> Error:
 				if funct == "":
 					funct = sub
 				else:
-					if sub[0] == "-":
+					if sub[0] == "_":
 						flags.append(sub)
 					else:
 						params.append(sub)

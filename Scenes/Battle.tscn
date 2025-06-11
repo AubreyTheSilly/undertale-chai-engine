@@ -144,7 +144,8 @@ position = Vector2(15.5, 124.5)
 script = ExtResource("5_dllax")
 
 [node name="AttackRect" type="NinePatchRect" parent="AttackBox"]
-offset_right = 288.0
+offset_left = 0.00294495
+offset_right = 287.997
 offset_bottom = 70.5
 texture = ExtResource("3_mf2ya")
 patch_margin_left = 4
@@ -154,11 +155,11 @@ patch_margin_bottom = 4
 metadata/_edit_use_anchors_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackBox"]
-position = Vector2(1.5, 35.25)
+position = Vector2(1.50294, 35.25)
 shape = SubResource("RectangleShape2D_iwfsq")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="AttackBox"]
-position = Vector2(286.5, 35.25)
+position = Vector2(286.497, 35.25)
 shape = SubResource("RectangleShape2D_cxxln")
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="AttackBox"]
@@ -168,6 +169,14 @@ shape = SubResource("RectangleShape2D_8s1ob")
 [node name="CollisionShape2D4" type="CollisionShape2D" parent="AttackBox"]
 position = Vector2(144, 69)
 shape = SubResource("RectangleShape2D_28qgs")
+
+[node name="attacks" type="Node2D" parent="AttackBox"]
+position = Vector2(144, 35.25)
+
+[node name="bounding" type="Polygon2D" parent="AttackBox/attacks"]
+clip_children = 1
+polygon = PackedVector2Array(-144, -35.25, -144, 35.25, 144, 35.25, 144, -35.25)
+uv = PackedVector2Array(-307, 4, -128, -14, -107, 40, -290, 51)
 
 [node name="ChoiceBox" type="Node2D" parent="."]
 visible = false
@@ -275,7 +284,7 @@ texture_progress = ExtResource("12_mugwg")
 
 [node name="BGM" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_7i387")
-autoplay = true
+parameters/looping = true
 
 [node name="FightButton" parent="." instance=ExtResource("8_j2fg1")]
 position = Vector2(43, 226.5)
@@ -361,5 +370,12 @@ texture = ExtResource("21_hn3x6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BattleHeart"]
 shape = SubResource("RectangleShape2D_yahm3")
+
+[node name="soul" type="Area2D" parent="BattleHeart"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BattleHeart/soul"]
+shape = SubResource("RectangleShape2D_yahm3")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="BattleHeart"]
 
 [node name="Sounds" type="AudioStreamPlayer" parent="."]

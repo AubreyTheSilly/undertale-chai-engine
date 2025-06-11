@@ -13,8 +13,7 @@ var talking := false
 var nextdialogue := ""
 var frame := 0
 var damaging = false
-var sin : float = 0
-var cos : float = 0
+var nextattack := ""
 
 # important variables related to scripts
 var hasUpdateScript := false
@@ -51,6 +50,14 @@ func _ready():
 	if UTScript.new().loadScript("Enemies/"+enemy_data.name+"/Update.utscript") == OK:
 		hasUpdateScript = true
 
+func getAttack() -> UTScript:
+	var scr = UTScript.new()
+	scr.loadScript("Enemies/"+enemy_data.name+"/Attacks/"+enemy_data.Attacks.pick_random()+".utscript")
+	if nextattack != "":
+		scr.loadScript("Enemies/"+enemy_data.name+"/Attacks/"+nextattack+".utscript")
+		nextattack = ""
+	return scr
+
 func _dust():
 	# so long gay bowser
 	state = ENEMY_STATE.DEAD
@@ -78,7 +85,6 @@ func Shudder():
 	if $HPBar.value == 0:
 		# the enemy fucking dies
 		_dust()
-		state = ENEMY_STATE.DEAD
 	else:
 		# make it not hurt
 		sprite.texture = enemy_data.EnemySprite
@@ -149,6 +155,7 @@ func dialogue() -> void:
 	$SpeechBubble.visible = true
 	$SpeechBubble/Label.text = ""
 	var Dialogue = enemy_data.RandomDialogs.pick_random()
+	talking = true
 	if nextdialogue != "":
 		Dialogue = nextdialogue
 		nextdialogue = ""
@@ -162,10 +169,12 @@ func dialogue() -> void:
 					$AudioStreamPlayer2.play()
 		await get_tree().process_frame
 		await get_tree().process_frame
+	talking = false
 	if enemy_data.autodialog:
 		await get_tree().create_timer(0.5).timeout
 	else:
-		await next
+		while !Input.is_action_just_pressed("Select"):
+			await get_tree().process_frame
 	$SpeechBubble.visible = false
 	talking = false
 
@@ -183,7 +192,12 @@ func runScript(scr : UTScript):
 					if get(j):
 						text += str(get(j))+" "
 					else:
-						text += j+" "
+						var txt = str(j)
+						if txt[0] == '"':
+							txt[0] = ""
+						if txt[-1] == '"':
+							txt[-1] = ""
+						text += txt+" "
 				print(text)
 			"dialog":
 				var dialog = []
@@ -192,9 +206,15 @@ func runScript(scr : UTScript):
 				await flavorbox.StartBattleDialogue(dialog)
 			"set":
 				if get(i.parameters[0]) != null:
-					set(i.parameters[0],str_to_var(i.parameters[1]))
+					if get(i.parameters[1]) != null:
+						set(i.parameters[0],get(i.parameters[1]))
+					else:
+						set(i.parameters[0],str_to_var(i.parameters[1]))
 				else:
-					vars[i.parameters[0]] = str_to_var(i.parameters[1])
+					if get(i.parameters[1]) != null:
+						vars[i.parameters[0]] = get(i.parameters[1])
+					else:
+						vars[i.parameters[0]] = str_to_var(i.parameters[1])
 			"set_enemydata":
 				if enemy_data.get(i.parameters[0]) != null:
 					if str(i.parameters[0]) == "EnemySprite" or str(i.parameters[0]) == "EnemyHurtSprite" or str(i.parameters[0]) == "EnemySpareSprite":
@@ -202,24 +222,78 @@ func runScript(scr : UTScript):
 					else:
 						enemy_data.set(i.parameters[0],str_to_var(i.parameters[1]))
 			"create_sprite":
+				print(i.parameters)
 				var sprite = Sprite2D.new()
 				sprite.name = str(i.parameters[0])
 				sprite.position = Vector2(int(i.parameters[1]),int(i.parameters[2]))
-				sprite.texture = load("res://Sprites/"+str(i.parameters[3]))
+				sprite.texture = load(Undermaker.Path+"Sprites/"+str(i.parameters[3])+".png")
+				print(i.parameters.size())
 				if i.parameters.size() >= 5:
+					print("layer "+str(i.parameters[4]))
 					sprite.z_index = int(i.parameters[4])
-				if i.parameters.size() >= 7:
+				if i.parameters.size() == 7:
+					print("offset "+str(i.parameters[5])+" "+str(i.parameters[6]))
 					sprite.offset = Vector2(int(i.parameters[5]),int(i.parameters[6]))
-				if i.flags.has("-scene"):
+				if i.flags.has("_scene"):
 					get_tree().current_scene.add_child(sprite)
 				else:
 					add_child(sprite)
-			"add":
-				if vars[i.parameters[0]] is int:
-					vars[i.parameters[0]] += int(i.parameters[1])
+			"set_sprite":
+				if i.flags.has("_scene"):
+					get_tree().current_scene.get_node(str(i.parameters[0])).texture = load(Undermaker.Path+"Sprites/"+str(i.parameters[1])+".png")
+				else:
+					get_node(str(i.parameters[0])).texture = load(Undermaker.Path+"Sprites/"+str(i.parameters[1])+".png")
+			"sin":
+				vars[str(i.parameters[0])] = sin(frame*float(i.parameters[1]))*float(i.parameters[2])
+			"cos":
+				vars[str(i.parameters[0])] = cos(frame*float(i.parameters[1]))*float(i.parameters[2])
+			"rand":
+				vars[str(i.parameters[0])] = randf_range(float(i.parameters[1]),float(i.parameters[2]))
+			"set_property":
+				var setvar = str_to_var(i.parameters[2])
+				if vars.has(str(i.parameters[2])):
+					setvar = vars[str(i.parameters[2])]
+				elif get(i.parameters[2]):
+					setvar = get(i.parameters[2])
+				if i.parameters[0] == "self":
+					set(i.parameters[1],setvar)
+				else:
+					if i.flags.has("_scene"):
+						get_tree().current_scene.get_node(str(i.parameters[0])).set(i.parameters[1],setvar)
+					else:
+						get_node(str(i.parameters[0])).set(i.parameters[1],setvar)
+			"set_position":
+				var x = int(i.parameters[1])
+				var y = int(i.parameters[2])
+				
+				if vars.has(str(i.parameters[1])):
+					x = vars[str(i.parameters[1])]
+				if vars.has(str(i.parameters[2])):
+					y = vars[str(i.parameters[2])]
+				
+				var pos = Vector2(x,y)
+				if i.parameters[0] == "self":
+					set("position",pos)
+				else:
+					if i.flags.has("_scene"):
+						get_tree().current_scene.get_node(str(i.parameters[0])).set("position",pos)
+					else:
+						get_node(str(i.parameters[0])).set("position",pos)
+			"change":
+				if vars.has(str(i.parameters[1])):
+					if vars[str(i.parameters[1])] is int:
+						match str(i.parameters[0]):
+							"+":
+								vars[str(i.parameters[1])] += int(i.parameters[2])
+							"-":
+								vars[str(i.parameters[1])] -= int(i.parameters[2])
+							"*":
+								vars[str(i.parameters[1])] *= int(i.parameters[2])
+							"/":
+								vars[str(i.parameters[1])] /= int(i.parameters[2])
 			"if":
-				var compare = str(i.parameters[0])
-				if i.flags.has("-not"):
+				var compare = i.parameters[0]
+				if i.flags.has("_not"):
 					if get(compare):
 						if i.parameters.size() == 1:
 							runNext = false
@@ -231,7 +305,7 @@ func runScript(scr : UTScript):
 					if vars[compare] == str_to_var(i.parameters[1]):
 						runNext = false
 				else:
-					if get(compare):
+					if get(compare) != null:
 						if i.parameters.size() == 1:
 							runNext = true
 						elif get(compare) == str_to_var(i.parameters[1]):
@@ -249,12 +323,10 @@ func runScript(scr : UTScript):
 
 func _process(_delta):
 	frame += 1
-	sin = sin(frame)
-	cos = cos(frame)
-	if hasUpdateScript:
+	if hasUpdateScript and state == 1:
 		var scr = UTScript.new()
 		scr.loadScript("Enemies/"+enemy_data.name+"/Update.utscript")
-		await runScript(scr)
+		runScript(scr)
 	if damaging:
 		sprite.texture = enemy_data.EnemyHurtSprite
 	elif state == 2:

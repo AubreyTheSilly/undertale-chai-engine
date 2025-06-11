@@ -515,6 +515,7 @@ script = ExtResource("3_25xbn")
 
 [node name="HPBar" type="TextureProgressBar" parent="."]
 visible = false
+z_index = 1
 offset_left = -24.0
 offset_top = -34.5
 offset_right = 27.0
@@ -526,9 +527,11 @@ texture_under = ExtResource("6_sn47w")
 texture_progress = ExtResource("7_pcqe5")
 
 [node name="DamageText" parent="." instance=ExtResource("8_1o3so")]
+z_index = 1
 position = Vector2(-48.5, -53)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 1
 scale = Vector2(0.75, 0.75)
 sprite_frames = SubResource("SpriteFrames_qkdun")
 frame = 6

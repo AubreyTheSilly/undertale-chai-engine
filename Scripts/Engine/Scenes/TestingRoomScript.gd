@@ -4,9 +4,13 @@ extends Node2D
 func _ready():
 	if PlayerData.flags.has("clover"):
 		if PlayerData.flags["clover"] == 0:
+			Undermaker.player_can_move = true
 			PlayerData.flags["clover"] = 1
 			if PlayerData.EXP == 0:
-				await DialogueHandler.StartDialogue(["* oh sorry i didn't realise[newline]  it would attack you :(","my bad"])
+				await DialogueHandler.StartDialogue(["* oh sorry i didn't realise[newline]  it would attack you","* my bad"])
+			else:
+				await DialogueHandler.StartDialogue(["* bro did you just fucking kill that doggy","* that's a genocide","* sans get this mf"])
+				Battle.Encounter("dustsans")
 	else:
 		PlayerData.flags["clover"] = 0
 		Undermaker.player_can_move = false

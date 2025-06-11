@@ -77,3 +77,6 @@ func _process(_delta) -> void:
 			get_window().mode = get_window().MODE_WINDOWED
 		else:
 			get_window().mode = get_window().MODE_FULLSCREEN
+
+func load_scene(sceneName : String):
+	get_tree().change_scene_to_packed(load("res://Scenes/TestScenes/"+sceneName+".tscn"))

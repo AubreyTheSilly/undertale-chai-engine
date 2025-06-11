@@ -24,6 +24,7 @@ DialogueHandler="*res://Scenes/Objects/DialogueHandler.tscn"
 Battle="*res://Scripts/Engine/Classes/Battle.gd"
 Items="*res://Scripts/Engine/Classes/Items.gd"
 PlayerData="*res://Scripts/Engine/Classes/PlayerData.gd"
+fader="*res://Scenes/Objects/fader.tscn"
 
 [display]
 
