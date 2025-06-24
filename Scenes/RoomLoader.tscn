@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://fx5iw7vsg4x8"]
+
+[ext_resource type="Script" uid="uid://br1q3s4y11s8f" path="res://Scripts/Engine/Scenes/room_loader.gd" id="1_j27jd"]
+
+[node name="Room" type="Node2D"]
+script = ExtResource("1_j27jd")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0

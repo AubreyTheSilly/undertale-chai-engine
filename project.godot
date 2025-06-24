@@ -11,9 +11,14 @@ config_version=5
 [application]
 
 config/name="UNDERTALE - CHAI ENGINE"
-run/main_scene="res://Scenes/Menu.tscn"
+run/main_scene="uid://dnjysem7vkqxv"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="undercreator"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 run/max_fps=30
+boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/use_filter=false
+boot_splash/image="uid://c8kf3q61m6fbl"
 config/icon="uid://cld6yyq8mvbqs"
 
 [autoload]
@@ -35,6 +40,10 @@ window/size/window_width_override=640
 window/size/window_height_override=480
 window/subwindows/embed_subwindows=false
 window/stretch/mode="canvas_items"
+
+[editor]
+
+run/main_run_args="--creator"
 
 [gui]
 
@@ -108,4 +117,4 @@ Fullscreen={
 textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
-environment/defaults/default_clear_color=Color(0.6, 0.6, 0.6, 1)
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)

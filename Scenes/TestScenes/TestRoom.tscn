@@ -14,7 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://25q0kjsmovrf" path="res://Sprites/Character/Clover/spr_cloveru_1.png" id="12_he2et"]
 [ext_resource type="Texture2D" uid="uid://cgmffv00h7j77" path="res://Sprites/Character/Clover/spr_cloveru_3.png" id="13_elm4b"]
 [ext_resource type="Texture2D" uid="uid://eqivvgggeqb0" path="res://Sprites/Character/Clover/spr_cloveru_2.png" id="14_hah11"]
-[ext_resource type="Script" uid="uid://cw83i3o8jodo5" path="res://Scripts/CharacterSprite.gd" id="15_ms343"]
+[ext_resource type="Script" uid="uid://cw83i3o8jodo5" path="res://Scripts/Engine/Classes/CharacterSprite.gd" id="15_ms343"]
 [ext_resource type="PackedScene" uid="uid://txeqj7p6n33l" path="res://Scenes/Objects/Player.tscn" id="16_3lqki"]
 [ext_resource type="Texture2D" uid="uid://nk30f2egad37" path="res://Sprites/Character/Frisk/spr_maincharad_0.png" id="17_aslog"]
 [ext_resource type="Texture2D" uid="uid://dghqku1jvge1c" path="res://Sprites/Character/Frisk/spr_maincharal_0.png" id="18_lytxb"]
