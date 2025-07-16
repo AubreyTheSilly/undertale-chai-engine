@@ -54,7 +54,7 @@ script = ExtResource("1_tnkeg")
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -15)
 sprite_frames = SubResource("SpriteFrames_y547t")
-animation = &"idle_up"
+animation = &"move_right"
 autoplay = "idle_down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

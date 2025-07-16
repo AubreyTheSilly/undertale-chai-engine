@@ -148,6 +148,7 @@ func act(Act : String) -> void:
 			scr.loadScript("Enemies/"+enemy_data.name+"/Acts/"+Act+".utscript")
 			await runScript(scr)
 		else:
+			# uh oh!
 			await flavorbox.StartBattleDialogue(["* Error!"])
 
 func dialogue() -> void:
@@ -226,7 +227,7 @@ func runScript(scr : UTScript):
 				var sprite = Sprite2D.new()
 				sprite.name = str(i.parameters[0])
 				sprite.position = Vector2(int(i.parameters[1]),int(i.parameters[2]))
-				sprite.texture = load(Undermaker.Path+"Sprites/"+str(i.parameters[3])+".png")
+				sprite.texture = Loader.load_file("Sprites/"+str(i.parameters[3])+".png")
 				print(i.parameters.size())
 				if i.parameters.size() >= 5:
 					print("layer "+str(i.parameters[4]))
@@ -240,9 +241,9 @@ func runScript(scr : UTScript):
 					add_child(sprite)
 			"set_sprite":
 				if i.flags.has("_scene"):
-					get_tree().current_scene.get_node(str(i.parameters[0])).texture = load(Undermaker.Path+"Sprites/"+str(i.parameters[1])+".png")
+					get_tree().current_scene.get_node(str(i.parameters[0])).texture = Loader.load_file("Sprites/"+str(i.parameters[1])+".png")
 				else:
-					get_node(str(i.parameters[0])).texture = load(Undermaker.Path+"Sprites/"+str(i.parameters[1])+".png")
+					get_node(str(i.parameters[0])).texture = Loader.load_file("Sprites/"+str(i.parameters[1])+".png")
 			"sin":
 				vars[str(i.parameters[0])] = sin(frame*float(i.parameters[1]))*float(i.parameters[2])
 			"cos":

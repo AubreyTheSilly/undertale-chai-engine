@@ -12,3 +12,12 @@ centered = false
 position = Vector2(59, 160)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
+pitch_scale = 0.91
+
+[node name="ColorRect" type="ColorRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+offset_right = 320.0
+offset_bottom = 240.0
+color = Color(0, 0, 0, 1)

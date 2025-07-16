@@ -1,3 +1,586 @@
-[gd_scene format=3 uid="uid://bs3djk331aip0"]
+[gd_scene load_steps=15 format=3 uid="uid://bs3djk331aip0"]
 
-[node name="Node2D" type="Node2D"]
+[ext_resource type="Script" uid="uid://cbwd0tkbqc2uy" path="res://Scripts/Engine/editor.gd" id="1_24ceq"]
+[ext_resource type="AudioStream" uid="uid://co33t77depyrh" path="res://Audio/BGM/mus_editor.ogg" id="1_eyy8u"]
+[ext_resource type="PackedScene" uid="uid://bkjf2cxdicqe7" path="res://Scenes/Objects/fake_enemy.tscn" id="3_a7iym"]
+[ext_resource type="Script" uid="uid://da0qn1e64ibou" path="res://Scenes/room_display.gd" id="3_wkuwf"]
+[ext_resource type="Script" uid="uid://be4ri408nmn3m" path="res://Scenes/character_editor.gd" id="4_7wlcy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_24ceq"]
+bg_color = Color(1, 1, 1, 0.25)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a7iym"]
+bg_color = Color(0, 0, 0, 0.25)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7wlcy"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_24ceq"]
+font_size = 13
+
+[sub_resource type="LabelSettings" id="LabelSettings_a7iym"]
+font_size = 13
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8howc"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b78su"]
+bg_color = Color(1, 1, 1, 0.1)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wkuwf"]
+bg_color = Color(1, 1, 1, 0.25)
+corner_detail = 1
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7wlcy"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"idle_down",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle_left",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle_right",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle_up",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"walk_down",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"walk_left",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"walk_right",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"walk_up",
+"speed": 5.0
+}]
+
+[node name="editor" type="Node2D"]
+script = ExtResource("1_24ceq")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("1_eyy8u")
+autoplay = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+z_index = 1
+anchor_mode = 0
+
+[node name="ColorRect" type="ColorRect" parent="Camera2D"]
+z_index = -10
+z_as_relative = false
+offset_right = 320.0
+offset_bottom = 240.0
+mouse_filter = 2
+color = Color(0.7, 0.7, 0.75, 1)
+
+[node name="Room" type="Button" parent="Camera2D"]
+z_index = 1
+offset_left = 82.0
+offset_top = 216.0
+offset_right = 142.0
+offset_bottom = 240.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 13
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+action_mode = 0
+text = "Room"
+
+[node name="Enemy" type="Button" parent="Camera2D"]
+z_index = 1
+offset_left = 144.0
+offset_top = 216.0
+offset_right = 204.0
+offset_bottom = 240.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 13
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+action_mode = 0
+text = "Enemy"
+
+[node name="Npc" type="Button" parent="Camera2D"]
+z_index = 1
+offset_left = 206.0
+offset_top = 216.0
+offset_right = 246.0
+offset_bottom = 240.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 13
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+action_mode = 0
+text = "NPC"
+
+[node name="Character" type="Button" parent="Camera2D"]
+z_index = 1
+offset_top = 216.0
+offset_right = 80.0
+offset_bottom = 240.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 13
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+action_mode = 0
+text = "Character"
+
+[node name="Project" type="Button" parent="Camera2D"]
+z_index = 1
+offset_left = 248.0
+offset_top = 216.0
+offset_right = 320.0
+offset_bottom = 240.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 13
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+action_mode = 0
+text = "Project"
+
+[node name="Label" type="Label" parent="Camera2D"]
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 139.0
+offset_bottom = 31.0
+text = "Project Name"
+label_settings = SubResource("LabelSettings_24ceq")
+
+[node name="Place" type="Label" parent="Camera2D"]
+offset_left = 10.0
+offset_top = 26.0
+offset_right = 259.0
+offset_bottom = 58.0
+text = "Project Settings"
+label_settings = SubResource("LabelSettings_a7iym")
+
+[node name="Settings" type="Node2D" parent="."]
+visible = false
+
+[node name="LineEdit" type="LineEdit" parent="Settings"]
+offset_left = 20.0
+offset_top = 60.0
+offset_right = 170.0
+offset_bottom = 84.0
+focus_mode = 1
+theme_override_font_sizes/font_size = 13
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+placeholder_text = "Project Name"
+
+[node name="LineEdit2" type="LineEdit" parent="Settings"]
+offset_left = 20.0
+offset_top = 90.0
+offset_right = 170.0
+offset_bottom = 114.0
+focus_mode = 1
+theme_override_font_sizes/font_size = 13
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+placeholder_text = "Game Name"
+
+[node name="Save" type="Button" parent="Settings"]
+z_index = 1
+offset_left = 240.0
+offset_top = 7.5
+offset_right = 300.0
+offset_bottom = 31.5
+focus_mode = 0
+theme_override_font_sizes/font_size = 13
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+action_mode = 0
+text = "Save"
+
+[node name="RoomEditor" type="Node2D" parent="."]
+
+[node name="RoomDisplay" type="Node2D" parent="RoomEditor"]
+script = ExtResource("3_wkuwf")
+
+[node name="LineEdit" type="LineEdit" parent="RoomEditor"]
+anchors_preset = -1
+anchor_top = -0.00416667
+anchor_bottom = -0.00416667
+offset_left = 158.0
+offset_top = 4.0
+offset_right = 308.0
+offset_bottom = 28.0
+focus_mode = 1
+theme_override_font_sizes/font_size = 12
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+placeholder_text = "Room Name"
+metadata/_edit_use_anchors_ = true
+
+[node name="LineEdit2" type="LineEdit" parent="RoomEditor"]
+offset_right = 46.375
+offset_bottom = 28.0
+
+[node name="EnemyEditor" type="Node2D" parent="."]
+visible = false
+
+[node name="FakeEnemy" parent="EnemyEditor" instance=ExtResource("3_a7iym")]
+position = Vector2(60, 120)
+
+[node name="Hurt" type="Button" parent="EnemyEditor"]
+z_index = 1
+offset_left = 158.0
+offset_top = 168.0
+offset_right = 207.0
+offset_bottom = 192.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 12
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+action_mode = 0
+text = "Hurt"
+
+[node name="Save" type="Button" parent="EnemyEditor"]
+z_index = 1
+offset_left = 209.0
+offset_top = 168.0
+offset_right = 258.0
+offset_bottom = 192.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 12
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+action_mode = 0
+text = "Save"
+
+[node name="Next" type="Button" parent="EnemyEditor"]
+z_index = 1
+offset_left = 260.0
+offset_top = 168.0
+offset_right = 308.0
+offset_bottom = 192.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 12
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+action_mode = 0
+text = "Next"
+
+[node name="Page1" type="Node2D" parent="EnemyEditor"]
+
+[node name="EnemyName" type="LineEdit" parent="EnemyEditor/Page1"]
+anchors_preset = -1
+anchor_top = -0.00416667
+anchor_bottom = -0.00416667
+offset_left = 158.0
+offset_top = 12.0
+offset_right = 308.0
+offset_bottom = 36.0
+focus_mode = 1
+theme_override_font_sizes/font_size = 11
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+placeholder_text = "Enemy Name"
+metadata/_edit_use_anchors_ = true
+
+[node name="FileName" type="LineEdit" parent="EnemyEditor/Page1"]
+anchors_preset = -1
+anchor_top = -0.00416667
+anchor_bottom = -0.00416667
+offset_left = 158.0
+offset_top = 38.0
+offset_right = 308.0
+offset_bottom = 62.0
+focus_mode = 1
+theme_override_font_sizes/font_size = 11
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+placeholder_text = "Filename"
+metadata/_edit_use_anchors_ = true
+
+[node name="NormalSprite" type="LineEdit" parent="EnemyEditor/Page1"]
+anchors_preset = -1
+anchor_top = -0.00416667
+anchor_bottom = -0.00416667
+offset_left = 158.0
+offset_top = 64.0
+offset_right = 308.0
+offset_bottom = 88.0
+focus_mode = 1
+theme_override_font_sizes/font_size = 11
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+placeholder_text = "Idle Sprite"
+metadata/_edit_use_anchors_ = true
+
+[node name="HurtSprite" type="LineEdit" parent="EnemyEditor/Page1"]
+anchors_preset = -1
+anchor_top = -0.00416667
+anchor_bottom = -0.00416667
+offset_left = 158.0
+offset_top = 90.0
+offset_right = 308.0
+offset_bottom = 114.0
+focus_mode = 1
+theme_override_font_sizes/font_size = 11
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+placeholder_text = "Hurt Sprite"
+metadata/_edit_use_anchors_ = true
+
+[node name="SpareSprite" type="LineEdit" parent="EnemyEditor/Page1"]
+anchors_preset = -1
+anchor_top = -0.00416667
+anchor_bottom = -0.00416667
+offset_left = 158.0
+offset_top = 116.0
+offset_right = 308.0
+offset_bottom = 140.0
+focus_mode = 1
+theme_override_font_sizes/font_size = 11
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+placeholder_text = "Spare Sprite"
+metadata/_edit_use_anchors_ = true
+
+[node name="HP" type="LineEdit" parent="EnemyEditor/Page1"]
+anchors_preset = -1
+anchor_top = -0.00416667
+anchor_bottom = -0.00416667
+offset_left = 158.0
+offset_top = 142.0
+offset_right = 207.0
+offset_bottom = 166.0
+focus_mode = 1
+theme_override_font_sizes/font_size = 11
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+placeholder_text = "HP"
+metadata/_edit_use_anchors_ = true
+
+[node name="ATK" type="LineEdit" parent="EnemyEditor/Page1"]
+anchors_preset = -1
+anchor_top = -0.00416667
+anchor_bottom = -0.00416667
+offset_left = 209.0
+offset_top = 142.0
+offset_right = 258.0
+offset_bottom = 166.0
+focus_mode = 1
+theme_override_font_sizes/font_size = 11
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+placeholder_text = "ATK"
+metadata/_edit_use_anchors_ = true
+
+[node name="DEF" type="LineEdit" parent="EnemyEditor/Page1"]
+anchors_preset = -1
+anchor_top = -0.00416667
+anchor_bottom = -0.00416667
+offset_left = 260.0
+offset_top = 142.0
+offset_right = 308.0
+offset_bottom = 166.0
+focus_mode = 1
+theme_override_font_sizes/font_size = 11
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+placeholder_text = "DEF"
+metadata/_edit_use_anchors_ = true
+
+[node name="Page2" type="Node2D" parent="EnemyEditor"]
+
+[node name="NPCEditor" type="Node2D" parent="."]
+visible = false
+
+[node name="CharacterEditor" type="Node2D" parent="."]
+visible = false
+script = ExtResource("4_7wlcy")
+
+[node name="ItemList" type="ItemList" parent="CharacterEditor"]
+offset_left = 150.0
+offset_top = 10.0
+offset_right = 250.0
+offset_bottom = 180.0
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_8howc")
+theme_override_styles/hovered = SubResource("StyleBoxFlat_b78su")
+theme_override_styles/hovered_selected = SubResource("StyleBoxFlat_wkuwf")
+theme_override_styles/selected = SubResource("StyleBoxFlat_wkuwf")
+
+[node name="ItemList2" type="ItemList" parent="CharacterEditor"]
+offset_left = 248.0
+offset_top = 10.0
+offset_right = 310.0
+offset_bottom = 180.0
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_8howc")
+theme_override_styles/hovered = SubResource("StyleBoxFlat_b78su")
+theme_override_styles/hovered_selected = SubResource("StyleBoxFlat_wkuwf")
+theme_override_styles/selected = SubResource("StyleBoxFlat_wkuwf")
+item_count = 8
+item_0/text = "walk_up"
+item_1/text = "walk_down"
+item_2/text = "walk_left"
+item_3/text = "walk_right"
+item_4/text = "idle_up"
+item_5/text = "idle_down"
+item_6/text = "idle_left"
+item_7/text = "idle_right"
+
+[node name="AddSprite" type="Button" parent="CharacterEditor"]
+z_index = 1
+offset_left = 259.0
+offset_top = 180.0
+offset_right = 308.0
+offset_bottom = 204.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 12
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+action_mode = 0
+text = "Add"
+
+[node name="LineEdit" type="LineEdit" parent="CharacterEditor"]
+anchors_preset = -1
+anchor_top = -0.00416667
+anchor_bottom = -0.00416667
+offset_left = 152.0
+offset_top = 180.0
+offset_right = 257.0
+offset_bottom = 204.0
+focus_mode = 1
+theme_override_font_sizes/font_size = 12
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+placeholder_text = "Frame Sprite"
+metadata/_edit_use_anchors_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterEditor"]
+position = Vector2(75, 100)
+sprite_frames = SubResource("SpriteFrames_7wlcy")
+animation = &"idle_down"
+autoplay = "idle_down"
+
+[node name="SaveChar" type="Button" parent="CharacterEditor"]
+z_index = 1
+offset_left = 11.0
+offset_top = 180.0
+offset_right = 77.0
+offset_bottom = 204.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 12
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+action_mode = 0
+text = "Save"
+
+[node name="LoadChar" type="Button" parent="CharacterEditor"]
+z_index = 1
+offset_left = 79.0
+offset_top = 180.0
+offset_right = 145.0
+offset_bottom = 204.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 12
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+action_mode = 0
+text = "Load"
+
+[node name="LineEdit2" type="LineEdit" parent="CharacterEditor"]
+anchors_preset = -1
+anchor_top = -0.00416667
+anchor_bottom = -0.00416667
+offset_left = 11.0
+offset_top = 154.0
+offset_right = 145.0
+offset_bottom = 178.0
+focus_mode = 1
+theme_override_font_sizes/font_size = 12
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+placeholder_text = "Filename"
+metadata/_edit_use_anchors_ = true
+
+[connection signal="pressed" from="Camera2D/Room" to="." method="_on_room_pressed"]
+[connection signal="pressed" from="Camera2D/Enemy" to="." method="_on_enemy_pressed"]
+[connection signal="pressed" from="Camera2D/Npc" to="." method="_on_npc_pressed"]
+[connection signal="pressed" from="Camera2D/Character" to="." method="_on_character_pressed"]
+[connection signal="pressed" from="Camera2D/Project" to="." method="_on_project_pressed"]
+[connection signal="pressed" from="Settings/Save" to="." method="_on_save_settings_pressed"]
+[connection signal="pressed" from="EnemyEditor/Hurt" to="EnemyEditor/FakeEnemy" method="Shudder"]
+[connection signal="pressed" from="EnemyEditor/Save" to="EnemyEditor/FakeEnemy" method="_on_save_pressed"]
+[connection signal="pressed" from="EnemyEditor/Next" to="." method="_on_next_enenymenu_pressed"]
+[connection signal="item_selected" from="CharacterEditor/ItemList" to="CharacterEditor" method="_on_framelist_item_selected"]
+[connection signal="item_selected" from="CharacterEditor/ItemList2" to="CharacterEditor" method="_on_animlist_item_selected"]
+[connection signal="pressed" from="CharacterEditor/AddSprite" to="CharacterEditor" method="_on_add_sprite_pressed"]
+[connection signal="pressed" from="CharacterEditor/SaveChar" to="CharacterEditor" method="_on_save_pressed"]
+[connection signal="pressed" from="CharacterEditor/LoadChar" to="CharacterEditor" method="_on_load_pressed"]

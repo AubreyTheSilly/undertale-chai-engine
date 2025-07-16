@@ -39,7 +39,7 @@ func _process(_delta) -> void:
 			match battle.soulMode:
 				Battle.SOULMODES.RED:
 					velocity = Vector2.ZERO
-					velocity = Input.get_vector("Move Left","Move Right","Move Up","Move Down")*(30*SPEED)
+					velocity = (Input.get_vector("Move Left","Move Right","Move Up","Move Down")*(30*SPEED))
 				Battle.SOULMODES.BLUE:
 					bluevel.x = Input.get_axis("Move Left","Move Right")
 					if is_on_floor_only():

@@ -3,7 +3,6 @@ extends CanvasLayer
 signal done
 
 func _ready():
-	get_tree().current_scene
 	$PlayerSprite.global_position = PlayerData.obj.position
 	$Heart.global_position = PlayerData.obj.position
 	var dir = PlayerData.obj.direction

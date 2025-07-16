@@ -1,7 +1,7 @@
 extends Window
 
 func _on_create_click():
-	if Undermaker.loadProject($LineEdit.text) == OK:
+	if Undermaker.loadProject() == OK:
 		visible = false
 	else:
 		$Label2.visible = true

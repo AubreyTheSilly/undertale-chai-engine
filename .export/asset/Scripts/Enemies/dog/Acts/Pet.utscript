@@ -1,0 +1,3 @@
+set spare true
+set nextdialogue "Happy&bark!!!"
+dialog "* You pat the top of the[newline]  dog's head..." "* It barks at you happily! :D"

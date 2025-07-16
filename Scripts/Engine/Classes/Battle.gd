@@ -32,9 +32,9 @@ func DictionaryToEnemyData(dict : Dictionary) -> EnemyData:
 	var enemydata = EnemyData.new()
 	enemydata.EnemyName = dict["enemyName"]
 	enemydata.name = dict["name"]
-	enemydata.EnemySprite = load("res://Sprites/Battle/Enemies/"+dict["sprite"]+".png")
-	enemydata.EnemyHurtSprite = load("res://Sprites/Battle/Enemies/"+dict["hurtSprite"]+".png")
-	enemydata.EnemySpareSprite = load("res://Sprites/Battle/Enemies/"+dict["spareSprite"]+".png")
+	enemydata.EnemySprite = Loader.load_file("Sprites/Battle/Enemies/"+dict["sprite"]+".png")
+	enemydata.EnemyHurtSprite = Loader.load_file("Sprites/Battle/Enemies/"+dict["hurtSprite"]+".png")
+	enemydata.EnemySpareSprite = Loader.load_file("Sprites/Battle/Enemies/"+dict["spareSprite"]+".png")
 	enemydata.HP = dict["hp"]
 	enemydata.ATK = dict["atk"]
 	enemydata.DEF = dict["def"]

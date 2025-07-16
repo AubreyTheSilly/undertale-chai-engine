@@ -17,8 +17,10 @@ var fun : int = randi_range(0,100)
 var room = "TestRoom"
 
 var obj : Player
+var player_can_move = true
+var player_teleporting = false
 
-func loadFile():
+func loadFile(newgame : bool = false):
 	pass
 
 func _process(_delta):

@@ -18,7 +18,7 @@ config/features=PackedStringArray("4.4", "GL Compatibility")
 run/max_fps=30
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/use_filter=false
-boot_splash/image="uid://c8kf3q61m6fbl"
+boot_splash/image="uid://dlf6gl4db6e34"
 config/icon="uid://cld6yyq8mvbqs"
 
 [autoload]
@@ -30,6 +30,7 @@ Battle="*res://Scripts/Engine/Classes/Battle.gd"
 Items="*res://Scripts/Engine/Classes/Items.gd"
 PlayerData="*res://Scripts/Engine/Classes/PlayerData.gd"
 fader="*res://Scenes/Objects/fader.tscn"
+Loader="*res://Scripts/Engine/Loader.gd"
 
 [display]
 
@@ -40,10 +41,6 @@ window/size/window_width_override=640
 window/size/window_height_override=480
 window/subwindows/embed_subwindows=false
 window/stretch/mode="canvas_items"
-
-[editor]
-
-run/main_run_args="--creator"
 
 [gui]
 

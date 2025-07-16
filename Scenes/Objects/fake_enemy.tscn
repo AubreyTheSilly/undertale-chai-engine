@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://bkjf2cxdicqe7"]
+
+[ext_resource type="Script" uid="uid://bolqqufc07oq8" path="res://Scripts/Engine/Objects/fakeenemy.gd" id="1_2wt2h"]
+[ext_resource type="Texture2D" uid="uid://cdlpvwckj8axf" path="res://Sprites/Battle/Enemies/spr_dummybattle_0.png" id="1_j5o1x"]
+
+[node name="FakeEnemy" type="Sprite2D"]
+texture = ExtResource("1_j5o1x")
+script = ExtResource("1_2wt2h")

@@ -23,6 +23,7 @@ func StartDialogue(dialogue : Array[String],position : int = DOWN) -> void:
 		var textcolor := Color(1,1,1)
 		var mode = "normal"
 		var speed = 1
+		var font = preload("res://Fonts/DTM-Mono.otf")
 		skiptext = false
 		for j in dialogbox.get_children():
 			j.queue_free()
@@ -54,6 +55,11 @@ func StartDialogue(dialogue : Array[String],position : int = DOWN) -> void:
 							mode = cmand[1]
 						"speed":
 							speed = int(cmand[1])
+						"font":
+							if Loader.load_file("Fonts/"+".otf"):
+								font = Loader.load_file("Fonts/"+".otf")
+							elif Loader.load_file("Fonts/"+".ttf"):
+								font = Loader.load_file("Fonts/"+".ttf")
 				_:
 					if cmd == true:
 						command += j
@@ -82,3 +88,4 @@ func StartDialogue(dialogue : Array[String],position : int = DOWN) -> void:
 func _process(_delta) -> void:
 	if visible and Input.is_action_just_pressed("Back"):
 		skiptext = true
+	var audio = AudioStream.new()

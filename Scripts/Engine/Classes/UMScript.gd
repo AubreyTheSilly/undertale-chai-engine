@@ -49,5 +49,5 @@ func loadScript(path:StringName) -> Error:
 			script.append(Function.new(funct,params,flags))
 		data = script
 		return OK
-	print("Script does not exist")
+	push_error("Script does not exist")
 	return FAILED

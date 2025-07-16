@@ -6,24 +6,49 @@ var imageindex = 0
 @onready var dialogbox = $Node2D
 @onready var soundplayer = $AudioStreamPlayer
 
+var skip = false
+
+signal finisheddialogue
+
 func _ready():
-	image.texture = load(Undermaker.Path+"Sprites/Intro/spr_introimage_"+str(imageindex)+".png")
-	await StartDialogue(["Long ago,[wait 30][next]","Test 2[wait 30]"])
+	$AudioStreamPlayer2.stream = Loader.load_file("Audio/BGM/mus_story.ogg")
+	if FileAccess.file_exists(Undermaker.Path+"Data/intro.txt"):
+		image.texture = Loader.load_file("Sprites/Intro/spr_introimage_"+str(imageindex)+".png")
+		var introtext = FileAccess.open(Undermaker.Path+"Data/intro.txt",FileAccess.READ)
+		var introdialog : Array[String] = []
+		while !introtext.eof_reached():
+			introdialog.append(introtext.get_line())
+		visible = true
+		$AudioStreamPlayer2.play()
+		StartDialogue(introdialog)
+		await finisheddialogue
+		skip = true
+	else:
+		$ColorRect.modulate.a = 1
+
+func _process(_delta):
+	if Input.is_action_just_pressed("Select"):
+		$AudioStreamPlayer.volume_db = -80
+		$Node2D.visible = false
+		skip = true
+	if skip:
+		$AudioStreamPlayer2.volume_db += -60*0.05
+		$ColorRect.modulate.a += 0.05
+	if $ColorRect.modulate.a >= 1:
+		get_tree().change_scene_to_packed(preload("res://Scenes/TitleMenu.tscn"))
 
 func nextimg():
 	for i in range(15):
 		image.modulate.a -= 1.0/15
 		await get_tree().process_frame
 	imageindex+=1
-	image.texture = load(Undermaker.Path+"Sprites/Intro/spr_introimage_"+str(imageindex)+".png")
+	image.texture = Loader.load_file("Sprites/Intro/spr_introimage_"+str(imageindex)+".png")
 	for i in range(15):
 		image.modulate.a += 1.0/15
 		await get_tree().process_frame
 
 func StartDialogue(dialogue : Array[String]) -> void:
-	visible = true
 	var sound = "SND_TXT2"
-	var face = "none"
 	for i in dialogue:
 		var textpos := Vector2(0,0)
 		var index := 0
@@ -48,10 +73,8 @@ func StartDialogue(dialogue : Array[String]) -> void:
 							textpos.x = 0
 							textpos.y += 1
 						"wait":
-							for k in range(int(cmand[1])):
+							for k in range(int(cmand[1])*7.5):
 								await get_tree().process_frame
-						"face":
-							face = cmand[1]
 						"color":
 							textcolor.r = float(cmand[1])/255.0
 							textcolor.g = float(cmand[2])/255.0
@@ -77,8 +100,9 @@ func StartDialogue(dialogue : Array[String]) -> void:
 						textpos.x += 1
 						dialogbox.add_child(chara)
 						soundplayer.stream = load("res://Audio/Sounds/"+sound+".wav")
-						soundplayer.play()
+						if j != " ":
+							soundplayer.play()
 						for k in range(speed):
 							await get_tree().process_frame
 							await get_tree().process_frame
-	visible = false
+	finisheddialogue.emit()

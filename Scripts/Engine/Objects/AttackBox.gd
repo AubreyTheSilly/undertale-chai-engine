@@ -68,7 +68,7 @@ func runScript(scr : UTScript,enemy_data : EnemyData):
 				var sprite = Sprite2D.new()
 				sprite.name = str(i.parameters[0])
 				sprite.position = Vector2(int(i.parameters[1]),int(i.parameters[2]))
-				sprite.texture = load(Undermaker.Path+"Sprites/"+str(i.parameters[3])+".png")
+				sprite.texture = Loader.load_file("Sprites/"+str(i.parameters[3])+".png")
 				print(i.parameters.size())
 				if i.parameters.size() >= 5:
 					print("layer "+str(i.parameters[4]))
@@ -166,7 +166,7 @@ func runScript(scr : UTScript,enemy_data : EnemyData):
 				if vars.has(str(i.parameters[2])):
 					attacky = vars[str(i.parameters[2])]
 				attack.position = Vector2(attackx,attacky)
-				attack.texture = load(Undermaker.Path+"Sprites/Battle/Attacks/"+str(i.parameters[3])+".png")
+				attack.texture = Loader.load_file("Sprites/Battle/Attacks/"+str(i.parameters[3])+".png")
 				var velx = float(i.parameters[4])
 				var vely = float(i.parameters[5])
 				if vars.has(str(i.parameters[4])):
@@ -183,7 +183,7 @@ func runScript(scr : UTScript,enemy_data : EnemyData):
 			"play_sound":
 				var audio = AudioStreamPlayer.new()
 				add_child(audio)
-				audio.stream = load(Undermaker.Path+"Audio/Sounds/"+str(i.parameters[0])+".wav")
+				audio.stream = Loader.load_file("Audio/Sounds/"+str(i.parameters[0])+".wav")
 				audio.finished.connect(audio.queue_free)
 				audio.play()
 			"set_box_size":

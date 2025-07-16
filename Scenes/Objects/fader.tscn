@@ -10,4 +10,5 @@ script = ExtResource("1_u7lk4")
 modulate = Color(1, 1, 1, 0)
 offset_right = 320.0
 offset_bottom = 240.0
+mouse_filter = 2
 color = Color(0, 0, 0, 1)

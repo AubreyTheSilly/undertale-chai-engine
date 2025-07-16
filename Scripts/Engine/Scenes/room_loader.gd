@@ -1,3 +1,4 @@
+class_name RoomLoader
 extends Node2D
 
 @export var room : Room

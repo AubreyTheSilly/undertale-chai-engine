@@ -1,0 +1,7 @@
+Long ago,[wait 1] two races[newline]ruled over Earth:[wait 1][newline]HUMANS and MONSTERS.[wait 6]
+One day,[wait 1] war broke[newline]out between the two[newline]races.[wait 6]
+After a long battle,[wait 1][newline]the humans were[newline]victorious.[wait 6]
+They sealed the monsters[newline]underground with a magic[newline]spell.[wait 6]
+Many years later.[wait 2].[wait 2].[wait 5]
+	  MT. EBOTT[newline]         201X[wait 9]
+Legends say that those[newline]who climb the mountain[newline]never return.[wait 8]

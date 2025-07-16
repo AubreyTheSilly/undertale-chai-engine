@@ -30,7 +30,7 @@ var attackStarted := false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	fader.fadeIn()
-	$BGM.stream = load("res://Audio/BGM/"+Battle.loadedBattle["music"]+".ogg")
+	$BGM.stream = Loader.load_file("Audio/BGM/"+Battle.loadedBattle["music"]+".ogg")
 	$BGM.play()
 	if !Battle.loadedBattle["bg"]:
 		$background.visible = false

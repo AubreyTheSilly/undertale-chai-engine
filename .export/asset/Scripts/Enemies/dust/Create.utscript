@@ -1,0 +1,3 @@
+create_sprite legs 0 40 Battle/Enemies/sans/spr_sanslegs_0 0 0 -40
+create_sprite body 0 0 Battle/Enemies/sans/spr_sanstorso_0
+create_sprite head 0 0 Battle/Enemies/sans/spr_sanshead_0

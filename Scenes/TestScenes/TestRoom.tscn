@@ -1,65 +1,10 @@
-[gd_scene load_steps=31 format=3 uid="uid://brsf5mna60qsa"]
+[gd_scene load_steps=2 format=3 uid="uid://brsf5mna60qsa"]
 
-[ext_resource type="Script" uid="uid://c18u0wlapspul" path="res://Scripts/Engine/Scenes/TestingRoomScript.gd" id="1_2ftxh"]
-[ext_resource type="PackedScene" uid="uid://c500t7ga4syg2" path="res://Scenes/Objects/Character.tscn" id="1_aihhj"]
-[ext_resource type="Texture2D" uid="uid://cbglgrvnfm487" path="res://Sprites/Character/Clover/spr_cloverd_0.png" id="3_p3cn1"]
-[ext_resource type="Texture2D" uid="uid://bo86ciavmvgf6" path="res://Sprites/Character/Clover/spr_cloverl_0.png" id="4_0ewv4"]
-[ext_resource type="Texture2D" uid="uid://cnoqqus40uivw" path="res://Sprites/Character/Clover/spr_cloverr_0.png" id="5_reuok"]
-[ext_resource type="Texture2D" uid="uid://bu8do73bhccmv" path="res://Sprites/Character/Clover/spr_cloveru_0.png" id="6_8fo27"]
-[ext_resource type="Texture2D" uid="uid://b6vuitgm0bbrd" path="res://Sprites/Character/Clover/spr_cloverd_1.png" id="7_wmio2"]
-[ext_resource type="Texture2D" uid="uid://bqdr57j1o27jh" path="res://Sprites/Character/Clover/spr_cloverd_3.png" id="8_huqp5"]
-[ext_resource type="Texture2D" uid="uid://bkrmlglcil7u6" path="res://Sprites/Character/Clover/spr_cloverd_2.png" id="9_3ab5d"]
-[ext_resource type="Texture2D" uid="uid://di3wjw5t26y4o" path="res://Sprites/Character/Clover/spr_cloverl_1.png" id="10_cd4ib"]
-[ext_resource type="Texture2D" uid="uid://dywbximxor1hn" path="res://Sprites/Character/Clover/spr_cloverr_1.png" id="11_k27rd"]
-[ext_resource type="Texture2D" uid="uid://25q0kjsmovrf" path="res://Sprites/Character/Clover/spr_cloveru_1.png" id="12_he2et"]
-[ext_resource type="Texture2D" uid="uid://cgmffv00h7j77" path="res://Sprites/Character/Clover/spr_cloveru_3.png" id="13_elm4b"]
-[ext_resource type="Texture2D" uid="uid://eqivvgggeqb0" path="res://Sprites/Character/Clover/spr_cloveru_2.png" id="14_hah11"]
-[ext_resource type="Script" uid="uid://cw83i3o8jodo5" path="res://Scripts/Engine/Classes/CharacterSprite.gd" id="15_ms343"]
 [ext_resource type="PackedScene" uid="uid://txeqj7p6n33l" path="res://Scenes/Objects/Player.tscn" id="16_3lqki"]
-[ext_resource type="Texture2D" uid="uid://nk30f2egad37" path="res://Sprites/Character/Frisk/spr_maincharad_0.png" id="17_aslog"]
-[ext_resource type="Texture2D" uid="uid://dghqku1jvge1c" path="res://Sprites/Character/Frisk/spr_maincharal_0.png" id="18_lytxb"]
-[ext_resource type="Texture2D" uid="uid://cfy26ky1tf4d4" path="res://Sprites/Character/Frisk/spr_maincharar_0.png" id="19_ojwh2"]
-[ext_resource type="Texture2D" uid="uid://bvg5grmuemgas" path="res://Sprites/Character/Frisk/spr_maincharau_0.png" id="20_s5cny"]
-[ext_resource type="Texture2D" uid="uid://defnlqbaqp530" path="res://Sprites/Character/Frisk/spr_maincharad_1.png" id="21_2bmua"]
-[ext_resource type="Texture2D" uid="uid://dvyenmp4crblb" path="res://Sprites/Character/Frisk/spr_maincharad_3.png" id="22_wwpcb"]
-[ext_resource type="Texture2D" uid="uid://blbqggo6e7jm6" path="res://Sprites/Character/Frisk/spr_maincharad_2.png" id="23_fl2eb"]
-[ext_resource type="Texture2D" uid="uid://de6ybmnxeew1d" path="res://Sprites/Character/Frisk/spr_maincharal_1.png" id="24_115bf"]
-[ext_resource type="Texture2D" uid="uid://b8vnbblghofic" path="res://Sprites/Character/Frisk/spr_maincharar_1.png" id="25_jr4lk"]
-[ext_resource type="Texture2D" uid="uid://dl5uydevw3a0n" path="res://Sprites/Character/Frisk/spr_maincharau_1.png" id="26_rnv7l"]
-[ext_resource type="Texture2D" uid="uid://cao5ngvripkls" path="res://Sprites/Character/Frisk/spr_maincharau_3.png" id="27_dtfpm"]
-[ext_resource type="Texture2D" uid="uid://du1bsfsonc81i" path="res://Sprites/Character/Frisk/spr_maincharau_2.png" id="28_mm6nq"]
-
-[sub_resource type="Resource" id="Resource_2r3ca"]
-script = ExtResource("15_ms343")
-WalkDown = Array[Texture2D]([ExtResource("7_wmio2"), ExtResource("3_p3cn1"), ExtResource("8_huqp5"), ExtResource("9_3ab5d")])
-WalkLeft = Array[Texture2D]([ExtResource("10_cd4ib"), ExtResource("4_0ewv4")])
-WalkRight = Array[Texture2D]([ExtResource("11_k27rd"), ExtResource("5_reuok")])
-WalkUp = Array[Texture2D]([ExtResource("12_he2et"), ExtResource("6_8fo27"), ExtResource("13_elm4b"), ExtResource("14_hah11")])
-IdleDown = ExtResource("3_p3cn1")
-IdleLeft = ExtResource("4_0ewv4")
-IdleRight = ExtResource("5_reuok")
-IdleUp = ExtResource("6_8fo27")
-
-[sub_resource type="Resource" id="Resource_op8k7"]
-script = ExtResource("15_ms343")
-WalkDown = Array[Texture2D]([ExtResource("21_2bmua"), ExtResource("17_aslog"), ExtResource("22_wwpcb"), ExtResource("23_fl2eb")])
-WalkLeft = Array[Texture2D]([ExtResource("24_115bf"), ExtResource("18_lytxb")])
-WalkRight = Array[Texture2D]([ExtResource("25_jr4lk"), ExtResource("19_ojwh2")])
-WalkUp = Array[Texture2D]([ExtResource("26_rnv7l"), ExtResource("20_s5cny"), ExtResource("27_dtfpm"), ExtResource("28_mm6nq")])
-IdleDown = ExtResource("17_aslog")
-IdleLeft = ExtResource("18_lytxb")
-IdleRight = ExtResource("19_ojwh2")
-IdleUp = ExtResource("20_s5cny")
 
 [node name="Node2D" type="Node2D"]
 y_sort_enabled = true
-script = ExtResource("1_2ftxh")
-
-[node name="Character" parent="." instance=ExtResource("1_aihhj")]
-position = Vector2(160, 80)
-Character_Sprite = SubResource("Resource_2r3ca")
 
 [node name="Player" parent="." instance=ExtResource("16_3lqki")]
 position = Vector2(160, 120)
-Character_Sprite = SubResource("Resource_op8k7")
-direction = "up"
+CharacterJson = "clover"

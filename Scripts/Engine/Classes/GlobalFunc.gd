@@ -1,12 +1,10 @@
 extends Node
 
 var Project : Dictionary = {
-	"projectName":"UNDERTALE",
+	"projectName":"New Project",
 	"gameName":"UNDERTALE"
 }
 var Path : String = "res://"
-
-var player_can_move = true
 
 func loadJsonAsDictionary(dir : String) -> Dictionary:
 	if !FileAccess.file_exists(Path+dir):
@@ -19,10 +17,12 @@ func loadJsonAsDictionary(dir : String) -> Dictionary:
 	if not parse_result == OK:
 		print("JSON Parse Error: ", json.get_error_message(), " in ", json_string, " at line ", json.get_error_line())
 		return {}
+	file.close()
 	return json.data
 
 func createJsonFromDictionary(dir : String,dict : Dictionary = {}) -> Error:
 	var file = FileAccess.open(Path+dir,FileAccess.WRITE)
+	print(FileAccess.get_open_error())
 	if !file:
 		return FAILED
 	var string = JSON.stringify(dict)
@@ -32,11 +32,8 @@ func createJsonFromDictionary(dir : String,dict : Dictionary = {}) -> Error:
 func createDirectory(dir : String) -> void:
 	DirAccess.make_dir_absolute(Path+dir)
 
-func loadProject(openpath : String) -> Error:
-	Path = openpath
-	if Path[-1] != "\\":
-		Path += "\\"
-	Project = loadJsonAsDictionary(Path+"project.umproject")
+func loadProject() -> Error:
+	Project = loadJsonAsDictionary("project.json")
 	if !Project:
 		return FAILED
 	get_window().title = Project["projectName"]
@@ -71,7 +68,8 @@ func newProject(newpath : String) -> Error:
 	return OK
 
 func _process(_delta) -> void:
-	get_window().title = Project["gameName"]
+	if Undermaker.Project.has("gameName"):
+		get_window().title = Project["gameName"]
 	if Input.is_action_just_pressed("Fullscreen"):
 		if get_window().mode == get_window().MODE_FULLSCREEN:
 			get_window().mode = get_window().MODE_WINDOWED
@@ -80,3 +78,10 @@ func _process(_delta) -> void:
 
 func load_scene(sceneName : String):
 	get_tree().change_scene_to_packed(load("res://Scenes/TestScenes/"+sceneName+".tscn"))
+
+func _ready():
+	if OS.is_debug_build():
+		Path="res://"
+	else:
+		Path=OS.get_executable_path().get_base_dir()+"/asset/"
+	loadProject()

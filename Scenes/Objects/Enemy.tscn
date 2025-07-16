@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://ghjeqv20751v"]
+[gd_scene load_steps=29 format=3 uid="uid://ghjeqv20751v"]
 
 [ext_resource type="Script" uid="uid://b8hxmfu6ccyo5" path="res://Scripts/Engine/Objects/enemy.gd" id="1_f7ytk"]
 [ext_resource type="Texture2D" uid="uid://cdlpvwckj8axf" path="res://Sprites/Battle/Enemies/spr_dummybattle_0.png" id="1_yatfw"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://ye5spsstmqik" path="res://Sprites/Battle/spr_slice_o_3.png" id="10_bswbq"]
 [ext_resource type="Texture2D" uid="uid://c1bmw4s6h0w2k" path="res://Sprites/Battle/spr_slice_o_4.png" id="11_16syu"]
 [ext_resource type="Texture2D" uid="uid://kibhhmpgde1f" path="res://Sprites/Battle/spr_slice_o_5.png" id="12_86awf"]
+[ext_resource type="AudioStream" uid="uid://coxfbknkv5fqu" path="res://Audio/Sounds/snd_damage_c.wav" id="13_6wei6"]
 [ext_resource type="AudioStream" uid="uid://csqr67tcdlo84" path="res://Audio/Sounds/SND_TXT1.wav" id="15_fvwyc"]
 [ext_resource type="FontFile" uid="uid://cvrg1o3nedg0c" path="res://Fonts/undertale-dotumche.otf" id="16_fvwyc"]
 [ext_resource type="Texture2D" uid="uid://81hi2vabuvw8" path="res://Sprites/Battle/SpeechBubbles/spr_blconabove_0.png" id="16_xmk3q"]
@@ -538,6 +539,7 @@ frame = 6
 frame_progress = 1.0
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("13_6wei6")
 
 [node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("15_fvwyc")

@@ -2,6 +2,8 @@ class_name Character
 extends CharacterBody2D
 
 @onready var sprite : AnimatedSprite2D = $Sprite
+## Character sprite JSON to load. Loads from Data/characters. e.g. "player" is Data/characters/player.json.
+@export var CharacterJson : String
 ## Set of animations for the character.
 @export var Character_Sprite : CharacterSprite
 ## Walk speed in pixels per frame. 1 = 30 pixels per second.
@@ -9,6 +11,9 @@ extends CharacterBody2D
 @export_enum("left","down","up","right") var direction = "down"
 
 func _ready():
+	if CharacterJson:
+		Character_Sprite = CharacterSprite.fromJson(CharacterJson+".json")
+	
 	if Character_Sprite.IdleDown:
 		sprite.sprite_frames.add_frame("idle_down",Character_Sprite.IdleDown,1,-1)
 	if Character_Sprite.IdleLeft:
@@ -32,7 +37,7 @@ func _ready():
 			sprite.sprite_frames.add_frame("move_right",i,1,-1)
 
 func handleAnimation(dir : Vector2) -> String:
-	var target_animation = "idle_down"
+	var target_animation := "idle_down"
 	match dir:
 		Vector2(-1,0):
 			direction = "left"
@@ -46,7 +51,7 @@ func handleAnimation(dir : Vector2) -> String:
 		target_animation = "idle_"+direction
 	else:
 		target_animation = "move_"+direction
-	if sprite.animation != target_animation:
+	if sprite.animation != target_animation and sprite.sprite_frames.get_frame_texture(target_animation,0):
 		sprite.animation = target_animation
 		sprite.play()
 	return target_animation

@@ -1,30 +1,6 @@
-[gd_scene load_steps=18 format=3 uid="uid://txeqj7p6n33l"]
+[gd_scene load_steps=4 format=3 uid="uid://txeqj7p6n33l"]
 
 [ext_resource type="Script" uid="uid://cyeou45gb8e8p" path="res://Scripts/Engine/Objects/Player.gd" id="1_e2oef"]
-[ext_resource type="Texture2D" uid="uid://nk30f2egad37" path="res://Sprites/Character/Frisk/spr_maincharad_0.png" id="2_12acn"]
-[ext_resource type="Texture2D" uid="uid://dghqku1jvge1c" path="res://Sprites/Character/Frisk/spr_maincharal_0.png" id="3_8ydoy"]
-[ext_resource type="Texture2D" uid="uid://cfy26ky1tf4d4" path="res://Sprites/Character/Frisk/spr_maincharar_0.png" id="4_a48mv"]
-[ext_resource type="Texture2D" uid="uid://bvg5grmuemgas" path="res://Sprites/Character/Frisk/spr_maincharau_0.png" id="5_hwqf6"]
-[ext_resource type="Texture2D" uid="uid://defnlqbaqp530" path="res://Sprites/Character/Frisk/spr_maincharad_1.png" id="6_aiupc"]
-[ext_resource type="Texture2D" uid="uid://dvyenmp4crblb" path="res://Sprites/Character/Frisk/spr_maincharad_3.png" id="7_ibji5"]
-[ext_resource type="Texture2D" uid="uid://blbqggo6e7jm6" path="res://Sprites/Character/Frisk/spr_maincharad_2.png" id="8_ennq4"]
-[ext_resource type="Texture2D" uid="uid://de6ybmnxeew1d" path="res://Sprites/Character/Frisk/spr_maincharal_1.png" id="9_65je8"]
-[ext_resource type="Texture2D" uid="uid://b8vnbblghofic" path="res://Sprites/Character/Frisk/spr_maincharar_1.png" id="10_1awqx"]
-[ext_resource type="Texture2D" uid="uid://dl5uydevw3a0n" path="res://Sprites/Character/Frisk/spr_maincharau_1.png" id="11_4y6pr"]
-[ext_resource type="Texture2D" uid="uid://cao5ngvripkls" path="res://Sprites/Character/Frisk/spr_maincharau_3.png" id="12_wuw63"]
-[ext_resource type="Texture2D" uid="uid://du1bsfsonc81i" path="res://Sprites/Character/Frisk/spr_maincharau_2.png" id="13_rghic"]
-[ext_resource type="Script" uid="uid://cw83i3o8jodo5" path="res://Scripts/Engine/Classes/CharacterSprite.gd" id="14_1rqrl"]
-
-[sub_resource type="Resource" id="Resource_op8k7"]
-script = ExtResource("14_1rqrl")
-WalkDown = Array[Texture2D]([ExtResource("6_aiupc"), ExtResource("2_12acn"), ExtResource("7_ibji5"), ExtResource("8_ennq4")])
-WalkLeft = Array[Texture2D]([ExtResource("9_65je8"), ExtResource("3_8ydoy")])
-WalkRight = Array[Texture2D]([ExtResource("10_1awqx"), ExtResource("4_a48mv")])
-WalkUp = Array[Texture2D]([ExtResource("11_4y6pr"), ExtResource("5_hwqf6"), ExtResource("12_wuw63"), ExtResource("13_rghic")])
-IdleDown = ExtResource("2_12acn")
-IdleLeft = ExtResource("3_8ydoy")
-IdleRight = ExtResource("4_a48mv")
-IdleUp = ExtResource("5_hwqf6")
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_y547t"]
 animations = [{
@@ -74,7 +50,6 @@ size = Vector2(20, 10)
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_e2oef")
-Character_Sprite = SubResource("Resource_op8k7")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -15)
