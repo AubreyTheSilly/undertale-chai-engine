@@ -1,6 +1,7 @@
 extends Node2D
 
 var enemypage := 0
+var lastpressed := false
 
 func _ready():
 	while !Undermaker.Project.has("projectName"):
@@ -47,6 +48,9 @@ func _on_project_pressed():
 func _process(_delta):
 	if Undermaker.Project.has("projectName"):
 		$Camera2D/Label.text = Undermaker.Project["projectName"]
+	if $RoomEditor.visible:
+		var vel = Vector2(Input.get_axis("ui_left","ui_right"),Input.get_axis("ui_up","ui_down"))*-20
+		$RoomEditor/RoomDisplay.position += vel
 
 func _on_save_settings_pressed():
 	#$Settings/LineEdit.text = Undermaker.Project["projectName"]

@@ -1,0 +1,28 @@
+@font-face {
+    font-family: 'MonsterFriend';
+    src: url('fonts/MonsterFriendFore.otf');
+}
+
+@font-face {
+    font-family: 'Determination';
+    src: url('fonts/DTM-Mono.ttf');
+}
+
+p {
+    font-family: 'Determination';
+    font-size: 20px;
+}
+h2 {
+    font-family: 'Determination';
+    font-size: 30px;
+    font-style: normal;
+}
+h1 {
+    font-family: 'MonsterFriend';
+    font-size: 50px;
+    font-style: normal;
+}
+
+body {
+    text-align: center;
+}

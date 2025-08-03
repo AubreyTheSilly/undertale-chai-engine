@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://ghjeqv20751v"]
+[gd_scene load_steps=30 format=3 uid="uid://ghjeqv20751v"]
 
 [ext_resource type="Script" uid="uid://b8hxmfu6ccyo5" path="res://Scripts/Engine/Objects/enemy.gd" id="1_f7ytk"]
 [ext_resource type="Texture2D" uid="uid://cdlpvwckj8axf" path="res://Sprites/Battle/Enemies/spr_dummybattle_0.png" id="1_yatfw"]
@@ -17,6 +17,7 @@
 [ext_resource type="FontFile" uid="uid://cvrg1o3nedg0c" path="res://Fonts/undertale-dotumche.otf" id="16_fvwyc"]
 [ext_resource type="Texture2D" uid="uid://81hi2vabuvw8" path="res://Sprites/Battle/SpeechBubbles/spr_blconabove_0.png" id="16_xmk3q"]
 [ext_resource type="Script" uid="uid://l4x4f6y1ba4e" path="res://Scripts/Engine/Objects/SpeechBubble.gd" id="17_fvwyc"]
+[ext_resource type="Script" uid="uid://b6m6ndh7u38dl" path="res://Scripts/Engine/Classes/ScriptRunner.gd" id="18_fvwyc"]
 
 [sub_resource type="Gradient" id="Gradient_vxur4"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
@@ -559,3 +560,7 @@ offset_right = 61.0
 offset_bottom = 29.0
 text = "Test dialogue."
 label_settings = SubResource("LabelSettings_704u3")
+
+[node name="ScriptRunner" type="Node" parent="."]
+script = ExtResource("18_fvwyc")
+metadata/_custom_type_script = "uid://b6m6ndh7u38dl"

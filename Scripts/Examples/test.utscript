@@ -1,0 +1,19 @@
+// UTScript example
+
+print "Hello World!" // prints "Hello World!"
+var string text // init string variable
+set text "Text" // set variable 
+print "variable text is: %text%" // print variable
+
+var num number
+set number 0
+while true
+    increment number
+    print "%number%"
+    if number == 10
+        break
+    end
+    wait 0.5
+end
+playsnd "mus_intronoise"
+print "Oh ho ho"

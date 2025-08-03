@@ -63,7 +63,7 @@ func move(steps : int,dir : Vector2) -> void:
 			await get_tree().process_frame
 	velocity = Vector2.ZERO
 
-func _process(delta) -> void:
+func _process(_delta) -> void:
 	sprite.speed_scale = Speed/2
 	handleAnimation(velocity/(30*Speed))
 	move_and_slide()

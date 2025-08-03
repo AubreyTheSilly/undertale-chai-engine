@@ -1,7 +1,7 @@
 class_name RoomDisplay
 extends Node2D
 
-@export var room : Dictionary = {
+@export var room : Dictionary[String,Dictionary] = {
 	"layer1":{
 		"type":"tile",
 		"tilemap":"ruins",
@@ -45,7 +45,6 @@ extends Node2D
 		]
 	}
 }
-var offset : Vector2 = Vector2.ZERO
 var tilemap : Texture2D
 
 func _draw():
@@ -55,4 +54,11 @@ func _draw():
 			for j in i.Tiles:
 				var tile : Tile = j
 				tilemap = i.tilemap
-				draw_texture_rect_region(tilemap,Rect2(tile.position*20,Vector2(20,20)),Rect2(tile.tileindex*20,Vector2(20,20)))
+				draw_texture_rect_region(tilemap,Rect2((tile.position*20),Vector2(20,20)),Rect2(tile.tileindex*20,Vector2(20,20)))
+		if i is RoomInstanceLayer:
+			for j in i.Objects:
+				var obj : RoomInstance = j
+				if obj.type == "Character" or obj.type == "NPC":
+					draw_texture(preload("res://sprites/npc1.png"),obj.position*20)
+				if obj.type == "Player":
+					draw_texture(preload("res://sprites/player.png"),obj.position*20)
