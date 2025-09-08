@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bkndneqi6ppj5"
-path="res://.godot/imported/spr_dustcloud_2.png-b832ce7f56e0253ea4e31d5e6c8036f8.ctex"
+path="res://.godot/imported/spr_dustcloud_2.png-022ccc813f55d338f0e983ada7c3cc33.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://export/asset/Sprites/Battle/spr_dustcloud_2.png"
-dest_files=["res://.godot/imported/spr_dustcloud_2.png-b832ce7f56e0253ea4e31d5e6c8036f8.ctex"]
+source_file="res://Sprites/Battle/spr_dustcloud_2.png"
+dest_files=["res://.godot/imported/spr_dustcloud_2.png-022ccc813f55d338f0e983ada7c3cc33.ctex"]
 
 [params]
 

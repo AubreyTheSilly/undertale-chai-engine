@@ -15,5 +15,8 @@ while true
     end
     wait 0.5
 end
+create_sprite "TestSprite" "Battle/Enemies/spr_dummybattle_0.png" 160 120
+tween_property "TestSprite" "position:x" 100 1 IN_OUT
 playsnd "mus_intronoise"
 print "Oh ho ho"
+set_property "Output" "text" "Test text! Wahoo"

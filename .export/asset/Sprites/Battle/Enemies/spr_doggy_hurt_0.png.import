@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cl4ufoqdhm3rr"
-path="res://.godot/imported/spr_doggy_hurt_0.png-846c4c1c9aa86eea2109efe0241aa344.ctex"
+path="res://.godot/imported/spr_doggy_hurt_0.png-d21f3e49166659f9a9245547c9520ca9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://export/asset/Sprites/Battle/Enemies/spr_doggy_hurt_0.png"
-dest_files=["res://.godot/imported/spr_doggy_hurt_0.png-846c4c1c9aa86eea2109efe0241aa344.ctex"]
+source_file="res://Sprites/Battle/Enemies/spr_doggy_hurt_0.png"
+dest_files=["res://.godot/imported/spr_doggy_hurt_0.png-d21f3e49166659f9a9245547c9520ca9.ctex"]
 
 [params]
 

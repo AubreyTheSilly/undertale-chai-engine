@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c6w2upa53npu3"
-path="res://.godot/imported/spr_barkbullet_0.png-76cff8ba064f19da24d1e2d5ecf73459.ctex"
+uid="uid://c8g75hwyhhse2"
+path="res://.godot/imported/spr_barkbullet_0.png-9be7f88a7764bd67866bc3fb30db1ba9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://export/asset/Sprites/Battle/Attacks/spr_barkbullet_0.png"
-dest_files=["res://.godot/imported/spr_barkbullet_0.png-76cff8ba064f19da24d1e2d5ecf73459.ctex"]
+source_file="res://Sprites/Battle/Attacks/spr_barkbullet_0.png"
+dest_files=["res://.godot/imported/spr_barkbullet_0.png-9be7f88a7764bd67866bc3fb30db1ba9.ctex"]
 
 [params]
 

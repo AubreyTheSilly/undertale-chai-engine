@@ -1,64 +1,35 @@
 class_name RoomDisplay
 extends Node2D
 
-@export var room : Dictionary[String,Dictionary] = {
-	"layer1":{
+@export var room : Dictionary = {
+	"Layer 1":{
 		"type":"tile",
 		"tilemap":"ruins",
-		"tiles":[
-			{
-				"tileindex":[0,11],
-				"position":[0,0]
-			},
-			{
-				"tileindex":[1,11],
-				"position":[1,0]
-			},
-			{
-				"tileindex":[2,11],
-				"position":[2,0]
-			},
-			{
-				"tileindex":[0,12],
-				"position":[0,1]
-			},
-			{
-				"tileindex":[1,12],
-				"position":[1,1]
-			},
-			{
-				"tileindex":[2,12],
-				"position":[2,1]
-			},
-			{
-				"tileindex":[0,11],
-				"position":[0,0]
-			},
-			{
-				"tileindex":[1,11],
-				"position":[1,0]
-			},
-			{
-				"tileindex":[2,11],
-				"position":[2,0]
-			}
-		]
+		"tiles":[]
+	},
+	"Layer 2":{
+		"type":"tile",
+		"tilemap":"ruins",
+		"tiles":[]
 	}
 }
-var tilemap : Texture2D
+
+var tilemaps : Dictionary[String,Texture]
 
 func _draw():
+	var index = 0
 	var roomjson = Room.loadRoomFromDictionary(room)
 	for i in roomjson.Layers:
 		if i is RoomTileLayer:
+			tilemaps["Layer"+str(index)] = i.tilemap
 			for j in i.Tiles:
 				var tile : Tile = j
-				tilemap = i.tilemap
-				draw_texture_rect_region(tilemap,Rect2((tile.position*20),Vector2(20,20)),Rect2(tile.tileindex*20,Vector2(20,20)))
+				draw_texture_rect_region(tilemaps["Layer"+str(index)],Rect2((tile.position*20),Vector2(20,20)),Rect2(tile.tileindex*20,Vector2(20,20)))
 		if i is RoomInstanceLayer:
 			for j in i.Objects:
 				var obj : RoomInstance = j
 				if obj.type == "Character" or obj.type == "NPC":
-					draw_texture(preload("res://sprites/npc1.png"),obj.position*20)
+					draw_texture(Loader.load_file("Sprites/npc1.png"),obj.position*20)
 				if obj.type == "Player":
-					draw_texture(preload("res://sprites/player.png"),obj.position*20)
+					draw_texture(Loader.load_file("Sprites/player.png"),obj.position*20)
+		index += 1

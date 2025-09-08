@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dtxeb76upkgym"
-path="res://.godot/imported/spr_maincharad_1.png-0c7d1638a68f23b9beb1f373bf6be072.ctex"
+uid="uid://defnlqbaqp530"
+path="res://.godot/imported/spr_maincharad_1.png-c178655cdc0d55031e454c89d44920e7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://export/asset/Sprites/Character/Frisk/spr_maincharad_1.png"
-dest_files=["res://.godot/imported/spr_maincharad_1.png-0c7d1638a68f23b9beb1f373bf6be072.ctex"]
+source_file="res://Sprites/Character/Frisk/spr_maincharad_1.png"
+dest_files=["res://.godot/imported/spr_maincharad_1.png-c178655cdc0d55031e454c89d44920e7.ctex"]
 
 [params]
 

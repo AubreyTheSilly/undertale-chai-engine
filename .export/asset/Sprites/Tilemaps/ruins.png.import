@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://caogtecxffsqr"
-path="res://.godot/imported/ruins.png-1021683d7c444883dad2927bfc04816e.ctex"
+path="res://.godot/imported/ruins.png-42e34f1d121c3669187e6a3aa5088f63.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://export/asset/Sprites/Tilemaps/ruins.png"
-dest_files=["res://.godot/imported/ruins.png-1021683d7c444883dad2927bfc04816e.ctex"]
+source_file="res://Sprites/Tilemaps/ruins.png"
+dest_files=["res://.godot/imported/ruins.png-42e34f1d121c3669187e6a3aa5088f63.ctex"]
 
 [params]
 

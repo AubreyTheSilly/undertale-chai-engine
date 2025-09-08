@@ -4,6 +4,7 @@
 
 [node name="Room" type="Node2D"]
 script = ExtResource("1_j27jd")
+roomName = "room_test1"
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0

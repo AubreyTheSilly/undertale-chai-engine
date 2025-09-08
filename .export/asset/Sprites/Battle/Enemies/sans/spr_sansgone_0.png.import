@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ceinrsqirc57j"
-path="res://.godot/imported/spr_sansgone_0.png-ba215015615aaf6882dfdefa7284f4c1.ctex"
+path="res://.godot/imported/spr_sansgone_0.png-34f6434108f8d811241cd5e5d0aec10d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://export/asset/Sprites/Battle/Enemies/sans/spr_sansgone_0.png"
-dest_files=["res://.godot/imported/spr_sansgone_0.png-ba215015615aaf6882dfdefa7284f4c1.ctex"]
+source_file="res://Sprites/Battle/Enemies/sans/spr_sansgone_0.png"
+dest_files=["res://.godot/imported/spr_sansgone_0.png-34f6434108f8d811241cd5e5d0aec10d.ctex"]
 
 [params]
 

@@ -9,7 +9,10 @@ static func loadRoomFromDictionary(dict : Dictionary) -> Room:
 	var json = dict
 	
 	for i in json:
-		var layerjson = json[i]
+		if i == "bounds":
+			room.CameraBounds = Rect2(0,0,json["bounds"][0],json["bounds"][1])
+			continue
+		var layerjson : Dictionary = json[i]
 		var layer : RoomLayer
 		if layerjson["type"] == "tile":
 			layer = RoomTileLayer.new()

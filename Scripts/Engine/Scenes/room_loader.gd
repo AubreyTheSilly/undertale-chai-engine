@@ -1,14 +1,16 @@
 class_name RoomLoader
 extends Node2D
 
-@export var room : Room
+@export var roomName : String
 
 @onready var camera = $Camera2D
+@onready var room : Room
 
 func _ready() -> void:
 	LoadRoom()
 
 func LoadRoom() -> void:
+	room = Room.loadRoomFromDictionary(Undermaker.loadJsonAsDictionary("Data/rooms/"+roomName+".json"))
 	for i in get_children():
 		if i.name != "Camera2D":
 			i.queue_free()

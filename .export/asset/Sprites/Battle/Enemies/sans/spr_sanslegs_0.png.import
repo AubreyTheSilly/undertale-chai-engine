@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b2iu2swq8ew2o"
-path="res://.godot/imported/spr_sanslegs_0.png-298446ef8b74ece4a4ed0f737e8136fb.ctex"
+path="res://.godot/imported/spr_sanslegs_0.png-6f3baafd38727c87ee4e3b61a6c0e4d3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://export/asset/Sprites/Battle/Enemies/sans/spr_sanslegs_0.png"
-dest_files=["res://.godot/imported/spr_sanslegs_0.png-298446ef8b74ece4a4ed0f737e8136fb.ctex"]
+source_file="res://Sprites/Battle/Enemies/sans/spr_sanslegs_0.png"
+dest_files=["res://.godot/imported/spr_sanslegs_0.png-6f3baafd38727c87ee4e3b61a6c0e4d3.ctex"]
 
 [params]
 

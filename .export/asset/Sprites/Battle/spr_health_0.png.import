@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c6gy64rfkuyaq"
-path="res://.godot/imported/spr_health_0.png-ae1acc449b224bf8a971686081942f60.ctex"
+path="res://.godot/imported/spr_health_0.png-8d08aaa13bc73719cc59139728f206a9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://export/asset/Sprites/Battle/spr_health_0.png"
-dest_files=["res://.godot/imported/spr_health_0.png-ae1acc449b224bf8a971686081942f60.ctex"]
+source_file="res://Sprites/Battle/spr_health_0.png"
+dest_files=["res://.godot/imported/spr_health_0.png-8d08aaa13bc73719cc59139728f206a9.ctex"]
 
 [params]
 

@@ -1,7 +1,0 @@
-if frame 10
-set_enemydata EnemySprite spr_doggy_1
-end
-if frame 20
-set_enemydata EnemySprite spr_doggy_0
-set frame 0
-end

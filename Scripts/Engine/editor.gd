@@ -11,7 +11,7 @@ func _ready():
 
 func _on_room_pressed():
 	print("room")
-	$Camera2D/Place.text = "Room Editor"
+	$Place.text = "Room Editor"
 	$Settings.visible = false
 	$RoomEditor.visible = true
 	$EnemyEditor.visible = false
@@ -20,7 +20,7 @@ func _on_room_pressed():
 
 func _on_enemy_pressed():
 	print("enemy")
-	$Camera2D/Place.text = "Enemy Creator"
+	$Place.text = "Enemy Creator"
 	$Settings.visible = false
 	$RoomEditor.visible = false
 	$EnemyEditor.visible = true
@@ -29,7 +29,7 @@ func _on_enemy_pressed():
 
 func _on_npc_pressed():
 	print("npc")
-	$Camera2D/Place.text = "NPC Editor"
+	$Place.text = "NPC Editor"
 	$Settings.visible = false
 	$RoomEditor.visible = false
 	$EnemyEditor.visible = false
@@ -38,7 +38,7 @@ func _on_npc_pressed():
 
 func _on_project_pressed():
 	print("project settings")
-	$Camera2D/Place.text = "Project Settings"
+	$Place.text = "Project Settings"
 	$Settings.visible = true
 	$RoomEditor.visible = false
 	$EnemyEditor.visible = false
@@ -47,7 +47,7 @@ func _on_project_pressed():
 
 func _process(_delta):
 	if Undermaker.Project.has("projectName"):
-		$Camera2D/Label.text = Undermaker.Project["projectName"]
+		$Label.text = Undermaker.Project["projectName"]
 	if $RoomEditor.visible:
 		var vel = Vector2(Input.get_axis("ui_left","ui_right"),Input.get_axis("ui_up","ui_down"))*-20
 		$RoomEditor/RoomDisplay.position += vel
@@ -62,7 +62,7 @@ func _on_save_settings_pressed():
 
 func _on_character_pressed():
 	print("character")
-	$Camera2D/Place.text = "Character Creator"
+	$Place.text = "Character Creator"
 	$Settings.visible = false
 	$RoomEditor.visible = false
 	$EnemyEditor.visible = false

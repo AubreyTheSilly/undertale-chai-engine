@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b0rk7jclh5ydd"
-path="res://.godot/imported/spr_heart_0.png-efe60e4f264431431929f51f39896584.ctex"
+path="res://.godot/imported/spr_heart_0.png-33281efb68ef0f7b14054cf880a43782.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://export/asset/Sprites/Battle/spr_heart_0.png"
-dest_files=["res://.godot/imported/spr_heart_0.png-efe60e4f264431431929f51f39896584.ctex"]
+source_file="res://Sprites/Battle/spr_heart_0.png"
+dest_files=["res://.godot/imported/spr_heart_0.png-33281efb68ef0f7b14054cf880a43782.ctex"]
 
 [params]
 

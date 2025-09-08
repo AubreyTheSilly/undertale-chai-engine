@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c6hrj2udg3owh"
-path="res://.godot/imported/spr_sanshead_0.png-16ccb81a03e640e52ad9c660148df7d9.ctex"
+path="res://.godot/imported/spr_sanshead_0.png-660fd776cb95cd900fabab77388c7679.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://export/asset/Sprites/Battle/Enemies/sans/spr_sanshead_0.png"
-dest_files=["res://.godot/imported/spr_sanshead_0.png-16ccb81a03e640e52ad9c660148df7d9.ctex"]
+source_file="res://Sprites/Battle/Enemies/sans/spr_sanshead_0.png"
+dest_files=["res://.godot/imported/spr_sanshead_0.png-660fd776cb95cd900fabab77388c7679.ctex"]
 
 [params]
 

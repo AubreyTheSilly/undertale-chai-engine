@@ -21,14 +21,14 @@ var vars : Dictionary[String,UMVar]
 func _ready():
 	audio.max_polyphony = 1024
 	add_child(audio)
-	run_script()
+	run_script("Examples/test.utscript")
 
-func run_script() -> Error:
-	if !script_to_run:
+func run_script(script : String = script_to_run) -> Error:
+	if !script:
 		push_error("There is no script to run! Make sure to set script_to_run!!")
 		return ERR_DOES_NOT_EXIST
 	
-	var runscript : UTScript = UTScript.loadScriptFromFile(script_to_run)
+	var runscript : UTScript = UTScript.loadScriptFromFile(script)
 	vars.clear()
 	
 	var line : int = 0
@@ -229,15 +229,93 @@ func run_script() -> Error:
 						else:
 							push_error("line "+str(line+1)+": Sound \""+runscript.data[line].data[1].value+"\" does not exist")
 				Token.TokenType.WAIT:
+					if runscript.data[line].data.size() != 2:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
 					if runscript.data[line].data[1].type != Token.TokenType.NUMBER:
 						push_error("line "+str(line+1)+": You must input a valid number")
 						continue
 					await get_tree().create_timer(runscript.data[line].data[1].value).timeout
+				Token.TokenType.SET_PROPERTY:
+					if runscript.data[line].data.size() != 4:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Node name must be a string")
+						continue
+					if !node.get_node(runscript.data[line].data[1].value):
+						push_error("line "+str(line+1)+": Target node must exist")
+						continue
+					if runscript.data[line].data[2].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Node property must be a string")
+						continue
+					create_tween().tween_property(node.get_node(runscript.data[line].data[1].value),runscript.data[line].data[2].value,runscript.data[line].data[3].value,0)
+				Token.TokenType.TWEEN_PROPERTY:
+					if runscript.data[line].data.size() < 5:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Node name must be a string")
+						continue
+					if !node.get_node(runscript.data[line].data[1].value):
+						push_error("line "+str(line+1)+": Target node must exist")
+						continue
+					if runscript.data[line].data[2].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Node property must be a string")
+						continue
+					if runscript.data[line].data[4].type != Token.TokenType.NUMBER:
+						push_error("line "+str(line+1)+": Tween time must be a valid number")
+						continue
+					if runscript.data[line].data.size() == 5:
+						await create_tween().tween_property(node.get_node(runscript.data[line].data[1].value),runscript.data[line].data[2].value,runscript.data[line].data[3].value,runscript.data[line].data[4].value).finished
+					elif runscript.data[line].data.size() > 6:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					else:
+						if runscript.data[line].data[5].type >= Token.TokenType.IN and runscript.data[line].data[5].type <= Token.TokenType.OUT_IN:
+							var tweentype = Tween.EASE_IN_OUT
+							match runscript.data[line].data[5].type:
+								Token.TokenType.IN:
+									tweentype = Tween.EASE_IN
+								Token.TokenType.OUT:
+									tweentype = Tween.EASE_OUT
+								Token.TokenType.IN_OUT:
+									tweentype = Tween.EASE_IN_OUT
+								Token.TokenType.OUT_IN:
+									tweentype = Tween.EASE_OUT_IN
+							await create_tween().tween_property(node.get_node(runscript.data[line].data[1].value),runscript.data[line].data[2].value,runscript.data[line].data[3].value,runscript.data[line].data[4].value).set_ease(tweentype).set_trans(Tween.TRANS_CUBIC).finished
+						else:
+							push_error("line "+str(line+1)+": You must use a valid ease type")
+							continue
+				Token.TokenType.CREATE_SPRITE:
+					if runscript.data[line].data.size() < 4:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Sprite name must be a string")
+						continue
+					if runscript.data[line].data[2].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Sprite path must be a string")
+						continue
+					if !Loader.load_file("Sprites/"+runscript.data[line].data[2].value):
+						push_error("line "+str(line+1)+": Sprite path must lead to a valid image file (Path: "+"Sprites/"+runscript.data[line].data[2].value+")")
+						continue
+					if runscript.data[line].data[3].type != Token.TokenType.NUMBER:
+						push_error("line "+str(line+1)+": Sprite X position must be a number")
+						continue
+					if runscript.data[line].data[4].type != Token.TokenType.NUMBER:
+						push_error("line "+str(line+1)+": Sprite Y position must be a number")
+						continue
+					var sprite = Sprite2D.new()
+					sprite.name = runscript.data[line].data[1].value
+					sprite.texture = Loader.load_file("Sprites/"+runscript.data[line].data[2].value)
+					sprite.position = Vector2(runscript.data[line].data[3].value,runscript.data[line].data[4].value)
+					node.add_child(sprite)
 				_:
 					unhandled_function(runscript.data[line])
 		for i in ogstringtokens:
 			runscript.data[line].data[i] = ogstringtokens[i]
-	print("Script finished executing")
+	# print("Script finished executing")
 	return OK
 
 func unhandled_function(line : TokenArray):

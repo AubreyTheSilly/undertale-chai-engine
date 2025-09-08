@@ -3,7 +3,7 @@ extends Resource
 
 var data : Array[TokenArray]
 
-static var alnum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789._-"
+static var alnum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789._-/\\=+-*!@#$%^&*(){}[]|~`<,>.?/';:"
 static var al = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 static var num = "0123456789"
 
@@ -65,16 +65,16 @@ static func loadScriptFromFile(path:StringName) -> UTScript:
 						tokenbuffer.tokenize(buffer)
 						buffer = ""
 					pointer += 1
-				"/":
-					comment = true
-					if scriptStr[pointer+1] == "/":
-						pointer += 1
-					pointer += 1
 				"+","-","*","/":
+					if scriptStr[pointer] == "/" and scriptStr[pointer+1] == "/":
+						comment = true
+						pointer += 2
+						continue
 					if string:
 						buffer += scriptStr[pointer]
 						pointer += 1
 						continue
+					pointer += 1
 					tokenbuffer.tokenize(scriptStr[pointer])
 					buffer = ""
 					pointer += 1
@@ -90,7 +90,6 @@ static func loadScriptFromFile(path:StringName) -> UTScript:
 						tokenbuffer.tokenize(scriptStr[pointer])
 					buffer = ""
 					pointer += 1
-				
 				_:
 					if alnum.contains(scriptStr[pointer]) or string:
 						buffer += scriptStr[pointer]

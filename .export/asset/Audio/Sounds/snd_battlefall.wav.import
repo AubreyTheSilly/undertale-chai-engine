@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://bjxbrfouowj6x"
-path="res://.godot/imported/snd_battlefall.wav-82236cc16f8573d0c930741fbc443e40.sample"
+path="res://.godot/imported/snd_battlefall.wav-80bef8b811f095c0b5b2e2591edfa141.sample"
 
 [deps]
 
-source_file="res://export/asset/Audio/Sounds/snd_battlefall.wav"
-dest_files=["res://.godot/imported/snd_battlefall.wav-82236cc16f8573d0c930741fbc443e40.sample"]
+source_file="res://Audio/Sounds/snd_battlefall.wav"
+dest_files=["res://.godot/imported/snd_battlefall.wav-80bef8b811f095c0b5b2e2591edfa141.sample"]
 
 [params]
 

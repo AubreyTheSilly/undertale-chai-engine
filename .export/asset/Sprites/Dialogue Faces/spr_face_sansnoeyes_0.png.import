@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://u2nnvb6pjd7s"
-path="res://.godot/imported/spr_face_sansnoeyes_0.png-700e45e1888e4df07a596ad34175ea79.ctex"
+uid="uid://ccmy84cu8kbo7"
+path="res://.godot/imported/spr_face_sansnoeyes_0.png-22f1a8a18c454ab9938f5705a150c47d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://export/asset/Sprites/Dialogue Faces/spr_face_sansnoeyes_0.png"
-dest_files=["res://.godot/imported/spr_face_sansnoeyes_0.png-700e45e1888e4df07a596ad34175ea79.ctex"]
+source_file="res://Sprites/Dialogue Faces/spr_face_sansnoeyes_0.png"
+dest_files=["res://.godot/imported/spr_face_sansnoeyes_0.png-22f1a8a18c454ab9938f5705a150c47d.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dhjekhhhgdxp8"
-path="res://.godot/imported/spr_cloveru_1.png-73c690be0d7ac31ca112f58124643135.ctex"
+uid="uid://25q0kjsmovrf"
+path="res://.godot/imported/spr_cloveru_1.png-d78139453e87d1ee5be07a6afb5b857f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://export/asset/Sprites/Character/Clover/spr_cloveru_1.png"
-dest_files=["res://.godot/imported/spr_cloveru_1.png-73c690be0d7ac31ca112f58124643135.ctex"]
+source_file="res://Sprites/Character/Clover/spr_cloveru_1.png"
+dest_files=["res://.godot/imported/spr_cloveru_1.png-d78139453e87d1ee5be07a6afb5b857f.ctex"]
 
 [params]
 

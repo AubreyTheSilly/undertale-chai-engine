@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://16614v78b4uo"
-path="res://.godot/imported/bullet.png-614a6a652ec339d817d0389c720f338e.ctex"
+uid="uid://cu1aqoi8stlbi"
+path="res://.godot/imported/bullet.png-057b63d02f2b701f7f1a5c36190414a0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://export/asset/Sprites/Battle/Attacks/bullet.png"
-dest_files=["res://.godot/imported/bullet.png-614a6a652ec339d817d0389c720f338e.ctex"]
+source_file="res://Sprites/Battle/Attacks/bullet.png"
+dest_files=["res://.godot/imported/bullet.png-057b63d02f2b701f7f1a5c36190414a0.ctex"]
 
 [params]
 

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bhwyf8lqg06du"
-path="res://.godot/imported/spr_hpname_0.png-71572c40869be39c887c6bf3e2e9a304.ctex"
+path="res://.godot/imported/spr_hpname_0.png-a470630ee7c4777cccaa58c448bb26e8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://export/asset/Sprites/Battle/spr_hpname_0.png"
-dest_files=["res://.godot/imported/spr_hpname_0.png-71572c40869be39c887c6bf3e2e9a304.ctex"]
+source_file="res://Sprites/Battle/spr_hpname_0.png"
+dest_files=["res://.godot/imported/spr_hpname_0.png-a470630ee7c4777cccaa58c448bb26e8.ctex"]
 
 [params]
 

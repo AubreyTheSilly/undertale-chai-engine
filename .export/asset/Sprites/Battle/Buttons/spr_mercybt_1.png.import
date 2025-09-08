@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cp1uj3uh033w1"
-path="res://.godot/imported/spr_mercybt_1.png-57430d657eae74dec6def2c40012ce82.ctex"
+path="res://.godot/imported/spr_mercybt_1.png-c6b35494fb2aeb70588bf400b1cf033a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://export/asset/Sprites/Battle/Buttons/spr_mercybt_1.png"
-dest_files=["res://.godot/imported/spr_mercybt_1.png-57430d657eae74dec6def2c40012ce82.ctex"]
+source_file="res://Sprites/Battle/Buttons/spr_mercybt_1.png"
+dest_files=["res://.godot/imported/spr_mercybt_1.png-c6b35494fb2aeb70588bf400b1cf033a.ctex"]
 
 [params]
 

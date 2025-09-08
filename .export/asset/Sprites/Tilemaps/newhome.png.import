@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c352re0af4nho"
-path="res://.godot/imported/newhome.png-ebc4b2a38f25eafcae7ed7823d8f279e.ctex"
+path="res://.godot/imported/newhome.png-0f01470ebcdba95518000a45b52b93d8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://export/asset/Sprites/Tilemaps/newhome.png"
-dest_files=["res://.godot/imported/newhome.png-ebc4b2a38f25eafcae7ed7823d8f279e.ctex"]
+source_file="res://Sprites/Tilemaps/newhome.png"
+dest_files=["res://.godot/imported/newhome.png-0f01470ebcdba95518000a45b52b93d8.ctex"]
 
 [params]
 

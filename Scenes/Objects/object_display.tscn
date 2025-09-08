@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://c2ebhge3ajuhj"]
+[gd_scene load_steps=6 format=3 uid="uid://c2ebhge3ajuhj"]
 
 [ext_resource type="Script" uid="uid://76bv8ivuxjsu" path="res://Scenes/Objects/object_display.gd" id="1_cq3em"]
 [ext_resource type="Texture2D" uid="uid://u42in0sf6pt5" path="res://Sprites/tileicon1.png" id="1_vbh8v"]
-[ext_resource type="Texture2D" uid="uid://bmtv345fqm7yy" path="res://Sprites/npc1.png" id="2_hva35"]
 [ext_resource type="Texture2D" uid="uid://cq1trw5xy4tix" path="res://Sprites/tileicon2.png" id="2_mjwur"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_jfxxc"]
@@ -29,15 +28,14 @@ script = ExtResource("1_cq3em")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(10, 10)
-texture = ExtResource("2_hva35")
 
 [node name="Label" type="Label" parent="."]
 offset_left = -30.0
 offset_top = -30.0
 offset_right = 50.0
 offset_bottom = 50.0
-text = "Object Name
-(type)"
+text = "
+()"
 label_settings = SubResource("LabelSettings_jfxxc")
 horizontal_alignment = 1
 vertical_alignment = 1

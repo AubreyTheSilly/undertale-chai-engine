@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://c1bnekcigd1yp"
-path="res://.godot/imported/snd_heal_c.wav-20ae834beda0d51056f4965eff2a9306.sample"
+path="res://.godot/imported/snd_heal_c.wav-fe430c384288acdc139c9061b2f7710b.sample"
 
 [deps]
 
-source_file="res://export/asset/Audio/Sounds/snd_heal_c.wav"
-dest_files=["res://.godot/imported/snd_heal_c.wav-20ae834beda0d51056f4965eff2a9306.sample"]
+source_file="res://Audio/Sounds/snd_heal_c.wav"
+dest_files=["res://.godot/imported/snd_heal_c.wav-fe430c384288acdc139c9061b2f7710b.sample"]
 
 [params]
 

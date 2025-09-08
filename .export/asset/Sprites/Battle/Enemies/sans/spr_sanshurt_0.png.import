@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b4nyf6ofrcwwo"
-path="res://.godot/imported/spr_sanshurt_0.png-c152da6936e2f0039dd4d23d5c9edab0.ctex"
+path="res://.godot/imported/spr_sanshurt_0.png-82adef0ecb4cde35e04f8c91183d9252.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://export/asset/Sprites/Battle/Enemies/sans/spr_sanshurt_0.png"
-dest_files=["res://.godot/imported/spr_sanshurt_0.png-c152da6936e2f0039dd4d23d5c9edab0.ctex"]
+source_file="res://Sprites/Battle/Enemies/sans/spr_sanshurt_0.png"
+dest_files=["res://.godot/imported/spr_sanshurt_0.png-82adef0ecb4cde35e04f8c91183d9252.ctex"]
 
 [params]
 

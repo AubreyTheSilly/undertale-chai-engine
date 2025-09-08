@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cogwgmfo4b0eh"
-path="res://.godot/imported/spr_blcontinyabove_0.png-963b50aa9bbdd4f4494e68a0194273b2.ctex"
+path="res://.godot/imported/spr_blcontinyabove_0.png-b62508d63bbc4f7d7c0089d725bdb951.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://export/asset/Sprites/Battle/SpeechBubbles/spr_blcontinyabove_0.png"
-dest_files=["res://.godot/imported/spr_blcontinyabove_0.png-963b50aa9bbdd4f4494e68a0194273b2.ctex"]
+source_file="res://Sprites/Battle/SpeechBubbles/spr_blcontinyabove_0.png"
+dest_files=["res://.godot/imported/spr_blcontinyabove_0.png-b62508d63bbc4f7d7c0089d725bdb951.ctex"]
 
 [params]
 

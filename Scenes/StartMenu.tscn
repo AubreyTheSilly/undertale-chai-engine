@@ -1,0 +1,134 @@
+[gd_scene load_steps=12 format=3 uid="uid://dfdbv3jsoc0cl"]
+
+[ext_resource type="Script" uid="uid://8h6arvyce38n" path="res://Scripts/Engine/start_menu.gd" id="1_h303d"]
+[ext_resource type="FontFile" uid="uid://dmp8kt2skg8oj" path="res://Fonts/DTM-Sans.otf" id="2_dl0pg"]
+[ext_resource type="Texture2D" uid="uid://bp7tv15vegder" path="res://Images/Naming.png" id="2_ql1sk"]
+[ext_resource type="FontFile" uid="uid://bwv20uaopj4hd" path="res://Fonts/undertale-crypt-of-tommorow.otf" id="3_dl0pg"]
+[ext_resource type="AudioStream" uid="uid://dcreykwpiiwbp" path="res://Audio/BGM/mus_menu0.ogg" id="5_ujd4t"]
+[ext_resource type="AudioStream" uid="uid://8ky16bysmole" path="res://Audio/Sounds/mus_cymbal.ogg" id="6_dibtv"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_h303d"]
+font = ExtResource("2_dl0pg")
+font_size = 13
+font_color = Color(1, 1, 1, 0.75)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ql1sk"]
+font = ExtResource("2_dl0pg")
+font_size = 13
+
+[sub_resource type="LabelSettings" id="LabelSettings_o6asp"]
+font = ExtResource("2_dl0pg")
+font_size = 13
+
+[sub_resource type="LabelSettings" id="LabelSettings_ujd4t"]
+font = ExtResource("3_dl0pg")
+font_size = 5
+font_color = Color(1, 1, 1, 0.5)
+
+[sub_resource type="LabelSettings" id="LabelSettings_dibtv"]
+font = ExtResource("2_dl0pg")
+font_size = 26
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_h303d")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(-1, -16)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_ql1sk")
+centered = false
+
+[node name="controls" type="Node2D" parent="."]
+
+[node name="Label" type="Label" parent="controls"]
+offset_left = 84.0
+offset_top = 50.0
+offset_right = 273.0
+offset_bottom = 199.0
+text = "[Z or ENTER] - Confirm
+[X or SHIFT] - Cancel
+[C or CTRL] - Menu (In-game)
+[F4] - Fullscreen
+[Hold ESC] - Quit
+When HP is 0, you lose."
+label_settings = SubResource("LabelSettings_h303d")
+
+[node name="Label2" type="Label" parent="controls"]
+offset_left = 84.0
+offset_top = 20.0
+offset_right = 273.0
+offset_bottom = 169.0
+text = "---Instruction---"
+label_settings = SubResource("LabelSettings_h303d")
+
+[node name="start" type="Label" parent="controls"]
+offset_left = 84.0
+offset_top = 176.0
+offset_right = 273.0
+offset_bottom = 325.0
+text = "Start Game"
+label_settings = SubResource("LabelSettings_ql1sk")
+
+[node name="settings" type="Label" parent="controls"]
+offset_left = 84.0
+offset_top = 193.0
+offset_right = 273.0
+offset_bottom = 342.0
+text = "Settings"
+label_settings = SubResource("LabelSettings_o6asp")
+
+[node name="Label3" type="Label" parent="controls"]
+offset_left = -160.0
+offset_top = 220.0
+offset_right = 480.0
+offset_bottom = 240.0
+text = "TEMPLATE
+USING UNDERTALE CHAI ENGINE (ALPHA)"
+label_settings = SubResource("LabelSettings_ujd4t")
+horizontal_alignment = 1
+
+[node name="settings" type="Node2D" parent="."]
+visible = false
+
+[node name="Label" type="Label" parent="settings"]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 199.0
+offset_bottom = 159.0
+text = "SETTINGS"
+label_settings = SubResource("LabelSettings_dibtv")
+
+[node name="start" type="Label" parent="settings"]
+offset_left = 84.0
+offset_top = 176.0
+offset_right = 273.0
+offset_bottom = 325.0
+text = "Start Game"
+label_settings = SubResource("LabelSettings_ql1sk")
+
+[node name="settings" type="Label" parent="settings"]
+offset_left = 84.0
+offset_top = 176.0
+offset_right = 273.0
+offset_bottom = 325.0
+text = "Start Game"
+label_settings = SubResource("LabelSettings_ql1sk")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_ujd4t")
+parameters/looping = true
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_dibtv")
+
+[node name="name" type="Node2D" parent="."]
+visible = false
+
+[node name="confirm" type="Node2D" parent="."]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 320.0
+offset_bottom = 240.0
+color = Color(1, 1, 1, 0)
