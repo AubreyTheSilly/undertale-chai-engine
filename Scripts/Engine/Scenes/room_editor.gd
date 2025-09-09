@@ -13,10 +13,24 @@ func checkfortile(tilelist : Array, tilepos : Vector2) -> int:
 			return index
 	return -1
 
+func makeObj():
+	var targetlayer = $OptionButton.get_item_text($OptionButton.selected)
+	var objpos = ((get_global_mouse_position()-Vector2(10,10)).snapped(Vector2(20,20))/20.0)-($RoomDisplay.position/20.0)
+	
+	var obj = {}
+	obj["position"] = [objpos.x,objpos.y]
+	
+	$RoomDisplay.queue_redraw()
+	
+func removeObj():
+	var targetlayer = $OptionButton.get_item_text($OptionButton.selected)
+	var objpos = ((get_global_mouse_position()-Vector2(10,10)).snapped(Vector2(20,20))/20.0)-($RoomDisplay.position/20.0)
+	$RoomDisplay.queue_redraw()
+
 func makeTile():
 	var targetlayer = $OptionButton.get_item_text($OptionButton.selected)
 	var tile = {}
-	tile["tileindex"] = [int($PanelContainer/Draw/TileMode/TileX.text),int($PanelContainer/Draw/TileMode/TileY.text)]
+	tile["tileindex"] = [int($PanelContainer/TileMode/TileX.text),int($PanelContainer/TileMode/TileY.text)]
 	var tilepos = ((get_global_mouse_position()-Vector2(10,10)).snapped(Vector2(20,20))/20.0)-($RoomDisplay.position/20.0)
 	tile["position"] = [tilepos.x,tilepos.y]
 	if checkfortile($RoomDisplay.room[targetlayer]["tiles"],tilepos) != -1:
@@ -34,62 +48,68 @@ func removeTile():
 
 func _process(_delta):
 	var targetlayer = $OptionButton.get_item_text($OptionButton.selected)
-	if $RoomDisplay.room[targetlayer]:
-		$RoomDisplay.room[targetlayer]
-	$PanelContainer/Draw.visible = false
+	if $RoomDisplay.room[targetlayer]["type"] == "instance":
+		$"obj properties".visible = true
+		if editormode == 2:
+			editormode = 0
+	else:
+		$"obj properties".visible = false
+	if $PanelContainer/TileMode.visible and $RoomDisplay.room[targetlayer]["type"] == "instance":
+		$PanelContainer/TileMode.visible = false
+	if $PanelContainer/ObjMode.visible and $RoomDisplay.room[targetlayer]["type"] == "tile":
+		print("set objmode invisible1")
+		$PanelContainer/ObjMode.visible = false
 	$PanelContainer/Settings.visible = false
 	$PanelContainer/Properties.visible = false
 	
 	match editormode:
-		0:
-			$PanelContainer/Draw.visible = true
 		1:
 			$PanelContainer/Settings.visible = true
 		2:
 			$PanelContainer/Properties.visible = true
 	
 	if $RoomDisplay.room[$OptionButton.get_item_text($OptionButton.selected)]["type"] == "tile":
-		$PanelContainer/Draw/TileMode.visible = true
-		$PanelContainer/Draw/ObjMode.visible = false
+		if !$PanelContainer/TileMode.visible:
+			$PanelContainer/TileMode.visible = true
+		if $PanelContainer/ObjMode.visible:
+			print("set objmode invisible")
+			$PanelContainer/ObjMode.visible = false
 		$ObjectDisplay.visible = false
 		$FakeTile.visible = true
 		
 		$FakeTile.position = (get_global_mouse_position()-Vector2(10,10)).snapped(Vector2(20,20))
-		if prevtilemap != "Sprites/Tilemaps/"+$PanelContainer/Draw/TileMode/Tilemap.text+".png":
-			$FakeTile.texture = Loader.load_file("Sprites/Tilemaps/"+$PanelContainer/Draw/TileMode/Tilemap.text+".png")
-			prevtilemap = "Sprites/Tilemaps/"+$PanelContainer/Draw/TileMode/Tilemap.text+".png"
-		$FakeTile.region_rect.position.x = int($PanelContainer/Draw/TileMode/TileX.text)*20
-		$FakeTile.region_rect.position.y = int($PanelContainer/Draw/TileMode/TileY.text)*20
+		if prevtilemap != "Sprites/Tilemaps/"+$PanelContainer/TileMode/Tilemap.text+".png":
+			$FakeTile.texture = Loader.load_file("Sprites/Tilemaps/"+$PanelContainer/TileMode/Tilemap.text+".png")
+			prevtilemap = "Sprites/Tilemaps/"+$PanelContainer/TileMode/Tilemap.text+".png"
+		$FakeTile.region_rect.position.x = int($PanelContainer/TileMode/TileX.text)*20
+		$FakeTile.region_rect.position.y = int($PanelContainer/TileMode/TileY.text)*20
 		
 		if Input.is_action_pressed("Click") and MouseArea in $Area2D.get_overlapping_areas():
 			makeTile()
 		if Input.is_action_pressed("RightClick") and MouseArea in $Area2D.get_overlapping_areas():
 			removeTile()
 		
-		if $FakeTile.texture and $RoomDisplay.room[targetlayer]["tilemap"] != $PanelContainer/Draw/TileMode/Tilemap.text:
-			$RoomDisplay.room[targetlayer]["tilemap"] = $PanelContainer/Draw/TileMode/Tilemap.text
+		if $FakeTile.texture and $RoomDisplay.room[targetlayer]["tilemap"] != $PanelContainer/TileMode/Tilemap.text:
+			$RoomDisplay.room[targetlayer]["tilemap"] = $PanelContainer/TileMode/Tilemap.text
 			$RoomDisplay.queue_redraw()
 	else:
-		$PanelContainer/Draw/TileMode.visible = false
-		$PanelContainer/Draw/ObjMode.visible = true
+		if $PanelContainer/TileMode.visible:
+			$PanelContainer/TileMode.visible = false
+		if !$PanelContainer/ObjMode.visible:
+			$PanelContainer/ObjMode.visible = true
 		$ObjectDisplay.visible = true
 		$FakeTile.visible = false
 		
 		$ObjectDisplay.position = (get_global_mouse_position()-Vector2(10,10)).snapped(Vector2(20,20))
-		#$ObjectDisplay/Label.text = $PanelContainer/Draw/ObjMode/ObjName.text+"\n("+$PanelContainer/Draw/ObjMode/Filename.text+")"
-		$ObjectDisplay.objname = $PanelContainer/Draw/ObjMode/ObjName.text
-		$ObjectDisplay.objtype = $PanelContainer/Draw/ObjMode/Filename.text
+		#$ObjectDisplay/Label.text = $PanelContainer/ObjMode/ObjName.text+"\n("+$PanelContainer/ObjMode/Filename.text+")"
+		$ObjectDisplay.objname = $PanelContainer/ObjMode/ObjName.text
+		$ObjectDisplay.objtype = $PanelContainer/ObjMode/Filename.text
 		
 		if Input.is_action_pressed("Click") and MouseArea in $Area2D.get_overlapping_areas():
-			var tile = {}
-			tile["tileindex"] = [int($PanelContainer/Draw/TileMode/TileX.text),int($PanelContainer/Draw/TileMode/TileY.text)]
-			var tilepos = ((get_global_mouse_position()-Vector2(10,10)).snapped(Vector2(20,20))/20.0)-($RoomDisplay.position/20.0)
-			tile["position"] = [tilepos.x,tilepos.y]
-			if checkfortile($RoomDisplay.room[targetlayer]["tiles"],tilepos) != -1:
-				$RoomDisplay.room[targetlayer]["tiles"][checkfortile($RoomDisplay.room[targetlayer]["tiles"],tilepos)] = tile
-			else:
-				$RoomDisplay.room[targetlayer]["tiles"].append(tile)
-			$RoomDisplay.queue_redraw()
+			makeObj()
+		if Input.is_action_pressed("Click") and MouseArea in $Area2D.get_overlapping_areas():
+			removeObj()
+		
 	if not (MouseArea in $Area2D.get_overlapping_areas()):
 		$FakeTile.visible = false
 		$ObjectDisplay.visible = false

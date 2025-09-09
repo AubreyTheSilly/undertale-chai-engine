@@ -571,19 +571,11 @@ offset_bottom = 214.0
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_7fkqn")
 
-[node name="Draw" type="Control" parent="RoomEditor/PanelContainer"]
+[node name="TileMode" type="Control" parent="RoomEditor/PanelContainer"]
 layout_mode = 2
 mouse_filter = 1
 
-[node name="TileMode" type="Control" parent="RoomEditor/PanelContainer/Draw"]
-visible = false
-layout_mode = 2
-anchors_preset = 0
-offset_right = 104.0
-offset_bottom = 160.0
-mouse_filter = 1
-
-[node name="Label2" type="Label" parent="RoomEditor/PanelContainer/Draw/TileMode"]
+[node name="Label2" type="Label" parent="RoomEditor/PanelContainer/TileMode"]
 layout_mode = 2
 offset_right = 80.0
 offset_bottom = 23.0
@@ -591,7 +583,7 @@ text = "Tile Position on
 Tilemap"
 label_settings = SubResource("LabelSettings_8howc")
 
-[node name="Label3" type="Label" parent="RoomEditor/PanelContainer/Draw/TileMode"]
+[node name="Label3" type="Label" parent="RoomEditor/PanelContainer/TileMode"]
 layout_mode = 2
 offset_top = 63.0
 offset_right = 80.0
@@ -599,7 +591,7 @@ offset_bottom = 86.0
 text = "Tilemap Filename"
 label_settings = SubResource("LabelSettings_8howc")
 
-[node name="TileX" type="LineEdit" parent="RoomEditor/PanelContainer/Draw/TileMode"]
+[node name="TileX" type="LineEdit" parent="RoomEditor/PanelContainer/TileMode"]
 custom_minimum_size = Vector2(40, 25)
 layout_mode = 1
 anchors_preset = -1
@@ -617,7 +609,7 @@ placeholder_text = "X"
 script = ExtResource("4_8howc")
 metadata/_edit_use_anchors_ = true
 
-[node name="TileY" type="LineEdit" parent="RoomEditor/PanelContainer/Draw/TileMode"]
+[node name="TileY" type="LineEdit" parent="RoomEditor/PanelContainer/TileMode"]
 custom_minimum_size = Vector2(40, 25)
 layout_mode = 1
 anchors_preset = -1
@@ -637,7 +629,7 @@ placeholder_text = "Y"
 script = ExtResource("4_8howc")
 metadata/_edit_use_anchors_ = true
 
-[node name="Tilemap" type="LineEdit" parent="RoomEditor/PanelContainer/Draw/TileMode"]
+[node name="Tilemap" type="LineEdit" parent="RoomEditor/PanelContainer/TileMode"]
 custom_minimum_size = Vector2(40, 25)
 layout_mode = 1
 anchors_preset = -1
@@ -656,14 +648,12 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Filename"
 metadata/_edit_use_anchors_ = true
 
-[node name="ObjMode" type="Control" parent="RoomEditor/PanelContainer/Draw"]
+[node name="ObjMode" type="Control" parent="RoomEditor/PanelContainer"]
+visible = false
 layout_mode = 2
-anchors_preset = 0
-offset_right = 104.0
-offset_bottom = 160.0
 mouse_filter = 1
 
-[node name="Label2" type="Label" parent="RoomEditor/PanelContainer/Draw/ObjMode"]
+[node name="Label2" type="Label" parent="RoomEditor/PanelContainer/ObjMode"]
 layout_mode = 0
 offset_left = 1.0
 offset_top = 2.0
@@ -672,7 +662,7 @@ offset_bottom = 25.0
 text = "Object Name"
 label_settings = SubResource("LabelSettings_8howc")
 
-[node name="ObjName" type="LineEdit" parent="RoomEditor/PanelContainer/Draw/ObjMode"]
+[node name="ObjName" type="LineEdit" parent="RoomEditor/PanelContainer/ObjMode"]
 custom_minimum_size = Vector2(40, 25)
 layout_mode = 1
 anchors_preset = -1
@@ -691,7 +681,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Name"
 metadata/_edit_use_anchors_ = true
 
-[node name="Label3" type="Label" parent="RoomEditor/PanelContainer/Draw/ObjMode"]
+[node name="Label3" type="Label" parent="RoomEditor/PanelContainer/ObjMode"]
 layout_mode = 0
 offset_left = 1.26086
 offset_top = 47.0
@@ -700,7 +690,7 @@ offset_bottom = 70.0
 text = "Object Type"
 label_settings = SubResource("LabelSettings_8howc")
 
-[node name="Filename" type="LineEdit" parent="RoomEditor/PanelContainer/Draw/ObjMode"]
+[node name="Filename" type="LineEdit" parent="RoomEditor/PanelContainer/ObjMode"]
 custom_minimum_size = Vector2(40, 25)
 layout_mode = 1
 anchors_preset = -1
@@ -719,7 +709,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Type"
 metadata/_edit_use_anchors_ = true
 
-[node name="Label4" type="Label" parent="RoomEditor/PanelContainer/Draw/ObjMode"]
+[node name="Label4" type="Label" parent="RoomEditor/PanelContainer/ObjMode"]
 layout_mode = 0
 offset_left = 1.0
 offset_top = 92.0
@@ -730,10 +720,12 @@ object type names."
 label_settings = SubResource("LabelSettings_8howc")
 
 [node name="Settings" type="Control" parent="RoomEditor/PanelContainer"]
+visible = false
 layout_mode = 2
 mouse_filter = 1
 
 [node name="Properties" type="Control" parent="RoomEditor/PanelContainer"]
+visible = false
 layout_mode = 2
 mouse_filter = 1
 
