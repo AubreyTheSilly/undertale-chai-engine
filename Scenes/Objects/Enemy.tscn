@@ -17,7 +17,7 @@
 [ext_resource type="FontFile" uid="uid://cvrg1o3nedg0c" path="res://Fonts/undertale-dotumche.otf" id="16_fvwyc"]
 [ext_resource type="Texture2D" uid="uid://81hi2vabuvw8" path="res://Sprites/Battle/SpeechBubbles/spr_blconabove_0.png" id="16_xmk3q"]
 [ext_resource type="Script" uid="uid://l4x4f6y1ba4e" path="res://Scripts/Engine/Objects/SpeechBubble.gd" id="17_fvwyc"]
-[ext_resource type="Script" uid="uid://b6m6ndh7u38dl" path="res://Scripts/Engine/Classes/ScriptRunner.gd" id="18_fvwyc"]
+[ext_resource type="Script" uid="uid://xdj537rg68ks" path="res://scripts/Engine/Objects/EnemyScriptRunner.gd" id="18_fvwyc"]
 
 [sub_resource type="Gradient" id="Gradient_vxur4"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
@@ -561,6 +561,7 @@ offset_bottom = 29.0
 text = "Test dialogue."
 label_settings = SubResource("LabelSettings_704u3")
 
-[node name="ScriptRunner" type="Node" parent="."]
+[node name="ScriptRunner" type="Node" parent="." node_paths=PackedStringArray("node")]
 script = ExtResource("18_fvwyc")
+node = NodePath("..")
 metadata/_custom_type_script = "uid://b6m6ndh7u38dl"

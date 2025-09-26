@@ -17,11 +17,19 @@ var types = {
 var ifoperators = [5, 7, 8, 9, 10, 11]
 
 var vars : Dictionary[String,UMVar]
+var persistentVars : Dictionary[String,UMVar]
 
 func _ready():
 	audio.max_polyphony = 1024
 	add_child(audio)
-	run_script("Examples/test.utscript")
+
+func getVariable(varName : String):
+	if persistentVars.has(varName):
+		return persistentVars[varName]
+	elif vars.has(varName):
+		return vars[varName]
+	else:
+		return null
 
 func run_script(script : String = script_to_run) -> Error:
 	if !script:
@@ -31,7 +39,7 @@ func run_script(script : String = script_to_run) -> Error:
 	var runscript : UTScript = UTScript.loadScriptFromFile(script)
 	vars.clear()
 	
-	var line : int = 0
+	var line : int =-1
 	var skip_depth = 0
 	var depth = 0
 	
@@ -71,12 +79,12 @@ func run_script(script : String = script_to_run) -> Error:
 						if start!=-1 and end!=-1:
 							replace = i.value.substr(start,(end-start)+1)
 							replacevar = replace.rstrip("%").lstrip("%")
-							
-							if vars.has(replacevar):
-								if vars[replacevar].type == Token.TokenType.TYPE_NUM and str(vars[replacevar].value).ends_with(".0"):
-									i.value = i.value.replace(replace,str(vars[replacevar].value).substr(0,str(vars[replacevar].value).length()-2))
+							var variable = getVariable(replacevar)
+							if variable:
+								if variable.type == Token.TokenType.TYPE_NUM and str(variable.value).ends_with(".0"):
+									i.value = i.value.replace(replace,str(variable.value).substr(0,str(variable.value).length()-2))
 								else:
-									i.value = i.value.replace(replace,str(vars[replacevar].value))
+									i.value = i.value.replace(replace,str(variable.value))
 							
 							index -= replace.length()
 							index += str(vars[replacevar].value).length()
@@ -95,16 +103,21 @@ func run_script(script : String = script_to_run) -> Error:
 						var variable : UMVar = UMVar.new()
 						variable.type = runscript.data[line].data[1].type
 						if runscript.data[line].data[2].type == Token.TokenType.IDENTIFIER:
-							vars[runscript.data[line].data[2].lexeme] = variable
+							if runscript.data[line].data[2].lexeme[0] == "$":
+								runscript.data[line].data[2].lexeme[0] = ""
+								persistentVars[runscript.data[line].data[2].lexeme] = variable
+							else:
+								vars[runscript.data[line].data[2].lexeme] = variable
 						else:
 							push_error("line "+str(line+1)+": Failed to input an identifier for var")
 					else:
 						push_error("line "+str(line+1)+": Not a data type")
 				Token.TokenType.SET:
 					if runscript.data[line].data[1].type == Token.TokenType.IDENTIFIER:
-						if vars.has(runscript.data[line].data[1].lexeme):
-							if vars[runscript.data[line].data[1].lexeme].type == types[runscript.data[line].data[2].type]:
-								vars[runscript.data[line].data[1].lexeme].value = runscript.data[line].data[2].value
+						var variable = getVariable(runscript.data[line].data[1].lexeme)
+						if variable:
+							if variable.type == types[runscript.data[line].data[2].type]:
+								variable.value = runscript.data[line].data[2].value
 							else:
 								push_error("line "+str(line+1)+": Variable set type does not match!")
 						else:
@@ -113,9 +126,10 @@ func run_script(script : String = script_to_run) -> Error:
 						push_error("line "+str(line+1)+": You must enter a valid identifier for set")
 				Token.TokenType.INCREMENT:
 					if runscript.data[line].data[1].type == Token.TokenType.IDENTIFIER:
-						if vars.has(runscript.data[line].data[1].lexeme):
-							if vars[runscript.data[line].data[1].lexeme].type == Token.TokenType.TYPE_NUM:
-								vars[runscript.data[line].data[1].lexeme].value += 1.0
+						var variable = getVariable(runscript.data[line].data[1].lexeme)
+						if variable:
+							if variable.type == Token.TokenType.TYPE_NUM:
+								variable.value += 1.0
 							else:
 								push_error("line "+str(line+1)+": Variable must be a num!")
 						else:
@@ -124,9 +138,10 @@ func run_script(script : String = script_to_run) -> Error:
 						push_error("line "+str(line+1)+": You must enter a valid identifier for increment")
 				Token.TokenType.DECREMENT:
 					if runscript.data[line].data[1].type == Token.TokenType.IDENTIFIER:
-						if vars.has(runscript.data[line].data[1].lexeme):
-							if vars[runscript.data[line].data[1].lexeme].type == Token.TokenType.TYPE_NUM:
-								vars[runscript.data[line].data[1].lexeme].value -= 1.0
+						var variable = getVariable(runscript.data[line].data[1].lexeme)
+						if variable:
+							if variable.type == Token.TokenType.TYPE_NUM:
+								variable.value -= 1.0
 							else:
 								push_error("line "+str(line+1)+": Variable must be a num!")
 						else:
@@ -141,14 +156,16 @@ func run_script(script : String = script_to_run) -> Error:
 						if !bool(runscript.data[line].data[1].value):
 							skip_depth += 1
 					elif !(ifoperators.has(runscript.data[line].data[2].type)):
-						push_error("line "+str(line+1)+": You must add a valid operator for if")
+						push_error("line "+str(line+1)+": You must add a valid operator for while")
 					elif runscript.data[line].data.size() == 3:
-						push_error("line "+str(line+1)+": You must have a valid number of arguments for if")
+						push_error("line "+str(line+1)+": You must have a valid number of arguments for while")
 					else:
-						if vars.has(runscript.data[line].data[1].lexeme):
-							runscript.data[line].data[1].value = vars[runscript.data[line].data[1].lexeme].value
-						if vars.has(runscript.data[line].data[3].lexeme):
-							runscript.data[line].data[3].value = vars[runscript.data[line].data[3].lexeme].value
+						var variable1 = getVariable(runscript.data[line].data[1].lexeme)
+						var variable2 = getVariable(runscript.data[line].data[3].lexeme)
+						if variable1:
+							runscript.data[line].data[1].value = variable1.value
+						if variable2:
+							runscript.data[line].data[3].value = variable2.value
 						match runscript.data[line].data[2].type:
 							5:
 								if runscript.data[line].data[1].value == runscript.data[line].data[3].value:
@@ -189,10 +206,12 @@ func run_script(script : String = script_to_run) -> Error:
 					elif runscript.data[line].data.size() == 3:
 						push_error("line "+str(line+1)+": You must have a valid number of arguments for if")
 					else:
-						if vars.has(runscript.data[line].data[1].lexeme):
-							runscript.data[line].data[1].value = vars[runscript.data[line].data[1].lexeme].value
-						if vars.has(runscript.data[line].data[3].lexeme):
-							runscript.data[line].data[3].value = vars[runscript.data[line].data[3].lexeme].value
+						var variable1 = getVariable(runscript.data[line].data[1].lexeme)
+						var variable2 = getVariable(runscript.data[line].data[3].lexeme)
+						if variable1:
+							runscript.data[line].data[1].value = variable1.value
+						if variable2:
+							runscript.data[line].data[3].value = variable2.value
 						match runscript.data[line].data[2].type:
 							5:
 								if runscript.data[line].data[1].value == runscript.data[line].data[3].value:
@@ -243,13 +262,16 @@ func run_script(script : String = script_to_run) -> Error:
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
 						continue
-					if !node.get_node(runscript.data[line].data[1].value):
+					if !node.get_node_or_null(runscript.data[line].data[1].value) and runscript.data[line].data[1].value != "self":
 						push_error("line "+str(line+1)+": Target node must exist")
 						continue
 					if runscript.data[line].data[2].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node property must be a string")
 						continue
-					create_tween().tween_property(node.get_node(runscript.data[line].data[1].value),runscript.data[line].data[2].value,runscript.data[line].data[3].value,0)
+					if runscript.data[line].data[1].value == "self":
+						create_tween().tween_property(node,runscript.data[line].data[2].value,runscript.data[line].data[3].value,0)
+					else:
+						create_tween().tween_property(node.get_node(runscript.data[line].data[1].value),runscript.data[line].data[2].value,runscript.data[line].data[3].value,0)
 				Token.TokenType.TWEEN_PROPERTY:
 					if runscript.data[line].data.size() < 5:
 						push_error("line "+str(line+1)+": Invalid number of arguments")
@@ -312,10 +334,9 @@ func run_script(script : String = script_to_run) -> Error:
 					sprite.position = Vector2(runscript.data[line].data[3].value,runscript.data[line].data[4].value)
 					node.add_child(sprite)
 				_:
-					unhandled_function(runscript.data[line])
+					await unhandled_function(runscript.data[line])
 		for i in ogstringtokens:
 			runscript.data[line].data[i] = ogstringtokens[i]
-	# print("Script finished executing")
 	return OK
 
 func unhandled_function(line : TokenArray):

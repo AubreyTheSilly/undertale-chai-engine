@@ -20,6 +20,7 @@ func makeObj():
 	var obj = {}
 	obj["position"] = [objpos.x,objpos.y]
 	
+	
 	$RoomDisplay.queue_redraw()
 	
 func removeObj():

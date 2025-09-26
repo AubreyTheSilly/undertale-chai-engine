@@ -138,9 +138,9 @@ func act(Act : String) -> void:
 		await flavorbox.StartBattleDialogue(enemy_data.Check)
 	else:
 		# run script
-		if UTScript.new().loadScript("Enemies/"+enemy_data.name+"/Acts/"+Act+".utscript") == OK:
+		if UTScript.loadScriptFromFile("Enemies/"+enemy_data.name+"/Acts/"+Act+".utscript"):
 			scr.script_to_run = "Enemies/"+enemy_data.name+"/Acts/"+Act+".utscript"
-			scr.run_script()
+			await scr.run_script()
 		else:
 			# uh oh!
 			await flavorbox.StartBattleDialogue(["* Error!"])
@@ -164,7 +164,6 @@ func dialogue() -> void:
 					$AudioStreamPlayer2.play()
 		await get_tree().process_frame
 		await get_tree().process_frame
-	talking = false
 	if enemy_data.autodialog:
 		await get_tree().create_timer(0.5).timeout
 	else:

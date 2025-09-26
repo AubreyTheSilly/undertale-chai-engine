@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://d3s7r8bmqm08b"]
+[gd_scene load_steps=45 format=3 uid="uid://d3s7r8bmqm08b"]
 
 [ext_resource type="Script" uid="uid://co2guxtvgjejm" path="res://Scripts/Engine/Scenes/Battle.gd" id="1_qxqxx"]
 [ext_resource type="Script" uid="uid://ckik5x0yqgxeb" path="res://Scripts/Engine/Objects/BattleDialogueBox.gd" id="2_3g107"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://51lu7uaohc4j" path="res://Scenes/Objects/BattleButton.tscn" id="8_j2fg1"]
 [ext_resource type="Texture2D" uid="uid://db3xb8pxayasp" path="res://Sprites/Battle/Buttons/spr_fightbt_0.png" id="9_1iuas"]
 [ext_resource type="Texture2D" uid="uid://c462oie8gqmdf" path="res://Sprites/Battle/Buttons/spr_fightbt_1.png" id="10_3xx1h"]
+[ext_resource type="Script" uid="uid://dtovq8lgaq6x7" path="res://Scenes/script_runner.gd" id="11_d5dbc"]
 [ext_resource type="Texture2D" uid="uid://bh4rc4a22qrwc" path="res://Sprites/Battle/Buttons/spr_actbt_0.png" id="11_fdlm1"]
 [ext_resource type="Texture2D" uid="uid://dc02kscou060m" path="res://Sprites/Battle/Buttons/spr_actbt_1.png" id="12_btnny"]
 [ext_resource type="Texture2D" uid="uid://d35dhp0c418nn" path="res://Sprites/Battle/spr_enemyhealth_0.png" id="12_mugwg"]
@@ -181,6 +182,10 @@ position = Vector2(144, 35.25)
 clip_children = 1
 polygon = PackedVector2Array(-144, -35.25, -144, 35.25, 144, 35.25, 144, -35.25)
 uv = PackedVector2Array(-307, 4, -128, -14, -107, 40, -290, 51)
+
+[node name="ScriptRunner" type="Node" parent="AttackBox"]
+script = ExtResource("11_d5dbc")
+metadata/_custom_type_script = "uid://b6m6ndh7u38dl"
 
 [node name="ChoiceBox" type="Node2D" parent="."]
 visible = false

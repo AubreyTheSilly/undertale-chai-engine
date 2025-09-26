@@ -3,10 +3,10 @@ extends Node
 enum SOULMODES {RED=0,BLUE=1}
 
 var loadedBattle = {
-	"encounterText":"* . . .",
-	"enemies":["dust"],
+	"encounterText":"* Test dialogue...",
+	"enemies":["dog"],
 	"state":0,
-	"music":"mus_dustsans",
+	"music":"mus_battle1",
 	"bg":false
 }
 
