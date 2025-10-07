@@ -6,6 +6,8 @@ var Project : Dictionary = {
 }
 var Path : String = "res://"
 
+var timer : float = 0
+
 func loadJsonAsDictionary(dir : String) -> Dictionary:
 	if !FileAccess.file_exists(Path+dir):
 		print("JSON to load does not exist. Returning null.")
@@ -67,7 +69,7 @@ func newProject(newpath : String) -> Error:
 	print("New project successfully created at "+Path+"!")
 	return OK
 
-func _process(_delta) -> void:
+func _process(delta) -> void:
 	if Undermaker.Project.has("gameName"):
 		get_window().title = Project["gameName"]
 	if Input.is_action_just_pressed("Fullscreen"):
@@ -75,6 +77,7 @@ func _process(_delta) -> void:
 			get_window().mode = get_window().MODE_WINDOWED
 		else:
 			get_window().mode = get_window().MODE_FULLSCREEN
+	timer += 1
 
 func load_scene(sceneName : String):
 	get_tree().change_scene_to_packed(load("res://Scenes/TestScenes/"+sceneName+".tscn"))

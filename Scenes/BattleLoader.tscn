@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://coabncfpw3ed6"]
+
+[ext_resource type="Script" uid="uid://bcdw0cb10mb6k" path="res://Scripts/Engine/Scenes/battle_loader.gd" id="1_jjdoh"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ryd7w"]
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_jjdoh")
+
+[node name="LineEdit" type="LineEdit" parent="."]
+offset_right = 320.0
+offset_bottom = 30.0
+theme_override_colors/font_placeholder_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_ryd7w")
+theme_override_styles/read_only = SubResource("StyleBoxFlat_ryd7w")
+theme_override_styles/focus = SubResource("StyleBoxFlat_ryd7w")
+placeholder_text = "put an encounter name here !!"

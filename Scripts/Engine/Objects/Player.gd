@@ -30,6 +30,7 @@ func _ready() -> void:
 			sprite.sprite_frames.add_frame("move_right",i,1,-1)
 	
 	PlayerData.player_teleporting = false
+	PlayerData.player_can_move = true
 	fader.fadeIn()
 
 func _process(_delta) -> void:

@@ -33,6 +33,8 @@ signal next
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	scr.persistentVars["damaging"] = UMVar.new()
+	scr.persistentVars["damaging"].type = Token.TokenType.TYPE_BOOL
 	# setup
 	position += enemy_data.offset
 	$SpeechBubble.pos = enemy_data.BubbleOffset
@@ -50,8 +52,8 @@ func _ready():
 	if UTScript.loadScriptFromFile("Enemies/"+enemy_data.name+"/Update.utscript"):
 		hasUpdateScript = true
 
-func getAttack() -> UTScript:
-	return UTScript.loadScriptFromFile("Enemies/"+enemy_data.name+"/Attacks/"+enemy_data.Attacks.pick_random()+".utscript")
+func getAttack() -> String:
+	return "Enemies/"+enemy_data.name+"/Attacks/"+enemy_data.Attacks.pick_random()+".utscript"
 
 func _dust():
 	# so long gay bowser
@@ -89,6 +91,9 @@ func Shudder():
 func _spare():
 	if spare == true:
 		state = ENEMY_STATE.SPARED
+		if hasUpdateScript:
+			scr.script_to_run = "Enemies/"+enemy_data.name+"/Update.utscript"
+			scr.run_script()
 		modulate.a = 0.5
 		sprite.texture = enemy_data.EnemySpareSprite
 		for i in range(14):
@@ -98,7 +103,7 @@ func _spare():
 		$AudioStreamPlayer.play()
 
 func _damage(damage : float):
-	if damage > 0:
+	if damage >= 0:
 		# enemy hurt :(
 		$AudioStreamPlayer.stream = preload("res://Audio/Sounds/snd_laz_c.wav")
 		$AudioStreamPlayer.play()
@@ -148,22 +153,46 @@ func act(Act : String) -> void:
 func dialogue() -> void:
 	talking = true
 	$SpeechBubble.visible = true
-	$SpeechBubble/Label.text = ""
 	var Dialogue = enemy_data.RandomDialogs.pick_random()
+	$AudioStreamPlayer2.stream = Loader.load_file("Audio/Sounds/snd_TXT2.wav")
 	talking = true
+	$SpeechBubble/TextObject.text = "[color:0:0:0]"
 	if nextdialogue != "":
 		Dialogue = nextdialogue
 		nextdialogue = ""
+	
+	if Dialogue == "":
+		$SpeechBubble.visible = false
+		talking = false
+		return
+	
+	var cmd = false
+	var command = ""
 	for i in Dialogue:
 		match i:
-			"&":
-				$SpeechBubble/Label.text += "\n"
+			"[":
+				cmd = true
+				command = ""
+			"]":
+				cmd = false
+				var cmand = command.split(":",false)
+				match cmand[0]:
+					"wait":
+						for k in range(int(cmand[1])):
+							await get_tree().process_frame
+					"sound":
+						$AudioStreamPlayer2.stream = Loader.load_file("Audio/Sounds/"+cmand[1]+".wav")
+					_:
+						$SpeechBubble/TextObject.text += "["+command+"]"
 			_:
-				$SpeechBubble/Label.text += i
-				if i != " ":
-					$AudioStreamPlayer2.play()
-		await get_tree().process_frame
-		await get_tree().process_frame
+				if cmd:
+					command += i
+				else:
+					$SpeechBubble/TextObject.text += i
+					if i != " ":
+						$AudioStreamPlayer2.play()
+					await get_tree().process_frame
+					await get_tree().process_frame
 	if enemy_data.autodialog:
 		await get_tree().create_timer(0.5).timeout
 	else:
@@ -173,6 +202,8 @@ func dialogue() -> void:
 	talking = false
 
 func _process(_delta):
+	scr.persistentVars["damaging"].value = damaging
+	
 	frame += 1
 	if hasUpdateScript and state == 1:
 		scr.script_to_run = "Enemies/"+enemy_data.name+"/Update.utscript"

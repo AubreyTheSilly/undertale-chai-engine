@@ -1,14 +1,18 @@
 extends Sprite2D
 
 @export_enum("White","Blue","Orange","Green") var attack_type : String = "White"
-@export var damage = 1
+@export var damage := 1
+@export var hitbox_override_enabled := false
+@export var hitbox_override := Vector2.ZERO
 var velocity : Vector2 = Vector2.ZERO
+var rotation_velocity : float = 0
 
 func _process(_delta):
 	if texture:
 		$attack/CollisionShape2D.shape.size = texture.get_size()
 	
-	position += velocity.normalized()
+	position += velocity
+	rotation_degrees += rotation_velocity
 	
 	match attack_type.to_lower():
 		"blue":

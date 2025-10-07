@@ -1,3 +1,19 @@
-create_sprite legs 0 40 Battle/Enemies/sans/spr_sanslegs_0 0 0 -40
-create_sprite body 0 0 Battle/Enemies/sans/spr_sanstorso_0
-create_sprite head 0 0 Battle/Enemies/sans/spr_sanshead_0
+//create animation sprites
+create_sprite "legs" "Battle/Enemies/sanslegs.png" 0 0
+create_sprite "body" "Battle/Enemies/sansbody.png" 0 0
+create_sprite "head" "Battle/Enemies/sanshead.png" 0 0
+
+set_property "legs" "offset:y" -44
+set_property "legs" "position:y" 44
+
+//init variables
+var num $headx
+var num $bodyx
+var num $heady
+var num $bodyy
+var num $legs
+set headx 0
+set bodyx 0
+set heady 0
+set bodyy 0
+set legs 0

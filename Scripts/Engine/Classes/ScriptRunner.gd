@@ -11,13 +11,20 @@ var audio : AudioStreamPlayer = AudioStreamPlayer.new()
 var types = {
 	Token.TokenType.STRING:Token.TokenType.TYPE_STRING,
 	Token.TokenType.BOOLEAN:Token.TokenType.TYPE_BOOL,
-	Token.TokenType.NUMBER:Token.TokenType.TYPE_NUM
+	Token.TokenType.NUMBER:Token.TokenType.TYPE_NUM,
+	Token.TokenType.TYPE_STRING:Token.TokenType.STRING,
+	Token.TokenType.TYPE_BOOL:Token.TokenType.BOOLEAN,
+	Token.TokenType.TYPE_NUM:Token.TokenType.NUMBER
 }
+
+var operators = [Token.TokenType.PLUS,Token.TokenType.MINUS,Token.TokenType.STAR,Token.TokenType.SLASH]
 
 var ifoperators = [5, 7, 8, 9, 10, 11]
 
 var vars : Dictionary[String,UMVar]
 var persistentVars : Dictionary[String,UMVar]
+
+signal script_finished
 
 func _ready():
 	audio.max_polyphony = 1024
@@ -31,12 +38,18 @@ func getVariable(varName : String):
 	else:
 		return null
 
-func run_script(script : String = script_to_run) -> Error:
+func _pre_line():
+	pass
+
+func _pre_run():
+	pass
+
+func run_script(script : String = script_to_run,verbose : bool = false) -> Error:
 	if !script:
 		push_error("There is no script to run! Make sure to set script_to_run!!")
 		return ERR_DOES_NOT_EXIST
 	
-	var runscript : UTScript = UTScript.loadScriptFromFile(script)
+	var runscript : UTScript = UTScript.loadScriptFromFile(script,verbose)
 	vars.clear()
 	
 	var line : int =-1
@@ -46,15 +59,19 @@ func run_script(script : String = script_to_run) -> Error:
 	var while_line = -1
 	var while_depth = -1
 	
+	_pre_run()
+	
 	while line < runscript.data.size()-1:
 		line += 1
+		_pre_line()
 		
 		var ogstringtokens : Dictionary[int,Token] = {}
 		
 		if skip_depth != 0:
-			if runscript.data[line].data[0].type == Token.TokenType.END:
-				skip_depth -= 1
-				depth -= 1
+			if runscript.data[line].data.size() != 0:
+				if runscript.data[line].data[0].type == Token.TokenType.END:
+					skip_depth -= 1
+					depth -= 1
 			continue
 		if runscript.data[line].data.size() != 0:
 			var token = runscript.data[line].data[0]
@@ -268,6 +285,9 @@ func run_script(script : String = script_to_run) -> Error:
 					if runscript.data[line].data[2].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node property must be a string")
 						continue
+					var variable = getVariable(runscript.data[line].data[3].lexeme)
+					if variable:
+						runscript.data[line].data[3].value = variable.value
 					if runscript.data[line].data[1].value == "self":
 						create_tween().tween_property(node,runscript.data[line].data[2].value,runscript.data[line].data[3].value,0)
 					else:
@@ -310,7 +330,7 @@ func run_script(script : String = script_to_run) -> Error:
 							push_error("line "+str(line+1)+": You must use a valid ease type")
 							continue
 				Token.TokenType.CREATE_SPRITE:
-					if runscript.data[line].data.size() < 4:
+					if runscript.data[line].data.size() != 5:
 						push_error("line "+str(line+1)+": Invalid number of arguments")
 						continue
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
@@ -333,10 +353,236 @@ func run_script(script : String = script_to_run) -> Error:
 					sprite.texture = Loader.load_file("Sprites/"+runscript.data[line].data[2].value)
 					sprite.position = Vector2(runscript.data[line].data[3].value,runscript.data[line].data[4].value)
 					node.add_child(sprite)
+				Token.TokenType.SIN:
+					if runscript.data[line].data.size() != 4:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type == Token.TokenType.IDENTIFIER:
+						var variable = getVariable(runscript.data[line].data[1].lexeme)
+						if variable:
+							if variable.type == Token.TokenType.TYPE_NUM:
+								if runscript.data[line].data[2].type == Token.TokenType.NUMBER:
+									if runscript.data[line].data[3].type == Token.TokenType.NUMBER:
+										variable.value = sin(Undermaker.timer*runscript.data[line].data[2].value)*runscript.data[line].data[3].value
+									else:
+										push_error("line "+str(line+1)+": Multiplier must be a num!")
+								else:
+									push_error("line "+str(line+1)+": Time scale must be a num!")
+							else:
+								push_error("line "+str(line+1)+": Variable must be a num!")
+						else:
+							push_error("line "+str(line+1)+": You must enter an existing variable for sin")
+					else:
+						push_error("line "+str(line+1)+": You must enter a valid identifier for sin")
+				Token.TokenType.COS:
+					if runscript.data[line].data.size() != 4:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type == Token.TokenType.IDENTIFIER:
+						var variable = getVariable(runscript.data[line].data[1].lexeme)
+						if variable:
+							if variable.type == Token.TokenType.TYPE_NUM:
+								if runscript.data[line].data[2].type == Token.TokenType.TYPE_NUM:
+									if runscript.data[line].data[2].type == Token.TokenType.TYPE_NUM:
+										variable.value = cos(Undermaker.timer*runscript.data[line].data[2].value)*runscript.data[line].data[3].value
+									else:
+										push_error("line "+str(line+1)+": Multiplier must be a num!")
+								else:
+									push_error("line "+str(line+1)+": Time scale must be a num!")
+							else:
+								push_error("line "+str(line+1)+": Variable must be a num!")
+						else:
+							push_error("line "+str(line+1)+": You must enter an existing variable for cos")
+					else:
+						push_error("line "+str(line+1)+": You must enter a valid identifier for cos")
+				Token.TokenType.CREATE_ANIMATED_SPRITE:
+					if runscript.data[line].data.size() != 4:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Sprite name must be a string")
+						continue
+					if runscript.data[line].data[2].type != Token.TokenType.NUMBER:
+						push_error("line "+str(line+1)+": Sprite X position must be a number")
+						continue
+					if runscript.data[line].data[3].type != Token.TokenType.NUMBER:
+						push_error("line "+str(line+1)+": Sprite Y position must be a number")
+						continue
+					var sprite = AnimatedSprite2D.new()
+					sprite.sprite_frames = SpriteFrames.new()
+					sprite.name = runscript.data[line].data[1].value
+					sprite.position = Vector2(runscript.data[line].data[2].value,runscript.data[line].data[3].value)
+					node.add_child(sprite)
+				Token.TokenType.ADD_SPRITE_FRAME:
+					if runscript.data[line].data.size() != 3:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Node name must be a string")
+						continue
+					if !node.get_node_or_null(runscript.data[line].data[1].value) and runscript.data[line].data[1].value != "self":
+						push_error("line "+str(line+1)+": Target node must exist")
+						continue
+					if runscript.data[line].data[2].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Sprite path must be a string")
+						continue
+					if !Loader.load_file("Sprites/"+runscript.data[line].data[2].value):
+						push_error("line "+str(line+1)+": Sprite path must lead to a valid image file (Path: "+"Sprites/"+runscript.data[line].data[2].value+")")
+						continue
+					node.get_node(runscript.data[line].data[1].value).sprite_frames.add_frame("default",Loader.load_file("Sprites/"+runscript.data[line].data[2].value))
+				Token.TokenType.PLAY_ANIMATED_SPRITE:
+					if runscript.data[line].data.size() != 2:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Node name must be a string")
+						continue
+					if !node.get_node_or_null(runscript.data[line].data[1].value) and runscript.data[line].data[1].value != "self":
+						push_error("line "+str(line+1)+": Target node must exist")
+						continue
+					if node.get_node(runscript.data[line].data[1].value) is AnimatedSprite2D:
+						node.get_node(runscript.data[line].data[1].value).play()
+					else:
+						push_error("line "+str(line+1)+": Target node must be an animatedsprite")
+						continue
+				Token.TokenType.REPARENT_TO_ROOT:
+					if runscript.data[line].data.size() != 2:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Node name must be a string")
+						continue
+					if !node.get_node_or_null(runscript.data[line].data[1].value) and runscript.data[line].data[1].value != "self":
+						push_error("line "+str(line+1)+": Target node must exist")
+						continue
+					node.get_node(runscript.data[line].data[1].value).reparent(get_tree().current_scene)
+				Token.TokenType.SEND_PROPERTY:
+					if runscript.data[line].data.size() != 4:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.IDENTIFIER:
+						push_error("line "+str(line+1)+": Variable name must be an identifier")
+						continue
+					if !getVariable(runscript.data[line].data[1].lexeme):
+						push_error("line "+str(line+1)+": Variable must exist")
+						continue
+					if runscript.data[line].data[2].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Node name must be a string")
+						continue
+					if !node.get_node_or_null(runscript.data[line].data[2].value) and runscript.data[line].data[2].value != "self":
+						push_error("line "+str(line+1)+": Target node must exist")
+						continue
+					if runscript.data[line].data[3].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Node property must be a string")
+						continue
+					var variable = getVariable(runscript.data[line].data[1].lexeme)
+					var value
+					if runscript.data[line].data[2].value == "self":
+						value = node.get(runscript.data[line].data[3].value)
+					else:
+						value = node.get_node(runscript.data[line].data[2].value).get(runscript.data[line].data[3].value)
+					variable.value = value
+				Token.TokenType.SEND_X:
+					if runscript.data[line].data.size() != 3:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.IDENTIFIER:
+						push_error("line "+str(line+1)+": Variable name must be an identifier")
+						continue
+					if !getVariable(runscript.data[line].data[1].lexeme):
+						push_error("line "+str(line+1)+": Variable must exist")
+						continue
+					if runscript.data[line].data[2].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Node name must be a string")
+						continue
+					if !node.get_node_or_null(runscript.data[line].data[2].value) and runscript.data[line].data[2].value != "self":
+						push_error("line "+str(line+1)+": Target node must exist")
+						continue
+					var variable = getVariable(runscript.data[line].data[1].lexeme)
+					variable.value = node.get_node(runscript.data[line].data[2].value).position.x
+				Token.TokenType.SEND_Y:
+					if runscript.data[line].data.size() != 3:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.IDENTIFIER:
+						push_error("line "+str(line+1)+": Variable name must be an identifier")
+						continue
+					if !getVariable(runscript.data[line].data[1].lexeme):
+						push_error("line "+str(line+1)+": Variable must exist")
+						continue
+					if runscript.data[line].data[2].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Node name must be a string")
+						continue
+					if !node.get_node_or_null(runscript.data[line].data[2].value) and runscript.data[line].data[2].value != "self":
+						push_error("line "+str(line+1)+": Target node must exist")
+						continue
+					var variable = getVariable(runscript.data[line].data[1].lexeme)
+					variable.value = node.get_node(runscript.data[line].data[2].value).position.y
+				Token.TokenType.MATH:
+					var j = -1
+					for i in runscript.data[line].data:
+						j += 1
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme) and j != 1:
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
+					if runscript.data[line].data.size() != 5:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.IDENTIFIER:
+						push_error("line "+str(line+1)+": Output variable name must be an identifier")
+						continue
+					if !getVariable(runscript.data[line].data[1].lexeme):
+						push_error("line "+str(line+1)+": Output variable must exist")
+						continue
+					if !operators.has(runscript.data[line].data[3].type):
+						push_error("line "+str(line+1)+": Must use a valid operator")
+						continue
+					if runscript.data[line].data[2].type != Token.TokenType.NUMBER:
+						push_error("line "+str(line+1)+": First number must be a number")
+						continue
+					if runscript.data[line].data[4].type != Token.TokenType.NUMBER:
+						push_error("line "+str(line+1)+": Second number must be a number")
+						continue
+					var variable = getVariable(runscript.data[line].data[1].lexeme)
+					match runscript.data[line].data[3].type:
+						Token.TokenType.PLUS:
+							variable.value = runscript.data[line].data[2].value + runscript.data[line].data[4].value
+						Token.TokenType.MINUS:
+							variable.value = runscript.data[line].data[2].value - runscript.data[line].data[4].value
+						Token.TokenType.STAR:
+							variable.value = runscript.data[line].data[2].value * runscript.data[line].data[4].value
+						Token.TokenType.SLASH:
+							variable.value = runscript.data[line].data[2].value / runscript.data[line].data[4].value
+				Token.TokenType.PROCESS_FRAME:
+					await get_tree().process_frame
+				Token.TokenType.RAND:
+					if runscript.data[line].data.size() != 4:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type == Token.TokenType.IDENTIFIER:
+						var variable = getVariable(runscript.data[line].data[1].lexeme)
+						if variable:
+							if variable.type == Token.TokenType.TYPE_NUM:
+								if runscript.data[line].data[2].type == Token.TokenType.NUMBER:
+									if runscript.data[line].data[3].type == Token.TokenType.NUMBER:
+										variable.value = randi_range(runscript.data[line].data[2].value,runscript.data[line].data[3].value)
+									else:
+										push_error("line "+str(line+1)+": Maximum value must be a num!")
+								else:
+									push_error("line "+str(line+1)+": Minimum value must be a num!")
+							else:
+								push_error("line "+str(line+1)+": Variable must be a num!")
+						else:
+							push_error("line "+str(line+1)+": You must enter an existing variable for sin")
+					else:
+						push_error("line "+str(line+1)+": You must enter a valid identifier for sin")
 				_:
 					await unhandled_function(runscript.data[line])
 		for i in ogstringtokens:
 			runscript.data[line].data[i] = ogstringtokens[i]
+	await get_tree().process_frame
+	script_finished.emit()
 	return OK
 
 func unhandled_function(line : TokenArray):

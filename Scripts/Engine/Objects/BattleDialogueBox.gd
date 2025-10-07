@@ -16,8 +16,7 @@ func StartFlavorDialogue(dialogue : String) -> void:
 	var mode = "normal"
 	var speed = 1
 	skiptext = false
-	for j in dialogbox.get_children():
-		j.queue_free()
+	$TextObject.text = ""
 	for j in dialogue:
 		index += 1
 		match j:
@@ -26,40 +25,24 @@ func StartFlavorDialogue(dialogue : String) -> void:
 				command = ""
 			"]":
 				cmd = false
-				var cmand = command.split(" ",false)
+				var cmand = command.split(":",false)
 				print(cmand)
 				match cmand[0]:
-					"newline":
-						textpos.x = 0
-						textpos.y += 1
 					"wait":
 						if skiptext2 or skiptext:
 							continue
 						for k in range(int(cmand[1])):
 							await get_tree().process_frame
-					"color":
-						textcolor.r = float(cmand[1])/255.0
-						textcolor.g = float(cmand[2])/255.0
-						textcolor.b = float(cmand[3])/255.0
-					"mode":
-						mode = cmand[1]
 					"speed":
 						speed = int(cmand[1])
+					_:
+							$TextObject.text += "["+command+"]"
 			_:
 				if cmd == true:
 					command += j
 				else:
-					var chara = preload("res://Scenes/Objects/TextCharacter.tscn").instantiate()
-					chara.name = "character"+str(index)
-					chara.position = Vector2(9.5,10.35)
-					chara.position.x += textpos.x*8
-					chara.position.y += textpos.y*16
-					chara.chara = j
-					chara.color = textcolor
-					chara.mode = mode
-					textpos.x += 1
-					dialogbox.add_child(chara)
-					soundplayer.stream = load("res://Audio/Sounds/"+sound+".wav")
+					$TextObject.text += j
+					soundplayer.stream = Loader.load_file("Audio/Sounds/"+sound+".wav")
 					if j != " " and !skiptext:
 						soundplayer.play()
 					if !skiptext:
@@ -75,8 +58,7 @@ func StartBattleDialogue(dialogue : Array) -> void:
 		var command = ""
 		var textcolor := Color(1,1,1)
 		skiptext2 = false
-		for j in dialogbox.get_children():
-			j.queue_free()
+		$TextObject.text = ""
 		for j in i:
 			index += 1
 			match j:
@@ -85,34 +67,21 @@ func StartBattleDialogue(dialogue : Array) -> void:
 					command = ""
 				"]":
 					cmd = false
-					var cmand = command.split(" ",false)
+					var cmand = command.split(":",false)
 					print(cmand)
 					match cmand[0]:
-						"newline":
-							textpos.x = 0
-							textpos.y += 1
 						"wait":
 							if skiptext2 or skiptext:
 								continue
 							for k in range(int(cmand[1])):
 								await get_tree().process_frame
-						"color":
-							textcolor.r = float(cmand[1])/255.0
-							textcolor.g = float(cmand[2])/255.0
-							textcolor.b = float(cmand[3])/255.0
+						_:
+							$TextObject.text += "["+command+"]"
 				_:
 					if cmd == true:
 						command += j
 					else:
-						var chara = preload("res://Scenes/Objects/TextCharacter.tscn").instantiate()
-						chara.name = "character"+str(index)
-						chara.position = Vector2(9.5,10.35)
-						chara.position.x += textpos.x*8
-						chara.position.y += textpos.y*16
-						chara.chara = j
-						chara.color = textcolor
-						textpos.x += 1
-						dialogbox.add_child(chara)
+						$TextObject.text += j
 						soundplayer.stream = load("res://Audio/Sounds/"+sound+".wav")
 						if j != " " and !skiptext2:
 							soundplayer.play()

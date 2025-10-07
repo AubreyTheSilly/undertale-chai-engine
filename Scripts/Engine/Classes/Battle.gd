@@ -3,15 +3,15 @@ extends Node
 enum SOULMODES {RED=0,BLUE=1}
 
 var loadedBattle = {
-	"encounterText":"* Test dialogue...",
-	"enemies":["dog"],
+	"encounterText":"* ...",
+	"enemies":["dust"],
 	"state":0,
-	"music":"mus_battle1",
+	"music":"mus_dusttale2",
 	"bg":false
 }
 
-func Encounter(id : String):
-	Undermaker.player_can_move = false
+func Encounter(id : String,transition : bool = true):
+	PlayerData.player_can_move = false
 	var encounterFile = FileAccess.open(Undermaker.Path+"Data/Encounters/"+id+".txt",FileAccess.READ)
 	var encounter = encounterFile.get_line().split(":")
 	encounterFile.close()
@@ -26,15 +26,28 @@ func Encounter(id : String):
 		loadedBattle["bg"] = true
 	else:
 		loadedBattle["bg"] = false
-	get_tree().get_root().add_child(preload("res://Scenes/Objects/BattleStarter.tscn").instantiate())
+	
+	if transition:
+		get_tree().get_root().add_child(preload("res://Scenes/Objects/BattleStarter.tscn").instantiate())
+	else:
+		get_tree().change_scene_to_packed(preload("res://Scenes/Battle.tscn"))
 
 func DictionaryToEnemyData(dict : Dictionary) -> EnemyData:
 	var enemydata = EnemyData.new()
 	enemydata.EnemyName = dict["enemyName"]
 	enemydata.name = dict["name"]
-	enemydata.EnemySprite = Loader.load_file("Sprites/Battle/Enemies/"+dict["sprite"]+".png")
-	enemydata.EnemyHurtSprite = Loader.load_file("Sprites/Battle/Enemies/"+dict["hurtSprite"]+".png")
-	enemydata.EnemySpareSprite = Loader.load_file("Sprites/Battle/Enemies/"+dict["spareSprite"]+".png")
+	if dict["sprite"] == "":
+		enemydata.EnemySprite = null
+	else:
+		enemydata.EnemySprite = Loader.load_file("Sprites/Battle/Enemies/"+dict["sprite"]+".png")
+	if dict["hurtSprite"] == "":
+		enemydata.EnemyHurtSprite = null
+	else:
+		enemydata.EnemyHurtSprite = Loader.load_file("Sprites/Battle/Enemies/"+dict["hurtSprite"]+".png")
+	if dict["spareSprite"] == "":
+		enemydata.EnemySpareSprite = null
+	else:
+		enemydata.EnemySpareSprite = Loader.load_file("Sprites/Battle/Enemies/"+dict["spareSprite"]+".png")
 	enemydata.HP = dict["hp"]
 	enemydata.ATK = dict["atk"]
 	enemydata.DEF = dict["def"]

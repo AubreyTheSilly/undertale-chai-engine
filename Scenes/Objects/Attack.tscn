@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://dcxvt33qw1qmu" path="res://Scripts/Engine/Objects/Attack.gd" id="1_xy7un"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_haf2j"]
+resource_local_to_scene = true
 size = Vector2(8, 8)
 
 [node name="Attack" type="Sprite2D"]

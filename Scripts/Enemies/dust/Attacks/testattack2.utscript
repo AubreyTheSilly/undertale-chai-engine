@@ -1,0 +1,33 @@
+set_box_size 100 70.5
+create_bone "bone1" RIGHT UP 30.25 -2.5 0 180
+wait 0.5
+create_bone "bone2" LEFT DOWN 30.25 2.5 0 0
+wait 0.5
+create_bone "bone1" RIGHT UP 30.25 -2.5 0 180
+wait 0.5
+create_bone "bone2" LEFT DOWN 30.25 2.5 0 0
+wait 0.5
+create_bone "bone1" RIGHT UP 30.25 -2.5 0 180
+wait 0.5
+create_bone "bone2" LEFT DOWN 30.25 2.5 0 0
+wait 0.5
+create_bone "bone1" RIGHT UP 30.25 -2.5 0 180
+wait 0.5
+create_bone "bone2" LEFT DOWN 30.25 2.5 0 0
+wait 0.5
+create_bone "bone1" RIGHT UP 30.25 -2.5 0 180
+wait 0.5
+create_bone "bone2" LEFT DOWN 30.25 2.5 0 0
+wait 0.5
+create_bone "bone1" RIGHT UP 30.25 -2.5 0 180
+wait 0.5
+create_bone "bone2" LEFT DOWN 30.25 2.5 0 0
+wait 0.5
+create_bone "bone1" RIGHT UP 30.25 -2.5 0 180
+wait 0.5
+create_bone "bone2" LEFT DOWN 30.25 2.5 0 0
+wait 0.5
+create_bone "bone1" RIGHT UP 30.25 -2.5 0 180
+wait 0.5
+create_bone "bone2" LEFT DOWN 30.25 2.5 0 0
+wait 2

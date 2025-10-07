@@ -58,12 +58,12 @@ func handleAnimation(dir : Vector2) -> String:
 
 func move(steps : int,dir : Vector2) -> void:
 	for i in range(steps):
-		for j in range(20/(Speed)):
+		for j in range(20.0/(Speed)):
 			velocity = dir*(30*Speed)
 			await get_tree().process_frame
 	velocity = Vector2.ZERO
 
 func _process(_delta) -> void:
-	sprite.speed_scale = Speed/2
+	sprite.speed_scale = Speed/2.0
 	handleAnimation(velocity/(30*Speed))
 	move_and_slide()

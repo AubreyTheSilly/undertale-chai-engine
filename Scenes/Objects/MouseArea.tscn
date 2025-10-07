@@ -5,8 +5,10 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6h844"]
 size = Vector2(2, 2)
 
-[node name="MouseArea" type="Area2D"]
+[node name="MouseArea" type="CanvasLayer"]
 script = ExtResource("1_5x3wi")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_6h844")

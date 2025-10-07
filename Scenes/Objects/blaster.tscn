@@ -1,0 +1,79 @@
+[gd_scene load_steps=12 format=3 uid="uid://ddcric4nhyqix"]
+
+[ext_resource type="Script" uid="uid://cqog21evbme3t" path="res://Scripts/Engine/Objects/blaster.gd" id="1_h3y0l"]
+[ext_resource type="Texture2D" uid="uid://tkht7wxmrrks" path="res://Sprites/Battle/Attacks/blaster/spr_gasterblaster_0.png" id="2_5fpen"]
+[ext_resource type="Texture2D" uid="uid://cvgw0kelho7c2" path="res://Sprites/Battle/Attacks/blaster/beam.png" id="2_h3y0l"]
+[ext_resource type="Texture2D" uid="uid://b3xfn53mbjem2" path="res://Sprites/Battle/Attacks/blaster/spr_gasterblaster_4.png" id="3_xxwao"]
+[ext_resource type="Texture2D" uid="uid://b4lewsqwl4mh8" path="res://Sprites/Battle/Attacks/blaster/spr_gasterblaster_5.png" id="4_bieou"]
+[ext_resource type="Texture2D" uid="uid://ulh2enfu6wmp" path="res://Sprites/Battle/Attacks/blaster/spr_gasterblaster_1.png" id="5_ye3aq"]
+[ext_resource type="Texture2D" uid="uid://bajo6qvwetoxa" path="res://Sprites/Battle/Attacks/blaster/spr_gasterblaster_2.png" id="6_jupg2"]
+[ext_resource type="AudioStream" uid="uid://dq84g5py8lduv" path="res://Audio/Sounds/mus_sfx_segapower.wav" id="8_hmjwp"]
+[ext_resource type="AudioStream" uid="uid://568i1h42p47c" path="res://Audio/Sounds/mus_sfx_rainbowbeam_1.wav" id="9_qyq33"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h3y0l"]
+resource_local_to_scene = true
+size = Vector2(8, 200)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lyhgw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_5fpen")
+}],
+"loop": true,
+"name": &"begin",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_xxwao")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_bieou")
+}],
+"loop": true,
+"name": &"fire",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_ye3aq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_jupg2")
+}],
+"loop": false,
+"name": &"ready",
+"speed": 16.0
+}]
+
+[node name="Blaster" type="Node2D"]
+z_index = 10
+z_as_relative = false
+script = ExtResource("1_h3y0l")
+
+[node name="attack" type="Area2D" parent="."]
+scale = Vector2(1e-05, 4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="attack"]
+position = Vector2(0, 100)
+shape = SubResource("RectangleShape2D_h3y0l")
+disabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0)
+scale = Vector2(1e-05, 4)
+texture = ExtResource("2_h3y0l")
+offset = Vector2(0, 100)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_lyhgw")
+animation = &"begin"
+autoplay = "begin"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_hmjwp")
+autoplay = true
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_qyq33")

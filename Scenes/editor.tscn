@@ -25,18 +25,6 @@ expand_margin_top = 2.0
 expand_margin_right = 2.0
 expand_margin_bottom = 2.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_24ceq"]
-bg_color = Color(1, 1, 1, 0.25)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
-expand_margin_left = 2.0
-expand_margin_top = 2.0
-expand_margin_right = 2.0
-expand_margin_bottom = 2.0
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a7iym"]
 bg_color = Color(0, 0, 0, 0.25)
 border_width_left = 2
@@ -49,15 +37,8 @@ expand_margin_top = 2.0
 expand_margin_right = 2.0
 expand_margin_bottom = 2.0
 
-[sub_resource type="Gradient" id="Gradient_32ik4"]
-colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_1k58v"]
-gradient = SubResource("Gradient_32ik4")
-width = 1
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7fkqn"]
-bg_color = Color(0.7, 0.7, 0.75, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_24ceq"]
+bg_color = Color(1, 1, 1, 0.25)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -67,29 +48,6 @@ expand_margin_left = 2.0
 expand_margin_top = 2.0
 expand_margin_right = 2.0
 expand_margin_bottom = 2.0
-
-[sub_resource type="LabelSettings" id="LabelSettings_8howc"]
-font_size = 8
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_32ik4"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("6_yl2l4")
-}, {
-"duration": 1.0,
-"texture": ExtResource("7_eo2o7")
-}],
-"loop": true,
-"name": &"default",
-"speed": 4.0
-}]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_eo2o7"]
-size = Vector2(156, 214)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_32ik4"]
-size = Vector2(54, 154)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8howc"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -154,21 +112,72 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="Gradient" id="Gradient_32ik4"]
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1k58v"]
+gradient = SubResource("Gradient_32ik4")
+width = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7fkqn"]
+bg_color = Color(0.7, 0.7, 0.75, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_8howc"]
+font_size = 8
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_eo2o7"]
+size = Vector2(156, 214)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_32ik4"]
+size = Vector2(54, 165)
+
 [sub_resource type="LabelSettings" id="LabelSettings_24ceq"]
 font_size = 13
 
 [sub_resource type="LabelSettings" id="LabelSettings_a7iym"]
 font_size = 13
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_32ik4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_yl2l4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_eo2o7")
+}],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
+
 [node name="editor" type="Node2D"]
 script = ExtResource("1_24ceq")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -10
+z_as_relative = false
+offset_left = -5000.0
+offset_top = -5000.0
+offset_right = 5000.0
+offset_bottom = 5000.0
+mouse_filter = 2
+color = Color(0.7, 0.7, 0.75, 1)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("1_eyy8u")
 volume_db = -15.0
 
 [node name="Settings" type="Node2D" parent="."]
-visible = false
 
 [node name="LineEdit" type="LineEdit" parent="Settings"]
 offset_left = 20.0
@@ -177,8 +186,8 @@ offset_right = 170.0
 offset_bottom = 84.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 13
-theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Project Name"
 
 [node name="LineEdit2" type="LineEdit" parent="Settings"]
@@ -188,8 +197,8 @@ offset_right = 170.0
 offset_bottom = 114.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 13
-theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Game Name"
 
 [node name="Save" type="Button" parent="Settings"]
@@ -201,635 +210,11 @@ offset_bottom = 31.5
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 13
-theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
 action_mode = 0
 text = "Save"
-
-[node name="RoomEditor" type="Node2D" parent="."]
-script = ExtResource("3_b78su")
-
-[node name="RoomDisplay" type="Node2D" parent="RoomEditor"]
-script = ExtResource("3_wkuwf")
-room = {
-"Layer 1": {
-"tilemap": "snow",
-"tiles": [{
-"position": [0.0, 6.0],
-"tileindex": [5, 23]
-}, {
-"position": [1.0, 6.0],
-"tileindex": [5, 23]
-}, {
-"position": [2.0, 6.0],
-"tileindex": [5, 23]
-}, {
-"position": [3.0, 6.0],
-"tileindex": [5, 23]
-}, {
-"position": [4.0, 6.0],
-"tileindex": [5, 23]
-}, {
-"position": [5.0, 6.0],
-"tileindex": [5, 23]
-}, {
-"position": [6.0, 6.0],
-"tileindex": [5, 23]
-}, {
-"position": [7.0, 6.0],
-"tileindex": [5, 23]
-}, {
-"position": [8.0, 6.0],
-"tileindex": [5, 23]
-}, {
-"position": [9.0, 6.0],
-"tileindex": [5, 23]
-}, {
-"position": [10.0, 6.0],
-"tileindex": [5, 23]
-}, {
-"position": [10.0, 7.0],
-"tileindex": [5, 24]
-}, {
-"position": [9.0, 7.0],
-"tileindex": [5, 24]
-}, {
-"position": [8.0, 7.0],
-"tileindex": [5, 24]
-}, {
-"position": [7.0, 7.0],
-"tileindex": [5, 24]
-}, {
-"position": [6.0, 7.0],
-"tileindex": [5, 24]
-}, {
-"position": [5.0, 7.0],
-"tileindex": [5, 24]
-}, {
-"position": [4.0, 7.0],
-"tileindex": [5, 24]
-}, {
-"position": [3.0, 7.0],
-"tileindex": [5, 24]
-}, {
-"position": [2.0, 7.0],
-"tileindex": [5, 24]
-}, {
-"position": [1.0, 7.0],
-"tileindex": [5, 24]
-}, {
-"position": [0.0, 7.0],
-"tileindex": [5, 24]
-}, {
-"position": [10.0, 8.0],
-"tileindex": [5, 24]
-}, {
-"position": [9.0, 8.0],
-"tileindex": [5, 24]
-}, {
-"position": [8.0, 8.0],
-"tileindex": [5, 24]
-}, {
-"position": [6.0, 8.0],
-"tileindex": [5, 24]
-}, {
-"position": [5.0, 8.0],
-"tileindex": [5, 24]
-}, {
-"position": [4.0, 8.0],
-"tileindex": [5, 24]
-}, {
-"position": [3.0, 8.0],
-"tileindex": [5, 24]
-}, {
-"position": [2.0, 8.0],
-"tileindex": [5, 24]
-}, {
-"position": [1.0, 8.0],
-"tileindex": [5, 24]
-}, {
-"position": [0.0, 8.0],
-"tileindex": [5, 24]
-}, {
-"position": [7.0, 8.0],
-"tileindex": [5, 24]
-}, {
-"position": [10.0, 9.0],
-"tileindex": [5, 25]
-}, {
-"position": [9.0, 9.0],
-"tileindex": [5, 25]
-}, {
-"position": [8.0, 9.0],
-"tileindex": [5, 25]
-}, {
-"position": [7.0, 9.0],
-"tileindex": [5, 25]
-}, {
-"position": [6.0, 9.0],
-"tileindex": [5, 25]
-}, {
-"position": [5.0, 9.0],
-"tileindex": [5, 25]
-}, {
-"position": [4.0, 9.0],
-"tileindex": [5, 25]
-}, {
-"position": [3.0, 9.0],
-"tileindex": [5, 25]
-}, {
-"position": [2.0, 9.0],
-"tileindex": [5, 25]
-}, {
-"position": [1.0, 9.0],
-"tileindex": [5, 25]
-}, {
-"position": [0.0, 9.0],
-"tileindex": [5, 25]
-}, {
-"position": [10.0, 10.0],
-"tileindex": [5, 26]
-}, {
-"position": [9.0, 10.0],
-"tileindex": [5, 26]
-}, {
-"position": [8.0, 10.0],
-"tileindex": [5, 26]
-}, {
-"position": [7.0, 10.0],
-"tileindex": [5, 26]
-}, {
-"position": [6.0, 10.0],
-"tileindex": [5, 26]
-}, {
-"position": [5.0, 10.0],
-"tileindex": [5, 26]
-}, {
-"position": [4.0, 10.0],
-"tileindex": [5, 26]
-}, {
-"position": [3.0, 10.0],
-"tileindex": [5, 26]
-}, {
-"position": [2.0, 10.0],
-"tileindex": [5, 26]
-}, {
-"position": [1.0, 10.0],
-"tileindex": [5, 26]
-}, {
-"position": [0.0, 10.0],
-"tileindex": [5, 26]
-}, {
-"position": [10.0, 11.0],
-"tileindex": [5, 27]
-}, {
-"position": [9.0, 11.0],
-"tileindex": [5, 27]
-}, {
-"position": [8.0, 11.0],
-"tileindex": [5, 27]
-}, {
-"position": [7.0, 11.0],
-"tileindex": [5, 27]
-}, {
-"position": [6.0, 11.0],
-"tileindex": [5, 27]
-}, {
-"position": [5.0, 11.0],
-"tileindex": [5, 27]
-}, {
-"position": [4.0, 11.0],
-"tileindex": [5, 27]
-}, {
-"position": [3.0, 11.0],
-"tileindex": [5, 27]
-}, {
-"position": [2.0, 11.0],
-"tileindex": [5, 27]
-}, {
-"position": [1.0, 11.0],
-"tileindex": [5, 27]
-}, {
-"position": [0.0, 11.0],
-"tileindex": [5, 27]
-}],
-"type": "tile"
-},
-"Layer 2": {
-"tilemap": "snow",
-"tiles": [{
-"position": [0.0, 6.0],
-"tileindex": [0, 11]
-}, {
-"position": [0.0, 7.0],
-"tileindex": [0, 12]
-}, {
-"position": [1.0, 7.0],
-"tileindex": [1, 12]
-}, {
-"position": [1.0, 6.0],
-"tileindex": [1, 11]
-}, {
-"position": [2.0, 6.0],
-"tileindex": [2, 11]
-}, {
-"position": [2.0, 7.0],
-"tileindex": [2, 12]
-}, {
-"position": [3.0, 7.0],
-"tileindex": [3, 12]
-}, {
-"position": [3.0, 6.0],
-"tileindex": [3, 11]
-}, {
-"position": [10.0, 11.0],
-"tileindex": [5, 26]
-}, {
-"position": [9.0, 11.0],
-"tileindex": [5, 26]
-}, {
-"position": [8.0, 11.0],
-"tileindex": [5, 26]
-}, {
-"position": [7.0, 11.0],
-"tileindex": [5, 26]
-}, {
-"position": [6.0, 11.0],
-"tileindex": [5, 26]
-}, {
-"position": [5.0, 11.0],
-"tileindex": [5, 26]
-}, {
-"position": [4.0, 11.0],
-"tileindex": [5, 26]
-}, {
-"position": [3.0, 11.0],
-"tileindex": [5, 26]
-}, {
-"position": [2.0, 11.0],
-"tileindex": [5, 26]
-}, {
-"position": [1.0, 11.0],
-"tileindex": [5, 26]
-}, {
-"position": [0.0, 11.0],
-"tileindex": [5, 26]
-}, {
-"position": [5.0, 5.0],
-"tileindex": [1, 14]
-}, {
-"position": [4.0, 5.0],
-"tileindex": [0, 14]
-}, {
-"position": [6.0, 5.0],
-"tileindex": [2, 14]
-}, {
-"position": [6.0, 6.0],
-"tileindex": [2, 15]
-}, {
-"position": [5.0, 6.0],
-"tileindex": [1, 15]
-}, {
-"position": [4.0, 6.0],
-"tileindex": [0, 15]
-}, {
-"position": [4.0, 7.0],
-"tileindex": [0, 16]
-}, {
-"position": [5.0, 7.0],
-"tileindex": [1, 16]
-}, {
-"position": [6.0, 7.0],
-"tileindex": [2, 16]
-}],
-"type": "tile"
-},
-"Layer 3": {
-"obj": {
-"frisk": {
-"data": {},
-"name": "Player",
-"position": [5, 5],
-"type": "Player"
-}
-},
-"type": "instance"
-}
-}
-
-[node name="Sprite2D" type="Sprite2D" parent="RoomEditor/RoomDisplay"]
-modulate = Color(1, 1, 1, 0.5)
-texture = ExtResource("9_1k58v")
-centered = false
-
-[node name="LineEdit" type="LineEdit" parent="RoomEditor"]
-anchors_preset = -1
-anchor_top = -0.00416667
-anchor_bottom = -0.00416667
-offset_left = 212.0
-offset_top = 3.0
-offset_right = 314.0
-offset_bottom = 21.0
-focus_mode = 1
-theme_override_font_sizes/font_size = 7
-theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-text = "room_test1"
-placeholder_text = "Room Name"
-
-[node name="OptionButton" type="OptionButton" parent="RoomEditor"]
-offset_left = 212.0
-offset_top = 29.0
-offset_right = 314.0
-offset_bottom = 45.0
-focus_mode = 0
-mouse_default_cursor_shape = 2
-theme_override_font_sizes/font_size = 6
-theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/hover = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_icons/arrow = SubResource("GradientTexture1D_1k58v")
-selected = 0
-item_count = 3
-popup/item_0/text = "Layer 1"
-popup/item_0/id = 0
-popup/item_1/text = "Layer 2"
-popup/item_1/id = 1
-popup/item_2/text = "Layer 3"
-popup/item_2/id = 2
-
-[node name="PanelContainer" type="PanelContainer" parent="RoomEditor"]
-custom_minimum_size = Vector2(96, 141)
-offset_left = 211.0
-offset_top = 50.0
-offset_right = 319.0
-offset_bottom = 214.0
-mouse_filter = 1
-theme_override_styles/panel = SubResource("StyleBoxFlat_7fkqn")
-
-[node name="TileMode" type="Control" parent="RoomEditor/PanelContainer"]
-layout_mode = 2
-mouse_filter = 1
-
-[node name="Label2" type="Label" parent="RoomEditor/PanelContainer/TileMode"]
-layout_mode = 2
-offset_right = 80.0
-offset_bottom = 23.0
-text = "Tile Position on
-Tilemap"
-label_settings = SubResource("LabelSettings_8howc")
-
-[node name="Label3" type="Label" parent="RoomEditor/PanelContainer/TileMode"]
-layout_mode = 2
-offset_top = 63.0
-offset_right = 80.0
-offset_bottom = 86.0
-text = "Tilemap Filename"
-label_settings = SubResource("LabelSettings_8howc")
-
-[node name="TileX" type="LineEdit" parent="RoomEditor/PanelContainer/TileMode"]
-custom_minimum_size = Vector2(40, 25)
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.189781
-anchor_bottom = 0.189781
-offset_left = 2.0
-offset_top = 2.0
-offset_right = 42.0
-offset_bottom = 27.0
-focus_mode = 1
-theme_override_font_sizes/font_size = 12
-theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-placeholder_text = "X"
-script = ExtResource("4_8howc")
-metadata/_edit_use_anchors_ = true
-
-[node name="TileY" type="LineEdit" parent="RoomEditor/PanelContainer/TileMode"]
-custom_minimum_size = Vector2(40, 25)
-layout_mode = 1
-anchors_preset = -1
-anchor_left = -0.0288462
-anchor_top = 0.1875
-anchor_right = -0.0288462
-anchor_bottom = 0.1875
-offset_left = 50.0
-offset_top = 2.0
-offset_right = 90.0
-offset_bottom = 27.0
-focus_mode = 1
-theme_override_font_sizes/font_size = 12
-theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-placeholder_text = "Y"
-script = ExtResource("4_8howc")
-metadata/_edit_use_anchors_ = true
-
-[node name="Tilemap" type="LineEdit" parent="RoomEditor/PanelContainer/TileMode"]
-custom_minimum_size = Vector2(40, 25)
-layout_mode = 1
-anchors_preset = -1
-anchor_left = -0.461538
-anchor_top = 0.48125
-anchor_right = -0.0288462
-anchor_bottom = 0.48125
-offset_left = 50.0
-offset_top = 2.0
-offset_right = 90.0
-offset_bottom = 27.0
-focus_mode = 1
-theme_override_font_sizes/font_size = 12
-theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-placeholder_text = "Filename"
-metadata/_edit_use_anchors_ = true
-
-[node name="ObjMode" type="Control" parent="RoomEditor/PanelContainer"]
-visible = false
-layout_mode = 2
-mouse_filter = 1
-
-[node name="Label2" type="Label" parent="RoomEditor/PanelContainer/ObjMode"]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 2.0
-offset_right = 81.0
-offset_bottom = 25.0
-text = "Object Name"
-label_settings = SubResource("LabelSettings_8howc")
-
-[node name="ObjName" type="LineEdit" parent="RoomEditor/PanelContainer/ObjMode"]
-custom_minimum_size = Vector2(40, 25)
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.0192308
-anchor_top = 0.0875
-anchor_right = 0.807692
-anchor_bottom = 0.24375
-offset_left = 1.0
-offset_top = 2.0
-offset_right = 1.0
-offset_bottom = 2.0
-focus_mode = 1
-theme_override_font_sizes/font_size = 8
-theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-placeholder_text = "Name"
-metadata/_edit_use_anchors_ = true
-
-[node name="Label3" type="Label" parent="RoomEditor/PanelContainer/ObjMode"]
-layout_mode = 0
-offset_left = 1.26086
-offset_top = 47.0
-offset_right = 81.2609
-offset_bottom = 70.0
-text = "Object Type"
-label_settings = SubResource("LabelSettings_8howc")
-
-[node name="Filename" type="LineEdit" parent="RoomEditor/PanelContainer/ObjMode"]
-custom_minimum_size = Vector2(40, 25)
-layout_mode = 1
-anchors_preset = -1
-anchor_left = -0.464047
-anchor_top = 0.46875
-anchor_right = -0.0602006
-anchor_bottom = 0.46875
-offset_left = 51.2609
-offset_top = -14.0
-offset_right = 91.2609
-offset_bottom = 11.0
-focus_mode = 1
-theme_override_font_sizes/font_size = 12
-theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-placeholder_text = "Type"
-metadata/_edit_use_anchors_ = true
-
-[node name="Label4" type="Label" parent="RoomEditor/PanelContainer/ObjMode"]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 92.0
-offset_right = 88.0
-offset_bottom = 115.0
-text = "Refer to wiki for
-object type names."
-label_settings = SubResource("LabelSettings_8howc")
-
-[node name="Settings" type="Control" parent="RoomEditor/PanelContainer"]
-visible = false
-layout_mode = 2
-mouse_filter = 1
-
-[node name="Properties" type="Control" parent="RoomEditor/PanelContainer"]
-visible = false
-layout_mode = 2
-mouse_filter = 1
-
-[node name="FakeTile" type="Sprite2D" parent="RoomEditor"]
-centered = false
-region_enabled = true
-region_rect = Rect2(0, 0, 20, 20)
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RoomEditor/FakeTile"]
-modulate = Color(1, 1, 1, 0.5)
-position = Vector2(-10, -10)
-sprite_frames = SubResource("SpriteFrames_32ik4")
-frame_progress = 0.205191
-centered = false
-
-[node name="ObjectDisplay" parent="RoomEditor" instance=ExtResource("8_eo2o7")]
-
-[node name="Area2D" type="Area2D" parent="RoomEditor"]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomEditor/Area2D"]
-position = Vector2(78, 107)
-shape = SubResource("RectangleShape2D_eo2o7")
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="RoomEditor/Area2D"]
-position = Vector2(183, 137)
-shape = SubResource("RectangleShape2D_32ik4")
-
-[node name="Save" type="Button" parent="RoomEditor"]
-z_index = 1
-offset_left = 156.0
-offset_top = 3.0
-offset_right = 206.0
-offset_bottom = 21.0
-focus_mode = 0
-mouse_default_cursor_shape = 2
-theme_override_font_sizes/font_size = 10
-theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-action_mode = 0
-text = "Save"
-
-[node name="Load" type="Button" parent="RoomEditor"]
-z_index = 1
-offset_left = 156.0
-offset_top = 29.0
-offset_right = 206.0
-offset_bottom = 47.0
-focus_mode = 0
-mouse_default_cursor_shape = 2
-theme_override_font_sizes/font_size = 10
-theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-action_mode = 0
-text = "Load"
-
-[node name="draw" type="Button" parent="RoomEditor"]
-z_index = 1
-offset_left = 320.0
-offset_top = 50.0
-offset_right = 374.0
-offset_bottom = 65.0
-rotation = 1.57079
-focus_mode = 0
-mouse_default_cursor_shape = 2
-theme_override_font_sizes/font_size = 8
-theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-action_mode = 0
-text = "Draw"
-
-[node name="settings" type="Button" parent="RoomEditor"]
-z_index = 1
-offset_left = 320.0
-offset_top = 106.0
-offset_right = 372.0
-offset_bottom = 121.0
-rotation = 1.57079
-focus_mode = 0
-mouse_default_cursor_shape = 2
-theme_override_font_sizes/font_size = 8
-theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-action_mode = 0
-text = "Settings"
-
-[node name="obj properties" type="Button" parent="RoomEditor"]
-z_index = 1
-offset_left = 320.0
-offset_top = 160.0
-offset_right = 374.0
-offset_bottom = 175.0
-rotation = 1.57079
-focus_mode = 0
-mouse_default_cursor_shape = 2
-theme_override_font_sizes/font_size = 8
-theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-action_mode = 0
-text = "Properties"
 
 [node name="EnemyEditor" type="Node2D" parent="."]
 visible = false
@@ -846,9 +231,9 @@ offset_bottom = 192.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 12
-theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
 action_mode = 0
 text = "Hurt"
 
@@ -861,9 +246,9 @@ offset_bottom = 192.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 12
-theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
 action_mode = 0
 text = "Save"
 
@@ -876,9 +261,9 @@ offset_bottom = 192.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 12
-theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
 action_mode = 0
 text = "Next"
 
@@ -894,8 +279,8 @@ offset_right = 308.0
 offset_bottom = 36.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 11
-theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Enemy Name"
 metadata/_edit_use_anchors_ = true
 
@@ -909,8 +294,8 @@ offset_right = 308.0
 offset_bottom = 62.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 11
-theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Filename"
 metadata/_edit_use_anchors_ = true
 
@@ -924,8 +309,8 @@ offset_right = 308.0
 offset_bottom = 88.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 11
-theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Idle Sprite"
 metadata/_edit_use_anchors_ = true
 
@@ -939,8 +324,8 @@ offset_right = 308.0
 offset_bottom = 114.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 11
-theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Hurt Sprite"
 metadata/_edit_use_anchors_ = true
 
@@ -954,8 +339,8 @@ offset_right = 308.0
 offset_bottom = 140.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 11
-theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Spare Sprite"
 metadata/_edit_use_anchors_ = true
 
@@ -969,8 +354,8 @@ offset_right = 207.0
 offset_bottom = 166.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 11
-theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "HP"
 metadata/_edit_use_anchors_ = true
 
@@ -984,8 +369,8 @@ offset_right = 258.0
 offset_bottom = 166.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 11
-theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "ATK"
 metadata/_edit_use_anchors_ = true
 
@@ -999,8 +384,8 @@ offset_right = 308.0
 offset_bottom = 166.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 11
-theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "DEF"
 metadata/_edit_use_anchors_ = true
 
@@ -1057,9 +442,9 @@ offset_bottom = 204.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 12
-theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
 action_mode = 0
 text = "Add"
 
@@ -1073,8 +458,8 @@ offset_right = 257.0
 offset_bottom = 204.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 12
-theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Frame Sprite"
 metadata/_edit_use_anchors_ = true
 
@@ -1093,9 +478,9 @@ offset_bottom = 204.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 12
-theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
 action_mode = 0
 text = "Save"
 
@@ -1108,9 +493,9 @@ offset_bottom = 204.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 12
-theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
 action_mode = 0
 text = "Load"
 
@@ -1124,8 +509,8 @@ offset_right = 145.0
 offset_bottom = 178.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 12
-theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Filename"
 metadata/_edit_use_anchors_ = true
 
@@ -1136,15 +521,309 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("3_32ik4")
 centered = false
 
-[node name="ColorRect" type="ColorRect" parent="."]
-z_index = -10
-z_as_relative = false
-offset_right = 320.0
-offset_bottom = 240.0
-mouse_filter = 2
-color = Color(0.7, 0.7, 0.75, 1)
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="Room" type="Button" parent="."]
+[node name="RoomEditor" type="Node2D" parent="CanvasLayer"]
+visible = false
+script = ExtResource("3_b78su")
+
+[node name="LineEdit" type="LineEdit" parent="CanvasLayer/RoomEditor"]
+anchors_preset = -1
+anchor_top = -0.00416667
+anchor_bottom = -0.00416667
+offset_left = 212.0
+offset_top = 3.0
+offset_right = 314.0
+offset_bottom = 21.0
+focus_mode = 1
+theme_override_font_sizes/font_size = 7
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+text = "room_test1"
+placeholder_text = "Room Name"
+
+[node name="OptionButton" type="OptionButton" parent="CanvasLayer/RoomEditor"]
+offset_left = 212.0
+offset_top = 29.0
+offset_right = 314.0
+offset_bottom = 45.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 6
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/hover = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_icons/arrow = SubResource("GradientTexture1D_1k58v")
+selected = 0
+item_count = 3
+popup/item_0/text = "Layer 1"
+popup/item_0/id = 0
+popup/item_1/text = "Layer 2"
+popup/item_1/id = 1
+popup/item_2/text = "Layer 3"
+popup/item_2/id = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/RoomEditor"]
+custom_minimum_size = Vector2(96, 141)
+offset_left = 211.0
+offset_top = 50.0
+offset_right = 319.0
+offset_bottom = 214.0
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_7fkqn")
+
+[node name="TileMode" type="Control" parent="CanvasLayer/RoomEditor/PanelContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label2" type="Label" parent="CanvasLayer/RoomEditor/PanelContainer/TileMode"]
+layout_mode = 0
+offset_right = 80.0
+offset_bottom = 23.0
+text = "Tile Position on
+Tilemap"
+label_settings = SubResource("LabelSettings_8howc")
+
+[node name="Label3" type="Label" parent="CanvasLayer/RoomEditor/PanelContainer/TileMode"]
+layout_mode = 0
+offset_top = 63.0
+offset_right = 80.0
+offset_bottom = 86.0
+text = "Tilemap Filename"
+label_settings = SubResource("LabelSettings_8howc")
+
+[node name="TileX" type="LineEdit" parent="CanvasLayer/RoomEditor/PanelContainer/TileMode"]
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.189781
+anchor_bottom = 0.189781
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 42.0
+offset_bottom = 27.0
+focus_mode = 1
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+placeholder_text = "X"
+script = ExtResource("4_8howc")
+metadata/_edit_use_anchors_ = true
+
+[node name="TileY" type="LineEdit" parent="CanvasLayer/RoomEditor/PanelContainer/TileMode"]
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.0288462
+anchor_top = 0.1875
+anchor_right = -0.0288462
+anchor_bottom = 0.1875
+offset_left = 50.0
+offset_top = 2.0
+offset_right = 90.0
+offset_bottom = 27.0
+focus_mode = 1
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+placeholder_text = "Y"
+script = ExtResource("4_8howc")
+metadata/_edit_use_anchors_ = true
+
+[node name="Tilemap" type="LineEdit" parent="CanvasLayer/RoomEditor/PanelContainer/TileMode"]
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.461538
+anchor_top = 0.48125
+anchor_right = -0.0288462
+anchor_bottom = 0.48125
+offset_left = 50.0
+offset_top = 2.0
+offset_right = 90.0
+offset_bottom = 27.0
+focus_mode = 1
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+placeholder_text = "Filename"
+metadata/_edit_use_anchors_ = true
+
+[node name="ObjMode" type="Control" parent="CanvasLayer/RoomEditor/PanelContainer"]
+visible = false
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Label2" type="Label" parent="CanvasLayer/RoomEditor/PanelContainer/ObjMode"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 2.0
+offset_right = 81.0
+offset_bottom = 25.0
+text = "Object Name"
+label_settings = SubResource("LabelSettings_8howc")
+
+[node name="ObjName" type="LineEdit" parent="CanvasLayer/RoomEditor/PanelContainer/ObjMode"]
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0192308
+anchor_top = 0.0875
+anchor_right = 0.807692
+anchor_bottom = 0.24375
+offset_left = 1.0
+offset_top = 2.0
+offset_right = 1.0
+offset_bottom = 2.0
+focus_mode = 1
+theme_override_font_sizes/font_size = 8
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+placeholder_text = "Name"
+metadata/_edit_use_anchors_ = true
+
+[node name="Label3" type="Label" parent="CanvasLayer/RoomEditor/PanelContainer/ObjMode"]
+layout_mode = 0
+offset_left = 1.26086
+offset_top = 47.0
+offset_right = 81.2609
+offset_bottom = 70.0
+text = "Object Type"
+label_settings = SubResource("LabelSettings_8howc")
+
+[node name="Filename" type="LineEdit" parent="CanvasLayer/RoomEditor/PanelContainer/ObjMode"]
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.464047
+anchor_top = 0.46875
+anchor_right = -0.0602006
+anchor_bottom = 0.46875
+offset_left = 51.2609
+offset_top = -14.0
+offset_right = 91.2609
+offset_bottom = 11.0
+focus_mode = 1
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+placeholder_text = "Type"
+metadata/_edit_use_anchors_ = true
+
+[node name="Label4" type="Label" parent="CanvasLayer/RoomEditor/PanelContainer/ObjMode"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 92.0
+offset_right = 88.0
+offset_bottom = 115.0
+text = "Refer to wiki for
+object type names."
+label_settings = SubResource("LabelSettings_8howc")
+
+[node name="Settings" type="Control" parent="CanvasLayer/RoomEditor/PanelContainer"]
+visible = false
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Properties" type="Control" parent="CanvasLayer/RoomEditor/PanelContainer"]
+visible = false
+layout_mode = 2
+mouse_filter = 1
+
+[node name="ObjectDisplay" parent="CanvasLayer/RoomEditor" instance=ExtResource("8_eo2o7")]
+
+[node name="Save" type="Button" parent="CanvasLayer/RoomEditor"]
+z_index = 1
+offset_left = 156.0
+offset_top = 3.0
+offset_right = 206.0
+offset_bottom = 21.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+action_mode = 0
+text = "Save"
+
+[node name="Load" type="Button" parent="CanvasLayer/RoomEditor"]
+z_index = 1
+offset_left = 156.0
+offset_top = 29.0
+offset_right = 206.0
+offset_bottom = 47.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+action_mode = 0
+text = "Load"
+
+[node name="draw" type="Button" parent="CanvasLayer/RoomEditor"]
+z_index = 1
+offset_left = 320.0
+offset_top = 50.0
+offset_right = 374.0
+offset_bottom = 65.0
+rotation = 1.57079
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 8
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+action_mode = 0
+text = "Draw"
+
+[node name="settings" type="Button" parent="CanvasLayer/RoomEditor"]
+z_index = 1
+offset_left = 320.0
+offset_top = 106.0
+offset_right = 372.0
+offset_bottom = 121.0
+rotation = 1.57079
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 8
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+action_mode = 0
+text = "Settings"
+
+[node name="obj properties" type="Button" parent="CanvasLayer/RoomEditor"]
+z_index = 1
+offset_left = 320.0
+offset_top = 160.0
+offset_right = 374.0
+offset_bottom = 175.0
+rotation = 1.57079
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 8
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+action_mode = 0
+text = "Properties"
+
+[node name="Area2D" type="Area2D" parent="CanvasLayer/RoomEditor"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/RoomEditor/Area2D"]
+position = Vector2(78, 107)
+shape = SubResource("RectangleShape2D_eo2o7")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="CanvasLayer/RoomEditor/Area2D"]
+position = Vector2(183, 131.5)
+shape = SubResource("RectangleShape2D_32ik4")
+
+[node name="Room" type="Button" parent="CanvasLayer"]
 z_index = 1
 offset_left = 82.0
 offset_top = 216.0
@@ -1153,13 +832,13 @@ offset_bottom = 240.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 13
-theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
 action_mode = 0
 text = "Room"
 
-[node name="Enemy" type="Button" parent="."]
+[node name="Enemy" type="Button" parent="CanvasLayer"]
 z_index = 1
 offset_left = 144.0
 offset_top = 216.0
@@ -1168,13 +847,13 @@ offset_bottom = 240.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 13
-theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
 action_mode = 0
 text = "Enemy"
 
-[node name="Npc" type="Button" parent="."]
+[node name="Npc" type="Button" parent="CanvasLayer"]
 z_index = 1
 offset_left = 206.0
 offset_top = 216.0
@@ -1183,13 +862,13 @@ offset_bottom = 240.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 13
-theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
 action_mode = 0
 text = "NPC"
 
-[node name="Character" type="Button" parent="."]
+[node name="Character" type="Button" parent="CanvasLayer"]
 z_index = 1
 offset_top = 216.0
 offset_right = 80.0
@@ -1197,13 +876,13 @@ offset_bottom = 240.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 13
-theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
 action_mode = 0
 text = "Character"
 
-[node name="Project" type="Button" parent="."]
+[node name="Project" type="Button" parent="CanvasLayer"]
 z_index = 1
 offset_left = 248.0
 offset_top = 216.0
@@ -1212,13 +891,13 @@ offset_bottom = 240.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 13
-theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
 action_mode = 0
 text = "Project"
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="CanvasLayer"]
 offset_left = 5.0
 offset_top = 5.0
 offset_right = 139.0
@@ -1226,7 +905,7 @@ offset_bottom = 31.0
 text = "Project Name"
 label_settings = SubResource("LabelSettings_24ceq")
 
-[node name="Place" type="Label" parent="."]
+[node name="Place" type="Label" parent="CanvasLayer"]
 offset_left = 10.0
 offset_top = 26.0
 offset_right = 259.0
@@ -1234,12 +913,53 @@ offset_bottom = 58.0
 text = "Project Settings"
 label_settings = SubResource("LabelSettings_a7iym")
 
+[node name="RoomDisplay" type="Node2D" parent="."]
+script = ExtResource("3_wkuwf")
+room = {
+"Layer 1": {
+"tilemap": "snow",
+"tiles": [],
+"type": "tile"
+},
+"Layer 2": {
+"tilemap": "snow",
+"tiles": [],
+"type": "tile"
+},
+"Layer 3": {
+"obj": {
+"frisk": {
+"data": {},
+"name": "frisk",
+"position": [8, 6],
+"type": "Player"
+}
+},
+"type": "instance"
+}
+}
+
+[node name="Sprite2D" type="Sprite2D" parent="RoomDisplay"]
+modulate = Color(1, 1, 1, 0.5)
+texture = ExtResource("9_1k58v")
+centered = false
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(160, 120)
+
+[node name="FakeTile" type="Sprite2D" parent="."]
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 20, 20)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="FakeTile"]
+modulate = Color(1, 1, 1, 0.5)
+position = Vector2(-10, -10)
+sprite_frames = SubResource("SpriteFrames_32ik4")
+frame_progress = 0.205191
+centered = false
+
 [connection signal="pressed" from="Settings/Save" to="." method="_on_save_settings_pressed"]
-[connection signal="pressed" from="RoomEditor/Save" to="RoomEditor" method="_on_save_pressed"]
-[connection signal="pressed" from="RoomEditor/Load" to="RoomEditor" method="_on_load_pressed"]
-[connection signal="pressed" from="RoomEditor/draw" to="RoomEditor" method="_on_draw_pressed"]
-[connection signal="pressed" from="RoomEditor/settings" to="RoomEditor" method="_on_settings_pressed"]
-[connection signal="pressed" from="RoomEditor/obj properties" to="RoomEditor" method="_on_obj_properties_pressed"]
 [connection signal="pressed" from="EnemyEditor/Hurt" to="EnemyEditor/FakeEnemy" method="Shudder"]
 [connection signal="pressed" from="EnemyEditor/Save" to="EnemyEditor/FakeEnemy" method="_on_save_pressed"]
 [connection signal="pressed" from="EnemyEditor/Next" to="." method="_on_next_enenymenu_pressed"]
@@ -1248,8 +968,13 @@ label_settings = SubResource("LabelSettings_a7iym")
 [connection signal="pressed" from="CharacterEditor/AddSprite" to="CharacterEditor" method="_on_add_sprite_pressed"]
 [connection signal="pressed" from="CharacterEditor/SaveChar" to="CharacterEditor" method="_on_save_pressed"]
 [connection signal="pressed" from="CharacterEditor/LoadChar" to="CharacterEditor" method="_on_load_pressed"]
-[connection signal="pressed" from="Room" to="." method="_on_room_pressed"]
-[connection signal="pressed" from="Enemy" to="." method="_on_enemy_pressed"]
-[connection signal="pressed" from="Npc" to="." method="_on_npc_pressed"]
-[connection signal="pressed" from="Character" to="." method="_on_character_pressed"]
-[connection signal="pressed" from="Project" to="." method="_on_project_pressed"]
+[connection signal="pressed" from="CanvasLayer/RoomEditor/Save" to="CanvasLayer/RoomEditor" method="_on_save_pressed"]
+[connection signal="pressed" from="CanvasLayer/RoomEditor/Load" to="CanvasLayer/RoomEditor" method="_on_load_pressed"]
+[connection signal="pressed" from="CanvasLayer/RoomEditor/draw" to="CanvasLayer/RoomEditor" method="_on_draw_pressed"]
+[connection signal="pressed" from="CanvasLayer/RoomEditor/settings" to="CanvasLayer/RoomEditor" method="_on_settings_pressed"]
+[connection signal="pressed" from="CanvasLayer/RoomEditor/obj properties" to="CanvasLayer/RoomEditor" method="_on_obj_properties_pressed"]
+[connection signal="pressed" from="CanvasLayer/Room" to="." method="_on_room_pressed"]
+[connection signal="pressed" from="CanvasLayer/Enemy" to="." method="_on_enemy_pressed"]
+[connection signal="pressed" from="CanvasLayer/Npc" to="." method="_on_npc_pressed"]
+[connection signal="pressed" from="CanvasLayer/Character" to="." method="_on_character_pressed"]
+[connection signal="pressed" from="CanvasLayer/Project" to="." method="_on_project_pressed"]

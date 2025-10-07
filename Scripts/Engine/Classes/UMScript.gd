@@ -18,7 +18,7 @@ func has_chars(checkstr:String,charstr:String) -> bool:
 func _init(scr:Array[TokenArray]=[]):
 	data = scr
 	
-static func loadScriptFromFile(path:StringName) -> UTScript:
+static func loadScriptFromFile(path:StringName,verbose:bool=false) -> UTScript:
 	if FileAccess.file_exists(Undermaker.Path+"Scripts/"+path):
 		var script : UTScript = UTScript.new()
 		var scriptFile = FileAccess.open(Undermaker.Path+"Scripts/"+path,FileAccess.READ)
@@ -27,6 +27,7 @@ static func loadScriptFromFile(path:StringName) -> UTScript:
 		var pointer := 0
 		var buffer := ""
 		var tokenbuffer : TokenArray = TokenArray.new()
+		tokenbuffer.verbose = verbose
 		
 		var string := false
 		var comment := false
@@ -74,7 +75,11 @@ static func loadScriptFromFile(path:StringName) -> UTScript:
 						buffer += scriptStr[pointer]
 						pointer += 1
 						continue
-					pointer += 1
+					if num.find(scriptStr[pointer+1]) != -1:
+						buffer += scriptStr[pointer]
+						pointer += 1
+						continue
+					#pointer += 1
 					tokenbuffer.tokenize(scriptStr[pointer])
 					buffer = ""
 					pointer += 1

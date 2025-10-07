@@ -1,5 +1,6 @@
-extends Area2D
+extends CanvasLayer
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+@onready var area = $Area2D
+
 func _process(_delta):
-	position = get_global_mouse_position()
+	area.position = area.get_global_mouse_position()

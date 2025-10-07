@@ -1,20 +1,21 @@
-[gd_scene load_steps=45 format=3 uid="uid://d3s7r8bmqm08b"]
+[gd_scene load_steps=47 format=3 uid="uid://d3s7r8bmqm08b"]
 
 [ext_resource type="Script" uid="uid://co2guxtvgjejm" path="res://Scripts/Engine/Scenes/Battle.gd" id="1_qxqxx"]
 [ext_resource type="Script" uid="uid://ckik5x0yqgxeb" path="res://Scripts/Engine/Objects/BattleDialogueBox.gd" id="2_3g107"]
-[ext_resource type="AudioStream" uid="uid://dpgfi016rob46" path="res://Audio/Sounds/SND_TXT2.wav" id="3_4nbmx"]
+[ext_resource type="AudioStream" uid="uid://cry24v00e6n2y" path="res://Audio/Sounds/SND_TXT2.wav" id="3_4nbmx"]
 [ext_resource type="Texture2D" uid="uid://bpn2e0kssrbga" path="res://Sprites/Battle/spr_battlebg_0.png" id="3_is2k6"]
 [ext_resource type="Texture2D" uid="uid://ciiui7kmdomoi" path="res://Sprites/UIBox.png" id="3_mf2ya"]
 [ext_resource type="Script" uid="uid://bih6ay7xkmep3" path="res://Scripts/Engine/Objects/AttackBox.gd" id="5_dllax"]
 [ext_resource type="Script" uid="uid://d2qur5365yacj" path="res://Scripts/Engine/Objects/FightBox.gd" id="5_u5lwd"]
 [ext_resource type="Texture2D" uid="uid://qbf0w8bbkphm" path="res://Sprites/Battle/spr_target_0.png" id="6_dfi4p"]
+[ext_resource type="Script" uid="uid://dexqxqsprthju" path="res://Scripts/Engine/Objects/text.gd" id="6_ybx13"]
 [ext_resource type="AudioStream" uid="uid://dis0583kl3o5j" path="res://Audio/BGM/mus_battle2.ogg" id="7_7i387"]
+[ext_resource type="FontFile" uid="uid://dmp8kt2skg8oj" path="res://Sprites/DTM-Sans.otf" id="7_xtlnh"]
 [ext_resource type="Texture2D" uid="uid://ouagx58qj8vj" path="res://Sprites/Battle/spr_targetchoice_0.png" id="7_yahm3"]
 [ext_resource type="Texture2D" uid="uid://bhyupb4bxnm4f" path="res://Sprites/Battle/spr_targetchoice_1.png" id="8_1s3yx"]
 [ext_resource type="PackedScene" uid="uid://51lu7uaohc4j" path="res://Scenes/Objects/BattleButton.tscn" id="8_j2fg1"]
 [ext_resource type="Texture2D" uid="uid://db3xb8pxayasp" path="res://Sprites/Battle/Buttons/spr_fightbt_0.png" id="9_1iuas"]
 [ext_resource type="Texture2D" uid="uid://c462oie8gqmdf" path="res://Sprites/Battle/Buttons/spr_fightbt_1.png" id="10_3xx1h"]
-[ext_resource type="Script" uid="uid://dtovq8lgaq6x7" path="res://Scenes/script_runner.gd" id="11_d5dbc"]
 [ext_resource type="Texture2D" uid="uid://bh4rc4a22qrwc" path="res://Sprites/Battle/Buttons/spr_actbt_0.png" id="11_fdlm1"]
 [ext_resource type="Texture2D" uid="uid://dc02kscou060m" path="res://Sprites/Battle/Buttons/spr_actbt_1.png" id="12_btnny"]
 [ext_resource type="Texture2D" uid="uid://d35dhp0c418nn" path="res://Sprites/Battle/spr_enemyhealth_0.png" id="12_mugwg"]
@@ -85,10 +86,14 @@ font_size = 10
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yahm3"]
 size = Vector2(8, 8)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hoytp"]
+size = Vector2(6, 6)
+
 [node name="Battle" type="Node2D"]
 script = ExtResource("1_qxqxx")
 
 [node name="ColorRect" type="ColorRect" parent="."]
+visible = false
 offset_right = 320.0
 offset_bottom = 240.0
 color = Color(0, 0, 0, 1)
@@ -114,6 +119,13 @@ patch_margin_top = 4
 patch_margin_right = 4
 patch_margin_bottom = 4
 metadata/_edit_use_anchors_ = true
+
+[node name="TextObject" type="Node2D" parent="FlavorBox"]
+position = Vector2(11, 10.5)
+script = ExtResource("6_ybx13")
+text = "* You encountered the Dummy."
+font = ExtResource("7_xtlnh")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
 
 [node name="FightBox" type="Node2D" parent="."]
 visible = false
@@ -182,10 +194,6 @@ position = Vector2(144, 35.25)
 clip_children = 1
 polygon = PackedVector2Array(-144, -35.25, -144, 35.25, 144, 35.25, 144, -35.25)
 uv = PackedVector2Array(-307, 4, -128, -14, -107, 40, -290, 51)
-
-[node name="ScriptRunner" type="Node" parent="AttackBox"]
-script = ExtResource("11_d5dbc")
-metadata/_custom_type_script = "uid://b6m6ndh7u38dl"
 
 [node name="ChoiceBox" type="Node2D" parent="."]
 visible = false
@@ -384,7 +392,7 @@ shape = SubResource("RectangleShape2D_yahm3")
 [node name="soul" type="Area2D" parent="BattleHeart"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BattleHeart/soul"]
-shape = SubResource("RectangleShape2D_yahm3")
+shape = SubResource("RectangleShape2D_hoytp")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="BattleHeart"]
 stream = ExtResource("29_3quo0")

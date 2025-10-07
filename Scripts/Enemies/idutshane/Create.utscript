@@ -1,0 +1,35 @@
+//create animation sprites
+create_sprite "legs" "Battle/Enemies/dustlegs.png" 0 0
+create_sprite "body" "Battle/Enemies/dustbody.png" 0 0
+
+set_property "legs" "offset:y" -44
+set_property "legs" "position:y" 44
+
+//init variables
+var num $body
+var num $legs
+set body 0
+set legs 0
+
+//create animated background
+create_animated_sprite "bg" 0 0
+set_property "bg" "speed_scale" 3
+set_property "bg" "global_position:x" 160
+set_property "bg" "global_position:y" 120
+set_property "bg" "scale:x" 1.25
+set_property "bg" "scale:y" 1.25
+set_property "bg" "modulate:a" 0.4
+set_property "bg" "z_index" -1
+add_sprite_frame "bg" "dusttale battle bg/1.png"
+add_sprite_frame "bg" "dusttale battle bg/2.png"
+add_sprite_frame "bg" "dusttale battle bg/3.png"
+add_sprite_frame "bg" "dusttale battle bg/4.png"
+add_sprite_frame "bg" "dusttale battle bg/5.png"
+add_sprite_frame "bg" "dusttale battle bg/6.png"
+add_sprite_frame "bg" "dusttale battle bg/7.png"
+add_sprite_frame "bg" "dusttale battle bg/8.png"
+add_sprite_frame "bg" "dusttale battle bg/9.png"
+add_sprite_frame "bg" "dusttale battle bg/10.png"
+add_sprite_frame "bg" "dusttale battle bg/11.png"
+play_animated_sprite "bg"
+reparent_to_root "bg"

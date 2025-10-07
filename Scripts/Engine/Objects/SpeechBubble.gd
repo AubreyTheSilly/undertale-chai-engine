@@ -16,28 +16,28 @@ var sprites := {
 }
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	texture = sprites[bubbleType]
 	match bubbleType:
 		"Small Right":
 			position = Vector2(52.25,0.5)
-			$Label.position = Vector2(-26.5,-43.0)
+			$TextObject.position = Vector2(-26.5,-39.0)
 		"Small Left":
 			position = Vector2(-55,0.5)
-			$Label.position = Vector2(-40,-43.0)
+			$TextObject.position = Vector2(-40,-39.0)
 		"Wide Right":
 			position = Vector2(79,-2)
-			$Label.position = Vector2(-80,-43.0)
+			$TextObject.position = Vector2(-80,-39.0)
 		"Wide Left":
 			position = Vector2(-84,-2)
-			$Label.position = Vector2(-100,-43.0)
+			$TextObject.position = Vector2(-100,-39.0)
 		"Above":
 			position = Vector2(0,-60)
-			$Label.position = Vector2(-78,-43.0)
+			$TextObject.position = Vector2(-78,-39.0)
 		"Short Left":
 			position = Vector2(-52,-0.5)
-			$Label.position = Vector2(-40,-23)
+			$TextObject.position = Vector2(-40,-19)
 		"Short Right":
 			position = Vector2(52,-0.5)
-			$Label.position = Vector2(-30,-23)
+			$TextObject.position = Vector2(-30,-19)
 	position += pos

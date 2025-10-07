@@ -1,48 +1,99 @@
+set_box_size 100 70.5
+var num barkx
+var num barkrot
 rand barkx -2 2
-create_attack bark 0 70.5 spr_barkbullet_0 barkx -6
-play_sound snd_pombark
+rand barkrot 1 5
+create_attack "bark1" 0 70.5 "spr_barkbullet_0" barkx -3
+set_property "attacks/bounding/bark1" "rotation_velocity" barkrot
+set_property "attacks/bounding/bark1" "scale:x" 0.5
+set_property "attacks/bounding/bark1" "scale:y" 0.5
+playsnd "snd_pombark"
 wait 0.5
 rand barkx -2 2
-create_attack bark 0 70.5 spr_barkbullet_0 barkx -6
-play_sound snd_pombark
+rand barkrot 1 5
+create_attack "bark2" 0 70.5 "spr_barkbullet_0" barkx -3
+set_property "attacks/bounding/bark2" "rotation_velocity" barkrot
+set_property "attacks/bounding/bark2" "scale:x" 0.5
+set_property "attacks/bounding/bark2" "scale:y" 0.5
+playsnd "snd_pombark"
 wait 0.5
 rand barkx -2 2
-create_attack bark 0 70.5 spr_barkbullet_0 barkx -6
-play_sound snd_pombark
+rand barkrot 1 5
+create_attack "bark3" 0 70.5 "spr_barkbullet_0" barkx -3
+set_property "attacks/bounding/bark3" "rotation_velocity" barkrot
+set_property "attacks/bounding/bark3" "scale:x" 0.5
+set_property "attacks/bounding/bark3" "scale:y" 0.5
+playsnd "snd_pombark"
 wait 0.5
 rand barkx -2 2
-create_attack bark 0 70.5 spr_barkbullet_0 barkx -6
-play_sound snd_pombark
+rand barkrot 1 5
+create_attack "bark4" 0 70.5 "spr_barkbullet_0" barkx -3
+set_property "attacks/bounding/bark4" "rotation_velocity" barkrot
+set_property "attacks/bounding/bark4" "scale:x" 0.5
+set_property "attacks/bounding/bark4" "scale:y" 0.5
+playsnd "snd_pombark"
 wait 0.5
 rand barkx -2 2
-create_attack bark 0 70.5 spr_barkbullet_0 barkx -6
-play_sound snd_pombark
+rand barkrot 1 5
+create_attack "bark5" 0 70.5 "spr_barkbullet_0" barkx -3
+set_property "attacks/bounding/bark5" "rotation_velocity" barkrot
+set_property "attacks/bounding/bark5" "scale:x" 0.5
+set_property "attacks/bounding/bark5" "scale:y" 0.5
+playsnd "snd_pombark"
 wait 0.5
 rand barkx -2 2
-create_attack bark 0 70.5 spr_barkbullet_0 barkx -6
-play_sound snd_pombark
+rand barkrot 1 5
+create_attack "bark6" 0 70.5 "spr_barkbullet_0" barkx -3
+set_property "attacks/bounding/bark6" "rotation_velocity" barkrot
+set_property "attacks/bounding/bark6" "scale:x" 0.5
+set_property "attacks/bounding/bark6" "scale:y" 0.5
+playsnd "snd_pombark"
 wait 0.5
 rand barkx -2 2
-create_attack bark 0 70.5 spr_barkbullet_0 barkx -6
-play_sound snd_pombark
+rand barkrot 1 5
+create_attack "bark7" 0 70.5 "spr_barkbullet_0" barkx -3
+set_property "attacks/bounding/bark7" "rotation_velocity" barkrot
+set_property "attacks/bounding/bark7" "scale:x" 0.5
+set_property "attacks/bounding/bark7" "scale:y" 0.5
+playsnd "snd_pombark"
 wait 0.5
 rand barkx -2 2
-create_attack bark 0 70.5 spr_barkbullet_0 barkx -6
-play_sound snd_pombark
+rand barkrot 1 5
+create_attack "bark8" 0 70.5 "spr_barkbullet_0" barkx -3
+set_property "attacks/bounding/bark8" "rotation_velocity" barkrot
+set_property "attacks/bounding/bark8" "scale:x" 0.5
+set_property "attacks/bounding/bark8" "scale:y" 0.5
+playsnd "snd_pombark"
 wait 0.5
 rand barkx -2 2
-create_attack bark 0 70.5 spr_barkbullet_0 barkx -6
-play_sound snd_pombark
+rand barkrot 1 5
+create_attack "bark9" 0 70.5 "spr_barkbullet_0" barkx -3
+set_property "attacks/bounding/bark9" "rotation_velocity" barkrot
+set_property "attacks/bounding/bark9" "scale:x" 0.5
+set_property "attacks/bounding/bark9" "scale:y" 0.5
+playsnd "snd_pombark"
 wait 0.5
 rand barkx -2 2
-create_attack bark 0 70.5 spr_barkbullet_0 barkx -6
-play_sound snd_pombark
+rand barkrot 1 5
+create_attack "bark10" 0 70.5 "spr_barkbullet_0" barkx -3
+set_property "attacks/bounding/bark10" "rotation_velocity" barkrot
+set_property "attacks/bounding/bark10" "scale:x" 0.5
+set_property "attacks/bounding/bark10" "scale:y" 0.5
+playsnd "snd_pombark"
 wait 0.5
 rand barkx -2 2
-create_attack bark 0 70.5 spr_barkbullet_0 barkx -6
-play_sound snd_pombark
+rand barkrot 1 5
+create_attack "bark11" 0 70.5 "spr_barkbullet_0" barkx -3
+set_property "attacks/bounding/bark11" "rotation_velocity" barkrot
+set_property "attacks/bounding/bark11" "scale:x" 0.5
+set_property "attacks/bounding/bark11" "scale:y" 0.5
+playsnd "snd_pombark"
 wait 0.5
 rand barkx -2 2
-create_attack bark 0 70.5 spr_barkbullet_0 barkx -6
-play_sound snd_pombark
+rand barkrot 1 5
+create_attack "bark12" 0 70.5 "spr_barkbullet_0" barkx -3
+set_property "attacks/bounding/bark12" "rotation_velocity" barkrot
+set_property "attacks/bounding/bark12" "scale:x" 0.5
+set_property "attacks/bounding/bark12" "scale:y" 0.5
+playsnd "snd_pombark"
 wait 0.5

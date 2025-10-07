@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://ghjeqv20751v"]
+[gd_scene load_steps=28 format=3 uid="uid://ghjeqv20751v"]
 
 [ext_resource type="Script" uid="uid://b8hxmfu6ccyo5" path="res://Scripts/Engine/Objects/enemy.gd" id="1_f7ytk"]
 [ext_resource type="Texture2D" uid="uid://cdlpvwckj8axf" path="res://Sprites/Battle/Enemies/spr_dummybattle_0.png" id="1_yatfw"]
@@ -13,11 +13,11 @@
 [ext_resource type="Texture2D" uid="uid://c1bmw4s6h0w2k" path="res://Sprites/Battle/spr_slice_o_4.png" id="11_16syu"]
 [ext_resource type="Texture2D" uid="uid://kibhhmpgde1f" path="res://Sprites/Battle/spr_slice_o_5.png" id="12_86awf"]
 [ext_resource type="AudioStream" uid="uid://coxfbknkv5fqu" path="res://Audio/Sounds/snd_damage_c.wav" id="13_6wei6"]
-[ext_resource type="AudioStream" uid="uid://csqr67tcdlo84" path="res://Audio/Sounds/SND_TXT1.wav" id="15_fvwyc"]
 [ext_resource type="FontFile" uid="uid://cvrg1o3nedg0c" path="res://Fonts/undertale-dotumche.otf" id="16_fvwyc"]
 [ext_resource type="Texture2D" uid="uid://81hi2vabuvw8" path="res://Sprites/Battle/SpeechBubbles/spr_blconabove_0.png" id="16_xmk3q"]
 [ext_resource type="Script" uid="uid://l4x4f6y1ba4e" path="res://Scripts/Engine/Objects/SpeechBubble.gd" id="17_fvwyc"]
-[ext_resource type="Script" uid="uid://xdj537rg68ks" path="res://scripts/Engine/Objects/EnemyScriptRunner.gd" id="18_fvwyc"]
+[ext_resource type="Script" uid="uid://xdj537rg68ks" path="res://Scripts/Engine/Objects/EnemyScriptRunner.gd" id="18_fvwyc"]
+[ext_resource type="Script" uid="uid://dexqxqsprthju" path="res://Scripts/Engine/Objects/text.gd" id="18_xmk3q"]
 
 [sub_resource type="Gradient" id="Gradient_vxur4"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
@@ -490,15 +490,6 @@ animations = [{
 "speed": 7.0
 }]
 
-[sub_resource type="FontVariation" id="FontVariation_eqdrc"]
-base_font = ExtResource("16_fvwyc")
-spacing_glyph = 1
-
-[sub_resource type="LabelSettings" id="LabelSettings_704u3"]
-font = SubResource("FontVariation_eqdrc")
-font_size = 12
-font_color = Color(0, 0, 0, 1)
-
 [node name="Enemy" type="Node2D"]
 script = ExtResource("1_f7ytk")
 
@@ -543,7 +534,6 @@ frame_progress = 1.0
 stream = ExtResource("13_6wei6")
 
 [node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("15_fvwyc")
 
 [node name="SpeechBubble" type="Sprite2D" parent="."]
 visible = false
@@ -553,13 +543,14 @@ texture = ExtResource("16_xmk3q")
 script = ExtResource("17_fvwyc")
 bubbleType = "Above"
 
-[node name="Label" type="Label" parent="SpeechBubble"]
-offset_left = -78.0
-offset_top = -43.0
-offset_right = 61.0
-offset_bottom = 29.0
-text = "Test dialogue."
-label_settings = SubResource("LabelSettings_704u3")
+[node name="TextObject" type="Node2D" parent="SpeechBubble"]
+position = Vector2(-78, -39)
+script = ExtResource("18_xmk3q")
+text = "[color:0:0:0]Test dialogue.[newline]Lol"
+character_spacing = 10.0
+size = 12
+font = ExtResource("16_fvwyc")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
 
 [node name="ScriptRunner" type="Node" parent="." node_paths=PackedStringArray("node")]
 script = ExtResource("18_fvwyc")

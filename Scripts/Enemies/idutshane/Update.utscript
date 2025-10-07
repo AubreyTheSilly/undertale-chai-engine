@@ -1,0 +1,19 @@
+// set variables
+send_sin body 0.05 2
+send_sin legs 0.05 -0.06
+increment legs
+
+// set scale and position
+set_property "body" "position:y" body
+set_property "legs" "scale:y" legs
+
+// hide the animated sprites if being damaged
+if damaging == true
+    set_property "body" "visible" false
+    set_property "legs" "visible" false
+end
+
+if damaging == false
+    set_property "body" "visible" true
+    set_property "legs" "visible" true
+end

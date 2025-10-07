@@ -7,13 +7,22 @@ extends Node2D
 @onready var room : Room
 
 func _ready() -> void:
+	await $LineEdit.text_submitted
+	roomName = $LineEdit.text
 	LoadRoom()
 
-func LoadRoom() -> void:
-	room = Room.loadRoomFromDictionary(Undermaker.loadJsonAsDictionary("Data/rooms/"+roomName+".json"))
+func _process(_delta):
+	if Input.is_action_just_pressed("backslash"):
+		get_tree().reload_current_scene()
+
+func clear_room() -> void:
 	for i in get_children():
 		if i.name != "Camera2D":
 			i.queue_free()
+
+func LoadRoom() -> void:
+	room = Room.loadRoomFromDictionary(Undermaker.loadJsonAsDictionary("Data/rooms/"+roomName+".json"))
+	clear_room()
 	var layernum = 0
 	for layer in room.Layers:
 		var layerobj = Node2D.new()
@@ -47,5 +56,8 @@ func _physics_process(_delta) -> void:
 		for j in i.get_children():
 			if j.name == "Player":
 				camera.position = j.position-Vector2(160,120)
-	camera.position.x = clamp(camera.position.x,room.CameraBounds.position.x,room.CameraBounds.position.x+room.CameraBounds.size.x)
-	camera.position.y = clamp(camera.position.y,room.CameraBounds.position.y,room.CameraBounds.position.y+room.CameraBounds.size.y)
+	if room:
+		camera.position.x = clamp(camera.position.x,room.CameraBounds.position.x,room.CameraBounds.position.x+room.CameraBounds.size.x)
+		camera.position.y = clamp(camera.position.y,room.CameraBounds.position.y,room.CameraBounds.position.y+room.CameraBounds.size.y)
+	else:
+		camera.position = Vector2.ZERO

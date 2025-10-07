@@ -82,6 +82,9 @@ func _process(_delta):
 	$HPBar.max_value = PlayerData.MaxHP
 	$HP.position.x = (137+$HPBar.size.x)+6.5
 	
+	if PlayerData.HP == 0:
+		get_tree().change_scene_to_file("res://Scenes/gameover.tscn")
+	
 	$ChoiceBox/Choice0.label_settings.font_color = Color(255,255,255)
 	$ChoiceBox/Choice1.label_settings.font_color = Color(255,255,255)
 	$ChoiceBox/Choice2.label_settings.font_color = Color(255,255,255)
@@ -396,6 +399,7 @@ func _process(_delta):
 				items -= 4
 			for i in PlayerData.inventory:
 				choicei += 1
+				print(i.short)
 				if choicei <= 3 and itemmenu == 0:
 					$ChoiceBox.get_node("Choice"+str(int(fmod(choicei,4)))).visible = true
 					$ChoiceBox.get_node("Choice"+str(int(fmod(choicei,4)))).text = "* "+i.short
@@ -445,7 +449,7 @@ func _process(_delta):
 				else:
 					playeritemchoice += 1
 			if Input.is_action_just_pressed("Back"):
-				state = PLAYER_ENEMY_CHOICE_ACT
+				state = PLAYER_BUTTON_CHOICE
 			if Input.is_action_just_pressed("Select"):
 				MenuSound.stream = preload("res://Audio/Sounds/snd_select.wav")
 				MenuSound.play()

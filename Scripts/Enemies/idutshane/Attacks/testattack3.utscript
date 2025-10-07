@@ -1,0 +1,39 @@
+// make the x position variable
+var num bonex
+
+// make spinny bone
+create_doublebone "spinbone" RIGHT 0 33.5 -1 0 0
+set_property "attacks/bounding/spinbone" "rotation_velocity" 3
+
+send_x bonex "attacks/bounding/spinbone"
+
+while bonex <= 0
+    send_x bonex "attacks/bounding/spinbone"
+    process_frame
+end
+
+set_property "attacks/bounding/spinbone" "position:x" 0
+set_property "attacks/bounding/spinbone" "velocity:x" 0
+
+wait 2.5
+playsnd "snd_bell"
+wait 0.5
+playsnd "snd_bell"
+wait 0.5
+playsnd "snd_bell"
+wait 0.5
+// make another spinny bone
+var num bonedir
+send_property bonedir "attacks/bounding/spinbone" "rotation_degrees"
+process_frame
+playsnd "snd_spearrise"
+create_doublebone "spinbone2" 0 0 33.5 0 0 bonedir "blue"
+set_property "attacks/bounding/spinbone2" "rotation_velocity" 5
+wait 4
+create_blaster "blaster1" 100 UP 90
+create_blaster "blaster2" -100 DOWN -90
+set_property "attacks/blaster1" "scale:x" 1.5
+set_property "attacks/blaster1" "scale:y" 1.5
+set_property "attacks/blaster2" "scale:x" 1.5
+set_property "attacks/blaster2" "scale:y" 1.5
+wait 3

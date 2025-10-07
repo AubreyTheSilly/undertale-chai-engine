@@ -11,46 +11,53 @@ func _ready():
 
 func _on_room_pressed():
 	print("room")
-	$Place.text = "Room Editor"
+	$CanvasLayer/Place.text = "Room Editor"
 	$Settings.visible = false
-	$RoomEditor.visible = true
+	$CanvasLayer/RoomEditor.visible = true
 	$EnemyEditor.visible = false
 	$NPCEditor.visible = false
 	$CharacterEditor.visible = false
 
 func _on_enemy_pressed():
 	print("enemy")
-	$Place.text = "Enemy Creator"
+	$CanvasLayer/Place.text = "Enemy Creator"
 	$Settings.visible = false
-	$RoomEditor.visible = false
+	$CanvasLayer/RoomEditor.visible = false
 	$EnemyEditor.visible = true
 	$NPCEditor.visible = false
 	$CharacterEditor.visible = false
 
 func _on_npc_pressed():
 	print("npc")
-	$Place.text = "NPC Editor"
+	$CanvasLayer/Place.text = "NPC Editor"
 	$Settings.visible = false
-	$RoomEditor.visible = false
+	$CanvasLayer/RoomEditor.visible = false
 	$EnemyEditor.visible = false
 	$NPCEditor.visible = true
 	$CharacterEditor.visible = false
 
 func _on_project_pressed():
 	print("project settings")
-	$Place.text = "Project Settings"
+	$CanvasLayer/Place.text = "Project Settings"
 	$Settings.visible = true
-	$RoomEditor.visible = false
+	$CanvasLayer/RoomEditor.visible = false
 	$EnemyEditor.visible = false
 	$NPCEditor.visible = false
 	$CharacterEditor.visible = false
 
 func _process(_delta):
+	$RoomDisplay.visible = $CanvasLayer/RoomEditor.visible
+	$FakeTile.visible = $CanvasLayer/RoomEditor.visible
 	if Undermaker.Project.has("projectName"):
-		$Label.text = Undermaker.Project["projectName"]
-	if $RoomEditor.visible:
-		var vel = Vector2(Input.get_axis("ui_left","ui_right"),Input.get_axis("ui_up","ui_down"))*-20
-		$RoomEditor/RoomDisplay.position += vel
+		$CanvasLayer/Label.text = Undermaker.Project["projectName"]
+	if $CanvasLayer/RoomEditor.visible:
+		var vel = Vector2(Input.get_axis("ui_left","ui_right"),Input.get_axis("ui_up","ui_down"))*20
+		$Camera2D.position += vel
+		var zoom = Input.get_axis("zoomout","zoomin")*0.01
+		$Camera2D.zoom += Vector2(zoom,zoom)
+	else:
+		$Camera2D.position = Vector2(160,120)
+		$Camera2D.zoom = Vector2(1,1)
 
 func _on_save_settings_pressed():
 	#$Settings/LineEdit.text = Undermaker.Project["projectName"]
@@ -62,9 +69,9 @@ func _on_save_settings_pressed():
 
 func _on_character_pressed():
 	print("character")
-	$Place.text = "Character Creator"
+	$CanvasLayer/Place.text = "Character Creator"
 	$Settings.visible = false
-	$RoomEditor.visible = false
+	$CanvasLayer/RoomEditor.visible = false
 	$EnemyEditor.visible = false
 	$NPCEditor.visible = false
 	$CharacterEditor.visible = true

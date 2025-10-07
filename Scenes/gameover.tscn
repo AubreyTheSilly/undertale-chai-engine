@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://dbn1e16vu3umv"]
+
+[ext_resource type="Script" uid="uid://78g213f8oekc" path="res://Scripts/Engine/Scenes/gameover.gd" id="1_2oltb"]
+[ext_resource type="Script" uid="uid://dexqxqsprthju" path="res://Scripts/Engine/Objects/text.gd" id="1_qpupn"]
+[ext_resource type="FontFile" uid="uid://decmshb7688st" path="res://Fonts/DTM-Mono.otf" id="2_2oltb"]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_2oltb")
+
+[node name="TextObject" type="Node2D" parent="."]
+script = ExtResource("1_qpupn")
+text = "you died........[newline]press Z or ENTER to go back to the[newline]battle[newline][newline]fyi this is a placeholder not the real[newline]game over screen"
+font = ExtResource("2_2oltb")
+metadata/_custom_type_script = "uid://dexqxqsprthju"

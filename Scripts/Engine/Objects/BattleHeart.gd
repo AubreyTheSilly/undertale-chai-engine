@@ -31,9 +31,6 @@ func _process(_delta) -> void:
 	match battle.state:
 		battle.ENEMY_DIALOGUE:
 			visible = true
-			jumpstage = 2
-			bluevel = Vector2.ZERO
-			position = Vector2(159.5,159.75)
 		battle.ENEMY_ATTACK:
 			visible = true
 			match battle.soulMode:
@@ -41,25 +38,26 @@ func _process(_delta) -> void:
 					velocity = Vector2.ZERO
 					velocity = (Input.get_vector("Move Left","Move Right","Move Up","Move Down")*(30*SPEED))
 				Battle.SOULMODES.BLUE:
-					bluevel.x = Input.get_axis("Move Left","Move Right")
+					bluevel.x = Input.get_axis("Move Left","Move Right")*SPEED
 					if is_on_floor_only():
 						bluevel.y = 0
 						jumpstage = 1
 					if jumpstage == 1 and velocity.y == 0 and Input.is_action_just_pressed("Move Up"):
 						jumpstage = 2
-						bluevel.y = -3
+						bluevel.y = -4.5
 					if jumpstage == 2:
 						if Input.is_action_just_released("Move Up") and bluevel.y <= -1:
-							bluevel.y = -0.5
+							bluevel.y = -1
 						if (bluevel.y > 0.5 and bluevel.y < 8):
-							bluevel.y += 0.3
+							bluevel.y += 0.6
 						if (bluevel.y > -1 and bluevel.y <= 0.5):
-							bluevel.y += 0.1
+							bluevel.y += 0.2
 						if (bluevel.y > -4 and bluevel.y <= -1):
-							bluevel.y += 0.25
+							bluevel.y += 0.5
 						if (bluevel.y <= -4):
-							bluevel.y += 0.1
-					velocity = bluevel*(30*(SPEED))
+							bluevel.y += 0.2
+						
+					velocity = bluevel*(30)
 			for i in $soul.get_overlapping_areas():
 				if i.name == "attack" and !invincible:
 					var attack = i.get_parent()
@@ -74,7 +72,10 @@ func _process(_delta) -> void:
 					elif attack.modulate == Color(1,0.65,0) and velocity == Vector2.ZERO:
 						damage(dmg)
 		_:
+			position = Vector2(159.5,159.75)
 			visible = false
+			jumpstage = 2
+			bluevel = Vector2.ZERO
 	move_and_slide()
 
 func damage(dmg : int):

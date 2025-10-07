@@ -1,13 +1,13 @@
 extends Node
 
 var Name = "Chara"
-var HP : int = 20
-var MaxHP : int = 20
-var LV : int = 1
+var HP : int = 56
+var MaxHP : int = 56
+var LV : int = 10
 var EXP = 0
 var GOLD = 0
-var ATK : int = 0
-var DEF : int = 0
+var ATK : int = 18
+var DEF : int = 2
 var INV : int = 30
 var weapon : Item = Items.STICK
 var armor : Item = Items.BANDAGE

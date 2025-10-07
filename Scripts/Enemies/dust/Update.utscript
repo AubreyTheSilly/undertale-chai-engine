@@ -1,25 +1,21 @@
-sin headx 0.15 2
-sin headrot 0.15 2
-sin heady 0.3 1
+// set variables
+send_sin bodyx 0.1 4
+send_sin bodyy 0.2 2
+send_sin legs 0.05 -0.06
+increment legs
 
-sin bodyx 0.15 1.5
-sin bodyy 0.3 1.25
+// set scale and position
+set_property "body" "position:x" bodyx
+set_property "body" "position:y" bodyy
+set_property "legs" "scale:y" legs
 
-sin legskew 0.15 0.05
-
-set_position head headx heady
-set_property head rotation_degrees headrot
-set_position body bodyx bodyy 
-set_property legs skew legskew
-
-if damaging true
-set_property head visible false
-set_property body visible false
-set_property legs visible false
+// hide the animated sprites if being damaged
+if damaging == true
+    set_property "body" "visible" false
+    set_property "legs" "visible" false
 end
 
-if damaging false
-set_property head visible true
-set_property body visible true
-set_property legs visible true
+if damaging == false
+    set_property "body" "visible" true
+    set_property "legs" "visible" true
 end

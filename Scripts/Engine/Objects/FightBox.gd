@@ -33,9 +33,11 @@ func _attack(enemydata : EnemyData) -> int:
 			dmg = round(((PlayerData.ATK+10) - enemydata.DEF + randi_range(0,2)) * 2.2)
 		if bonusfactor > 12:
 			dmg = round(((PlayerData.ATK+10) - enemydata.DEF + randi_range(0,2)) * (1 - bonusfactor/273) * 2)
+		if dmg <= 0:
+			dmg = 0
 		return dmg
 	print("miss :(")
-	return 0
+	return -1
 
 func _close() -> void:
 	create_tween().tween_property($Sprite2D,"scale:x",0.01,0.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)

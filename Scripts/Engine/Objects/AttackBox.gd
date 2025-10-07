@@ -24,9 +24,15 @@ func _process(_delta):
 	$CollisionShape2D4.position.y = 35.25+float($AttackRect.size.y/2)-1.5
 	
 	var box_size = Vector2(float($AttackRect.size.x),float($AttackRect.size.y))-Vector2(6.0,6.0)
-	box_width = box_size.x
-	box_height = box_size.y
+	box_width = rect.size.x
+	box_height = rect.size.y
 	$attacks/bounding.polygon = [Vector2(-box_size.x/2,-box_size.y/2),Vector2(-box_size.x/2,box_size.y/2),Vector2(box_size.x/2,box_size.y/2),Vector2(box_size.x/2,-box_size.y/2)]
 
-func runScript(scr : UTScript,enemy_data : EnemyData):
+func runScript(scr : String,enemy_data : EnemyData):
+	await get_tree().process_frame
+	var scriptrunner = preload("res://Scenes/Objects/attackscriptrunner.tscn").instantiate()
+	scriptrunner.node = self
+	add_child(scriptrunner)
+	scriptrunner.run_script(scr,true)
+	await scriptrunner.script_finished
 	attack_over.emit()
