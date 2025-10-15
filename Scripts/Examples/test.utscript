@@ -1,5 +1,8 @@
 // UTScript example
 
+create_obj "TestText" "Label" 150 200
+set_property "TestText" "text" "testing testing 1 2 three!"
+
 print "Hello World!" // prints "Hello World!"
 var string text // init string variable
 set text "Text" // set variable 

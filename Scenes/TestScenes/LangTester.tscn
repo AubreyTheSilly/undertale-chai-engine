@@ -1,11 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://ck000tmcbm8fs"]
+[gd_scene load_steps=4 format=3 uid="uid://ck000tmcbm8fs"]
 
 [ext_resource type="Script" uid="uid://b6m6ndh7u38dl" path="res://Scripts/Engine/Classes/ScriptRunner.gd" id="1_ha3kq"]
+[ext_resource type="Script" uid="uid://dhqhkscp7obiy" path="res://Scripts/Engine/Scenes/lang_tester.gd" id="1_rgo3f"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_rgo3f"]
 font_size = 13
 
 [node name="Node2D" type="Node2D"]
+script = ExtResource("1_rgo3f")
 
 [node name="Output" type="Label" parent="."]
 offset_left = 10.0
@@ -17,5 +19,6 @@ label_settings = SubResource("LabelSettings_rgo3f")
 
 [node name="ScriptRunner" type="Node" parent="." node_paths=PackedStringArray("node")]
 script = ExtResource("1_ha3kq")
+script_to_run = "Examples/test.utscript"
 node = NodePath("..")
 metadata/_custom_type_script = "uid://b6m6ndh7u38dl"

@@ -8,8 +8,8 @@ var velocity : Vector2 = Vector2.ZERO
 var rotation_velocity : float = 0
 
 func _draw():
-	draw_texture_rect(preload("res://Sprites/Battle/Attacks/bone.png"),Rect2(Vector2(-3,-5-height),Vector2(6.5,5)),false)
-	draw_rect(Rect2(Vector2(-1,-height),Vector2(2.5,height)),Color.WHITE)
+	draw_texture_rect(preload("res://Sprites/Battle/Attacks/bone.png"),Rect2(Vector2(-2.5,-5-height),Vector2(6.5,5)),false)
+	draw_rect(Rect2(Vector2(-1.25,-height),Vector2(4,height)),Color.WHITE)
 
 func _process(_delta):
 	queue_redraw()

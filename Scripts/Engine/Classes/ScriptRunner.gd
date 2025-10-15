@@ -45,6 +45,11 @@ func _pre_run():
 	pass
 
 func run_script(script : String = script_to_run,verbose : bool = false) -> Error:
+	if script == "":
+		push_warning("Tried to run an empty script, it will be assumed this is intentional")
+		await get_tree().process_frame
+		script_finished.emit()
+		return ERR_SCRIPT_FAILED
 	if !script:
 		push_error("There is no script to run! Make sure to set script_to_run!!")
 		return ERR_DOES_NOT_EXIST
@@ -276,6 +281,11 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 					if runscript.data[line].data.size() != 4:
 						push_error("line "+str(line+1)+": Invalid number of arguments")
 						continue
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
 						continue
@@ -296,6 +306,11 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 					if runscript.data[line].data.size() < 5:
 						push_error("line "+str(line+1)+": Invalid number of arguments")
 						continue
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
 						continue
@@ -309,7 +324,7 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 						push_error("line "+str(line+1)+": Tween time must be a valid number")
 						continue
 					if runscript.data[line].data.size() == 5:
-						await create_tween().tween_property(node.get_node(runscript.data[line].data[1].value),runscript.data[line].data[2].value,runscript.data[line].data[3].value,runscript.data[line].data[4].value).finished
+						create_tween().tween_property(node.get_node(runscript.data[line].data[1].value),runscript.data[line].data[2].value,runscript.data[line].data[3].value,runscript.data[line].data[4].value).finished
 					elif runscript.data[line].data.size() > 6:
 						push_error("line "+str(line+1)+": Invalid number of arguments")
 						continue
@@ -325,7 +340,7 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 									tweentype = Tween.EASE_IN_OUT
 								Token.TokenType.OUT_IN:
 									tweentype = Tween.EASE_OUT_IN
-							await create_tween().tween_property(node.get_node(runscript.data[line].data[1].value),runscript.data[line].data[2].value,runscript.data[line].data[3].value,runscript.data[line].data[4].value).set_ease(tweentype).set_trans(Tween.TRANS_CUBIC).finished
+							create_tween().tween_property(node.get_node(runscript.data[line].data[1].value),runscript.data[line].data[2].value,runscript.data[line].data[3].value,runscript.data[line].data[4].value).set_ease(tweentype).set_trans(Tween.TRANS_CUBIC).finished
 						else:
 							push_error("line "+str(line+1)+": You must use a valid ease type")
 							continue
@@ -333,6 +348,11 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 					if runscript.data[line].data.size() != 5:
 						push_error("line "+str(line+1)+": Invalid number of arguments")
 						continue
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Sprite name must be a string")
 						continue
@@ -577,6 +597,69 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 							push_error("line "+str(line+1)+": You must enter an existing variable for sin")
 					else:
 						push_error("line "+str(line+1)+": You must enter a valid identifier for sin")
+				Token.TokenType.CREATE_OBJECT:
+					if runscript.data[line].data.size() != 5:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Object name must be a string")
+						continue
+					if runscript.data[line].data[2].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Object type must be a string")
+						continue
+					if !ClassDB.class_exists(runscript.data[line].data[2].value) or !ClassDB.can_instantiate(runscript.data[line].data[2].value):
+						push_error("line "+str(line+1)+": Object type must be a valid class, check the Godot documentation")
+						continue
+					if runscript.data[line].data[3].type != Token.TokenType.NUMBER:
+						push_error("line "+str(line+1)+": Object X position must be a number")
+						continue
+					if runscript.data[line].data[4].type != Token.TokenType.NUMBER:
+						push_error("line "+str(line+1)+": Object Y position must be a number")
+						continue
+					var obj = ClassDB.instantiate(runscript.data[line].data[2].value)
+					obj.name = runscript.data[line].data[1].value
+					obj.position = Vector2(runscript.data[line].data[3].value,runscript.data[line].data[4].value)
+					node.add_child(obj)
+				Token.TokenType.SET_SPRITE:
+					if runscript.data[line].data.size() != 3:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Node name must be a string")
+						continue
+					if !node.get_node_or_null(runscript.data[line].data[1].value):
+						push_error("line "+str(line+1)+": Target node must exist")
+						continue
+					if !node.get_node(runscript.data[line].data[1].value) is Sprite2D:
+						push_error("line "+str(line+1)+": Target node must be a sprite")
+						continue
+					if !Loader.load_file("Sprites/"+runscript.data[line].data[2].value):
+						push_error("line "+str(line+1)+": Sprite path must lead to a valid image file (Path: "+"Sprites/"+runscript.data[line].data[2].value+")")
+						continue
+					var sprite = node.get_node(runscript.data[line].data[1].value)
+					sprite.texture = Loader.load_file("Sprites/"+runscript.data[line].data[2].value)
+				Token.TokenType.GIVE_ITEM:
+					if runscript.data[line].data.size() != 2:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Item name must be a string")
+						continue
+					var item = Item.LoadItemFromFile(runscript.data[line].data[1].value)
+					if item:
+						PlayerData.inventory.append(item)
+					else:
+						push_error("line "+str(line+1)+": Item does not exist")
 				_:
 					await unhandled_function(runscript.data[line])
 		for i in ogstringtokens:

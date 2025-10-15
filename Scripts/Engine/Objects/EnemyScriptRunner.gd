@@ -30,3 +30,8 @@ func unhandled_function(line : TokenArray):
 				else:
 					dialogarray.append(i.value)
 			await get_parent().flavorbox.StartBattleDialogue(dialogarray)
+
+func _pre_run():
+	vars["LASTCHOICE"] = UMVar.new()
+	vars["LASTCHOICE"].type = Token.TokenType.TYPE_NUM
+	vars["LASTCHOICE"].value = get_parent().get_parent().playerbuttonchoice

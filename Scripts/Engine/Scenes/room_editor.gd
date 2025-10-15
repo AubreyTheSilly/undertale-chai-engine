@@ -22,7 +22,10 @@ func makeObj():
 	
 	
 	$"/root/editor/RoomDisplay".queue_redraw()
-	
+
+func _fix_layers():
+	print("Layers changed")
+
 func removeObj():
 	var targetlayer = $OptionButton.get_item_text($OptionButton.selected)
 	var objpos = ((get_global_mouse_position()-Vector2(10,10)).snapped(Vector2(20,20))/20.0)-($"/root/editor/RoomDisplay".position/20.0)

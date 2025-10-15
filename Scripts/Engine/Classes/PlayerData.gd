@@ -11,7 +11,7 @@ var DEF : int = 2
 var INV : int = 30
 var weapon : Item = Items.STICK
 var armor : Item = Items.BANDAGE
-var inventory : Array[Item] = [Items.MONSTER_CANDY,Items.MONSTER_CANDY,Items.MONSTER_CANDY,Items.MONSTER_CANDY,Items.MONSTER_CANDY,Items.MONSTER_CANDY]
+var inventory : Array[Item] = []
 var flags : Dictionary
 var fun : int = randi_range(0,100)
 var room = "TestRoom"
@@ -19,6 +19,7 @@ var room = "TestRoom"
 var obj : Player
 var player_can_move = true
 var player_teleporting = false
+var player_teleport_position : Vector2
 
 func loadFile(newgame : bool = false):
 	pass

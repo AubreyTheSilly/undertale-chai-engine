@@ -31,6 +31,8 @@ func _ready() -> void:
 	
 	PlayerData.player_teleporting = false
 	PlayerData.player_can_move = true
+	if PlayerData.player_teleport_position:
+		position = PlayerData.player_teleport_position
 	fader.fadeIn()
 
 func _process(_delta) -> void:

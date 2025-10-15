@@ -1,0 +1,15 @@
+if LASTCHOICE == 0
+    increment turn
+    if turn == 1
+        set_property "self" "nextattack" "testattack"
+        set_property "self" "nextdialogue" "[sound:snd_txtsans][font:Comic Sans UT.ttf][font_size:16:10:20][set:face:false]still attacking, as[newline]per usual.[pause][clear][sound:snd_txtsans]thought you'd know[newline]better by now."
+    end
+    if turn == 2
+        set_property "self" "nextattack" "testattack2"
+        set_property "self" "nextdialogue" "[sound:snd_txtsans]feels exciting,[newline]being at the final[newline]showdown like this.[pause][clear][sound:snd_txtsans]what a special[newline]ending to this[newline]story, eh?"
+    end
+    if turn == 3
+        set_property "self" "nextattack" "testattack3"
+        set_property "self" "nextdialogue" "[sound:snd_txtsans]y'know, i've been[newline]meaning to ask you[newline]a few questions.[pause][clear][sound:snd_txtsans]about you...[newline]about why you did[newline]this...[pause][clear][sound:snd_txtsans]all that stuff."
+    end
+end

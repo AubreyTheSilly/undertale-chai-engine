@@ -73,6 +73,7 @@ func _process(_delta) -> void:
 						damage(dmg)
 		_:
 			position = Vector2(159.5,159.75)
+			velocity = Vector2.ZERO
 			visible = false
 			jumpstage = 2
 			bluevel = Vector2.ZERO

@@ -10,13 +10,24 @@ extends Sprite2D
 @onready var atk = get_parent().get_node("Page1/ATK")
 @onready var def = get_parent().get_node("Page1/DEF")
 
+var lastsprite = ""
+var lasthurtsprite = ""
+var lastsparesprite = ""
+
 var damaging = false
 
 func _process(_delta):
 	enemydata.EnemyName = enemyname.text
-	enemydata.EnemySprite = Loader.load_file("Sprites/Battle/Enemies/"+normalsprite.text+".png")
-	enemydata.EnemyHurtSprite = Loader.load_file("Sprites/Battle/Enemies/"+hurtsprite.text+".png")
-	enemydata.EnemySpareSprite = Loader.load_file("Sprites/Battle/Enemies/"+sparesprite.text+".png")
+	enemydata.name = filename.text
+	if lastsprite != normalsprite.text:
+		lastsprite = normalsprite.text
+		enemydata.EnemySprite = Loader.load_file("Sprites/Battle/Enemies/"+normalsprite.text+".png")
+	if lasthurtsprite != hurtsprite.text:
+		lasthurtsprite = hurtsprite.text
+		enemydata.EnemyHurtSprite = Loader.load_file("Sprites/Battle/Enemies/"+hurtsprite.text+".png")
+	if lastsparesprite != sparesprite.text:
+		lastsparesprite = sparesprite.text
+		enemydata.EnemySpareSprite = Loader.load_file("Sprites/Battle/Enemies/"+sparesprite.text+".png")
 	enemydata.HP = int(hp.text)
 	enemydata.ATK = int(atk.text)
 	enemydata.DEF = int(def.text)
@@ -40,6 +51,9 @@ func Shudder():
 		await get_tree().process_frame
 	damaging = false
 
-
 func _on_save_pressed():
-	pass # Replace with function body.
+	var dict := Battle.EnemyDataToDictionary(enemydata)
+	dict["sprite"] = normalsprite.text
+	dict["hurtSprite"] = hurtsprite.text
+	dict["spareSprite"] = sparesprite.text
+	Undermaker.createJsonFromDictionary("Data/Enemies/"+filename.text+".json",dict)

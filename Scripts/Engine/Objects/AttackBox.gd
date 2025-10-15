@@ -29,7 +29,9 @@ func _process(_delta):
 	$attacks/bounding.polygon = [Vector2(-box_size.x/2,-box_size.y/2),Vector2(-box_size.x/2,box_size.y/2),Vector2(box_size.x/2,box_size.y/2),Vector2(box_size.x/2,-box_size.y/2)]
 
 func runScript(scr : String,enemy_data : EnemyData):
-	await get_tree().process_frame
+	#if scr == "":
+		#attack_over.emit()
+	#await get_tree().process_frame
 	var scriptrunner = preload("res://Scenes/Objects/attackscriptrunner.tscn").instantiate()
 	scriptrunner.node = self
 	add_child(scriptrunner)

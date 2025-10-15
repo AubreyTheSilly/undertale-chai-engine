@@ -135,10 +135,10 @@ expand_margin_bottom = 2.0
 font_size = 8
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eo2o7"]
-size = Vector2(156, 214)
+size = Vector2(137, 214)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_32ik4"]
-size = Vector2(54, 165)
+size = Vector2(73, 165)
 
 [sub_resource type="LabelSettings" id="LabelSettings_24ceq"]
 font_size = 13
@@ -178,6 +178,7 @@ stream = ExtResource("1_eyy8u")
 volume_db = -15.0
 
 [node name="Settings" type="Node2D" parent="."]
+visible = false
 
 [node name="LineEdit" type="LineEdit" parent="Settings"]
 offset_left = 20.0
@@ -524,7 +525,6 @@ centered = false
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="RoomEditor" type="Node2D" parent="CanvasLayer"]
-visible = false
 script = ExtResource("3_b78su")
 
 [node name="LineEdit" type="LineEdit" parent="CanvasLayer/RoomEditor"]
@@ -546,7 +546,7 @@ placeholder_text = "Room Name"
 offset_left = 212.0
 offset_top = 29.0
 offset_right = 314.0
-offset_bottom = 45.0
+offset_bottom = 48.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 6
@@ -557,18 +557,10 @@ theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 theme_override_icons/arrow = SubResource("GradientTexture1D_1k58v")
-selected = 0
-item_count = 3
-popup/item_0/text = "Layer 1"
-popup/item_0/id = 0
-popup/item_1/text = "Layer 2"
-popup/item_1/id = 1
-popup/item_2/text = "Layer 3"
-popup/item_2/id = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/RoomEditor"]
 custom_minimum_size = Vector2(96, 141)
-offset_left = 211.0
+offset_left = 212.0
 offset_top = 50.0
 offset_right = 319.0
 offset_bottom = 214.0
@@ -737,9 +729,9 @@ mouse_filter = 1
 
 [node name="Save" type="Button" parent="CanvasLayer/RoomEditor"]
 z_index = 1
-offset_left = 156.0
+offset_left = 140.0
 offset_top = 3.0
-offset_right = 206.0
+offset_right = 190.0
 offset_bottom = 21.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
@@ -750,12 +742,42 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
 action_mode = 0
 text = "Save"
 
+[node name="AddLayer" type="Button" parent="CanvasLayer/RoomEditor"]
+z_index = 1
+offset_left = 192.0
+offset_top = 3.0
+offset_right = 210.0
+offset_bottom = 21.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+action_mode = 0
+text = "+"
+
+[node name="RemoveLayer" type="Button" parent="CanvasLayer/RoomEditor"]
+z_index = 1
+offset_left = 192.0
+offset_top = 29.0
+offset_right = 210.0
+offset_bottom = 48.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+action_mode = 0
+text = "-"
+
 [node name="Load" type="Button" parent="CanvasLayer/RoomEditor"]
 z_index = 1
-offset_left = 156.0
+offset_left = 140.0
 offset_top = 29.0
-offset_right = 206.0
-offset_bottom = 47.0
+offset_right = 190.0
+offset_bottom = 48.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 10
@@ -816,11 +838,11 @@ text = "Properties"
 [node name="Area2D" type="Area2D" parent="CanvasLayer/RoomEditor"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/RoomEditor/Area2D"]
-position = Vector2(78, 107)
+position = Vector2(68.5, 107)
 shape = SubResource("RectangleShape2D_eo2o7")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="CanvasLayer/RoomEditor/Area2D"]
-position = Vector2(183, 131.5)
+position = Vector2(173.5, 131.5)
 shape = SubResource("RectangleShape2D_32ik4")
 
 [node name="Room" type="Button" parent="CanvasLayer"]

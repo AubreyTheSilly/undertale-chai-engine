@@ -109,7 +109,7 @@ static func loadScriptFromFile(path:StringName,verbose:bool=false) -> UTScript:
 		if tokenbuffer.data:
 			script.data.append(tokenbuffer)
 		return script
-	push_error("Script does not exist")
+	push_error("Script does not exist (Path: "+path+")")
 	return null
 
 #func loadScript(path:StringName) -> Error:

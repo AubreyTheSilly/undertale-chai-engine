@@ -15,21 +15,30 @@ var nextdialogue := ""
 var frame := 0
 var damaging = false
 var nextattack := ""
+var lastchoice := 0
 
 # important variables related to scripts
 var hasUpdateScript := false
+var hasPreDialogueScript := false
+
+var predialogue = false
+var ready_for_next_turn = true
 
 # state of the enemy
 enum ENEMY_STATE {DEAD,ALIVE,SPARED}
 var state = ENEMY_STATE.ALIVE
 
-# variables for scripts
+# variables for scripts (NOTE: this is a leftover from the old programming system)
 var vars : Dictionary = {}
 
 # fires when enemy has stopped shaking and/or dies
 signal damage_done
 # fired by battle scene
 signal next
+
+func _predialogue():
+	if hasPreDialogueScript:
+		scr.run_script("Enemies/"+enemy_data.name+"/PreDialogue.utscript")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -51,9 +60,18 @@ func _ready():
 		await scr.run_script()
 	if UTScript.loadScriptFromFile("Enemies/"+enemy_data.name+"/Update.utscript"):
 		hasUpdateScript = true
+	if UTScript.loadScriptFromFile("Enemies/"+enemy_data.name+"/PreDialogue.utscript"):
+		hasPreDialogueScript = true
 
 func getAttack() -> String:
-	return "Enemies/"+enemy_data.name+"/Attacks/"+enemy_data.Attacks.pick_random()+".utscript"
+	if nextattack != "":
+		var attack = nextattack
+		nextattack = ""
+		return "Enemies/"+enemy_data.name+"/Attacks/"+attack+".utscript"
+	elif enemy_data.Attacks.size() == 0:
+		return ""
+	else:
+		return "Enemies/"+enemy_data.name+"/Attacks/"+enemy_data.Attacks.pick_random()+".utscript"
 
 func _dust():
 	# so long gay bowser
@@ -135,7 +153,6 @@ func _damage(damage : float):
 			await get_tree().process_frame
 		$DamageText.visible = false
 		damage_done.emit()
-		
 
 func act(Act : String) -> void:
 	if Act == "Check":
@@ -151,20 +168,19 @@ func act(Act : String) -> void:
 			await flavorbox.StartBattleDialogue(["* Error!"])
 
 func dialogue() -> void:
-	talking = true
-	$SpeechBubble.visible = true
 	var Dialogue = enemy_data.RandomDialogs.pick_random()
-	$AudioStreamPlayer2.stream = Loader.load_file("Audio/Sounds/snd_TXT2.wav")
-	talking = true
-	$SpeechBubble/TextObject.text = "[color:0:0:0]"
 	if nextdialogue != "":
 		Dialogue = nextdialogue
 		nextdialogue = ""
-	
-	if Dialogue == "":
-		$SpeechBubble.visible = false
-		talking = false
+	if Dialogue != "":
+		talking = true
+	else:
 		return
+	await get_tree().process_frame
+	$SpeechBubble.visible = true
+	$AudioStreamPlayer2.stream = Loader.load_file("Audio/Sounds/snd_TXT2.wav")
+	talking = true
+	$SpeechBubble/TextObject.text = "[color:0:0:0]"
 	
 	var cmd = false
 	var command = ""
@@ -182,6 +198,33 @@ func dialogue() -> void:
 							await get_tree().process_frame
 					"sound":
 						$AudioStreamPlayer2.stream = Loader.load_file("Audio/Sounds/"+cmand[1]+".wav")
+					"pause":
+						while !Input.is_action_just_pressed("Select"):
+							await get_tree().process_frame
+					"clear":
+						$SpeechBubble/TextObject.text = "[color:0:0:0]"
+					"font":
+						var font = FontFile.new()
+						font.load_dynamic_font(Undermaker.Path+"Fonts/"+cmand[1])
+						$SpeechBubble/TextObject.font = font
+					"font_size":
+						$SpeechBubble/TextObject.size = int(cmand[1])
+						$SpeechBubble/TextObject.character_spacing = float(cmand[2])
+						$SpeechBubble/TextObject.line_spacing = float(cmand[3])
+					"set":
+						var variable = $ScriptRunner.getVariable(cmand[1])
+						if variable:
+							if variable.type == Token.TokenType.TYPE_STRING:
+								variable.value = cmand[2]
+							elif variable.type == Token.TokenType.TYPE_NUM:
+								variable.value = float(cmand[2])
+							elif variable.type == Token.TokenType.TYPE_BOOL:
+								if cmand[2] == "true":
+									variable.value = true
+								elif cmand[2] == "false":
+									variable.value = false
+					"playsnd":
+						pass
 					_:
 						$SpeechBubble/TextObject.text += "["+command+"]"
 			_:
@@ -207,7 +250,15 @@ func _process(_delta):
 	frame += 1
 	if hasUpdateScript and state == 1:
 		scr.script_to_run = "Enemies/"+enemy_data.name+"/Update.utscript"
+	#if predialogue:
+		#scr.script_to_run = "Enemies/"+enemy_data.name+"/PreDialogue.utscript"
+	#if hasUpdateScript or predialogue:
+	if hasUpdateScript:
 		scr.run_script()
+		#if predialogue:
+			#predialogue = false
+			#await scr.script_finished
+			#ready_for_next_turn = true
 	if damaging:
 		sprite.texture = enemy_data.EnemyHurtSprite
 	elif state == 2:

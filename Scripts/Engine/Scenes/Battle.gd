@@ -26,6 +26,7 @@ var firstTurn = true
 var EnemyDialogStarted = false
 var battleOver := false
 var attackStarted := false
+var dialoguejustStarted = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -64,7 +65,9 @@ func _ready():
 		enemyObj.name = "Enemy"+str(enemyindex)
 		add_child(enemyObj)
 		enemies.append(enemyObj)
-	_PlayerTurn()
+	state = Battle.loadedBattle["state"]
+	if state == 0:
+		_PlayerTurn()
 
 func _process(_delta):
 	if PlayerData.inventory.size() != 0:
@@ -321,14 +324,24 @@ func _process(_delta):
 			for i in buttons:
 				i.selected = false
 		ENEMY_DIALOGUE:
+			if dialoguejustStarted == false:
+				for i in enemies:
+					if i.state == 1:
+						i.lastchoice = playerbuttonchoice
+						i._predialogue()
+				dialoguejustStarted = true
+				return
 			for i in buttons:
 				i.selected = false
 			$ChoiceBox.visible = false
 			$FlavorBox.visible = false
 			$FightBox.visible = false
 			$AttackBox.visible = true
-			$AttackBox.rect.size = Vector2(70.5,70.5)
-			if EnemyDialogStarted == false:
+			var can_start = true
+			for i in enemies:
+				if i.ready_for_next_turn == false:
+					can_start = false
+			if EnemyDialogStarted == false and can_start:
 				EnemyDialogStarted = true
 				for i in enemies:
 					if i.state == 1:
@@ -336,6 +349,7 @@ func _process(_delta):
 			var donetalking = true
 			for i in enemies:
 				if i.talking == true:
+					$AttackBox.rect.size = Vector2(70.5,70.5)
 					donetalking = false
 			if donetalking:
 				state = ENEMY_ATTACK
@@ -344,9 +358,10 @@ func _process(_delta):
 				attackStarted = true
 				var attacksLeft := 0
 				for i in enemies:
-					if i.state == 1:
+					var attack = i.getAttack()
+					if i.state == 1 and attack != "":
 						attacksLeft += 1
-						$AttackBox.runScript(i.getAttack(),i.enemy_data)
+						$AttackBox.runScript(attack,i.enemy_data)
 				while attacksLeft != 0:
 					await $AttackBox.attack_over
 					attacksLeft -= 1
@@ -357,7 +372,8 @@ func _process(_delta):
 					i.queue_free()
 				state = ENEMY_ATTACK_END
 				$AttackBox.rect = Rect2(Vector2.ZERO,Vector2(288,70.5))
-				await get_tree().create_timer(0.25).timeout
+				if $AttackBox/AttackRect.size != Vector2(288,70.5):
+					await get_tree().create_timer(0.25).timeout
 				_PlayerTurn()
 		BATTLE_END:
 			if !battleOver:
@@ -399,13 +415,15 @@ func _process(_delta):
 				items -= 4
 			for i in PlayerData.inventory:
 				choicei += 1
-				print(i.short)
+				var itemname = i.short
+				if Battle.loadedBattle["serious"]:
+					itemname = i.serious
 				if choicei <= 3 and itemmenu == 0:
 					$ChoiceBox.get_node("Choice"+str(int(fmod(choicei,4)))).visible = true
-					$ChoiceBox.get_node("Choice"+str(int(fmod(choicei,4)))).text = "* "+i.short
+					$ChoiceBox.get_node("Choice"+str(int(fmod(choicei,4)))).text = "* "+itemname
 				elif choicei >= 4 and itemmenu == 1:
 					$ChoiceBox.get_node("Choice"+str(int(fmod(choicei,4)))).visible = true
-					$ChoiceBox.get_node("Choice"+str(int(fmod(choicei,4)))).text = "* "+i.short
+					$ChoiceBox.get_node("Choice"+str(int(fmod(choicei,4)))).text = "* "+itemname
 				
 			playeritemchoice = clamp(playeritemchoice,0,items-1)
 			$ChoiceBox/HeartChoice.position = $ChoiceBox.get_node("Choice"+str(playeritemchoice)).position+Vector2(-13.5,9)
@@ -465,6 +483,24 @@ func _process(_delta):
 						else:
 							await FlavorBox.StartBattleDialogue([PlayerData.inventory[playeritemchoice+(4*itemmenu)].use.pick_random()+"[wait 2][newline]* You recovered "+str(PlayerData.inventory[playeritemchoice+(4*itemmenu)].value)+" HP!"])
 						PlayerData.inventory.remove_at(playeritemchoice+(4*itemmenu))
+					Item.WEAPON:
+						PlayerData.HP += PlayerData.inventory[playeritemchoice+(4*itemmenu)].value
+						PlayerData.HP = clamp(PlayerData.HP,0,PlayerData.MaxHP)
+						$Sounds.stream = preload("res://Audio/Sounds/snd_item.wav")
+						$Sounds.play()
+						await FlavorBox.StartBattleDialogue([PlayerData.inventory[playeritemchoice+(4*itemmenu)].use.pick_random()])
+						PlayerData.inventory.append(PlayerData.weapon)
+						PlayerData.weapon = PlayerData.inventory[playeritemchoice+(4*itemmenu)]
+						PlayerData.inventory.remove_at(playeritemchoice+(4*itemmenu))
+					Item.ARMOR:
+						PlayerData.HP += PlayerData.inventory[playeritemchoice+(4*itemmenu)].value
+						PlayerData.HP = clamp(PlayerData.HP,0,PlayerData.MaxHP)
+						$Sounds.stream = preload("res://Audio/Sounds/snd_item.wav")
+						$Sounds.play()
+						await FlavorBox.StartBattleDialogue([PlayerData.inventory[playeritemchoice+(4*itemmenu)].use.pick_random()])
+						PlayerData.inventory.append(PlayerData.armor)
+						PlayerData.armor = PlayerData.inventory[playeritemchoice+(4*itemmenu)]
+						PlayerData.inventory.remove_at(playeritemchoice+(4*itemmenu))
 				state = ENEMY_DIALOGUE
 		_:
 			pass
@@ -478,6 +514,7 @@ func _process(_delta):
 
 func _PlayerTurn():
 	attackStarted = false
+	dialoguejustStarted = false
 	state = PLAYER_BUTTON_CHOICE
 	playerbuttonchoice = 0
 	if enemies[0].state == 1:

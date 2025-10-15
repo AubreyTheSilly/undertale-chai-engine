@@ -5,9 +5,10 @@ enum SOULMODES {RED=0,BLUE=1}
 var loadedBattle = {
 	"encounterText":"* ...",
 	"enemies":["dust"],
-	"state":0,
+	"state":7,
 	"music":"mus_dusttale2",
-	"bg":false
+	"bg":false,
+	"serious":false
 }
 
 func Encounter(id : String,transition : bool = true):
@@ -36,15 +37,15 @@ func DictionaryToEnemyData(dict : Dictionary) -> EnemyData:
 	var enemydata = EnemyData.new()
 	enemydata.EnemyName = dict["enemyName"]
 	enemydata.name = dict["name"]
-	if dict["sprite"] == "":
+	if dict["sprite"] == "none":
 		enemydata.EnemySprite = null
 	else:
 		enemydata.EnemySprite = Loader.load_file("Sprites/Battle/Enemies/"+dict["sprite"]+".png")
-	if dict["hurtSprite"] == "":
+	if dict["hurtSprite"] == "none":
 		enemydata.EnemyHurtSprite = null
 	else:
 		enemydata.EnemyHurtSprite = Loader.load_file("Sprites/Battle/Enemies/"+dict["hurtSprite"]+".png")
-	if dict["spareSprite"] == "":
+	if dict["spareSprite"] == "none":
 		enemydata.EnemySpareSprite = null
 	else:
 		enemydata.EnemySpareSprite = Loader.load_file("Sprites/Battle/Enemies/"+dict["spareSprite"]+".png")
@@ -64,3 +65,39 @@ func DictionaryToEnemyData(dict : Dictionary) -> EnemyData:
 	enemydata.BubbleOffset = Vector2(dict["bubbleoffsetx"],dict["bubbleoffsety"])
 	enemydata.Attacks = dict["attacks"]
 	return enemydata
+
+func EnemyDataToDictionary(enemydata : EnemyData) -> Dictionary:
+	var dict : Dictionary
+	dict["enemyName"] = enemydata.EnemyName
+	dict["name"] = enemydata.name
+	if enemydata.EnemySprite == null:
+		dict["sprite"] = "none"
+	else:
+		dict["sprite"] = enemydata.EnemySprite.resource_path.get_file().get_basename()
+		print(enemydata.EnemySprite.resource_path)
+	if enemydata.EnemyHurtSprite == null:
+		dict["hurtSprite"] = "none"
+	else:
+		dict["hurtSprite"] = enemydata.EnemyHurtSprite.resource_path.get_file().get_basename()
+	if enemydata.EnemySpareSprite == null:
+		dict["spareSprite"] = "none"
+	else:
+		dict["spareSprite"] = enemydata.EnemySpareSprite.resource_path.get_file().get_basename()
+	dict["hp"] = enemydata.HP
+	dict["atk"] = enemydata.ATK
+	dict["def"] = enemydata.DEF
+	dict["acts"] = enemydata.acts
+	dict["randomdialogs"] = enemydata.RandomDialogs
+	dict["check"] = enemydata.Check
+	dict["spareable"] = enemydata.InstantSpare
+	dict["bubble_type"] = enemydata.BubbleType
+	dict["exp"] = enemydata.EXP
+	dict["gold"] = enemydata.GOLD
+	dict["autodialog"] = enemydata.autodialog
+	dict["flavortext"] = enemydata.FlavorText
+	dict["offsetx"] = enemydata.offset.x
+	dict["offsety"] = enemydata.offset.y
+	dict["bubbleoffsetx"] = enemydata.BubbleOffset.x
+	dict["bubbleoffsety"] = enemydata.BubbleOffset.y
+	dict["attacks"] = enemydata.Attacks
+	return dict

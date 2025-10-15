@@ -3,6 +3,10 @@ create_sprite "legs" "Battle/Enemies/sanslegs.png" 0 0
 create_sprite "body" "Battle/Enemies/sansbody.png" 0 0
 create_sprite "head" "Battle/Enemies/sanshead.png" 0 0
 
+give_item "Heal"
+give_item "Weapon"
+give_item "Armor"
+
 set_property "legs" "offset:y" -44
 set_property "legs" "position:y" 44
 
@@ -12,8 +16,12 @@ var num $bodyx
 var num $heady
 var num $bodyy
 var num $legs
+var num $legsy
+var num $turn
 set headx 0
 set bodyx 0
 set heady 0
 set bodyy 0
 set legs 0
+set legsy 0
+set turn 0

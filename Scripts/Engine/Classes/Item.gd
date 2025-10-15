@@ -25,3 +25,12 @@ func _init(itemname = "Item",itemtype = SPECIAL,itemvalue = 0,Check = ["* Item[n
 		serious = itemname
 	else:
 		serious = Serious
+
+static func LoadItemFromFile(itemname : String) -> Item:
+	var itemFile = FileAccess.open(Undermaker.Path+"Data/items/"+itemname+".txt",FileAccess.READ)
+	if !itemFile:
+		return
+	var itemArray = itemFile.get_line().split(":")
+	itemFile.close()
+	var item = Item.new(itemArray[0],int(itemArray[1]),int(itemArray[2]),itemArray[3].split("|"),itemArray[4].split("|"),itemArray[5],itemArray[6])
+	return item
