@@ -301,6 +301,7 @@ texture_progress = ExtResource("12_mugwg")
 
 [node name="BGM" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_7i387")
+bus = &"BGM"
 parameters/looping = true
 
 [node name="FightButton" parent="." instance=ExtResource("8_j2fg1")]

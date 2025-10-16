@@ -5,7 +5,7 @@ enum SOULMODES {RED=0,BLUE=1}
 var loadedBattle = {
 	"encounterText":"* ...",
 	"enemies":["dust"],
-	"state":7,
+	"state":0,
 	"music":"mus_dusttale2",
 	"bg":false,
 	"serious":false
@@ -27,6 +27,11 @@ func Encounter(id : String,transition : bool = true):
 		loadedBattle["bg"] = true
 	else:
 		loadedBattle["bg"] = false
+	if encounter.size() >= 8:
+		if encounter[7] == "yes":
+			loadedBattle["serious"] = true
+		else:
+			loadedBattle["serious"] = false
 	
 	if transition:
 		get_tree().get_root().add_child(preload("res://Scenes/Objects/BattleStarter.tscn").instantiate())

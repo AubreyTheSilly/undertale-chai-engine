@@ -108,8 +108,8 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 								else:
 									i.value = i.value.replace(replace,str(variable.value))
 							
-							index -= replace.length()
-							index += str(vars[replacevar].value).length()
+								index -= replace.length()
+								index += str(variable.value).length()
 							
 							start=-1
 							end=-1

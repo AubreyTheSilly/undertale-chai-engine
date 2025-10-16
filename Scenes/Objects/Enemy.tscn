@@ -520,6 +520,7 @@ texture_under = ExtResource("6_sn47w")
 texture_progress = ExtResource("7_pcqe5")
 
 [node name="DamageText" parent="." instance=ExtResource("8_1o3so")]
+visible = false
 z_index = 1
 position = Vector2(-48.5, -53)
 

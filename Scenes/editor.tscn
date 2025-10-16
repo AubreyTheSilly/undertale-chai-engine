@@ -25,8 +25,8 @@ expand_margin_top = 2.0
 expand_margin_right = 2.0
 expand_margin_bottom = 2.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a7iym"]
-bg_color = Color(0, 0, 0, 0.25)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_24ceq"]
+bg_color = Color(1, 1, 1, 0.25)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -37,8 +37,8 @@ expand_margin_top = 2.0
 expand_margin_right = 2.0
 expand_margin_bottom = 2.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_24ceq"]
-bg_color = Color(1, 1, 1, 0.25)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a7iym"]
+bg_color = Color(0, 0, 0, 0.25)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -187,8 +187,8 @@ offset_right = 170.0
 offset_bottom = 84.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 13
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Project Name"
 
 [node name="LineEdit2" type="LineEdit" parent="Settings"]
@@ -198,8 +198,8 @@ offset_right = 170.0
 offset_bottom = 114.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 13
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Game Name"
 
 [node name="Save" type="Button" parent="Settings"]
@@ -211,9 +211,9 @@ offset_bottom = 31.5
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 13
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 action_mode = 0
 text = "Save"
 
@@ -232,9 +232,9 @@ offset_bottom = 192.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 action_mode = 0
 text = "Hurt"
 
@@ -247,9 +247,9 @@ offset_bottom = 192.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 action_mode = 0
 text = "Save"
 
@@ -262,9 +262,9 @@ offset_bottom = 192.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 action_mode = 0
 text = "Next"
 
@@ -280,8 +280,8 @@ offset_right = 308.0
 offset_bottom = 36.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 11
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Enemy Name"
 metadata/_edit_use_anchors_ = true
 
@@ -295,8 +295,8 @@ offset_right = 308.0
 offset_bottom = 62.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 11
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Filename"
 metadata/_edit_use_anchors_ = true
 
@@ -310,8 +310,8 @@ offset_right = 308.0
 offset_bottom = 88.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 11
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Idle Sprite"
 metadata/_edit_use_anchors_ = true
 
@@ -325,8 +325,8 @@ offset_right = 308.0
 offset_bottom = 114.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 11
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Hurt Sprite"
 metadata/_edit_use_anchors_ = true
 
@@ -340,8 +340,8 @@ offset_right = 308.0
 offset_bottom = 140.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 11
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Spare Sprite"
 metadata/_edit_use_anchors_ = true
 
@@ -355,8 +355,8 @@ offset_right = 207.0
 offset_bottom = 166.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 11
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "HP"
 metadata/_edit_use_anchors_ = true
 
@@ -370,8 +370,8 @@ offset_right = 258.0
 offset_bottom = 166.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 11
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "ATK"
 metadata/_edit_use_anchors_ = true
 
@@ -385,8 +385,8 @@ offset_right = 308.0
 offset_bottom = 166.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 11
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "DEF"
 metadata/_edit_use_anchors_ = true
 
@@ -443,9 +443,9 @@ offset_bottom = 204.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 action_mode = 0
 text = "Add"
 
@@ -459,8 +459,8 @@ offset_right = 257.0
 offset_bottom = 204.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Frame Sprite"
 metadata/_edit_use_anchors_ = true
 
@@ -479,9 +479,9 @@ offset_bottom = 204.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 action_mode = 0
 text = "Save"
 
@@ -494,9 +494,9 @@ offset_bottom = 204.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 action_mode = 0
 text = "Load"
 
@@ -510,8 +510,8 @@ offset_right = 145.0
 offset_bottom = 178.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Filename"
 metadata/_edit_use_anchors_ = true
 
@@ -537,8 +537,8 @@ offset_right = 314.0
 offset_bottom = 21.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 7
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 text = "room_test1"
 placeholder_text = "Room Name"
 
@@ -550,12 +550,12 @@ offset_bottom = 48.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 6
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/hover = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/hover = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_icons/arrow = SubResource("GradientTexture1D_1k58v")
 
 [node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/RoomEditor"]
@@ -599,8 +599,8 @@ offset_right = 42.0
 offset_bottom = 27.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "X"
 script = ExtResource("4_8howc")
 metadata/_edit_use_anchors_ = true
@@ -619,8 +619,8 @@ offset_right = 90.0
 offset_bottom = 27.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Y"
 script = ExtResource("4_8howc")
 metadata/_edit_use_anchors_ = true
@@ -639,8 +639,8 @@ offset_right = 90.0
 offset_bottom = 27.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Filename"
 metadata/_edit_use_anchors_ = true
 
@@ -672,8 +672,8 @@ offset_right = 1.0
 offset_bottom = 2.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 8
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Name"
 metadata/_edit_use_anchors_ = true
 
@@ -700,8 +700,8 @@ offset_right = 91.2609
 offset_bottom = 11.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Type"
 metadata/_edit_use_anchors_ = true
 
@@ -736,9 +736,9 @@ offset_bottom = 21.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 10
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 action_mode = 0
 text = "Save"
 
@@ -751,9 +751,9 @@ offset_bottom = 21.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 10
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 action_mode = 0
 text = "+"
 
@@ -766,9 +766,9 @@ offset_bottom = 48.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 10
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 action_mode = 0
 text = "-"
 
@@ -781,9 +781,9 @@ offset_bottom = 48.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 10
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 action_mode = 0
 text = "Load"
 
@@ -797,9 +797,9 @@ rotation = 1.57079
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 8
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 action_mode = 0
 text = "Draw"
 
@@ -813,9 +813,9 @@ rotation = 1.57079
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 8
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 action_mode = 0
 text = "Settings"
 
@@ -829,9 +829,9 @@ rotation = 1.57079
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 8
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 action_mode = 0
 text = "Properties"
 
@@ -854,9 +854,9 @@ offset_bottom = 240.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 13
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 action_mode = 0
 text = "Room"
 
@@ -869,9 +869,9 @@ offset_bottom = 240.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 13
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 action_mode = 0
 text = "Enemy"
 
@@ -884,9 +884,9 @@ offset_bottom = 240.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 13
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 action_mode = 0
 text = "NPC"
 
@@ -898,9 +898,9 @@ offset_bottom = 240.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 13
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 action_mode = 0
 text = "Character"
 
@@ -913,9 +913,9 @@ offset_bottom = 240.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 13
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 action_mode = 0
 text = "Project"
 

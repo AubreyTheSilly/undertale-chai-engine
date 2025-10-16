@@ -15,6 +15,16 @@ set_property "body" "position:y" bodyy
 set_property "legs" "skew" legs
 set_property "legs" "scale:y" legsy
 
+var num state
+send_property state "self" "state"
+
+if state == 0
+    set damaging true
+end
+if state == 2
+    set damaging true
+end
+
 // hide the animated sprites if being damaged
 if damaging == true
     set_property "head" "visible" false

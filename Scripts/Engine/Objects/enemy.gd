@@ -20,6 +20,7 @@ var lastchoice := 0
 # important variables related to scripts
 var hasUpdateScript := false
 var hasPreDialogueScript := false
+var hasDamageScript := false
 
 var predialogue = false
 var ready_for_next_turn = true
@@ -62,6 +63,8 @@ func _ready():
 		hasUpdateScript = true
 	if UTScript.loadScriptFromFile("Enemies/"+enemy_data.name+"/PreDialogue.utscript"):
 		hasPreDialogueScript = true
+	if UTScript.loadScriptFromFile("Enemies/"+enemy_data.name+"/Damage.utscript"):
+		hasDamageScript = true
 
 func getAttack() -> String:
 	if nextattack != "":
@@ -121,6 +124,10 @@ func _spare():
 		$AudioStreamPlayer.play()
 
 func _damage(damage : float):
+	if hasDamageScript:
+		scr.damage = damage
+		scr.run_script("Enemies/"+enemy_data.name+"/Damage.utscript")
+		return
 	if damage >= 0:
 		# enemy hurt :(
 		$AudioStreamPlayer.stream = preload("res://Audio/Sounds/snd_laz_c.wav")
@@ -180,7 +187,9 @@ func dialogue() -> void:
 	$SpeechBubble.visible = true
 	$AudioStreamPlayer2.stream = Loader.load_file("Audio/Sounds/snd_TXT2.wav")
 	talking = true
+	var mettaton = false
 	$SpeechBubble/TextObject.text = "[color:0:0:0]"
+	var skip = 0
 	
 	var cmd = false
 	var command = ""
@@ -197,7 +206,11 @@ func dialogue() -> void:
 						for k in range(int(cmand[1])):
 							await get_tree().process_frame
 					"sound":
-						$AudioStreamPlayer2.stream = Loader.load_file("Audio/Sounds/"+cmand[1]+".wav")
+						if cmand[1] == "mettaton":
+							mettaton = true
+						else:
+							mettaton = false
+							$AudioStreamPlayer2.stream = Loader.load_file("Audio/Sounds/"+cmand[1]+".wav")
 					"pause":
 						while !Input.is_action_just_pressed("Select"):
 							await get_tree().process_frame
@@ -225,6 +238,16 @@ func dialogue() -> void:
 									variable.value = false
 					"playsnd":
 						pass
+					"skip":
+						if mettaton:
+							$AudioStreamPlayer2.stream = load("res://Audio/Sounds/snd_mtt"+str(randi_range(1,9))+".wav")
+						$AudioStreamPlayer2.play()
+						skip = float(cmand[2])
+					"visibility":
+						if cmand[2] == "true":
+							$SpeechBubble.visible = true
+						elif cmand[2] == "false":
+							$SpeechBubble.visible = false
 					_:
 						$SpeechBubble/TextObject.text += "["+command+"]"
 			_:
@@ -232,10 +255,15 @@ func dialogue() -> void:
 					command += i
 				else:
 					$SpeechBubble/TextObject.text += i
-					if i != " ":
+					if i != " " and skip == 0:
+						if mettaton:
+							$AudioStreamPlayer2.stream = load("res://Audio/Sounds/snd_mtt"+str(randi_range(1,9))+".wav")
 						$AudioStreamPlayer2.play()
-					await get_tree().process_frame
-					await get_tree().process_frame
+					if skip == 0:
+						await get_tree().process_frame
+						await get_tree().process_frame
+					else:
+						skip -= 1
 	if enemy_data.autodialog:
 		await get_tree().create_timer(0.5).timeout
 	else:

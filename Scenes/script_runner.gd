@@ -1,5 +1,7 @@
 extends ScriptRunner
 
+var enemydata : EnemyData
+
 func unhandled_function(tokens : TokenArray):
 	match tokens.data[0].lexeme:
 		"create_attack":
@@ -38,7 +40,7 @@ func unhandled_function(tokens : TokenArray):
 					return
 			var attack = preload("res://Scenes/Objects/Attack.tscn").instantiate()
 			attack.name = tokens.data[1].value
-			#attack.damage = enemy_data.ATK
+			attack.damage = enemydata.ATK
 			var attackx = float(tokens.data[2].value)
 			var attacky = float(tokens.data[3].value)
 			attack.position = Vector2(attackx,attacky)
@@ -85,7 +87,7 @@ func unhandled_function(tokens : TokenArray):
 					return
 			var attack = preload("res://Scenes/Objects/Attack.tscn").instantiate()
 			attack.name = tokens.data[1].value
-			#attack.damage = enemy_data.ATK
+			attack.damage = enemydata.ATK
 			var attackx = float(tokens.data[2].value)
 			var attacky = float(tokens.data[3].value)
 			attack.position = Vector2(attackx,attacky)
@@ -142,7 +144,7 @@ func unhandled_function(tokens : TokenArray):
 					return
 			var attack = preload("res://Scenes/Objects/Bone.tscn").instantiate()
 			attack.name = tokens.data[1].value
-			#attack.damage = enemy_data.ATK
+			attack.damage = enemydata.ATK
 			var attackx = float(tokens.data[2].value)
 			var attacky = float(tokens.data[3].value)
 			attack.position = Vector2(attackx,attacky)
@@ -187,7 +189,7 @@ func unhandled_function(tokens : TokenArray):
 					return
 			var attack = preload("res://Scenes/Objects/DoubleBone.tscn").instantiate()
 			attack.name = tokens.data[1].value
-			#attack.damage = enemy_data.ATK
+			attack.damage = enemydata.ATK
 			var attackx = float(tokens.data[2].value)
 			var attacky = float(tokens.data[3].value)
 			attack.position = Vector2(attackx,attacky)
@@ -229,6 +231,76 @@ func unhandled_function(tokens : TokenArray):
 			attack.rotation_degrees = tokens.data[4].value
 			if tokens.data.size() == 6:
 				attack.attack_type = tokens.data[5].value
+			node.get_node("attacks").add_child(attack)
+		"create_platform":
+			for i in tokens.data:
+				if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+					var variable = getVariable(i.lexeme)
+					i.type = types[variable.type]
+					i.value = variable.value
+			if tokens.data[1].type != Token.TokenType.STRING:
+				push_error("Platform name must be a string")
+				return
+			if tokens.data[2].type != Token.TokenType.NUMBER:
+				push_error("Platform X position must be a number")
+				return
+			if tokens.data[3].type != Token.TokenType.NUMBER:
+				push_error("Platform Y position must be a number")
+				return
+			if tokens.data[4].type != Token.TokenType.NUMBER:
+				push_error("Platform width must be a number")
+				return
+			if tokens.data[5].type != Token.TokenType.NUMBER:
+				push_error("Platform X velocity must be a number")
+				return
+			if tokens.data[6].type != Token.TokenType.NUMBER:
+				push_error("Platform Y velocity must be a number")
+				return
+			var attack = preload("res://Scenes/Objects/SansPlatform.tscn").instantiate()
+			attack.name = tokens.data[1].value
+			attack.damage = enemydata.ATK
+			var attackx = float(tokens.data[2].value)
+			var attacky = float(tokens.data[3].value)
+			attack.position = Vector2(attackx,attacky)
+			attack.width = float(tokens.data[4].value)
+			var velx = float(tokens.data[5].value)
+			var vely = float(tokens.data[6].value)
+			attack.velocity = Vector2(velx,vely)
+			node.get_node("attacks/bounding").add_child(attack)
+		"create_platform_nobounding":
+			for i in tokens.data:
+				if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+					var variable = getVariable(i.lexeme)
+					i.type = types[variable.type]
+					i.value = variable.value
+			if tokens.data[1].type != Token.TokenType.STRING:
+				push_error("Platform name must be a string")
+				return
+			if tokens.data[2].type != Token.TokenType.NUMBER:
+				push_error("Platform X position must be a number")
+				return
+			if tokens.data[3].type != Token.TokenType.NUMBER:
+				push_error("Platform Y position must be a number")
+				return
+			if tokens.data[4].type != Token.TokenType.NUMBER:
+				push_error("Platform width must be a number")
+				return
+			if tokens.data[5].type != Token.TokenType.NUMBER:
+				push_error("Platform X velocity must be a number")
+				return
+			if tokens.data[6].type != Token.TokenType.NUMBER:
+				push_error("Platform Y velocity must be a number")
+				return
+			var attack = preload("res://Scenes/Objects/SansPlatform.tscn").instantiate()
+			attack.name = tokens.data[1].value
+			attack.damage = enemydata.ATK
+			var attackx = float(tokens.data[2].value)
+			var attacky = float(tokens.data[3].value)
+			attack.position = Vector2(attackx,attacky)
+			attack.width = float(tokens.data[4].value)
+			var velx = float(tokens.data[5].value)
+			var vely = float(tokens.data[6].value)
+			attack.velocity = Vector2(velx,vely)
 			node.get_node("attacks").add_child(attack)
 
 func _pre_run():

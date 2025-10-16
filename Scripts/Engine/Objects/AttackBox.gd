@@ -34,6 +34,7 @@ func runScript(scr : String,enemy_data : EnemyData):
 	#await get_tree().process_frame
 	var scriptrunner = preload("res://Scenes/Objects/attackscriptrunner.tscn").instantiate()
 	scriptrunner.node = self
+	scriptrunner.enemydata = enemy_data
 	add_child(scriptrunner)
 	scriptrunner.run_script(scr,true)
 	await scriptrunner.script_finished

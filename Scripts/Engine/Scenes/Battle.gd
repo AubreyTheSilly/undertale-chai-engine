@@ -352,10 +352,13 @@ func _process(_delta):
 					$AttackBox.rect.size = Vector2(70.5,70.5)
 					donetalking = false
 			if donetalking:
+				print("done talking")
 				state = ENEMY_ATTACK
 		ENEMY_ATTACK:
 			if !attackStarted:
+				dialoguejustStarted = false
 				attackStarted = true
+				EnemyDialogStarted = false
 				var attacksLeft := 0
 				for i in enemies:
 					var attack = i.getAttack()
@@ -370,11 +373,23 @@ func _process(_delta):
 						i.queue_free()
 				for i in $AttackBox/attacks/bounding.get_children():
 					i.queue_free()
-				state = ENEMY_ATTACK_END
+				if state == ENEMY_ATTACK:
+					print(state)
+					print("attack ending")
+					state = ENEMY_ATTACK_END
+				else:
+					print("fuck")
+					return
 				$AttackBox.rect = Rect2(Vector2.ZERO,Vector2(288,70.5))
 				if $AttackBox/AttackRect.size != Vector2(288,70.5):
 					await get_tree().create_timer(0.25).timeout
-				_PlayerTurn()
+				var can_playerturn = false
+				for i in enemies:
+					if i.state == 1:
+						can_playerturn = true
+				if can_playerturn and state == ENEMY_ATTACK_END:
+					print("player turn")
+					_PlayerTurn()
 		BATTLE_END:
 			if !battleOver:
 				battleOver = true
@@ -517,12 +532,22 @@ func _PlayerTurn():
 	dialoguejustStarted = false
 	state = PLAYER_BUTTON_CHOICE
 	playerbuttonchoice = 0
-	if enemies[0].state == 1:
-		playerenemychoice = 0
-	elif enemies[1].state == 1:
-		playerenemychoice = 1
-	elif enemies[2].state == 1:
-		playerenemychoice = 2
+	match enemies.size():
+		1:
+			if enemies[0].state == 1:
+				playerenemychoice = 0
+		2:
+			if enemies[0].state == 1:
+				playerenemychoice = 0
+			elif enemies[1].state == 1:
+					playerenemychoice = 1
+		3:
+			if enemies[0].state == 1:
+				playerenemychoice = 0
+			elif enemies[1].state == 1:
+					playerenemychoice = 1
+			elif enemies[2].state == 1:
+				playerenemychoice = 2
 	playeractchoice = 0
 	playeritemchoice = 0
 	itemmenu = 0

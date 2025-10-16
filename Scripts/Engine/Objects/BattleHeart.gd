@@ -42,6 +42,8 @@ func _process(_delta) -> void:
 					if is_on_floor_only():
 						bluevel.y = 0
 						jumpstage = 1
+					else:
+						jumpstage = 2
 					if jumpstage == 1 and velocity.y == 0 and Input.is_action_just_pressed("Move Up"):
 						jumpstage = 2
 						bluevel.y = -4.5
@@ -67,7 +69,7 @@ func _process(_delta) -> void:
 					elif attack.modulate == Color(0,1,0):
 						heal()
 						attack.queue_free()
-					elif attack.modulate == Color(0.251,1,1) and velocity != Vector2.ZERO:
+					elif attack.modulate == Color(0.251,1,1) and velocity != Vector2.ZERO:	
 						damage(dmg)
 					elif attack.modulate == Color(1,0.65,0) and velocity == Vector2.ZERO:
 						damage(dmg)
