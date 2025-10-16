@@ -64,14 +64,15 @@ func _process(_delta) -> void:
 				if i.name == "attack" and !invincible:
 					var attack = i.get_parent()
 					var dmg = calculateDamage(attack.damage)
+					var dir = Input.get_vector("Move Left","Move Right","Move Up","Move Down")
 					if attack.modulate == Color(1,1,1):
 						damage(dmg)
 					elif attack.modulate == Color(0,1,0):
 						heal()
 						attack.queue_free()
-					elif attack.modulate == Color(0.251,1,1) and velocity != Vector2.ZERO:	
+					elif attack.modulate == Color(0.251,1,1) and dir != Vector2.ZERO:	
 						damage(dmg)
-					elif attack.modulate == Color(1,0.65,0) and velocity == Vector2.ZERO:
+					elif attack.modulate == Color(1,0.65,0) and dir == Vector2.ZERO:
 						damage(dmg)
 		_:
 			position = Vector2(159.5,159.75)

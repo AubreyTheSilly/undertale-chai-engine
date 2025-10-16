@@ -660,6 +660,23 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 						PlayerData.inventory.append(item)
 					else:
 						push_error("line "+str(line+1)+": Item does not exist")
+				Token.TokenType.REPARENT:
+					if runscript.data[line].data.size() != 3:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Target node name must be a string")
+						continue
+					if !node.get_node_or_null(runscript.data[line].data[1].value) and runscript.data[line].data[1].value != "self":
+						push_error("line "+str(line+1)+": Target node must exist")
+						continue
+					if runscript.data[line].data[2].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Parent node name must be a string")
+						continue
+					if !node.get_node_or_null(runscript.data[line].data[2].value) and runscript.data[line].data[2].value != "self":
+						push_error("line "+str(line+1)+": Parent node must exist")
+						continue
+					node.get_node(runscript.data[line].data[1].value).reparent(node.get_node(runscript.data[line].data[2].value))
 				_:
 					await unhandled_function(runscript.data[line])
 		for i in ogstringtokens:

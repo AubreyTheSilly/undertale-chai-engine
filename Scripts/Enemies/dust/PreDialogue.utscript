@@ -3,6 +3,8 @@ if LASTCHOICE == 0
     if turn == 1
         set_property "self" "nextattack" "end"
         set_property "self" "nextdialogue" "[sound:snd_txtsans][font:Comic Sans UT.ttf][font_size:16:10:20][set:face:false]still attacking, as[newline]per usual.[pause][clear][sound:snd_txtsans]thought you'd know[newline]better by now."
+        
+        set_property "self" "nextdialogue" "[sound:mettaton][skip:3]OOO[skip:3]OOO[skip:3]OOH[skip:3] YE[skip:3]S ![skip:3]!!"
     end
     if turn == 2
         set_property "self" "nextattack" "testattack2"

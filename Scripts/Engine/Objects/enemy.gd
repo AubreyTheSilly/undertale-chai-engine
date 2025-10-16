@@ -237,16 +237,20 @@ func dialogue() -> void:
 								elif cmand[2] == "false":
 									variable.value = false
 					"playsnd":
-						pass
+						var audio = AudioStreamPlayer.new()
+						audio.stream = Loader.load_file("Audio/Sounds/"+cmand[1]+".wav")
+						add_child(audio)
+						audio.play()
+						audio.finished.connect(audio.queue_free)
 					"skip":
 						if mettaton:
 							$AudioStreamPlayer2.stream = load("res://Audio/Sounds/snd_mtt"+str(randi_range(1,9))+".wav")
 						$AudioStreamPlayer2.play()
-						skip = float(cmand[2])
+						skip = float(cmand[1])
 					"visibility":
-						if cmand[2] == "true":
+						if cmand[1] == "true":
 							$SpeechBubble.visible = true
-						elif cmand[2] == "false":
+						elif cmand[1] == "false":
 							$SpeechBubble.visible = false
 					_:
 						$SpeechBubble/TextObject.text += "["+command+"]"
@@ -264,6 +268,9 @@ func dialogue() -> void:
 						await get_tree().process_frame
 					else:
 						skip -= 1
+						if skip == 0:
+							await get_tree().process_frame
+							await get_tree().process_frame
 	if enemy_data.autodialog:
 		await get_tree().create_timer(0.5).timeout
 	else:

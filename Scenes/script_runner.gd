@@ -258,7 +258,6 @@ func unhandled_function(tokens : TokenArray):
 				return
 			var attack = preload("res://Scenes/Objects/SansPlatform.tscn").instantiate()
 			attack.name = tokens.data[1].value
-			attack.damage = enemydata.ATK
 			var attackx = float(tokens.data[2].value)
 			var attacky = float(tokens.data[3].value)
 			attack.position = Vector2(attackx,attacky)
@@ -293,7 +292,6 @@ func unhandled_function(tokens : TokenArray):
 				return
 			var attack = preload("res://Scenes/Objects/SansPlatform.tscn").instantiate()
 			attack.name = tokens.data[1].value
-			attack.damage = enemydata.ATK
 			var attackx = float(tokens.data[2].value)
 			var attacky = float(tokens.data[3].value)
 			attack.position = Vector2(attackx,attacky)
