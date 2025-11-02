@@ -19,6 +19,6 @@ label_settings = SubResource("LabelSettings_rgo3f")
 
 [node name="ScriptRunner" type="Node" parent="." node_paths=PackedStringArray("node")]
 script = ExtResource("1_ha3kq")
-script_to_run = "Examples/test.utscript"
+script_to_run = "Examples/test2.utscript"
 node = NodePath("..")
 metadata/_custom_type_script = "uid://b6m6ndh7u38dl"

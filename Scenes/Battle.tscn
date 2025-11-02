@@ -399,3 +399,6 @@ shape = SubResource("RectangleShape2D_hoytp")
 stream = ExtResource("29_3quo0")
 
 [node name="Sounds" type="AudioStreamPlayer" parent="."]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(160, 120)

@@ -57,7 +57,7 @@ func unhandled_function(tokens : TokenArray):
 					var variable = getVariable(i.lexeme)
 					i.type = types[variable.type]
 					i.value = variable.value
-			if tokens.data.size() <= 7 or tokens.data.size() > 8:
+			if tokens.data.size() < 7 or tokens.data.size() > 8:
 				push_error("Invalid number of arguments for create_attack_nobounding")
 				return
 			if tokens.data[1].type != Token.TokenType.STRING:
@@ -81,7 +81,7 @@ func unhandled_function(tokens : TokenArray):
 			if tokens.data[6].type != Token.TokenType.NUMBER:
 				push_error("Attack Y velocity must be a number")
 				return
-			if tokens.data.size() == 7:
+			if tokens.data.size() == 8:
 				if tokens.data[7].type != Token.TokenType.STRING:
 					push_error("Attack color must be a string")
 					return

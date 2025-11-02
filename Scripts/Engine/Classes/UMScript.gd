@@ -52,6 +52,7 @@ static func loadScriptFromFile(path:StringName,verbose:bool=false) -> UTScript:
 						buffer = ""
 					script.data.append(tokenbuffer)
 					tokenbuffer = TokenArray.new()
+					tokenbuffer.verbose = verbose
 					pointer += 1
 				"\"":
 					if buffer:

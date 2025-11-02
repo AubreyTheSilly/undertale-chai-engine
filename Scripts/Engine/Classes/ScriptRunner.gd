@@ -54,7 +54,8 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 		push_error("There is no script to run! Make sure to set script_to_run!!")
 		return ERR_DOES_NOT_EXIST
 	
-	var runscript : UTScript = UTScript.loadScriptFromFile(script,verbose)
+	var ogrunscript : UTScript = UTScript.loadScriptFromFile(script,verbose)
+	var runscript : UTScript = UTScript.loadScriptFromFile(script)
 	vars.clear()
 	
 	var line : int =-1
@@ -70,8 +71,6 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 		line += 1
 		_pre_line()
 		
-		var ogstringtokens : Dictionary[int,Token] = {}
-		
 		if skip_depth != 0:
 			if runscript.data[line].data.size() != 0:
 				if runscript.data[line].data[0].type == Token.TokenType.END:
@@ -84,7 +83,6 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 			for i in runscript.data[line].data:
 				stringtokenno += 1
 				if i.type == Token.TokenType.STRING:
-					ogstringtokens[stringtokenno] = Token.new(i.lexeme,i.type,i.value)
 					var start := -1
 					var end := -1
 					var index := -1
@@ -135,6 +133,11 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 					else:
 						push_error("line "+str(line+1)+": Not a data type")
 				Token.TokenType.SET:
+					if runscript.data[line].data[2].type == Token.TokenType.IDENTIFIER:
+						var variable = getVariable(runscript.data[line].data[2].lexeme)
+						if variable:
+							runscript.data[line].data[2].type = types[variable.type]
+							runscript.data[line].data[2].value = variable.value
 					if runscript.data[line].data[1].type == Token.TokenType.IDENTIFIER:
 						var variable = getVariable(runscript.data[line].data[1].lexeme)
 						if variable:
@@ -349,8 +352,8 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 						push_error("line "+str(line+1)+": Invalid number of arguments")
 						continue
 					for i in runscript.data[line].data:
-						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
-							var variable = getVariable(i.lexeme)
+						var variable = getVariable(i.lexeme)
+						if i.type == Token.TokenType.IDENTIFIER and variable:
 							i.type = types[variable.type]
 							i.value = variable.value
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
@@ -679,8 +682,7 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 					node.get_node(runscript.data[line].data[1].value).reparent(node.get_node(runscript.data[line].data[2].value))
 				_:
 					await unhandled_function(runscript.data[line])
-		for i in ogstringtokens:
-			runscript.data[line].data[i] = ogstringtokens[i]
+		runscript = UTScript.loadScriptFromFile(script)
 	await get_tree().process_frame
 	script_finished.emit()
 	return OK
