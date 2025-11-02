@@ -69,6 +69,7 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 	
 	while line < runscript.data.size()-1:
 		line += 1
+		var reset = false
 		_pre_line()
 		
 		if skip_depth != 0:
@@ -289,6 +290,7 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
+							reset = true
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
 						continue
@@ -314,6 +316,7 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
+							reset = true
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
 						continue
@@ -356,6 +359,7 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 						if i.type == Token.TokenType.IDENTIFIER and variable:
 							i.type = types[variable.type]
 							i.value = variable.value
+							reset = true
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Sprite name must be a string")
 						continue
@@ -549,6 +553,7 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
+							reset = true
 					if runscript.data[line].data.size() != 5:
 						push_error("line "+str(line+1)+": Invalid number of arguments")
 						continue
@@ -609,6 +614,7 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
+							reset = true
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Object name must be a string")
 						continue
@@ -637,6 +643,7 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
+							reset = true
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
 						continue
@@ -682,7 +689,8 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 					node.get_node(runscript.data[line].data[1].value).reparent(node.get_node(runscript.data[line].data[2].value))
 				_:
 					await unhandled_function(runscript.data[line])
-		runscript = UTScript.loadScriptFromFile(script)
+		if reset:
+			runscript = UTScript.loadScriptFromFile(script)
 	await get_tree().process_frame
 	script_finished.emit()
 	return OK
