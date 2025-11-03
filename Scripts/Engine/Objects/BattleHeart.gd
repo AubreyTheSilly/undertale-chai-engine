@@ -39,7 +39,7 @@ func _process(_delta) -> void:
 					velocity = (Input.get_vector("Move Left","Move Right","Move Up","Move Down")*(30*SPEED))
 				Battle.SOULMODES.BLUE:
 					bluevel.x = Input.get_axis("Move Left","Move Right")*SPEED
-					if is_on_floor_only():
+					if is_on_floor():
 						bluevel.y = 0
 						jumpstage = 1
 					else:

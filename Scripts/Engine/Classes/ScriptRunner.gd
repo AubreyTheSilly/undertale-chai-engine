@@ -77,6 +77,9 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 				if runscript.data[line].data[0].type == Token.TokenType.END:
 					skip_depth -= 1
 					depth -= 1
+				elif runscript.data[line].data[0].type == Token.TokenType.IF or runscript.data[line].data[0].type == Token.TokenType.WHILE:
+					skip_depth += 1
+					depth += 1
 			continue
 		if runscript.data[line].data.size() != 0:
 			var token = runscript.data[line].data[0]
