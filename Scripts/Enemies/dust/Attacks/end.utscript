@@ -1,3 +1,4 @@
+set_variable "../Enemy0" "hi" false
 set_soulmode 1
 create_platform "platform" 30 10 60 -1 0
 wait 5

@@ -7,6 +7,9 @@ give_item "Heal"
 give_item "Weapon"
 give_item "Armor"
 
+var bool $hi
+set hi true
+
 set_property "legs" "offset:y" -44
 set_property "legs" "position:y" 44
 

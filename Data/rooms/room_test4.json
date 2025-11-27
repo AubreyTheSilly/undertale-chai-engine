@@ -1,0 +1,1 @@
+{"Layer 1":{"tilemap":"ruins","tiles":[],"type":"tile"},"Layer 2":{"tilemap":"ruins","tiles":[],"type":"tile"},"Layer 3":{"obj":{"frisk":{"data":{},"name":"frisk","position":[8,6],"type":"Player"},"frisk2":{"data":{},"name":"frisk2","position":[8.0,6.0],"type":"Player"}},"type":"instance"}}

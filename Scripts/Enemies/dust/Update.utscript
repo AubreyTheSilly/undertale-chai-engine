@@ -37,3 +37,10 @@ if damaging == false
     set_property "body" "visible" true
     set_property "legs" "visible" true
 end
+
+if hi == true
+    set_property "self" "visible" true
+end
+if hi == false
+    set_property "self" "visible" false
+end

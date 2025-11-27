@@ -22,7 +22,10 @@ var player_teleporting = false
 var player_teleport_position : Vector2
 
 func loadFile(newgame : bool = false):
-	pass
+	if newgame:
+		pass
+	else:
+		pass
 
 func _process(_delta):
 	HP = clampi(HP,0,MaxHP)

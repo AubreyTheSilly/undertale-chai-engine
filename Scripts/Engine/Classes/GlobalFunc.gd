@@ -69,7 +69,7 @@ func newProject(newpath : String) -> Error:
 	print("New project successfully created at "+Path+"!")
 	return OK
 
-func _process(delta) -> void:
+func _process(_delta) -> void:
 	if Undermaker.Project.has("gameName"):
 		get_window().title = Project["gameName"]
 	if Input.is_action_just_pressed("Fullscreen"):

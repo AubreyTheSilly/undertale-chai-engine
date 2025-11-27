@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://bs3djk331aip0"]
+[gd_scene load_steps=31 format=3 uid="uid://bs3djk331aip0"]
 
 [ext_resource type="Script" uid="uid://cbwd0tkbqc2uy" path="res://Scripts/Engine/editor.gd" id="1_24ceq"]
 [ext_resource type="AudioStream" uid="uid://co33t77depyrh" path="res://Audio/BGM/mus_editor.ogg" id="1_eyy8u"]
@@ -112,6 +112,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="Theme" id="Theme_1k58v"]
+default_font_size = 12
+
 [sub_resource type="Gradient" id="Gradient_32ik4"]
 colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 0)
 
@@ -138,7 +141,10 @@ font_size = 8
 size = Vector2(137, 214)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_32ik4"]
-size = Vector2(73, 165)
+size = Vector2(73, 138)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1k58v"]
+size = Vector2(53, 26)
 
 [sub_resource type="LabelSettings" id="LabelSettings_24ceq"]
 font_size = 13
@@ -543,13 +549,15 @@ text = "room_test1"
 placeholder_text = "Room Name"
 
 [node name="OptionButton" type="OptionButton" parent="CanvasLayer/RoomEditor"]
+custom_minimum_size = Vector2(0, 16)
 offset_left = 212.0
 offset_top = 29.0
 offset_right = 314.0
 offset_bottom = 48.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
-theme_override_font_sizes/font_size = 6
+theme = SubResource("Theme_1k58v")
+theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/hover = SubResource("StyleBoxFlat_7wlcy")
@@ -754,8 +762,6 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 theme_override_icons/arrow = SubResource("GradientTexture1D_1k58v")
 
-[node name="ObjectDisplay" parent="CanvasLayer/RoomEditor" instance=ExtResource("8_eo2o7")]
-
 [node name="Save" type="Button" parent="CanvasLayer/RoomEditor"]
 z_index = 1
 offset_left = 140.0
@@ -886,8 +892,12 @@ position = Vector2(68.5, 107)
 shape = SubResource("RectangleShape2D_eo2o7")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="CanvasLayer/RoomEditor/Area2D"]
-position = Vector2(173.5, 131.5)
+position = Vector2(173.5, 145)
 shape = SubResource("RectangleShape2D_32ik4")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="CanvasLayer/RoomEditor/Area2D"]
+position = Vector2(163.5, 63)
+shape = SubResource("RectangleShape2D_1k58v")
 
 [node name="Room" type="Button" parent="CanvasLayer"]
 z_index = 1
@@ -1015,6 +1025,8 @@ sprite_frames = SubResource("SpriteFrames_32ik4")
 frame_progress = 0.205191
 centered = false
 
+[node name="ObjectDisplay" parent="." instance=ExtResource("8_eo2o7")]
+
 [connection signal="pressed" from="Settings/Save" to="." method="_on_save_settings_pressed"]
 [connection signal="pressed" from="EnemyEditor/Hurt" to="EnemyEditor/FakeEnemy" method="Shudder"]
 [connection signal="pressed" from="EnemyEditor/Save" to="EnemyEditor/FakeEnemy" method="_on_save_pressed"]
@@ -1025,6 +1037,9 @@ centered = false
 [connection signal="pressed" from="CharacterEditor/SaveChar" to="CharacterEditor" method="_on_save_pressed"]
 [connection signal="pressed" from="CharacterEditor/LoadChar" to="CharacterEditor" method="_on_load_pressed"]
 [connection signal="pressed" from="CanvasLayer/RoomEditor/Save" to="CanvasLayer/RoomEditor" method="_on_save_pressed"]
+[connection signal="pressed" from="CanvasLayer/RoomEditor/AddTileLayer" to="CanvasLayer/RoomEditor" method="_add_tile_layer"]
+[connection signal="pressed" from="CanvasLayer/RoomEditor/AddObjectLayer" to="CanvasLayer/RoomEditor" method="_add_object_layer"]
+[connection signal="pressed" from="CanvasLayer/RoomEditor/RemoveLayer" to="CanvasLayer/RoomEditor" method="_on_remove_layer_pressed"]
 [connection signal="pressed" from="CanvasLayer/RoomEditor/Load" to="CanvasLayer/RoomEditor" method="_on_load_pressed"]
 [connection signal="pressed" from="CanvasLayer/RoomEditor/draw" to="CanvasLayer/RoomEditor" method="_on_draw_pressed"]
 [connection signal="pressed" from="CanvasLayer/RoomEditor/settings" to="CanvasLayer/RoomEditor" method="_on_settings_pressed"]

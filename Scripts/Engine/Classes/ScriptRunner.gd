@@ -24,6 +24,9 @@ var ifoperators = [5, 7, 8, 9, 10, 11]
 var vars : Dictionary[String,UMVar]
 var persistentVars : Dictionary[String,UMVar]
 
+var last_script : UTScript
+var last_script_filename : String = ""
+
 signal script_finished
 
 func _ready():
@@ -55,7 +58,7 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 		return ERR_DOES_NOT_EXIST
 	
 	var ogrunscript : UTScript = UTScript.loadScriptFromFile(script,verbose)
-	var runscript : UTScript = UTScript.loadScriptFromFile(script)
+	var runscript : UTScript = ogrunscript
 	vars.clear()
 	
 	var line : int =-1
@@ -280,6 +283,12 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 					if runscript.data[line].data.size() != 2:
 						push_error("line "+str(line+1)+": Invalid number of arguments")
 						continue
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
+							reset = true
 					if runscript.data[line].data[1].type != Token.TokenType.NUMBER:
 						push_error("line "+str(line+1)+": You must input a valid number")
 						continue
@@ -290,9 +299,9 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 						continue
 					for i in runscript.data[line].data:
 						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
-							var variable = getVariable(i.lexeme)
-							i.type = types[variable.type]
-							i.value = variable.value
+							var variabl = getVariable(i.lexeme)
+							i.type = types[variabl.type]
+							i.value = variabl.value
 							reset = true
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
@@ -333,7 +342,7 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 						push_error("line "+str(line+1)+": Tween time must be a valid number")
 						continue
 					if runscript.data[line].data.size() == 5:
-						create_tween().tween_property(node.get_node(runscript.data[line].data[1].value),runscript.data[line].data[2].value,runscript.data[line].data[3].value,runscript.data[line].data[4].value).finished
+						create_tween().tween_property(node.get_node(runscript.data[line].data[1].value),runscript.data[line].data[2].value,runscript.data[line].data[3].value,runscript.data[line].data[4].value)
 					elif runscript.data[line].data.size() > 6:
 						push_error("line "+str(line+1)+": Invalid number of arguments")
 						continue
@@ -349,7 +358,7 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 									tweentype = Tween.EASE_IN_OUT
 								Token.TokenType.OUT_IN:
 									tweentype = Tween.EASE_OUT_IN
-							create_tween().tween_property(node.get_node(runscript.data[line].data[1].value),runscript.data[line].data[2].value,runscript.data[line].data[3].value,runscript.data[line].data[4].value).set_ease(tweentype).set_trans(Tween.TRANS_CUBIC).finished
+							create_tween().tween_property(node.get_node(runscript.data[line].data[1].value),runscript.data[line].data[2].value,runscript.data[line].data[3].value,runscript.data[line].data[4].value).set_ease(tweentype).set_trans(Tween.TRANS_CUBIC)
 						else:
 							push_error("line "+str(line+1)+": You must use a valid ease type")
 							continue
@@ -553,9 +562,9 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 					for i in runscript.data[line].data:
 						j += 1
 						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme) and j != 1:
-							var variable = getVariable(i.lexeme)
-							i.type = types[variable.type]
-							i.value = variable.value
+							var variabl = getVariable(i.lexeme)
+							i.type = types[variabl.type]
+							i.value = variabl.value
 							reset = true
 					if runscript.data[line].data.size() != 5:
 						push_error("line "+str(line+1)+": Invalid number of arguments")
@@ -690,10 +699,105 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 						push_error("line "+str(line+1)+": Parent node must exist")
 						continue
 					node.get_node(runscript.data[line].data[1].value).reparent(node.get_node(runscript.data[line].data[2].value))
+				Token.TokenType.SET_AUDIO:
+					if runscript.data[line].data.size() != 3:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
+							reset = true
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Node name must be a string")
+						continue
+					if !node.get_node_or_null(runscript.data[line].data[1].value):
+						push_error("line "+str(line+1)+": Target node must exist")
+						continue
+					if !node.get_node(runscript.data[line].data[1].value) is AudioStreamPlayer:
+						push_error("line "+str(line+1)+": Target node must be a audio player")
+						continue
+					if !Loader.load_file("Audio/BGM/"+runscript.data[line].data[2].value):
+						push_error("line "+str(line+1)+": Audio path must lead to a valid image file (Path: "+"Audio/BGM/"+runscript.data[line].data[2].value+")")
+						continue
+					var audiuo = node.get_node(runscript.data[line].data[1].value)
+					audiuo.stream = Loader.load_file("Audio/BGM/"+runscript.data[line].data[2].value)
+				Token.TokenType.STOP_AUDIO:
+					if runscript.data[line].data.size() != 2:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
+							reset = true
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Node name must be a string")
+						continue
+					if !node.get_node_or_null(runscript.data[line].data[1].value):
+						push_error("line "+str(line+1)+": Target node must exist")
+						continue
+					if !node.get_node(runscript.data[line].data[1].value) is AudioStreamPlayer:
+						push_error("line "+str(line+1)+": Target node must be a audio player")
+						continue
+					var audiuo = node.get_node(runscript.data[line].data[1].value)
+					audiuo.stop()
+				Token.TokenType.PLAY_AUDIO:
+					if runscript.data[line].data.size() != 2:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
+							reset = true
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Node name must be a string")
+						continue
+					if !node.get_node_or_null(runscript.data[line].data[1].value):
+						push_error("line "+str(line+1)+": Target node must exist")
+						continue
+					if !node.get_node(runscript.data[line].data[1].value) is AudioStreamPlayer:
+						push_error("line "+str(line+1)+": Target node must be a audio player")
+						continue
+					var audiuo = node.get_node(runscript.data[line].data[1].value)
+					audiuo.play()
+				Token.TokenType.SET_VARIABLE:
+					if runscript.data[line].data.size() != 4:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+							var variabl = getVariable(i.lexeme)
+							i.type = types[variabl.type]
+							i.value = variabl.value
+							reset = true
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Node name must be a string")
+						continue
+					if !node.get_node_or_null(runscript.data[line].data[1].value+"/ScriptRunner"):
+						push_error("line "+str(line+1)+": Target node must exist")
+						continue
+					if !node.get_node(runscript.data[line].data[1].value+"/ScriptRunner") is ScriptRunner:
+						push_error("line "+str(line+1)+": Target node must have a script runner as a child")
+						continue
+					print(runscript.data[line].data[2].value)
+					var variable = node.get_node(runscript.data[line].data[1].value+"/ScriptRunner").getVariable(runscript.data[line].data[2].value)
+					if variable:
+						if variable.type == types[runscript.data[line].data[3].type]:
+							variable.value = runscript.data[line].data[3].value
+						else:
+							push_error("line "+str(line+1)+": Variable set type does not match!")
+					else:
+						print(variable)
+						push_error("line "+str(line+1)+": Variable must exist")
 				_:
 					await unhandled_function(runscript.data[line])
 		if reset:
-			runscript = UTScript.loadScriptFromFile(script)
+			runscript = ogrunscript
 	await get_tree().process_frame
 	script_finished.emit()
 	return OK

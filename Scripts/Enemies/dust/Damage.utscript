@@ -1,2 +1,4 @@
+set_audio "../BGM" "mus_dustsans.ogg"
+play_audio "../BGM"
 process_frame
 damage_done
