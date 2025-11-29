@@ -104,6 +104,7 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 							else:
 								end = index
 						if start!=-1 and end!=-1:
+							reset = true
 							replace = i.value.substr(start,(end-start)+1)
 							replacevar = replace.rstrip("%").lstrip("%")
 							var variable = getVariable(replacevar)
@@ -112,10 +113,8 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 									i.value = i.value.replace(replace,str(variable.value).substr(0,str(variable.value).length()-2))
 								else:
 									i.value = i.value.replace(replace,str(variable.value))
-							
-								index -= replace.length()
+								index -= replace.length() 
 								index += str(variable.value).length()
-							
 							start=-1
 							end=-1
 			match token.type:
@@ -484,6 +483,21 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 					else:
 						push_error("line "+str(line+1)+": Target node must be an animatedsprite")
 						continue
+				Token.TokenType.STOP_ANIMATED_SPRITE:
+					if runscript.data[line].data.size() != 2:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Node name must be a string")
+						continue
+					if !node.get_node_or_null(runscript.data[line].data[1].value) and runscript.data[line].data[1].value != "self":
+						push_error("line "+str(line+1)+": Target node must exist")
+						continue
+					if node.get_node(runscript.data[line].data[1].value) is AnimatedSprite2D:
+						node.get_node(runscript.data[line].data[1].value).stop()
+					else:
+						push_error("line "+str(line+1)+": Target node must be an animatedsprite")
+						continue
 				Token.TokenType.REPARENT_TO_ROOT:
 					if runscript.data[line].data.size() != 2:
 						push_error("line "+str(line+1)+": Invalid number of arguments")
@@ -794,6 +808,41 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 					else:
 						print(variable)
 						push_error("line "+str(line+1)+": Variable must exist")
+				Token.TokenType.WAIT_FRAMES:
+					if runscript.data[line].data.size() != 2:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
+							reset = true
+					if runscript.data[line].data[1].type != Token.TokenType.NUMBER:
+						push_error("line "+str(line+1)+": You must input a valid number")
+						continue
+					for i in range(runscript.data[line].data[1].value):
+						await get_tree().process_frame
+				Token.TokenType.START_ENCOUNTER:
+					if runscript.data[line].data.size() != 2 and runscript.data[line].data.size() != 3:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
+							reset = true
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Encounter name must be a string")
+						continue
+					if runscript.data[line].data[2].size == 3:
+						if runscript.data[line].data[2].type != Token.TokenType.BOOLEAN:
+							push_error("line "+str(line+1)+": Transition or not must be a boolean")
+							continue
+						Battle.Encounter(runscript.data[line].data[1].value,runscript.data[line].data[2].value)
+					else:
+						Battle.Encounter(runscript.data[line].data[1].value)
 				_:
 					await unhandled_function(runscript.data[line])
 		if reset:

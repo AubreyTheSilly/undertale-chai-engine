@@ -24,7 +24,7 @@ func calculateDamage(atk : int):
 	if 80 <= HP and HP < 90: HPmod = 7
 	if 90 <= HP: HPmod = 8
 
-	return(round(atk + HPmod - (def / 5)))
+	return(round(atk + HPmod - (def / 5.0)))
 
 func _process(_delta) -> void:
 	$Soul.modulate = soul_colors[battle.soulMode]
@@ -42,6 +42,9 @@ func _process(_delta) -> void:
 					if is_on_floor():
 						bluevel.y = 0
 						jumpstage = 1
+					elif is_on_ceiling():
+						bluevel.y = 0
+						jumpstage = 2
 					else:
 						jumpstage = 2
 					if jumpstage == 1 and velocity.y == 0 and Input.is_action_just_pressed("Move Up"):
@@ -51,13 +54,13 @@ func _process(_delta) -> void:
 						if Input.is_action_just_released("Move Up") and bluevel.y <= -1:
 							bluevel.y = -1
 						if (bluevel.y > 0.5 and bluevel.y < 8):
-							bluevel.y += 0.6
+							bluevel.y += 0.4
 						if (bluevel.y > -1 and bluevel.y <= 0.5):
-							bluevel.y += 0.2
+							bluevel.y += 0.125
 						if (bluevel.y > -4 and bluevel.y <= -1):
-							bluevel.y += 0.5
+							bluevel.y += 0.325
 						if (bluevel.y <= -4):
-							bluevel.y += 0.2
+							bluevel.y += 0.125
 						
 					velocity = bluevel*(30)
 			for i in $soul.get_overlapping_areas():
@@ -87,7 +90,7 @@ func damage(dmg : int):
 	$AudioStreamPlayer.play()
 	PlayerData.HP -= dmg
 	invincible = true
-	for i in range(PlayerData.INV/2):
+	for i in range(PlayerData.INV/2.0):
 		$Soul.visible = false
 		await get_tree().process_frame
 		$Soul.visible = true

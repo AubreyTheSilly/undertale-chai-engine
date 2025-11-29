@@ -3,11 +3,12 @@ extends CanvasLayer
 signal done
 
 func _ready():
-	$PlayerSprite.global_position = PlayerData.obj.position
-	$Heart.global_position = PlayerData.obj.position
-	var dir = PlayerData.obj.direction
-	dir[0] = dir[0].to_upper()
-	$PlayerSprite.texture = PlayerData.obj.Character_Sprite.get("Idle"+dir)
+	if PlayerData.obj:
+		$PlayerSprite.global_position = PlayerData.obj.position
+		$Heart.global_position = PlayerData.obj.position
+		var dir = PlayerData.obj.direction
+		dir[0] = dir[0].to_upper()
+		$PlayerSprite.texture = PlayerData.obj.Character_Sprite.get("Idle"+dir)
 	for i in range(3):
 		$PlayerSprite.visible = true
 		$AudioStreamPlayer.play()

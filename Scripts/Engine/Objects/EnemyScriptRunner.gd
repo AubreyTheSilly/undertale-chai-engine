@@ -91,6 +91,16 @@ func unhandled_function(line : TokenArray):
 				push_error("damage_done does not have any parameters")
 				return
 			node.damage_done.emit()
+		"shudder":
+			var shudder = 16
+			while shudder != 0:
+				if (shudder < 0):
+					shudder = (-((shudder + 2)))
+				else:
+					shudder = (-shudder)
+				node.sprite.position.x = shudder
+				await get_tree().process_frame
+				await get_tree().process_frame
 
 func _pre_run():
 	if damage != -450:
