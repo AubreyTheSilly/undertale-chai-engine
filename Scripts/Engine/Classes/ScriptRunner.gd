@@ -47,7 +47,7 @@ func _pre_line():
 func _pre_run():
 	pass
 
-func run_script(script : String = script_to_run,verbose : bool = false) -> Error:
+func run_script(script : String = script_to_run,function_name : String = "",verbose : bool = false) -> Error:
 	if script == "":
 		push_warning("Tried to run an empty script, it will be assumed this is intentional")
 		await get_tree().process_frame
@@ -262,6 +262,16 @@ func run_script(script : String = script_to_run,verbose : bool = false) -> Error
 							11:
 								if (runscript.data[line].data[1].value <= runscript.data[line].data[3].value):
 									skip_depth += 1
+				Token.TokenType.FUNCTION:
+					depth += 1
+					if runscript.data[line].data.size() == 2:
+						if runscript.data[line].data[1].type == Token.TokenType.IDENTIFIER:
+							if runscript.data[line].data[1].value != function_name:
+								skip_depth += 1
+						else:
+							push_error("line "+str(line+1)+": Function name must be an identifier")
+					else:
+						push_error("line "+str(line+1)+": You must have a valid number of arguments for function")
 				Token.TokenType.PLAY_SND:
 					if runscript.data[line].data.size() == 1:
 						push_error("line "+str(line+1)+": You must have a sound to play for playsnd")
