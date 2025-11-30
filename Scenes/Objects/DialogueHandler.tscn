@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://bniq2qap32r4q"]
+[gd_scene load_steps=5 format=3 uid="uid://bniq2qap32r4q"]
 
 [ext_resource type="Texture2D" uid="uid://ciiui7kmdomoi" path="res://Sprites/UIBox.png" id="1_q084c"]
 [ext_resource type="Script" uid="uid://cey17ub0nnpy2" path="res://Scripts/Engine/Objects/DialogueHandler.gd" id="1_toi2p"]
+[ext_resource type="Script" uid="uid://dexqxqsprthju" path="res://Scripts/Engine/Objects/text.gd" id="3_81uhv"]
+[ext_resource type="FontFile" uid="uid://decmshb7688st" path="res://Fonts/DTM-Mono.otf" id="4_81uhv"]
 
 [node name="DialogueHandler" type="CanvasLayer"]
 visible = false
@@ -24,3 +26,10 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Face" type="Sprite2D" parent="Box"]
 position = Vector2(36.5, 35)
+
+[node name="TextObject" type="Node2D" parent="Box"]
+position = Vector2(8, 9)
+script = ExtResource("3_81uhv")
+text = "* Example text 1.[newline][mode:shaky]* Example text 2.[newline][mode:wavy]* Example text 3."
+font = ExtResource("4_81uhv")
+metadata/_custom_type_script = "uid://dexqxqsprthju"

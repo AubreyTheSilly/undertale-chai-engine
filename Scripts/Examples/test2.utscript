@@ -1,29 +1,25 @@
 // UTScript example
 
-create_obj "TestText" "Label" 150 200
-set_property "TestText" "text" "testing testing 1 2 three!"
+function ready
+    create_obj "TestText" "Label" 150 200
+    set_property "TestText" "text" "testing testing 1 2 three!"
 
-print "Hello World!" // prints "Hello World!"
-var string text // init string variable
-set text "Text" // set variable 
-print "variable text is: %text%" // print variable
+    print "Hello World!" // prints "Hello World!"
+    var string text // init string variable
+    set text "Text" // set variable 
+    print "variable text is: %text%" // print variable
 
-var num number
-set number 0
-while true
-    math number number + 10
-    print "%number%"
-    var num x
-    set x number
-    math x x + 70
-    create_sprite "oa" "Battle/Attacks/bullet.png" 40 x
-    if number == 100
-        break
-    end
-    wait 0.5
+    var num number
+    set number 0
+
+    
+    create_sprite "TestSprite" "Battle/Enemies/spr_dummybattle_0.png" 160 120
+    tween_property "TestSprite" "position:x" 100 1 IN_OUT
+    playsnd "mus_intronoise"
+    print "Oh ho ho"
+    set_property "Output" "text" "Test text! Wahoo"
 end
-create_sprite "TestSprite" "Battle/Enemies/spr_dummybattle_0.png" 160 120
-tween_property "TestSprite" "position:x" 100 1 IN_OUT
-playsnd "mus_intronoise"
-print "Oh ho ho"
-set_property "Output" "text" "Test text! Wahoo"
+
+function update
+    print "FUCK"
+end

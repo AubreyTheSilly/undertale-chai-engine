@@ -1,7 +1,9 @@
 extends CanvasLayer
 
-@onready var dialogbox := $Box/DialogueRect
-@onready var soundplayer := $DialoguePlayer
+@onready var dialogbox : NinePatchRect = $Box/DialogueRect
+@onready var soundplayer : AudioStreamPlayer = $DialoguePlayer
+@onready var textobject : TextObject = $Box/TextObject
+@onready var facesprite : Sprite2D = $Box/Face
 
 var skiptext = false
 
@@ -9,37 +11,27 @@ enum {UP=0,DOWN=1}
 
 func StartDialogue(dialogue : Array[String],position : int = DOWN) -> void:
 	visible = true
-	var sound = "SND_TXT1"
 	var face = "none"
 	if position == 0:
 		$Box.position.y = 5
 	else:
 		$Box.position.y = 160
 	for i in dialogue:
-		var textpos := Vector2(0,0)
-		var index := 0
 		var cmd = false
 		var command = ""
-		var textcolor := Color(1,1,1)
-		var mode = "normal"
 		var speed = 1
-		var font = preload("res://Fonts/DTM-Mono.otf")
 		skiptext = false
 		for j in dialogbox.get_children():
 			j.queue_free()
 		for j in i:
-			index += 1
 			match j:
 				"[":
 					cmd = true
 					command = ""
 				"]":
 					cmd = false
-					var cmand = command.split(" ",false)
+					var cmand = command.split(":",false)
 					match cmand[0]:
-						"newline":
-							textpos.x = 0
-							textpos.y += 1
 						"wait":
 							if skiptext:
 								continue
@@ -47,34 +39,26 @@ func StartDialogue(dialogue : Array[String],position : int = DOWN) -> void:
 								await get_tree().process_frame
 						"face":
 							face = cmand[1]
-						"color":
-							textcolor.r = float(cmand[1])/255.0
-							textcolor.g = float(cmand[2])/255.0
-							textcolor.b = float(cmand[3])/255.0
-						"mode":
-							mode = cmand[1]
+							if face == "empty":
+								facesprite.sprite = null
+								textobject.position.x = 8
+							else:
+								facesprite.sprite = Loader.load_file("Sprites/Dialogue Faces/"+face+".png")
+								textobject.position.x = 72
 						"speed":
 							speed = int(cmand[1])
 						"font":
 							if Loader.load_file("Fonts/"+".otf"):
-								font = Loader.load_file("Fonts/"+".otf")
+								textobject.font = Loader.load_file("Fonts/"+".otf")
 							elif Loader.load_file("Fonts/"+".ttf"):
-								font = Loader.load_file("Fonts/"+".ttf")
+								textobject.font = Loader.load_file("Fonts/"+".ttf")
+						_:
+							$TextObject.text += "["+command+"]"
 				_:
 					if cmd == true:
 						command += j
 					else:
-						var chara = preload("res://Scenes/Objects/TextCharacter.tscn").instantiate()
-						chara.name = "character"+str(index)
-						chara.position = Vector2(14,10)
-						chara.position.x += textpos.x*8
-						chara.position.y += textpos.y*18
-						chara.chara = j
-						chara.color = textcolor
-						chara.mode = mode
-						textpos.x += 1
-						dialogbox.add_child(chara)
-						soundplayer.stream = load("res://Audio/Sounds/"+sound+".wav")
+						textobject.text += j
 						if j != " " and !skiptext:
 							soundplayer.play()
 						if !skiptext:
@@ -88,4 +72,6 @@ func StartDialogue(dialogue : Array[String],position : int = DOWN) -> void:
 func _process(_delta) -> void:
 	if visible and Input.is_action_just_pressed("Back"):
 		skiptext = true
-	var audio = AudioStream.new()
+	
+	# What the fuck was this line doing. Like I don't remember why it exists (commented it out 1/12/2025??)
+	#var audio = AudioStream.new()

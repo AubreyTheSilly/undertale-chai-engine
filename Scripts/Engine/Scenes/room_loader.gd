@@ -1,17 +1,15 @@
 class_name RoomLoader
 extends Node2D
 
-@export var roomName : String
+@export var roomName : String = "room_start"
 
 @onready var camera = $Camera2D
 @onready var room : Room
 
 func _ready() -> void:
-	await $LineEdit.text_submitted
-	roomName = $LineEdit.text
 	LoadRoom()
 
-func _process(_delta):
+func _process(_delta) -> void:
 	if Input.is_action_just_pressed("backslash"):
 		get_tree().reload_current_scene()
 
@@ -21,6 +19,9 @@ func clear_room() -> void:
 			i.queue_free()
 
 func LoadRoom() -> void:
+	if Undermaker.loadJsonAsDictionary("Data/rooms/"+roomName+".json") == {}:
+		$DoesntExist/Label.text = "Error!\n"+roomName+" does not exist.\nPlease enter a room to load instead."
+		$DoesntExist.visible = true
 	room = Room.loadRoomFromDictionary(Undermaker.loadJsonAsDictionary("Data/rooms/"+roomName+".json"))
 	clear_room()
 	var layernum = 0
@@ -61,3 +62,10 @@ func _physics_process(_delta) -> void:
 		camera.position.y = clamp(camera.position.y,room.CameraBounds.position.y,room.CameraBounds.position.y+room.CameraBounds.size.y)
 	else:
 		camera.position = Vector2.ZERO
+
+
+func _on_line_edit_text_submitted(new_text):
+	roomName = new_text
+	$DoesntExist.visible = false
+	$DoesntExist/LineEdit.text = ""
+	LoadRoom()

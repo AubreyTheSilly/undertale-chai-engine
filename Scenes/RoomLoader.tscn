@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://fx5iw7vsg4x8"]
+[gd_scene load_steps=4 format=3 uid="uid://fx5iw7vsg4x8"]
 
 [ext_resource type="Script" uid="uid://br1q3s4y11s8f" path="res://Scripts/Engine/Scenes/room_loader.gd" id="1_j27jd"]
 
@@ -14,6 +14,9 @@ expand_margin_top = 2.0
 expand_margin_right = 2.0
 expand_margin_bottom = 2.0
 
+[sub_resource type="LabelSettings" id="LabelSettings_j27jd"]
+font_size = 13
+
 [node name="Room" type="Node2D"]
 script = ExtResource("1_j27jd")
 roomName = "room_test1"
@@ -21,12 +24,27 @@ roomName = "room_test1"
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
 
-[node name="LineEdit" type="LineEdit" parent="."]
+[node name="DoesntExist" type="Node2D" parent="."]
+
+[node name="LineEdit" type="LineEdit" parent="DoesntExist"]
+offset_top = 140.0
 offset_right = 320.0
-offset_bottom = 30.0
-theme_override_colors/font_placeholder_color = Color(1, 1, 1, 1)
+offset_bottom = 170.0
 theme_override_font_sizes/font_size = 13
-theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/read_only = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-placeholder_text = "type a room here :3"
+theme_override_styles/read_only = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+placeholder_text = "Enter a room name here..."
+alignment = 1
+
+[node name="Label" type="Label" parent="DoesntExist"]
+offset_top = 80.0
+offset_right = 320.0
+offset_bottom = 134.0
+text = "Error!
+room_start does not exist.
+Please enter a room to load instead."
+label_settings = SubResource("LabelSettings_j27jd")
+horizontal_alignment = 1
+
+[connection signal="text_submitted" from="DoesntExist/LineEdit" to="." method="_on_line_edit_text_submitted"]
