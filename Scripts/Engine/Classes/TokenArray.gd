@@ -13,8 +13,8 @@ var verbose = false
 func _init():
 	data = []
 
-func isNum(str : String) -> bool:
-	for i in str:
+func isNum(string : String) -> bool:
+	for i in string:
 		if al.contains(i) or !num.contains(i):
 			return false
 	return true

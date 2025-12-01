@@ -50,19 +50,19 @@ func unhandled_function(line : TokenArray):
 			elif line.data[1].value is float:
 				push_error("Damage amount must be a number")
 				return	
-			var damage = line.data[1].value
-			if damage >= 0:
+			var damag = line.data[1].value
+			if damag >= 0:
 				# enemy hurt :(
 				$"../AudioStreamPlayer".stream = preload("res://Audio/Sounds/snd_damage_c.wav")
 				$"../AudioStreamPlayer".play()
 				node.Shudder()
 				$"../DamageText/Label".label_settings.font_color = Color.RED
-				$"../DamageText/Label".text = str(int(damage))
+				$"../DamageText/Label".text = str(int(damag))
 				$"../DamageText".bounce()
 				$"../HPBar".visible = true
 				var ogHP = $"../HPBar".value
-				while $"../HPBar".value > (ogHP-damage):
-					$"../HPBar".value -= (damage/15)
+				while $"../HPBar".value > (ogHP-damag):
+					$"../HPBar".value -= (damag/15)
 					await get_tree().process_frame
 			else:
 				# you missed dumbass

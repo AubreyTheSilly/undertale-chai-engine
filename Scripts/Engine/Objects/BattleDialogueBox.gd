@@ -8,17 +8,12 @@ var skiptext2 = false
 
 func StartFlavorDialogue(dialogue : String) -> void:
 	var sound = "SND_TXT2"
-	var textpos := Vector2(0,0)
-	var index := 0
 	var cmd = false
 	var command = ""
-	var textcolor := Color(1,1,1)
-	var mode = "normal"
 	var speed = 1
 	skiptext = false
 	$TextObject.text = ""
 	for j in dialogue:
-		index += 1
 		match j:
 			"[":
 				cmd = true
@@ -52,15 +47,11 @@ func StartFlavorDialogue(dialogue : String) -> void:
 func StartBattleDialogue(dialogue : Array) -> void:
 	for i in dialogue:
 		var sound = "SND_TXT2"
-		var textpos := Vector2(0,0)
-		var index := 0
 		var cmd = false
 		var command = ""
-		var textcolor := Color(1,1,1)
 		skiptext2 = false
 		$TextObject.text = ""
 		for j in i:
-			index += 1
 			match j:
 				"[":
 					cmd = true

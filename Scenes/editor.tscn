@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://bs3djk331aip0"]
+[gd_scene load_steps=33 format=3 uid="uid://bs3djk331aip0"]
 
 [ext_resource type="Script" uid="uid://cbwd0tkbqc2uy" path="res://Scripts/Engine/editor.gd" id="1_24ceq"]
 [ext_resource type="AudioStream" uid="uid://co33t77depyrh" path="res://Audio/BGM/mus_editor.ogg" id="1_eyy8u"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://cq1trw5xy4tix" path="res://Sprites/tileicon2.png" id="7_eo2o7"]
 [ext_resource type="PackedScene" uid="uid://c2ebhge3ajuhj" path="res://Scenes/Objects/object_display.tscn" id="8_eo2o7"]
 [ext_resource type="Texture2D" uid="uid://b7pomd4af6px0" path="res://Sprites/cambounds.png" id="9_1k58v"]
+[ext_resource type="Texture2D" uid="uid://dfbqolhxt1nts" path="res://Sprites/Backgrounds/room_start.png" id="9_l4kvy"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7wlcy"]
 bg_color = Color(1, 1, 1, 0)
@@ -135,6 +136,9 @@ expand_margin_right = 2.0
 expand_margin_bottom = 2.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_8howc"]
+font_size = 8
+
+[sub_resource type="LabelSettings" id="LabelSettings_1k58v"]
 font_size = 8
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eo2o7"]
@@ -730,37 +734,54 @@ object type names."
 label_settings = SubResource("LabelSettings_8howc")
 
 [node name="Settings" type="Control" parent="CanvasLayer/RoomEditor/PanelContainer"]
-visible = false
 layout_mode = 2
 mouse_filter = 1
 
-[node name="Properties" type="Control" parent="CanvasLayer/RoomEditor/PanelContainer"]
-layout_mode = 2
-mouse_filter = 1
-
-[node name="Label2" type="Label" parent="CanvasLayer/RoomEditor/PanelContainer/Properties"]
+[node name="Label" type="Label" parent="CanvasLayer/RoomEditor/PanelContainer/Settings"]
 layout_mode = 0
-offset_right = 80.0
-offset_bottom = 23.0
-text = "Object Property"
-label_settings = SubResource("LabelSettings_8howc")
+offset_right = 40.0
+offset_bottom = 20.0
+text = "Room size (in
+tiles)"
+label_settings = SubResource("LabelSettings_1k58v")
 
-[node name="OptionButton" type="OptionButton" parent="CanvasLayer/RoomEditor/PanelContainer/Properties"]
-layout_mode = 0
-offset_left = 3.0
-offset_top = 14.0
-offset_right = 85.0
-offset_bottom = 33.0
-focus_mode = 0
-mouse_default_cursor_shape = 2
-theme_override_font_sizes/font_size = 6
+[node name="SizeX" type="LineEdit" parent="CanvasLayer/RoomEditor/PanelContainer/Settings"]
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.164781
+anchor_bottom = 0.164781
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 42.0
+offset_bottom = 27.0
+focus_mode = 1
+theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/hover = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
-theme_override_icons/arrow = SubResource("GradientTexture1D_1k58v")
+placeholder_text = "X"
+script = ExtResource("4_8howc")
+metadata/_edit_use_anchors_ = true
+
+[node name="SizeY" type="LineEdit" parent="CanvasLayer/RoomEditor/PanelContainer/Settings"]
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.028846186
+anchor_top = 0.1625
+anchor_right = -0.028846223
+anchor_bottom = 0.1625
+offset_left = 50.0
+offset_top = 2.0
+offset_right = 90.0
+offset_bottom = 27.0
+focus_mode = 1
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
+placeholder_text = "Y"
+script = ExtResource("4_8howc")
+metadata/_edit_use_anchors_ = true
 
 [node name="Save" type="Button" parent="CanvasLayer/RoomEditor"]
 z_index = 1
@@ -868,22 +889,6 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
 theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
 action_mode = 0
 text = "Settings"
-
-[node name="obj properties" type="Button" parent="CanvasLayer/RoomEditor"]
-z_index = 1
-offset_left = 320.0
-offset_top = 160.0
-offset_right = 374.0
-offset_bottom = 175.0
-rotation = 1.57079
-focus_mode = 0
-mouse_default_cursor_shape = 2
-theme_override_font_sizes/font_size = 8
-theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
-theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
-action_mode = 0
-text = "Properties"
 
 [node name="Area2D" type="Area2D" parent="CanvasLayer/RoomEditor"]
 
@@ -1002,8 +1007,15 @@ room = {
 }
 },
 "type": "instance"
+},
+"bounds": [32, 12]
 }
-}
+
+[node name="Sprite2D2" type="Sprite2D" parent="RoomDisplay"]
+visible = false
+modulate = Color(1, 1, 1, 0.5)
+texture = ExtResource("9_l4kvy")
+centered = false
 
 [node name="Sprite2D" type="Sprite2D" parent="RoomDisplay"]
 modulate = Color(1, 1, 1, 0.5)
@@ -1043,7 +1055,6 @@ centered = false
 [connection signal="pressed" from="CanvasLayer/RoomEditor/Load" to="CanvasLayer/RoomEditor" method="_on_load_pressed"]
 [connection signal="pressed" from="CanvasLayer/RoomEditor/draw" to="CanvasLayer/RoomEditor" method="_on_draw_pressed"]
 [connection signal="pressed" from="CanvasLayer/RoomEditor/settings" to="CanvasLayer/RoomEditor" method="_on_settings_pressed"]
-[connection signal="pressed" from="CanvasLayer/RoomEditor/obj properties" to="CanvasLayer/RoomEditor" method="_on_obj_properties_pressed"]
 [connection signal="pressed" from="CanvasLayer/Room" to="." method="_on_room_pressed"]
 [connection signal="pressed" from="CanvasLayer/Enemy" to="." method="_on_enemy_pressed"]
 [connection signal="pressed" from="CanvasLayer/Npc" to="." method="_on_npc_pressed"]

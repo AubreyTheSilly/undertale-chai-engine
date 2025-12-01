@@ -82,6 +82,8 @@ func get_optionbutton_items(optionbutton : OptionButton) -> Array[String]:
 	return output
 
 func _process(_delta):
+	$"/root/editor/RoomDisplay".room["bounds"]
+	
 	if !visible:
 		return
 	var roomitems = []
@@ -103,25 +105,15 @@ func _process(_delta):
 			$OptionButton.selected = 0
 	var targetlayer = $OptionButton.get_item_text($OptionButton.selected)
 	if $"/root/editor/RoomDisplay".room.has(targetlayer):
-		if $"/root/editor/RoomDisplay".room[targetlayer]["type"] == "instance":
-			$"obj properties".visible = true
-			if editormode == 2:
-				editormode = 0
-		else:
-			$"obj properties".visible = false
-		if $PanelContainer/TileMode.visible and $"/root/editor/RoomDisplay".room[targetlayer]["type"] == "instance":
+		if $PanelContainer/TileMode.visible and ($"/root/editor/RoomDisplay".room[targetlayer]["type"] == "instance"):
 			$PanelContainer/TileMode.visible = false
-		if $PanelContainer/ObjMode.visible and $"/root/editor/RoomDisplay".room[targetlayer]["type"] == "tile":
-			print("set objmode invisible1")
+		if $PanelContainer/ObjMode.visible and ($"/root/editor/RoomDisplay".room[targetlayer]["type"] == "tile"):
 			$PanelContainer/ObjMode.visible = false
-	$PanelContainer/Settings.visible = false
-	$PanelContainer/Properties.visible = false
+	if $PanelContainer/Settings.visible and editormode == 0:
+		$PanelContainer/Settings.visible = false
+	if !$PanelContainer/Settings.visible and editormode == 1:
+		$PanelContainer/Settings.visible = true
 	
-	match editormode:
-		1:
-			$PanelContainer/Settings.visible = true
-		2:
-			$PanelContainer/Properties.visible = true
 	if $"/root/editor/RoomDisplay".room.has(targetlayer):
 		if $"/root/editor/RoomDisplay".room[$OptionButton.get_item_text($OptionButton.selected)]["type"] == "tile":
 			if !$PanelContainer/TileMode.visible:
@@ -192,9 +184,6 @@ func _on_draw_pressed():
 
 func _on_settings_pressed():
 	editormode = 1
-
-func _on_obj_properties_pressed():
-	editormode = 2
 
 func _add_tile_layer():
 	var roomitems = []

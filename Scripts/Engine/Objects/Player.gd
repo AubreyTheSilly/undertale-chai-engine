@@ -2,6 +2,8 @@ class_name Player
 extends Character
 
 func _ready() -> void:
+	PlayerData.obj = self
+	
 	if CharacterJson:
 		Character_Sprite = CharacterSprite.fromJson(CharacterJson+".json")
 	else:
@@ -36,7 +38,6 @@ func _ready() -> void:
 	fader.fadeIn()
 
 func _process(_delta) -> void:
-	PlayerData.obj = self
 	var can_move = !DialogueHandler.visible and PlayerData.player_can_move and !PlayerData.player_teleporting
 	if can_move:
 		velocity = Vector2(Input.get_axis("Move Left","Move Right"),Input.get_axis("Move Up","Move Down"))*(30*Speed)

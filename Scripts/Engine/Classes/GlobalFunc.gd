@@ -8,6 +8,40 @@ var Path : String = "res://"
 
 var timer : float = 0
 
+func loadTextAsObjectData(dir : String) -> Dictionary:
+	if !FileAccess.file_exists(Path+"Data/Objcets/"+dir+".txt"):
+		print("Objcet to load does not exist. Returning null.")
+		return {}
+	var file = FileAccess.open(Path+"Data/Objcets/"+dir+".txt",FileAccess.READ)
+	var string = ""
+	while !file.eof_reached():
+		string += file.get_line()
+	var dict = {}
+	for i in string.split("\n"):
+		var key : String = ""
+		var value = ""
+		var keying = true
+		
+		for j in i:
+			if j == "=" and keying:
+				keying = false
+			elif keying:
+				key += j
+			else:
+				value += j
+		
+		if value.is_valid_int():
+			value = int(value)
+		elif value.is_valid_float():
+			value = float(value)
+		elif value == "true":
+			value = true
+		elif value == "false":
+			value = false
+		
+		dict[key] = value
+	return {}
+
 func loadJsonAsDictionary(dir : String) -> Dictionary:
 	if !FileAccess.file_exists(Path+dir):
 		print("JSON to load does not exist. Returning null.")

@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://baiqu1t7v3rvv"]
+
+[ext_resource type="Script" uid="uid://wep2pc6ilvtr" path="res://scripts/Engine/Classes/ObjectScriptRunner.gd" id="1_jscdw"]
+
+[node name="ObjectScriptRunner" type="Node"]
+script = ExtResource("1_jscdw")
+metadata/_custom_type_script = "uid://b6m6ndh7u38dl"

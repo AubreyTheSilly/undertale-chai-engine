@@ -12,7 +12,7 @@ func _ready():
 	$AudioStreamPlayer.stream = Loader.load_file("Audio/BGM/mus_menu0.ogg")
 	$AudioStreamPlayer.play()
 
-func _process(delta):
+func _process(_delta):
 	$controls.visible = false
 	$settings.visible = false
 	$name.visible = false

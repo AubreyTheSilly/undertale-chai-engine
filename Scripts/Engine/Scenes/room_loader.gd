@@ -10,18 +10,33 @@ func _ready() -> void:
 	LoadRoom()
 
 func _process(_delta) -> void:
-	if Input.is_action_just_pressed("backslash"):
+	if Input.is_action_just_pressed("backslash") and !Engine.is_editor_hint():
 		get_tree().reload_current_scene()
+	for i in get_children():
+		for j in i.get_children():
+			if j.name == "Player":
+				camera.position = j.position-Vector2(160,120)
+	if room:
+		camera.position.x = clamp(camera.position.x,room.CameraBounds.position.x,room.CameraBounds.position.x+(room.CameraBounds.size.x-160))
+		camera.position.y = clamp(camera.position.y,room.CameraBounds.position.y,room.CameraBounds.position.y+(room.CameraBounds.size.y-120))
+	else:
+		camera.position = Vector2.ZERO
 
 func clear_room() -> void:
 	for i in get_children():
-		if i.name != "Camera2D":
+		if i.name != "Camera2D" and i.name != "DoesntExist" and i.name != "BG":
 			i.queue_free()
 
 func LoadRoom() -> void:
+	$BG.texture = null
+	$DoesntExist.visible = false
 	if Undermaker.loadJsonAsDictionary("Data/rooms/"+roomName+".json") == {}:
-		$DoesntExist/Label.text = "Error!\n"+roomName+" does not exist.\nPlease enter a room to load instead."
+		print("room load failed")
+		$DoesntExist/Label.text = "Error!\nRoom \""+roomName+"\" does not exist.\nPlease enter a room to load instead."
 		$DoesntExist.visible = true
+		return
+	if Loader.load_file("Sprites/Backgrounds/"+roomName+".png"):
+		$BG.texture = Loader.load_file("Sprites/Backgrounds/"+roomName+".png")
 	room = Room.loadRoomFromDictionary(Undermaker.loadJsonAsDictionary("Data/rooms/"+roomName+".json"))
 	clear_room()
 	var layernum = 0
@@ -52,20 +67,7 @@ func LoadRoom() -> void:
 		
 		layernum += 1
 
-func _physics_process(_delta) -> void:
-	for i in get_children():
-		for j in i.get_children():
-			if j.name == "Player":
-				camera.position = j.position-Vector2(160,120)
-	if room:
-		camera.position.x = clamp(camera.position.x,room.CameraBounds.position.x,room.CameraBounds.position.x+room.CameraBounds.size.x)
-		camera.position.y = clamp(camera.position.y,room.CameraBounds.position.y,room.CameraBounds.position.y+room.CameraBounds.size.y)
-	else:
-		camera.position = Vector2.ZERO
-
-
 func _on_line_edit_text_submitted(new_text):
 	roomName = new_text
-	$DoesntExist.visible = false
 	$DoesntExist/LineEdit.text = ""
 	LoadRoom()

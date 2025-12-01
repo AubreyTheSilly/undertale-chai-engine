@@ -6,8 +6,6 @@ extends Node
 ## Must be set for like create and set functions to work.
 @export var node : Node
 
-var audio : AudioStreamPlayer = AudioStreamPlayer.new()
-
 var types = {
 	Token.TokenType.STRING:Token.TokenType.TYPE_STRING,
 	Token.TokenType.BOOLEAN:Token.TokenType.TYPE_BOOL,
@@ -28,10 +26,6 @@ var last_script : UTScript
 var last_script_filename : String = ""
 
 signal script_finished
-
-func _ready():
-	audio.max_polyphony = 1024
-	add_child(audio)
 
 func getVariable(varName : String):
 	if persistentVars.has(varName):
@@ -86,9 +80,9 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 			continue
 		if runscript.data[line].data.size() != 0:
 			var token = runscript.data[line].data[0]
-			var stringtokenno = -1
+			var _stringtokenno = -1
 			for i in runscript.data[line].data:
-				stringtokenno += 1
+				_stringtokenno += 1
 				if i.type == Token.TokenType.STRING:
 					var start := -1
 					var end := -1
@@ -279,15 +273,20 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 					elif runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": You must put a string for playsnd")
 						continue
+					var audio = AudioStreamPlayer.new()
+					add_child(audio)
 					audio.stream = Loader.load_file("Audio/Sounds/"+runscript.data[line].data[1].value+".wav")
 					if audio.stream:
 						audio.play()
+						audio.finished.connect(audio.queue_free)
 					else:
 						audio.stream = Loader.load_file("Audio/Sounds/"+runscript.data[line].data[1].value+".ogg")
 						if audio.stream:
 							audio.play()
+							audio.finished.connect(audio.queue_free)
 						else:
 							push_error("line "+str(line+1)+": Sound \""+runscript.data[line].data[1].value+"\" does not exist")
+							audio.queue_free()
 				Token.TokenType.WAIT:
 					if runscript.data[line].data.size() != 2:
 						push_error("line "+str(line+1)+": Invalid number of arguments")

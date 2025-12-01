@@ -7,7 +7,7 @@ extends CharacterBody2D
 ## Set of animations for the character.
 @export var Character_Sprite : CharacterSprite
 ## Walk speed in pixels per frame. 1 = 30 pixels per second.
-@export var Speed : int = 2
+@export var Speed : int = 3
 @export_enum("left","down","up","right") var direction = "down"
 
 func _ready():

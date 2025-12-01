@@ -18,8 +18,9 @@ expand_margin_bottom = 2.0
 font_size = 13
 
 [node name="Room" type="Node2D"]
+process_priority = 1
+y_sort_enabled = true
 script = ExtResource("1_j27jd")
-roomName = "room_test1"
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
@@ -46,5 +47,9 @@ room_start does not exist.
 Please enter a room to load instead."
 label_settings = SubResource("LabelSettings_j27jd")
 horizontal_alignment = 1
+
+[node name="BG" type="Sprite2D" parent="."]
+z_index = -1
+centered = false
 
 [connection signal="text_submitted" from="DoesntExist/LineEdit" to="." method="_on_line_edit_text_submitted"]

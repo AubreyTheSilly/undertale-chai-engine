@@ -22,4 +22,5 @@ func _ready():
 	await create_tween().tween_property($Heart,"global_position",Vector2(23.5,227),0.5).set_ease(Tween.EASE_IN_OUT).set_ease(Tween.EASE_IN_OUT).finished
 	await fader.fadeOut()
 	get_tree().change_scene_to_packed(preload("res://Scenes/Battle.tscn"))
+	done.emit()
 	queue_free()

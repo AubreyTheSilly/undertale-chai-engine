@@ -109,8 +109,11 @@ func unhandled_function(tokens : TokenArray):
 			await get_tree().process_frame
 		"set_soulmode":
 			get_parent().get_parent().soulMode =  int(float(tokens.data[1].value))
+			var audio = AudioStreamPlayer.new()
+			add_child(audio)
 			audio.stream = preload("res://Audio/Sounds/snd_bell.wav")
 			audio.play()
+			audio.finished.connect(audio.queue_free)
 		"create_bone":
 			for i in tokens.data:
 				if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
