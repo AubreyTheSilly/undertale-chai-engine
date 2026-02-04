@@ -25,6 +25,8 @@ var hasDamageScript := false
 var predialogue = false
 var ready_for_next_turn = true
 
+var has_hurt_sprite = false
+
 # state of the enemy
 enum ENEMY_STATE {DEAD,ALIVE,SPARED}
 var state = ENEMY_STATE.ALIVE
@@ -50,10 +52,13 @@ func _ready():
 	$SpeechBubble.pos = enemy_data.BubbleOffset
 	spare = enemy_data.InstantSpare
 	$SpeechBubble.bubbleType = enemy_data.BubbleType
-	$GPUParticles2D.process_material.set_shader_parameter("sprite",enemy_data.EnemyHurtSprite)
-	var sprite_size = $GPUParticles2D.process_material.get_shader_parameter("sprite").get_size()
-	$GPUParticles2D.position = -(sprite_size/2)
-	$GPUParticles2D.amount = (sprite_size.x*sprite_size.y)
+	if enemy_data.EnemyHurtSprite:
+		has_hurt_sprite = true
+	if has_hurt_sprite:
+		$GPUParticles2D.process_material.set_shader_parameter("sprite",enemy_data.EnemyHurtSprite)
+		var sprite_size = $GPUParticles2D.process_material.get_shader_parameter("sprite").get_size()
+		$GPUParticles2D.position = -(sprite_size/2)
+		$GPUParticles2D.amount = (sprite_size.x*sprite_size.y)
 	$HPBar.max_value = enemy_data.HP
 	$HPBar.value = enemy_data.HP
 	if UTScript.loadScriptFromFile("Enemies/"+enemy_data.name+"/Create.utscript"):
@@ -69,12 +74,38 @@ func _ready():
 func getAttack() -> String:
 	if nextattack != "":
 		var attack = nextattack
-		nextattack = ""
 		return "Enemies/"+enemy_data.name+"/Attacks/"+attack+".utscript"
 	elif enemy_data.Attacks.size() == 0:
 		return ""
 	else:
 		return "Enemies/"+enemy_data.name+"/Attacks/"+enemy_data.Attacks.pick_random()+".utscript"
+
+func getAttackConfig(attack : String):
+	var attackPath : StringName = attack
+	#if nextattack != "":
+		#attackPath = "Enemies/"+enemy_data.name+"/Attacks/"+attack+".utscript"
+	
+	var configPath : StringName = attackPath.get_basename()+".txt"
+	if FileAccess.file_exists(Undermaker.Path+"Scripts/"+configPath):
+		var config = FileAccess.open(Undermaker.Path+"Scripts/"+configPath,FileAccess.READ)
+		var configtext : Array[String] = []
+		while !config.eof_reached():
+			configtext.append(config.get_line())
+		config.close()
+		
+		if configtext.size() != 3:
+			print("Invalid number of attack parameters")
+			return null
+		
+		var attack_config = Attack.new()
+		attack_config.attack_script = attack
+		attack_config.boxSize = Vector2(float(configtext[0]),float(configtext[1]))
+		attack_config.mode = fmod(int(configtext[2]),2)
+		
+		return attack_config
+	else:
+		print("Attack config for "+attackPath.get_file()+" does not exist")
+		return null
 
 func _dust():
 	# so long gay bowser

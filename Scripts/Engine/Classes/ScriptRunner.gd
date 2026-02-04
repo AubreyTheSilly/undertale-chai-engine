@@ -52,7 +52,10 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 		return ERR_DOES_NOT_EXIST
 	
 	var ogrunscript : UTScript = UTScript.loadScriptFromFile(script,verbose)
-	var runscript : UTScript = ogrunscript
+	if !ogrunscript:
+		push_error("Script load failed!")
+		return ERR_DOES_NOT_EXIST
+	var runscript : UTScript = ogrunscript.copy()
 	vars.clear()
 	
 	var line : int =-1
@@ -98,7 +101,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							else:
 								end = index
 						if start!=-1 and end!=-1:
-							reset = true
+							# reset = true (this caused lag so i moved it to only be in end)
 							replace = i.value.substr(start,(end-start)+1)
 							replacevar = replace.rstrip("%").lstrip("%")
 							var variable = getVariable(replacevar)
@@ -214,11 +217,13 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 					if while_line != -1:
 						skip_depth += 1
 						line = while_line-1
+						reset = true
 						while_line = -1
 				Token.TokenType.END:
 					if depth:
 						if depth == while_depth and while_line != -1:
 							line = while_line-1
+							reset = true
 						else:
 							depth -= 1
 				Token.TokenType.IF:
@@ -296,7 +301,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							reset = true
+							# reset = true (this caused lag so i moved it to only be in end)
 					if runscript.data[line].data[1].type != Token.TokenType.NUMBER:
 						push_error("line "+str(line+1)+": You must input a valid number")
 						continue
@@ -310,7 +315,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variabl = getVariable(i.lexeme)
 							i.type = types[variabl.type]
 							i.value = variabl.value
-							reset = true
+							# reset = true (this caused lag so i moved it to only be in end)
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
 						continue
@@ -336,7 +341,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							reset = true
+							# reset = true (this caused lag so i moved it to only be in end)
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
 						continue
@@ -379,7 +384,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 						if i.type == Token.TokenType.IDENTIFIER and variable:
 							i.type = types[variable.type]
 							i.value = variable.value
-							reset = true
+							# reset = true (this caused lag so i moved it to only be in end)
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Sprite name must be a string")
 						continue
@@ -588,7 +593,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variabl = getVariable(i.lexeme)
 							i.type = types[variabl.type]
 							i.value = variabl.value
-							reset = true
+							# reset = true (this caused lag so i moved it to only be in end)
 					if runscript.data[line].data.size() != 5:
 						push_error("line "+str(line+1)+": Invalid number of arguments")
 						continue
@@ -649,7 +654,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							reset = true
+							# reset = true (this caused lag so i moved it to only be in end)
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Object name must be a string")
 						continue
@@ -678,7 +683,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							reset = true
+							# reset = true (this caused lag so i moved it to only be in end)
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
 						continue
@@ -731,7 +736,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							reset = true
+							# reset = true (this caused lag so i moved it to only be in end)
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
 						continue
@@ -755,7 +760,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							reset = true
+							# reset = true (this caused lag so i moved it to only be in end)
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
 						continue
@@ -776,7 +781,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							reset = true
+							# reset = true (this caused lag so i moved it to only be in end)
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
 						continue
@@ -797,7 +802,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variabl = getVariable(i.lexeme)
 							i.type = types[variabl.type]
 							i.value = variabl.value
-							reset = true
+							# reset = true (this caused lag so i moved it to only be in end)
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
 						continue
@@ -807,7 +812,6 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 					if !node.get_node(runscript.data[line].data[1].value+"/ScriptRunner") is ScriptRunner:
 						push_error("line "+str(line+1)+": Target node must have a script runner as a child")
 						continue
-					print(runscript.data[line].data[2].value)
 					var variable = node.get_node(runscript.data[line].data[1].value+"/ScriptRunner").getVariable(runscript.data[line].data[2].value)
 					if variable:
 						if variable.type == types[runscript.data[line].data[3].type]:
@@ -815,7 +819,6 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 						else:
 							push_error("line "+str(line+1)+": Variable set type does not match!")
 					else:
-						print(variable)
 						push_error("line "+str(line+1)+": Variable must exist")
 				Token.TokenType.WAIT_FRAMES:
 					if runscript.data[line].data.size() != 2:
@@ -826,7 +829,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							reset = true
+							# reset = true (this caused lag so i moved it to only be in end)
 					if runscript.data[line].data[1].type != Token.TokenType.NUMBER:
 						push_error("line "+str(line+1)+": You must input a valid number")
 						continue
@@ -841,11 +844,11 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							reset = true
+							# reset = true (this caused lag so i moved it to only be in end)
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Encounter name must be a string")
 						continue
-					if runscript.data[line].data[2].size == 3:
+					if runscript.data[line].data.size() == 3:
 						if runscript.data[line].data[2].type != Token.TokenType.BOOLEAN:
 							push_error("line "+str(line+1)+": Transition or not must be a boolean")
 							continue
@@ -855,7 +858,8 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 				_:
 					await unhandled_function(runscript.data[line])
 		if reset:
-			runscript = ogrunscript
+			runscript = ogrunscript.copy()
+			reset = false
 	await get_tree().process_frame
 	script_finished.emit()
 	return OK

@@ -1,5 +1,6 @@
 set_soulmode 1
 set_box_size 141 70.5
+slam "down"
 create_bone "bonejump1_2" RIGHT UP 40 -2.5 0 180
 create_bone "bonejump1_1" RIGHT DOWN 5 -2.5 0 0
 create_bone "bonejump1_3" LEFT DOWN 5 2.5 0 0
@@ -20,6 +21,7 @@ create_bone "bonejump4_2" RIGHT UP 40 -2.5 0 180
 create_bone "bonejump4_3" LEFT DOWN 5 2.5 0 0
 create_bone "bonejump4_4" LEFT UP 40 2.5 0 180
 wait 0.5
+slam "up"
 create_bone "bonejump5_1" RIGHT DOWN 5 -2.5 0 0
 create_bone "bonejump5_2" RIGHT UP 40 -2.5 0 180
 create_bone "bonejump5_3" LEFT DOWN 5 2.5 0 0

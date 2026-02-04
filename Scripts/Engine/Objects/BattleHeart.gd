@@ -5,9 +5,14 @@ const SPEED := 2
 
 var soul_colors = [Color(1,0,0),Color(0,0,1)]
 var bluevel = Vector2.ZERO
+var bluedir = 0
 
 var invincible = false
 var jumpstage = 2
+var slamming = false
+var slamtimer = 0
+
+@onready var box = get_parent().get_node("AttackBox")
 
 func calculateDamage(atk : int):
 	var HPmod = 0
@@ -27,42 +32,94 @@ func calculateDamage(atk : int):
 	return(round(atk + HPmod - (def / 5.0)))
 
 func _process(_delta) -> void:
+	position.x = clampf(position.x,box.get_node("AttackRect").global_position.x,box.get_node("AttackRect").global_position.x+box.get_node("AttackRect").size.x)
+	position.y = clampf(position.y,box.get_node("AttackRect").global_position.y,box.get_node("AttackRect").global_position.y+box.get_node("AttackRect").size.y)
+	
 	$Soul.modulate = soul_colors[battle.soulMode]
 	match battle.state:
 		battle.ENEMY_DIALOGUE:
-			visible = true
+			pass
 		battle.ENEMY_ATTACK:
 			visible = true
 			match battle.soulMode:
 				Battle.SOULMODES.RED:
 					velocity = Vector2.ZERO
 					velocity = (Input.get_vector("Move Left","Move Right","Move Up","Move Down")*(30*SPEED))
+					bluedir = 0
+					bluevel = Vector2.ZERO
 				Battle.SOULMODES.BLUE:
-					bluevel.x = Input.get_axis("Move Left","Move Right")*SPEED
+					var left = "Move Left"
+					var right = "Move Right"
+					var jump = "Move Up"
+					match bluedir:
+						90:
+							jump = "Move Right"
+							left = "Move Up"
+							right = "Move Down"
+						180:
+							left = "Move Right"
+							right = "Move Left"
+							jump = "Move Down"
+						270:
+							left = "Move Down"
+							right = "Move Up"
+							jump = "Move Left"
+					bluevel.x = Input.get_axis(left,right)*SPEED
+					
+					up_direction = Vector2(0,-1).rotated(deg_to_rad(bluedir))
+					
+					# old code hopefully i can make it better
+					#if is_on_floor():
+						#bluevel.y = 0
+						#jumpstage = 1
+					#elif is_on_ceiling():
+						#bluevel.y = 0
+						#jumpstage = 2
+					#else:
+						#jumpstage = 2
+					#if jumpstage == 1 and velocity.y == 0 and Input.is_action_just_pressed("Move Up"):
+						#jumpstage = 2
+						#bluevel.y = -4.5
+					#if jumpstage == 2:
+						#if Input.is_action_just_released("Move Up") and bluevel.y <= -1:
+							#bluevel.y = -1
+						#if (bluevel.y > 0.5 and bluevel.y < 8):
+							#bluevel.y += 0.4
+						#if (bluevel.y > -1 and bluevel.y <= 0.5):
+							#bluevel.y += 0.125
+						#if (bluevel.y > -4 and bluevel.y <= -1):
+							#bluevel.y += 0.325
+						#if (bluevel.y <= -4):
+							#bluevel.y += 0.125
+					
 					if is_on_floor():
+						if slamming == true and slamtimer == 0:
+							$SlamSound.play()
+							slamming = false
 						bluevel.y = 0
-						jumpstage = 1
-					elif is_on_ceiling():
-						bluevel.y = 0
-						jumpstage = 2
-					else:
-						jumpstage = 2
-					if jumpstage == 1 and velocity.y == 0 and Input.is_action_just_pressed("Move Up"):
-						jumpstage = 2
-						bluevel.y = -4.5
-					if jumpstage == 2:
-						if Input.is_action_just_released("Move Up") and bluevel.y <= -1:
+						if Input.is_action_just_pressed(jump):
+							bluevel.y = -5
+					
+					if (Input.is_action_just_released(jump) and !is_on_floor()) or is_on_ceiling():
+						if bluevel.y < -1:
 							bluevel.y = -1
-						if (bluevel.y > 0.5 and bluevel.y < 8):
-							bluevel.y += 0.4
-						if (bluevel.y > -1 and bluevel.y <= 0.5):
-							bluevel.y += 0.125
-						if (bluevel.y > -4 and bluevel.y <= -1):
-							bluevel.y += 0.325
-						if (bluevel.y <= -4):
-							bluevel.y += 0.125
-						
-					velocity = bluevel*(30)
+					
+					var y_accel : float
+					if (bluevel.y <= -4) or (-1 < bluevel.y and bluevel.y <= 0.5):
+						y_accel = 0.2
+					elif -4 < bluevel.y and bluevel.y <= -1:
+						y_accel = 0.5
+					elif 0.5 < bluevel.y and bluevel.y < 8:
+						y_accel = 0.6
+					elif 8 <= bluevel.y:
+						y_accel = 0
+					
+					bluevel.y += y_accel
+					
+					if slamming:
+						bluevel.y = 8
+					
+					velocity = (bluevel*(30)).rotated(deg_to_rad(bluedir))
 			for i in $soul.get_overlapping_areas():
 				if i.name == "attack" and !invincible:
 					var attack = i.get_parent()
@@ -83,7 +140,12 @@ func _process(_delta) -> void:
 			visible = false
 			jumpstage = 2
 			bluevel = Vector2.ZERO
+			bluedir = 0
+			slamming = false
 	move_and_slide()
+	if slamtimer > 0:
+		slamtimer-=1
+	$Soul.rotation_degrees = bluedir
 
 func damage(dmg : int):
 	$AudioStreamPlayer.stream = preload("res://Audio/Sounds/snd_hurt1_c.wav")

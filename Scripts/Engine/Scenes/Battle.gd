@@ -325,11 +325,31 @@ func _process(_delta):
 				i.selected = false
 		ENEMY_DIALOGUE:
 			if dialoguejustStarted == false:
+				dialoguejustStarted = true
+				var attackconfigs : Array[Attack] = []
+				var attack_exists = false
 				for i in enemies:
-					if i.state == 1:
+					if i.state == 1 and i.hasPreDialogueScript:
 						i.lastchoice = playerbuttonchoice
 						i._predialogue()
-				dialoguejustStarted = true
+						await get_tree().process_frame
+					var attack = i.getAttack()
+					if attack != "":
+						attack_exists = true
+					else:
+						continue
+					var config = i.getAttackConfig(attack)
+					if config:
+						attackconfigs.append(config)
+				var boxSize = Vector2(70.5,70.5)
+				if attackconfigs.size() != 0:
+					boxSize = attackconfigs[0].boxSize
+				for i in attackconfigs:
+					if boxSize.x < i.boxSize.x or boxSize.y < i.boxSize.y:
+						boxSize = i.boxSize
+				if attack_exists:
+					$AttackBox.rect.size = boxSize
+					$BattleHeart.visible = true
 				return
 			for i in buttons:
 				i.selected = false
@@ -349,7 +369,6 @@ func _process(_delta):
 			var donetalking = true
 			for i in enemies:
 				if i.talking == true:
-					$AttackBox.rect.size = Vector2(70.5,70.5)
 					donetalking = false
 			if donetalking:
 				print("done talking")
@@ -362,9 +381,17 @@ func _process(_delta):
 				var attacksLeft := 0
 				for i in enemies:
 					var attack = i.getAttack()
+					var attack_config : Attack = i.getAttackConfig(attack)
 					if i.state == 1 and attack != "":
 						attacksLeft += 1
-						$AttackBox.runScript(attack,i.enemy_data)
+						if attack_config:
+							if attack_config.mode == 1:
+								$AttackBox.runAttack(attack_config,i.enemy_data)
+							else:
+								$AttackBox.runScript(attack,i.enemy_data)
+						else:
+							$AttackBox.runScript(attack,i.enemy_data)
+						i.nextattack = ""
 				while attacksLeft != 0:
 					await $AttackBox.attack_over
 					attacksLeft -= 1
@@ -382,6 +409,8 @@ func _process(_delta):
 					return
 				$AttackBox.rect = Rect2(Vector2.ZERO,Vector2(288,70.5))
 				if $AttackBox/AttackRect.size != Vector2(288,70.5):
+					if !get_tree():
+						return
 					await get_tree().create_timer(0.25).timeout
 				var can_playerturn = false
 				for i in enemies:

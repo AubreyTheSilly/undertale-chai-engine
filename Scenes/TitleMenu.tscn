@@ -14,8 +14,8 @@ font_color = Color(0.5, 0.5, 0.5, 1)
 script = ExtResource("1_cgfdd")
 
 [node name="SprTitleimage0" type="Sprite2D" parent="."]
+position = Vector2(160, 120)
 texture = ExtResource("1_2xwo8")
-centered = false
 
 [node name="Label" type="Label" parent="."]
 visible = false

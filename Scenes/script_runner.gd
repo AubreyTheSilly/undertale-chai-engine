@@ -1,6 +1,8 @@
 extends ScriptRunner
 
 var enemydata : EnemyData
+var frame = 0
+var running = true
 
 func unhandled_function(tokens : TokenArray):
 	match tokens.data[0].lexeme:
@@ -99,6 +101,9 @@ func unhandled_function(tokens : TokenArray):
 				attack.attack_type = tokens.data[7].value
 			node.get_node("attacks").add_child(attack)
 		"set_box_size":
+			if tokens.data.size() != 3:
+				push_error("Invalid number of arguments for set_box_size")
+				return
 			if tokens.data[1].type != Token.TokenType.NUMBER:
 				push_error("Box X scale must be a number")
 				return
@@ -108,12 +113,16 @@ func unhandled_function(tokens : TokenArray):
 			get_parent().rect.size = Vector2(float(tokens.data[1].value),float(tokens.data[2].value))
 			await get_tree().process_frame
 		"set_soulmode":
-			get_parent().get_parent().soulMode =  int(float(tokens.data[1].value))
-			var audio = AudioStreamPlayer.new()
-			add_child(audio)
-			audio.stream = preload("res://Audio/Sounds/snd_bell.wav")
-			audio.play()
-			audio.finished.connect(audio.queue_free)
+			if tokens.data.size() != 2:
+				push_error("Invalid number of arguments for set_soulmode")
+				return
+			if get_parent().get_parent().soulMode != int(float(tokens.data[1].value)):
+				get_parent().get_parent().soulMode = int(float(tokens.data[1].value))
+				var audio = AudioStreamPlayer.new()
+				add_child(audio)
+				audio.stream = preload("res://Audio/Sounds/snd_bell.wav")
+				audio.play()
+				audio.finished.connect(audio.queue_free)
 		"create_bone":
 			for i in tokens.data:
 				if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
@@ -141,9 +150,13 @@ func unhandled_function(tokens : TokenArray):
 			if tokens.data[7].type != Token.TokenType.NUMBER:
 				push_error("Bone direction must be a number")
 				return
-			if tokens.data.size() == 9:
+			if tokens.data.size() >= 9:
 				if tokens.data[8].type != Token.TokenType.STRING:
 					push_error("Bone color must be a string")
+					return
+			if tokens.data.size() >= 10:
+				if tokens.data[9].type != Token.TokenType.BOOLEAN:
+					push_error("Bone type must be a bool")
 					return
 			var attack = preload("res://Scenes/Objects/Bone.tscn").instantiate()
 			attack.name = tokens.data[1].value
@@ -156,8 +169,10 @@ func unhandled_function(tokens : TokenArray):
 			var vely = float(tokens.data[6].value)
 			attack.velocity = Vector2(velx,vely)
 			attack.rotation_degrees = tokens.data[7].value
-			if tokens.data.size() == 9:
+			if tokens.data.size() >= 9:
 				attack.attack_type = tokens.data[8].value
+			if tokens.data.size() == 10:
+				attack.pap = tokens.data[9].value
 			node.get_node("attacks/bounding").add_child(attack)
 		"create_doublebone":
 			for i in tokens.data:
@@ -186,9 +201,13 @@ func unhandled_function(tokens : TokenArray):
 			if tokens.data[7].type != Token.TokenType.NUMBER:
 				push_error("Bone direction must be a number")
 				return
-			if tokens.data.size() == 9:
+			if tokens.data.size() >= 9:
 				if tokens.data[8].type != Token.TokenType.STRING:
 					push_error("Bone color must be a string")
+					return
+			if tokens.data.size() >= 10:
+				if tokens.data[9].type != Token.TokenType.BOOLEAN:
+					push_error("Bone type must be a bool")
 					return
 			var attack = preload("res://Scenes/Objects/DoubleBone.tscn").instantiate()
 			attack.name = tokens.data[1].value
@@ -201,8 +220,10 @@ func unhandled_function(tokens : TokenArray):
 			var vely = float(tokens.data[6].value)
 			attack.velocity = Vector2(velx,vely)
 			attack.rotation_degrees = tokens.data[7].value
-			if tokens.data.size() == 9:
+			if tokens.data.size() >= 9:
 				attack.attack_type = tokens.data[8].value
+			if tokens.data.size() == 10:
+				attack.pap = tokens.data[9].value
 			node.get_node("attacks/bounding").add_child(attack)
 		"create_blaster":
 			for i in tokens.data:
@@ -222,7 +243,7 @@ func unhandled_function(tokens : TokenArray):
 			if tokens.data[4].type != Token.TokenType.NUMBER:
 				push_error("Blaster direction must be a number")
 				return
-			if tokens.data.size() == 6:
+			if tokens.data.size() >= 6:
 				if tokens.data[5].type != Token.TokenType.STRING:
 					push_error("Blaster color must be a string")
 					return
@@ -303,8 +324,57 @@ func unhandled_function(tokens : TokenArray):
 			var vely = float(tokens.data[6].value)
 			attack.velocity = Vector2(velx,vely)
 			node.get_node("attacks").add_child(attack)
+		"slam":
+			if tokens.data[1].type != Token.TokenType.STRING:
+				push_error("Slam direction must be a string")
+				return
+			match tokens.data[1].value:
+				"left":
+					get_parent().get_parent().get_node("BattleHeart").bluedir = 90
+					get_parent().get_parent().get_node("BattleHeart").slamming = true
+					get_parent().get_parent().get_node("BattleHeart").slamtimer = 1
+				"right":
+					get_parent().get_parent().get_node("BattleHeart").bluedir = 270
+					get_parent().get_parent().get_node("BattleHeart").slamming = true
+					get_parent().get_parent().get_node("BattleHeart").slamtimer = 1
+				"down":
+					get_parent().get_parent().get_node("BattleHeart").bluedir = 0
+					get_parent().get_parent().get_node("BattleHeart").slamming = true
+					get_parent().get_parent().get_node("BattleHeart").slamtimer = 1
+				"up":
+					get_parent().get_parent().get_node("BattleHeart").bluedir = 180
+					get_parent().get_parent().get_node("BattleHeart").slamming = true
+					get_parent().get_parent().get_node("BattleHeart").slamtimer = 1
+				_:
+					push_error("Slam direction must be \"left\", \"right\", \"up\", or \"down\". (case-sensitive)")
+		"set_soul_direction":
+			if tokens.data[1].type != Token.TokenType.STRING:
+				push_error("Soul direction must be a string")
+				return
+			match tokens.data[1].value:
+				"left":
+					get_parent().get_parent().get_node("BattleHeart").bluedir = 90
+				"right":
+					get_parent().get_parent().get_node("BattleHeart").bluedir = 270
+				"down":
+					get_parent().get_parent().get_node("BattleHeart").bluedir = 0
+				"up":
+					get_parent().get_parent().get_node("BattleHeart").bluedir = 180
+				_:
+					push_error("Soul direction must be \"left\", \"right\", \"up\", or \"down\". (case-sensitive)")
+					return
+		"end_attack":
+			running = false
+		_:
+			print(tokens.data[0].lexeme)
 
 func _pre_run():
+	vars["FRAME"] = UMVar.new()
+	vars["FRAME"].type = Token.TokenType.TYPE_NUM
+	vars["FRAME"].value = frame
+	vars["DELTA"] = UMVar.new()
+	vars["DELTA"].type = Token.TokenType.TYPE_NUM
+	vars["DELTA"].value = get_process_delta_time()
 	vars["LEFT"] = UMVar.new()
 	vars["LEFT"].type = Token.TokenType.TYPE_NUM
 	vars["LEFT"].value = 0

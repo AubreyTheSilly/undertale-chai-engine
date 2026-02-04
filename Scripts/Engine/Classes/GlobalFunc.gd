@@ -9,14 +9,14 @@ var Path : String = "res://"
 var timer : float = 0
 
 func loadTextAsObjectData(dir : String) -> Dictionary:
-	if !FileAccess.file_exists(Path+"Data/Objcets/"+dir+".txt"):
-		print("Objcet to load does not exist. Returning null.")
+	if !FileAccess.file_exists(Path+"Data/Objects/"+dir+".txt"):
+		print("Object to load does not exist. Returning null.")
 		return {}
-	var file = FileAccess.open(Path+"Data/Objcets/"+dir+".txt",FileAccess.READ)
+	var file = FileAccess.open(Path+"Data/Objects/"+dir+".txt",FileAccess.READ)
 	var string = ""
 	while !file.eof_reached():
 		string += file.get_line()
-	var dict = {}
+	var dict : Dictionary = {}
 	for i in string.split("\n"):
 		var key : String = ""
 		var value = ""
@@ -29,8 +29,9 @@ func loadTextAsObjectData(dir : String) -> Dictionary:
 				key += j
 			else:
 				value += j
-		
-		if value.is_valid_int():
+		if key == "extends":
+			pass
+		elif value.is_valid_int():
 			value = int(value)
 		elif value.is_valid_float():
 			value = float(value)
@@ -38,9 +39,11 @@ func loadTextAsObjectData(dir : String) -> Dictionary:
 			value = true
 		elif value == "false":
 			value = false
+		else:
+			value = str_to_var(value)
 		
 		dict[key] = value
-	return {}
+	return dict
 
 func loadJsonAsDictionary(dir : String) -> Dictionary:
 	if !FileAccess.file_exists(Path+dir):
@@ -114,7 +117,7 @@ func _process(_delta) -> void:
 	timer += 1
 
 func load_scene(sceneName : String):
-	get_tree().change_scene_to_packed(load("res://Scenes/TestScenes/"+sceneName+".tscn"))
+	get_tree().change_scene_to_packed(preload("res://Scenes/RoomLoader.tscn"))
 
 func _ready():
 	if OS.is_debug_build():

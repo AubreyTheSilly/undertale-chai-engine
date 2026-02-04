@@ -6,14 +6,20 @@ extends Node2D
 @export_range(0,100,1,"or_greater") var height : float = 0
 var velocity : Vector2 = Vector2.ZERO
 var rotation_velocity : float = 0
+@export var pap : bool = false
 
 func _draw():
-	draw_texture_rect(preload("res://Sprites/Battle/Attacks/bone.png"),Rect2(Vector2(-2.5,-5-height),Vector2(6.5,5)),false)
-	draw_rect(Rect2(Vector2(-1.25,-height),Vector2(4,height)),Color.WHITE)
+	if pap:
+		draw_texture_rect(preload("res://Sprites/Battle/Attacks/bone_pap.png"),Rect2(Vector2(-2.5,-5-height),Vector2(6.5,5)),false)
+		draw_rect(Rect2(Vector2(-0.5,-height),Vector2(2.5,height)),Color.WHITE)
+	else:
+		draw_texture_rect(preload("res://Sprites/Battle/Attacks/bone.png"),Rect2(Vector2(-2.5,-5-height),Vector2(6.5,5)),false)
+		draw_rect(Rect2(Vector2(-1.25,-height),Vector2(4,height)),Color.WHITE)
 
 func _process(_delta):
 	queue_redraw()
 	
+	$attack/CollisionShape2D.shape.size.x = 4-(1.5*int(pap))
 	$attack/CollisionShape2D.shape.size.y = 5+height
 	$attack/CollisionShape2D.position.y = -($attack/CollisionShape2D.shape.size.y/2)
 	

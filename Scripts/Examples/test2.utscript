@@ -21,5 +21,10 @@ function ready
 end
 
 function update
-    print "FUCK"
+    var num times
+    set times 0
+    while times != 3
+        increment times
+        print "%times%"
+    end
 end

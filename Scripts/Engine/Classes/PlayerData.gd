@@ -1,20 +1,20 @@
 extends Node
 
 var Name = "Chara"
-var HP : int = 56
-var MaxHP : int = 56
-var LV : int = 10
+var HP : int = 20
+var MaxHP : int = 20
+var LV : int = 1
 var EXP = 0
 var GOLD = 0
-var ATK : int = 18
-var DEF : int = 2
+var ATK : int = 0
+var DEF : int = 0
 var INV : int = 30
 var weapon : Item = Items.STICK
 var armor : Item = Items.BANDAGE
 var inventory : Array[Item] = []
 var flags : Dictionary
 var fun : int = randi_range(0,100)
-var room = "TestRoom"
+var room = "room_start"
 
 var obj : Player
 var player_can_move = true

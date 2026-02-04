@@ -9,6 +9,9 @@ var frame := 0
 var box_width : float = 0
 var box_height : float = 0
 
+# for attack mode 2
+var running = false
+
 signal attack_over
 
 func _process(_delta):
@@ -36,6 +39,22 @@ func runScript(scr : String,enemy_data : EnemyData):
 	scriptrunner.node = self
 	scriptrunner.enemydata = enemy_data
 	add_child(scriptrunner)
-	scriptrunner.run_script(scr,true)
+	scriptrunner.run_script(scr)
 	await scriptrunner.script_finished
+	attack_over.emit()
+
+func runAttack(attack : Attack,enemy_data : EnemyData):
+	#if scr == "":
+		#attack_over.emit()
+	#await get_tree().process_frame
+	frame = 0
+	var scriptrunner = preload("res://Scenes/Objects/attackscriptrunner.tscn").instantiate()
+	scriptrunner.node = self
+	scriptrunner.enemydata = enemy_data
+	scriptrunner.running = true
+	add_child(scriptrunner)
+	while scriptrunner.running:
+		scriptrunner.frame += 1
+		scriptrunner.run_script(attack.attack_script)
+		await get_tree().process_frame
 	attack_over.emit()

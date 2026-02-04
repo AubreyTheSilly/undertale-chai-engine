@@ -6,7 +6,11 @@ extends Node2D
 @onready var camera = $Camera2D
 @onready var room : Room
 
+var room_valid = false
+
 func _ready() -> void:
+	if PlayerData.room:
+		roomName = PlayerData.room
 	LoadRoom()
 
 func _process(_delta) -> void:
@@ -24,12 +28,14 @@ func _process(_delta) -> void:
 
 func clear_room() -> void:
 	for i in get_children():
-		if i.name != "Camera2D" and i.name != "DoesntExist" and i.name != "BG":
+		if i.name != "Camera2D" and i.name != "DoesntExist" and i.name != "BG" and i.name != "ScriptRunner":
 			i.queue_free()
 
 func LoadRoom() -> void:
+	room_valid = false
 	$BG.texture = null
 	$DoesntExist.visible = false
+	clear_room()
 	if Undermaker.loadJsonAsDictionary("Data/rooms/"+roomName+".json") == {}:
 		print("room load failed")
 		$DoesntExist/Label.text = "Error!\nRoom \""+roomName+"\" does not exist.\nPlease enter a room to load instead."
@@ -38,7 +44,7 @@ func LoadRoom() -> void:
 	if Loader.load_file("Sprites/Backgrounds/"+roomName+".png"):
 		$BG.texture = Loader.load_file("Sprites/Backgrounds/"+roomName+".png")
 	room = Room.loadRoomFromDictionary(Undermaker.loadJsonAsDictionary("Data/rooms/"+roomName+".json"))
-	clear_room()
+	room_valid = true
 	var layernum = 0
 	for layer in room.Layers:
 		var layerobj = Node2D.new()
@@ -66,6 +72,8 @@ func LoadRoom() -> void:
 				layerobj.add_child(object)
 		
 		layernum += 1
+	if FileAccess.file_exists(Undermaker.Path+"Scripts/Rooms/"+roomName+".utscript"):
+		$ScriptRunner.run_script("Rooms/"+roomName+".utscript")
 
 func _on_line_edit_text_submitted(new_text):
 	roomName = new_text

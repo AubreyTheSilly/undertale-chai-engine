@@ -4,11 +4,11 @@ enum SOULMODES {RED=0,BLUE=1}
 
 var loadedBattle = {
 	"encounterText":"* ...",
-	"enemies":["dust"],
+	"enemies":["idutshane"],
 	"state":0,
 	"music":"mus_dusttale2",
 	"bg":false,
-	"serious":false
+	"serious":true
 }
 
 func Encounter(id : String,transition : bool = true):
@@ -32,7 +32,7 @@ func Encounter(id : String,transition : bool = true):
 			loadedBattle["serious"] = true
 		else:
 			loadedBattle["serious"] = false
-	
+	await get_tree().process_frame
 	if transition:
 		get_tree().get_root().add_child(preload("res://Scenes/Objects/BattleStarter.tscn").instantiate())
 	else:

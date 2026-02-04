@@ -1,9 +1,16 @@
-[gd_scene load_steps=2 format=3 uid="uid://brsf5mna60qsa"]
+[gd_scene load_steps=4 format=3 uid="uid://brsf5mna60qsa"]
 
-[ext_resource type="PackedScene" uid="uid://txeqj7p6n33l" path="res://Scenes/Objects/Player.tscn" id="16_3lqki"]
+[ext_resource type="Script" uid="uid://dexqxqsprthju" path="res://Scripts/Engine/Objects/text.gd" id="1_letxm"]
+[ext_resource type="Script" uid="uid://daa8kr7e45bhy" path="res://Scripts/Engine/test_room.gd" id="1_wc0jp"]
+[ext_resource type="FontFile" uid="uid://decmshb7688st" path="res://Fonts/DTM-Mono.otf" id="2_wc0jp"]
 
 [node name="Node2D" type="Node2D"]
 y_sort_enabled = true
+script = ExtResource("1_wc0jp")
 
-[node name="Player" parent="." instance=ExtResource("16_3lqki")]
-position = Vector2(160, 120)
+[node name="TextObject" type="Node2D" parent="."]
+position = Vector2(5, 5)
+script = ExtResource("1_letxm")
+text = "Placeholder"
+font = ExtResource("2_wc0jp")
+metadata/_custom_type_script = "uid://dexqxqsprthju"

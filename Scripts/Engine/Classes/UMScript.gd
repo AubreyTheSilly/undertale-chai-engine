@@ -17,6 +17,15 @@ func has_chars(checkstr:String,charstr:String) -> bool:
 
 func _init(scr:Array[TokenArray]=[]):
 	data = scr
+
+func copy() -> UTScript:
+	var script = UTScript.new()
+	for i in data:
+		var tempdata : TokenArray = TokenArray.new()
+		for j in i.data:
+			tempdata.data.append(Token.new(j.lexeme,j.type,j.value))
+		script.data.append(tempdata)
+	return script
 	
 static func loadScriptFromFile(path:StringName,verbose:bool=false) -> UTScript:
 	if FileAccess.file_exists(Undermaker.Path+"Scripts/"+path):
@@ -110,7 +119,7 @@ static func loadScriptFromFile(path:StringName,verbose:bool=false) -> UTScript:
 		if tokenbuffer.data:
 			script.data.append(tokenbuffer)
 		return script
-	push_error("Script does not exist (Path: "+path+")")
+	push_warning("Script does not exist (Path: "+path+")")
 	return null
 
 #func loadScript(path:StringName) -> Error:

@@ -46,6 +46,7 @@ window/per_pixel_transparency/allowed=true
 
 [gui]
 
+common/snap_controls_to_pixels=false
 theme/custom_font="res://Fonts/DTM-Mono.otf"
 
 [input]

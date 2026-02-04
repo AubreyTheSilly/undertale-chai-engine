@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://dtovq8lgaq6x7" path="res://Scenes/script_runner.gd" id="1_kao2v"]
 
-[node name="ScriptRunner" type="Node" node_paths=PackedStringArray("node")]
+[node name="ScriptRunner" type="Node"]
 script = ExtResource("1_kao2v")
-node = NodePath("")
 metadata/_custom_type_script = "uid://b6m6ndh7u38dl"

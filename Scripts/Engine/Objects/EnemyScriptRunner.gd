@@ -47,7 +47,7 @@ func unhandled_function(line : TokenArray):
 			elif line.data.size() >= 4:
 				push_error("Too many parameters for damage, must be 2")
 				return
-			elif line.data[1].value is float:
+			elif line.data[1].type == Token.TokenType.TYPE_NUM:
 				push_error("Damage amount must be a number")
 				return	
 			var damag = line.data[1].value
@@ -105,11 +105,11 @@ func unhandled_function(line : TokenArray):
 
 func _pre_run():
 	if damage != -450:
-		vars["damage"] = UMVar.new()
-		vars["damage"].type = Token.TokenType.NUMBER
-		vars["damage"].value = damage
+		vars["DAMAGE"] = UMVar.new()
+		vars["DAMAGE"].type = Token.TokenType.TYPE_NUM
+		vars["DAMAGE"].value = float(damage)
 		damage = -450
 	
 	vars["LASTCHOICE"] = UMVar.new()
-	vars["LASTCHOICE"].type = Token.TokenType.NUMBER
+	vars["LASTCHOICE"].type = Token.TokenType.TYPE_NUM
 	vars["LASTCHOICE"].value = get_parent().get_parent().playerbuttonchoice

@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://fx5iw7vsg4x8"]
+[gd_scene load_steps=5 format=3 uid="uid://fx5iw7vsg4x8"]
 
 [ext_resource type="Script" uid="uid://br1q3s4y11s8f" path="res://Scripts/Engine/Scenes/room_loader.gd" id="1_j27jd"]
+[ext_resource type="Script" uid="uid://b6m6ndh7u38dl" path="res://Scripts/Engine/Classes/ScriptRunner.gd" id="2_3ec6f"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7wlcy"]
 bg_color = Color(1, 1, 1, 0)
@@ -51,5 +52,10 @@ horizontal_alignment = 1
 [node name="BG" type="Sprite2D" parent="."]
 z_index = -1
 centered = false
+
+[node name="ScriptRunner" type="Node" parent="." node_paths=PackedStringArray("node")]
+script = ExtResource("2_3ec6f")
+node = NodePath("..")
+metadata/_custom_type_script = "uid://b6m6ndh7u38dl"
 
 [connection signal="text_submitted" from="DoesntExist/LineEdit" to="." method="_on_line_edit_text_submitted"]
