@@ -326,7 +326,7 @@ func _process(_delta):
 		ENEMY_DIALOGUE:
 			if dialoguejustStarted == false:
 				dialoguejustStarted = true
-				var attackconfigs : Array[Attack] = []
+				var attackconfigs : Array[AttackData] = []
 				var attack_exists = false
 				for i in enemies:
 					if i.state == 1 and i.hasPreDialogueScript:
@@ -381,7 +381,7 @@ func _process(_delta):
 				var attacksLeft := 0
 				for i in enemies:
 					var attack = i.getAttack()
-					var attack_config : Attack = i.getAttackConfig(attack)
+					var attack_config : AttackData = i.getAttackConfig(attack)
 					if i.state == 1 and attack != "":
 						attacksLeft += 1
 						if attack_config:

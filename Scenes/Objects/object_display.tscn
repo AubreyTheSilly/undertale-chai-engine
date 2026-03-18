@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://c2ebhge3ajuhj"]
+[gd_scene format=3 uid="uid://c2ebhge3ajuhj"]
 
 [ext_resource type="Script" uid="uid://76bv8ivuxjsu" path="res://Scenes/Objects/object_display.gd" id="1_cq3em"]
 [ext_resource type="Texture2D" uid="uid://u42in0sf6pt5" path="res://Sprites/tileicon1.png" id="1_vbh8v"]
@@ -23,25 +23,24 @@ animations = [{
 "speed": 4.0
 }]
 
-[node name="ObjectDisplay" type="Node2D"]
+[node name="ObjectDisplay" type="Node2D" unique_id=498035904]
 script = ExtResource("1_cq3em")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(0, -15)
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=486793205]
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=1686450262]
 offset_left = -40.0
-offset_top = -55.0
+offset_top = -40.0
 offset_right = 40.0
-offset_bottom = 25.0
+offset_bottom = 40.0
 text = "
 ()"
 label_settings = SubResource("LabelSettings_jfxxc")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1950244071]
 modulate = Color(1, 1, 1, 0.5)
-position = Vector2(-20, -35)
+position = Vector2(-20, -20)
 sprite_frames = SubResource("SpriteFrames_cq3em")
 centered = false

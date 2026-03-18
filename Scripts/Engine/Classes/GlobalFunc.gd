@@ -8,6 +8,16 @@ var Path : String = "res://"
 
 var timer : float = 0
 
+func getObjectByClassName(className : String) -> Object:
+	var object : Object
+	if ClassDB.class_exists(className):
+		object = ClassDB.instantiate(className)
+	else:
+		var class_tscn : PackedScene = load("res://Scenes/Objects/"+className+".tscn")
+		if class_tscn:
+			object = class_tscn.instantiate()
+	return object
+
 func loadTextAsObjectData(dir : String) -> Dictionary:
 	if !FileAccess.file_exists(Path+"Data/Objects/"+dir+".txt"):
 		print("Object to load does not exist. Returning null.")
@@ -15,7 +25,7 @@ func loadTextAsObjectData(dir : String) -> Dictionary:
 	var file = FileAccess.open(Path+"Data/Objects/"+dir+".txt",FileAccess.READ)
 	var string = ""
 	while !file.eof_reached():
-		string += file.get_line()
+		string += file.get_line()+"\n"
 	var dict : Dictionary = {}
 	for i in string.split("\n"):
 		var key : String = ""
@@ -29,8 +39,15 @@ func loadTextAsObjectData(dir : String) -> Dictionary:
 				key += j
 			else:
 				value += j
+		
+		if key == "":
+			continue
 		if key == "extends":
 			pass
+		elif key == "editor_image":
+			value = Loader.load_file("Sprites/"+value+".png")
+		elif value.ends_with(".png") or value.ends_with(".wav") or value.ends_with(".ogg"):
+			value = Loader.load_file(value)
 		elif value.is_valid_int():
 			value = int(value)
 		elif value.is_valid_float():
@@ -43,6 +60,10 @@ func loadTextAsObjectData(dir : String) -> Dictionary:
 			value = str_to_var(value)
 		
 		dict[key] = value
+	print(dict)
+	if not dict.has("extends") or not dict.has("editor_image"):
+		push_error("Missing object data. Make sure you have extended and editor_image values defined!")
+		return {}
 	return dict
 
 func loadJsonAsDictionary(dir : String) -> Dictionary:

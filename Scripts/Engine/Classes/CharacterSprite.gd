@@ -1,15 +1,24 @@
 class_name CharacterSprite
 extends Resource
 
+## Walking animation when facing down.
 @export var WalkDown : Array[Texture2D]
+## Walking animation when facing left.
 @export var WalkLeft : Array[Texture2D]
+## Walking animation when facing right.
 @export var WalkRight : Array[Texture2D]
+## Walking animation when facing up.
 @export var WalkUp : Array[Texture2D]
+## Idle sprite when facing down.
 @export var IdleDown : Texture2D
+## Idle sprite when facing left.
 @export var IdleLeft : Texture2D
+## Idle sprite when facing right.
 @export var IdleRight : Texture2D
+## Idle sprite when facing up.
 @export var IdleUp : Texture2D
 
+## Loads a CharacterSprite from a JSON file.
 static func fromJson(path : String) -> CharacterSprite:
 	print(Undermaker.Path+"Data/characters/"+path)
 	var json = Undermaker.loadJsonAsDictionary("Data/characters/"+path)

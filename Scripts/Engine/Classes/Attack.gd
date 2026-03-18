@@ -1,4 +1,4 @@
-class_name Attack
+class_name AttackData
 extends Resource
 
 enum AttackMode {once,FrameByFrame}

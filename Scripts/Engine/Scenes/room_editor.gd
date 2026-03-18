@@ -7,6 +7,10 @@ var prevtilemap : String
 
 var newlayer = false
 
+func redraw_room(_text : String = "") -> void:
+	await $"/root/editor/RoomDisplay".updateObjectTextures()
+	$"/root/editor/RoomDisplay".queue_redraw()
+
 func checkfortile(tilelist : Array, tilepos : Vector2) -> int:
 	var index = -1
 	for i in tilelist:
@@ -15,17 +19,15 @@ func checkfortile(tilelist : Array, tilepos : Vector2) -> int:
 			return index
 	return -1
 
-func checkforobj(tilelist : Dictionary, tilepos : Vector2) -> int:
-	var index = -1
+func checkforobj(tilelist : Dictionary, tilepos : Vector2) -> String:
 	for i in tilelist:
-		index += 1
 		if tilelist[i]["position"] == [tilepos.x,tilepos.y]:
-			return index
-	return -1
+			return i
+	return ""
 
 func makeObj():
 	var targetlayer = $OptionButton.get_item_text($OptionButton.selected)
-	var objpos = (($"/root/editor/ObjectDisplay".position-Vector2(10,10)).snapped(Vector2(20,20))/20.0)-($"/root/editor/RoomDisplay".position/20.0)
+	var objpos = (($"/root/editor/ObjectDisplay".position-Vector2(10,10)).snapped(Vector2(10,10))/10.0)-($"/root/editor/RoomDisplay".position/10.0)
 	
 	var obj = {}
 	obj["position"] = [objpos.x,objpos.y]
@@ -36,23 +38,26 @@ func makeObj():
 	if obj["name"] == "" or obj["type"] == "":
 		return
 	
-	if checkforobj($"/root/editor/RoomDisplay".room[targetlayer]["obj"],objpos) != -1:
+	if checkforobj($"/root/editor/RoomDisplay".room[targetlayer]["obj"],objpos) != "":
 		print("theres an object there already")
 	else:
 		$"/root/editor/RoomDisplay".room[targetlayer]["obj"][obj["name"]] = obj
 	
-	$"/root/editor/RoomDisplay".queue_redraw()
+	redraw_room()
 
 func _fix_layers():
 	print("Layers changed")
 
 func removeObj():
 	var targetlayer = $OptionButton.get_item_text($OptionButton.selected)
-	var objpos = ((get_global_mouse_position()-Vector2(10,10)).snapped(Vector2(20,20))/20.0)-($"/root/editor/RoomDisplay".position/20.0)
+	var objpos = (($"/root/editor/ObjectDisplay".position-Vector2(10,10)).snapped(Vector2(10,10))/10.0)-($"/root/editor/RoomDisplay".position/10.0)
+	print(checkforobj($"/root/editor/RoomDisplay".room[targetlayer]["obj"],objpos))
 	
+	if checkforobj($"/root/editor/RoomDisplay".room[targetlayer]["obj"],objpos) != "":
+		print("Removing object")
+		$"/root/editor/RoomDisplay".room[targetlayer]["obj"].erase(checkforobj($"/root/editor/RoomDisplay".room[targetlayer]["obj"],objpos))
 	
-	
-	$"/root/editor/RoomDisplay".queue_redraw()
+	redraw_room()
 
 func makeTile():
 	var targetlayer = $OptionButton.get_item_text($OptionButton.selected)
@@ -66,14 +71,14 @@ func makeTile():
 		$"/root/editor/RoomDisplay".room[targetlayer]["tiles"][checkfortile($"/root/editor/RoomDisplay".room[targetlayer]["tiles"],tilepos)] = tile
 	else:
 		$"/root/editor/RoomDisplay".room[targetlayer]["tiles"].append(tile)
-	$"/root/editor/RoomDisplay".queue_redraw()
+	redraw_room()
 
 func removeTile():
 	var targetlayer = $OptionButton.get_item_text($OptionButton.selected)
 	var tilepos = (($"/root/editor/FakeTile".position-Vector2(10,10)).snapped(Vector2(20,20))/20.0)-($"/root/editor/RoomDisplay".position/20.0)
 	if checkfortile($"/root/editor/RoomDisplay".room[targetlayer]["tiles"],tilepos) != -1:
 		$"/root/editor/RoomDisplay".room[targetlayer]["tiles"].remove_at(checkfortile($"/root/editor/RoomDisplay".room[targetlayer]["tiles"],tilepos))
-	$"/root/editor/RoomDisplay".queue_redraw()
+	redraw_room()
 
 func get_optionbutton_items(optionbutton : OptionButton) -> Array[String]:
 	var output : Array[String]
@@ -82,13 +87,18 @@ func get_optionbutton_items(optionbutton : OptionButton) -> Array[String]:
 	return output
 
 func _process(_delta):
-	$"/root/editor/RoomDisplay".room["bounds"]
-	
 	if !visible:
 		return
+	var room_bg = Loader.load_file("Sprites/Backgrounds/"+$LineEdit.text+".png")
+	if room_bg:
+		$"/root/editor/RoomDisplay/Sprite2D2".visible = true
+		$"/root/editor/RoomDisplay/Sprite2D2".texture = room_bg
+	else:
+		$"/root/editor/RoomDisplay/Sprite2D2".visible = false
 	var roomitems = []
 	for i in $"/root/editor/RoomDisplay".room:
-		roomitems.append(i)
+		if i != "bounds":
+			roomitems.append(i)
 	if get_optionbutton_items($OptionButton) != roomitems:
 		print(get_optionbutton_items($OptionButton))
 		print(roomitems)
@@ -97,7 +107,8 @@ func _process(_delta):
 			j -= 1
 			$OptionButton.remove_item(j)
 		for i in $"/root/editor/RoomDisplay".room:
-			$OptionButton.add_item(i)
+			if i != "bounds":
+				$OptionButton.add_item(i)
 		if newlayer:
 			$OptionButton.selected = get_optionbutton_items($OptionButton).size()-1
 			newlayer = false
@@ -112,9 +123,11 @@ func _process(_delta):
 	if $PanelContainer/Settings.visible and editormode == 0:
 		$PanelContainer/Settings.visible = false
 	if !$PanelContainer/Settings.visible and editormode == 1:
+		$PanelContainer/TileMode.visible = false
+		$PanelContainer/ObjMode.visible = false
 		$PanelContainer/Settings.visible = true
 	
-	if $"/root/editor/RoomDisplay".room.has(targetlayer):
+	if $"/root/editor/RoomDisplay".room.has(targetlayer) and editormode == 0:
 		if $"/root/editor/RoomDisplay".room[$OptionButton.get_item_text($OptionButton.selected)]["type"] == "tile":
 			if !$PanelContainer/TileMode.visible:
 				$PanelContainer/TileMode.visible = true
@@ -138,7 +151,7 @@ func _process(_delta):
 			
 			if $"/root/editor/FakeTile".texture and $"/root/editor/RoomDisplay".room[targetlayer]["tilemap"] != $PanelContainer/TileMode/Tilemap.text:
 				$"/root/editor/RoomDisplay".room[targetlayer]["tilemap"] = $PanelContainer/TileMode/Tilemap.text
-				$"/root/editor/RoomDisplay".queue_redraw()
+				redraw_room()
 		else:
 			if $PanelContainer/TileMode.visible:
 				$PanelContainer/TileMode.visible = false
@@ -147,7 +160,7 @@ func _process(_delta):
 			$"/root/editor/ObjectDisplay".visible = true
 			$"/root/editor/FakeTile".visible = false
 		
-			$"/root/editor/ObjectDisplay".position = (get_global_mouse_position()-Vector2(10,10)).snapped(Vector2(20,20))
+			$"/root/editor/ObjectDisplay".position = (get_tree().current_scene.get_global_mouse_position()).snapped(Vector2(10,10))
 			#$"/root/editor/ObjectDisplay"/Label.text = $PanelContainer/ObjMode/ObjName.text+"\n("+$PanelContainer/ObjMode/Filename.text+")"
 			$"/root/editor/ObjectDisplay".objname = $PanelContainer/ObjMode/ObjName.text
 			$"/root/editor/ObjectDisplay".objtype = $PanelContainer/ObjMode/Filename.text
@@ -174,8 +187,15 @@ func _on_save_pressed():
 func _on_load_pressed():
 	if Undermaker.loadJsonAsDictionary("Data/rooms/"+$LineEdit.text+".json"):
 		$"/root/editor/RoomDisplay".room = Undermaker.loadJsonAsDictionary("Data/rooms/"+$LineEdit.text+".json")
+		# $"/root/editor/RoomDisplay".room["bounds"]
+		if $"/root/editor/RoomDisplay".room.has("bounds"):
+			$PanelContainer/Settings/SizeX.text = str(int($"/root/editor/RoomDisplay".room["bounds"][0]))
+			$PanelContainer/Settings/SizeY.text = str(int($"/root/editor/RoomDisplay".room["bounds"][1]))
+		else:
+			$PanelContainer/Settings/SizeX.text = "16"
+			$PanelContainer/Settings/SizeY.text = "12"
 		print("loaded room "+$LineEdit.text)
-		$"/root/editor/RoomDisplay".queue_redraw()
+		redraw_room()
 	else:
 		print("That room doesn't exist, dumbass ("+"Data/rooms/"+$LineEdit.text+".json"+")")
 
@@ -221,6 +241,14 @@ func _on_remove_layer_pressed():
 	if roomitems.size() != 1:
 		print("removed "+roomitems[$OptionButton.selected])
 		$"/root/editor/RoomDisplay".room.erase(roomitems[$OptionButton.selected])
-		$"/root/editor/RoomDisplay".queue_redraw()
+		redraw_room()
 	else:
 		print("you idiot there's only one layer")
+
+func _on_size_y_text_submitted(_new_text):
+	$"/root/editor/RoomDisplay".room["bounds"] = [float($PanelContainer/Settings/SizeX.text),float($PanelContainer/Settings/SizeY.text)]
+	redraw_room()
+
+func _on_size_x_text_submitted(_new_text):
+	$"/root/editor/RoomDisplay".room["bounds"] = [float($PanelContainer/Settings/SizeX.text),float($PanelContainer/Settings/SizeY.text)]
+	redraw_room()

@@ -21,8 +21,8 @@ func _process(_delta) -> void:
 			if j.name == "Player":
 				camera.position = j.position-Vector2(160,120)
 	if room:
-		camera.position.x = clamp(camera.position.x,room.CameraBounds.position.x,room.CameraBounds.position.x+(room.CameraBounds.size.x-160))
-		camera.position.y = clamp(camera.position.y,room.CameraBounds.position.y,room.CameraBounds.position.y+(room.CameraBounds.size.y-120))
+		camera.position.x = clamp(camera.position.x,room.CameraBounds.position.x,room.CameraBounds.position.x+(room.CameraBounds.size.x-320))
+		camera.position.y = clamp(camera.position.y,room.CameraBounds.position.y,room.CameraBounds.position.y+(room.CameraBounds.size.y-240))
 	else:
 		camera.position = Vector2.ZERO
 
@@ -64,12 +64,25 @@ func LoadRoom() -> void:
 				layerobj.add_child(tile)
 		elif layer is RoomInstanceLayer:
 			for i in layer.Objects:
-				var object = load("res://Scenes/Objects/"+i.type+".tscn").instantiate()
-				for j in i.data:
-					object.set(j,i.data[j])
-				object.position = i.position*20
+				# OLD and BAD object code
+				#var object = load("res://Scenes/Objects/"+i.type+".tscn").instantiate()
+				#for j in i.data:
+					#object.set(j,i.data[j])
+				#object.position = i.position*20
 				
-				layerobj.add_child(object)
+				var objectdata = Undermaker.loadTextAsObjectData(i.type)
+				if objectdata != {}:
+					var object = Undermaker.getObjectByClassName(objectdata["extends"])
+					if object:
+						for j in objectdata:
+							if j != "extends" and j != "editor_image":
+								object.set(j,objectdata[j])
+						object.position = i.position*10
+						layerobj.add_child(object)
+					else:
+						push_error("Object "+i.type+" has an invalid type")
+				else:
+					push_error("Tried to load an invalid object in"+roomName)
 		
 		layernum += 1
 	if FileAccess.file_exists(Undermaker.Path+"Scripts/Rooms/"+roomName+".utscript"):

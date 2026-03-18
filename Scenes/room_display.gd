@@ -6,14 +6,17 @@ extends Node2D
 		"type":"tile",
 		"tilemap":"ruins",
 		"tiles":[]
-	}
+	},
+	"bounds":[16,12]
 }
 
 var tilemaps : Dictionary[String,Texture]
+var object_textures : Dictionary[String,Texture]
 
 func _draw():
 	var index = 0
 	var roomjson = Room.loadRoomFromDictionary(room)
+	draw_rect(roomjson.CameraBounds,Color.RED,false,1)
 	for i in roomjson.Layers:
 		if i is RoomTileLayer:
 			tilemaps["Layer"+str(index)] = i.tilemap
@@ -23,8 +26,15 @@ func _draw():
 		if i is RoomInstanceLayer:
 			for j in i.Objects:
 				var obj : RoomInstance = j
-				if obj.type == "Character" or obj.type == "NPC":
-					draw_texture(preload("res://Sprites/npc1.png"),obj.position*20)
-				if obj.type == "Player":
-					draw_texture(preload("res://Sprites/player.png"),obj.position*20)
+				draw_rect(Rect2((obj.position*10),Vector2(20,20)),Color.BLACK,false,1.0)
+				var image = object_textures[obj.name]
+				draw_texture(image,((obj.position*10)+Vector2(10,10))-(image.get_size()/2))
 		index += 1
+
+func updateObjectTextures() -> void:
+	for i in Room.loadRoomFromDictionary(room).Layers:
+		if i is RoomInstanceLayer:
+			for j in i.Objects:
+				var obj : RoomInstance = j
+				var image = Undermaker.loadTextAsObjectData(obj.type)["editor_image"]
+				object_textures[obj.name] = image

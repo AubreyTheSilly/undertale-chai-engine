@@ -1,3 +1,4 @@
+class_name Portal
 extends Area2D
 
 ### Sends you to 'Data/rooms/[destination].json'.

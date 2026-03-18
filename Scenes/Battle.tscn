@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://d3s7r8bmqm08b"]
+[gd_scene format=3 uid="uid://d3s7r8bmqm08b"]
 
 [ext_resource type="Script" uid="uid://co2guxtvgjejm" path="res://Scripts/Engine/Scenes/Battle.gd" id="1_qxqxx"]
 [ext_resource type="Script" uid="uid://ckik5x0yqgxeb" path="res://Scripts/Engine/Objects/BattleDialogueBox.gd" id="2_3g107"]
@@ -90,28 +90,28 @@ size = Vector2(8, 8)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hoytp"]
 size = Vector2(6, 6)
 
-[node name="BattleRoom" type="Node2D"]
+[node name="BattleRoom" type="Node2D" unique_id=1715465023]
 script = ExtResource("1_qxqxx")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1900184329]
 visible = false
 offset_right = 320.0
 offset_bottom = 240.0
 color = Color(0, 0, 0, 1)
 
-[node name="background" type="Sprite2D" parent="."]
+[node name="background" type="Sprite2D" parent="." unique_id=448204415]
 position = Vector2(159.25, 63.5)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("3_is2k6")
 
-[node name="DialoguePlayer" type="AudioStreamPlayer" parent="."]
+[node name="DialoguePlayer" type="AudioStreamPlayer" parent="." unique_id=351399004]
 stream = ExtResource("3_4nbmx")
 
-[node name="FlavorBox" type="Node2D" parent="."]
+[node name="FlavorBox" type="Node2D" parent="." unique_id=1053598261]
 position = Vector2(15.5, 124.5)
 script = ExtResource("2_3g107")
 
-[node name="DialogueRect" type="NinePatchRect" parent="FlavorBox"]
+[node name="DialogueRect" type="NinePatchRect" parent="FlavorBox" unique_id=1530349780]
 offset_right = 288.0
 offset_bottom = 70.5
 texture = ExtResource("3_mf2ya")
@@ -121,19 +121,19 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 metadata/_edit_use_anchors_ = true
 
-[node name="TextObject" type="Node2D" parent="FlavorBox"]
+[node name="TextObject" type="Node2D" parent="FlavorBox" unique_id=1501017412]
 position = Vector2(11, 10.5)
 script = ExtResource("6_ybx13")
-text = "* You encountered the Dummy."
+text = "* [mode:wavy]yeah"
 font = ExtResource("7_xtlnh")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
-[node name="FightBox" type="Node2D" parent="."]
+[node name="FightBox" type="Node2D" parent="." unique_id=1635168616]
 visible = false
 position = Vector2(15.5, 124.5)
 script = ExtResource("5_u5lwd")
 
-[node name="Rect" type="NinePatchRect" parent="FightBox"]
+[node name="Rect" type="NinePatchRect" parent="FightBox" unique_id=875246415]
 offset_right = 288.0
 offset_bottom = 70.5
 texture = ExtResource("3_mf2ya")
@@ -143,24 +143,25 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 metadata/_edit_use_anchors_ = true
 
-[node name="Sprite2D" type="Sprite2D" parent="FightBox"]
+[node name="Sprite2D" type="Sprite2D" parent="FightBox" unique_id=1230979888]
 modulate = Color(1, 1, 1, 0)
 position = Vector2(144, 35)
 scale = Vector2(0.01, 0.5)
 texture = ExtResource("6_dfi4p")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="FightBox"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="FightBox" unique_id=229258208]
 modulate = Color(1, 1, 1, 0)
 position = Vector2(6.5, 35.25)
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_mugwg")
 autoplay = "default"
 
-[node name="AttackBox" type="StaticBody2D" parent="."]
+[node name="AttackBox" type="StaticBody2D" parent="." unique_id=1266161893]
+visible = false
 position = Vector2(15.5, 124.5)
 script = ExtResource("5_dllax")
 
-[node name="AttackRect" type="NinePatchRect" parent="AttackBox"]
+[node name="AttackRect" type="NinePatchRect" parent="AttackBox" unique_id=1138071595]
 offset_left = 0.00294495
 offset_right = 287.997
 offset_bottom = 70.5
@@ -171,35 +172,35 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 metadata/_edit_use_anchors_ = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackBox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackBox" unique_id=1180711141]
 position = Vector2(1.50294, 35.25)
 shape = SubResource("RectangleShape2D_iwfsq")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="AttackBox"]
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="AttackBox" unique_id=1733339271]
 position = Vector2(286.497, 35.25)
 shape = SubResource("RectangleShape2D_cxxln")
 
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="AttackBox"]
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="AttackBox" unique_id=80310908]
 position = Vector2(144, 1.5)
 shape = SubResource("RectangleShape2D_8s1ob")
 
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="AttackBox"]
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="AttackBox" unique_id=1568591258]
 position = Vector2(144, 69)
 shape = SubResource("RectangleShape2D_28qgs")
 
-[node name="attacks" type="Node2D" parent="AttackBox"]
+[node name="attacks" type="Node2D" parent="AttackBox" unique_id=354627323]
 position = Vector2(144, 35.25)
 
-[node name="bounding" type="Polygon2D" parent="AttackBox/attacks"]
+[node name="bounding" type="Polygon2D" parent="AttackBox/attacks" unique_id=1226847544]
 clip_children = 1
 polygon = PackedVector2Array(-144, -35.25, -144, 35.25, 144, 35.25, 144, -35.25)
 uv = PackedVector2Array(-307, 4, -128, -14, -107, 40, -290, 51)
 
-[node name="ChoiceBox" type="Node2D" parent="."]
+[node name="ChoiceBox" type="Node2D" parent="." unique_id=1619216673]
 visible = false
 position = Vector2(15.5, 124.5)
 
-[node name="DialogueRect" type="NinePatchRect" parent="ChoiceBox"]
+[node name="DialogueRect" type="NinePatchRect" parent="ChoiceBox" unique_id=401769076]
 offset_right = 288.0
 offset_bottom = 70.5
 texture = ExtResource("3_mf2ya")
@@ -209,7 +210,7 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 metadata/_edit_use_anchors_ = true
 
-[node name="Choice0" type="Label" parent="ChoiceBox"]
+[node name="Choice0" type="Label" parent="ChoiceBox" unique_id=1672015899]
 offset_left = 33.5
 offset_top = 9.5
 offset_right = 88.5
@@ -217,7 +218,7 @@ offset_bottom = 29.5
 text = "* Check"
 label_settings = SubResource("LabelSettings_1s3yx")
 
-[node name="Choice1" type="Label" parent="ChoiceBox"]
+[node name="Choice1" type="Label" parent="ChoiceBox" unique_id=233369172]
 offset_left = 161.5
 offset_top = 9.5
 offset_right = 255.5
@@ -226,7 +227,7 @@ text = "* Compliment
 "
 label_settings = SubResource("LabelSettings_mugwg")
 
-[node name="Choice2" type="Label" parent="ChoiceBox"]
+[node name="Choice2" type="Label" parent="ChoiceBox" unique_id=900444018]
 offset_left = 33.5
 offset_top = 25.5
 offset_right = 88.5
@@ -234,7 +235,7 @@ offset_bottom = 45.5
 text = "* Threat"
 label_settings = SubResource("LabelSettings_d13iw")
 
-[node name="Choice3" type="Label" parent="ChoiceBox"]
+[node name="Choice3" type="Label" parent="ChoiceBox" unique_id=533965258]
 offset_left = 161.5
 offset_top = 25.5
 offset_right = 255.5
@@ -243,7 +244,7 @@ text = "* Ribbit
 "
 label_settings = SubResource("LabelSettings_4nbmx")
 
-[node name="Choice4" type="Label" parent="ChoiceBox"]
+[node name="Choice4" type="Label" parent="ChoiceBox" unique_id=1217966787]
 offset_left = 33.5
 offset_top = 41.5
 offset_right = 96.5
@@ -251,7 +252,7 @@ offset_bottom = 61.5
 text = "* Flirt"
 label_settings = SubResource("LabelSettings_3quo0")
 
-[node name="Choice5" type="Label" parent="ChoiceBox"]
+[node name="Choice5" type="Label" parent="ChoiceBox" unique_id=1274164534]
 offset_left = 161.5
 offset_top = 41.5
 offset_right = 255.5
@@ -260,13 +261,13 @@ text = "* Die
 "
 label_settings = SubResource("LabelSettings_d5dbc")
 
-[node name="HeartChoice" type="Sprite2D" parent="ChoiceBox"]
+[node name="HeartChoice" type="Sprite2D" parent="ChoiceBox" unique_id=662717678]
 modulate = Color(1, 0, 0, 1)
 position = Vector2(20, 18.5)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("21_hn3x6")
 
-[node name="EnemyHealth1" type="TextureProgressBar" parent="ChoiceBox"]
+[node name="EnemyHealth1" type="TextureProgressBar" parent="ChoiceBox" unique_id=375471894]
 visible = false
 offset_left = 119.0
 offset_top = 15.5
@@ -277,7 +278,7 @@ nine_patch_stretch = true
 texture_under = ExtResource("17_sx1gs")
 texture_progress = ExtResource("12_mugwg")
 
-[node name="EnemyHealth2" type="TextureProgressBar" parent="ChoiceBox"]
+[node name="EnemyHealth2" type="TextureProgressBar" parent="ChoiceBox" unique_id=506012186]
 visible = false
 offset_left = 119.0
 offset_top = 31.5
@@ -288,7 +289,7 @@ nine_patch_stretch = true
 texture_under = ExtResource("17_sx1gs")
 texture_progress = ExtResource("12_mugwg")
 
-[node name="EnemyHealth3" type="TextureProgressBar" parent="ChoiceBox"]
+[node name="EnemyHealth3" type="TextureProgressBar" parent="ChoiceBox" unique_id=2016732966]
 visible = false
 offset_left = 119.0
 offset_top = 47.5
@@ -299,33 +300,33 @@ nine_patch_stretch = true
 texture_under = ExtResource("17_sx1gs")
 texture_progress = ExtResource("12_mugwg")
 
-[node name="BGM" type="AudioStreamPlayer" parent="."]
+[node name="BGM" type="AudioStreamPlayer" parent="." unique_id=1953506739]
 stream = ExtResource("7_7i387")
 bus = &"BGM"
 parameters/looping = true
 
-[node name="FightButton" parent="." instance=ExtResource("8_j2fg1")]
+[node name="FightButton" parent="." unique_id=983695603 instance=ExtResource("8_j2fg1")]
 position = Vector2(43, 226.5)
 NormalSprite = ExtResource("9_1iuas")
 SelectSprite = ExtResource("10_3xx1h")
 selected = true
 
-[node name="ActButton" parent="." instance=ExtResource("8_j2fg1")]
+[node name="ActButton" parent="." unique_id=1931831872 instance=ExtResource("8_j2fg1")]
 position = Vector2(119.5, 226.5)
 NormalSprite = ExtResource("11_fdlm1")
 SelectSprite = ExtResource("12_btnny")
 
-[node name="ItemButton" parent="." instance=ExtResource("8_j2fg1")]
+[node name="ItemButton" parent="." unique_id=237190904 instance=ExtResource("8_j2fg1")]
 position = Vector2(199.5, 226.5)
 NormalSprite = ExtResource("13_6f4sl")
 SelectSprite = ExtResource("14_nko56")
 
-[node name="MercyButton" parent="." instance=ExtResource("8_j2fg1")]
+[node name="MercyButton" parent="." unique_id=2120984517 instance=ExtResource("8_j2fg1")]
 position = Vector2(277, 226.5)
 NormalSprite = ExtResource("15_u7jef")
 SelectSprite = ExtResource("16_hcrc1")
 
-[node name="PlayerName" type="Label" parent="."]
+[node name="PlayerName" type="Label" parent="." unique_id=794341697]
 offset_left = 15.0
 offset_top = 200.0
 offset_right = 63.0
@@ -334,7 +335,7 @@ scale = Vector2(0.74, 0.74)
 text = "AAAAAA"
 label_settings = SubResource("LabelSettings_kfxkq")
 
-[node name="LV" type="Label" parent="."]
+[node name="LV" type="Label" parent="." unique_id=788477839]
 offset_left = 73.0
 offset_top = 200.0
 offset_right = 121.0
@@ -343,7 +344,7 @@ scale = Vector2(0.74, 0.74)
 text = "LV 1"
 label_settings = SubResource("LabelSettings_kfxkq")
 
-[node name="HP" type="Label" parent="."]
+[node name="HP" type="Label" parent="." unique_id=598435459]
 offset_left = 156.0
 offset_top = 200.0
 offset_right = 204.0
@@ -352,12 +353,12 @@ scale = Vector2(0.74, 0.74)
 text = "20 / 20"
 label_settings = SubResource("LabelSettings_kfxkq")
 
-[node name="HPText" type="Sprite2D" parent="."]
+[node name="HPText" type="Sprite2D" parent="." unique_id=487300858]
 position = Vector2(127.25, 205)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("16_itjnc")
 
-[node name="HPBar" type="TextureProgressBar" parent="."]
+[node name="HPBar" type="TextureProgressBar" parent="." unique_id=1231069744]
 offset_left = 137.0
 offset_top = 200.0
 offset_right = 149.5
@@ -369,39 +370,39 @@ nine_patch_stretch = true
 texture_under = ExtResource("17_sx1gs")
 texture_progress = ExtResource("18_hioeg")
 
-[node name="HeartButtonChoice" type="Sprite2D" parent="."]
+[node name="HeartButtonChoice" type="Sprite2D" parent="." unique_id=83831499]
 modulate = Color(1, 0, 0, 1)
 position = Vector2(23.5, 227)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("21_hn3x6")
 
-[node name="MenuSound" type="AudioStreamPlayer" parent="."]
+[node name="MenuSound" type="AudioStreamPlayer" parent="." unique_id=580810882]
 stream = ExtResource("27_3quo0")
 
-[node name="BattleHeart" type="CharacterBody2D" parent="."]
+[node name="BattleHeart" type="CharacterBody2D" parent="." unique_id=883008076]
 position = Vector2(159.5, 159.75)
 script = ExtResource("25_1s3yx")
 
-[node name="Soul" type="Sprite2D" parent="BattleHeart"]
+[node name="Soul" type="Sprite2D" parent="BattleHeart" unique_id=1288717918]
 modulate = Color(1, 0, 0, 1)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("21_hn3x6")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BattleHeart"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BattleHeart" unique_id=1106108201]
 shape = SubResource("RectangleShape2D_yahm3")
 
-[node name="soul" type="Area2D" parent="BattleHeart"]
+[node name="soul" type="Area2D" parent="BattleHeart" unique_id=340266511]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BattleHeart/soul"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BattleHeart/soul" unique_id=1678754348]
 shape = SubResource("RectangleShape2D_hoytp")
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="BattleHeart"]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="BattleHeart" unique_id=1399861018]
 stream = ExtResource("29_3quo0")
 
-[node name="SlamSound" type="AudioStreamPlayer" parent="BattleHeart"]
+[node name="SlamSound" type="AudioStreamPlayer" parent="BattleHeart" unique_id=1335337710]
 stream = ExtResource("32_ybx13")
 
-[node name="Sounds" type="AudioStreamPlayer" parent="."]
+[node name="Sounds" type="AudioStreamPlayer" parent="." unique_id=461195882]
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=776764751]
 position = Vector2(160, 120)

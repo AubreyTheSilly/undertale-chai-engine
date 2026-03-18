@@ -1,3 +1,4 @@
+class_name Attack
 extends Sprite2D
 
 @export_enum("White","Blue","Orange","Green") var attack_type : String = "White"

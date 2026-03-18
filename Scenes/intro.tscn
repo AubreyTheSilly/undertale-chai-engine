@@ -1,22 +1,21 @@
-[gd_scene load_steps=2 format=3 uid="uid://riy6skoqrwqc"]
+[gd_scene format=3 uid="uid://riy6skoqrwqc"]
 
 [ext_resource type="Script" uid="uid://cewaullb0begd" path="res://Scripts/Engine/Scenes/intro.gd" id="1_b226h"]
 
-[node name="Intro" type="Node2D"]
+[node name="Intro" type="Node2D" unique_id=863333540]
 script = ExtResource("1_b226h")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1410321783]
 centered = false
 
-[node name="Node2D" type="Node2D" parent="."]
+[node name="Node2D" type="Node2D" parent="." unique_id=1747761261]
 position = Vector2(59, 160)
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=50718746]
 
-[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
-pitch_scale = 0.91
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="." unique_id=1524307330]
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2047349980]
 modulate = Color(1, 1, 1, 0)
 offset_right = 320.0
 offset_bottom = 240.0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://fx5iw7vsg4x8"]
+[gd_scene format=3 uid="uid://fx5iw7vsg4x8"]
 
 [ext_resource type="Script" uid="uid://br1q3s4y11s8f" path="res://Scripts/Engine/Scenes/room_loader.gd" id="1_j27jd"]
 [ext_resource type="Script" uid="uid://b6m6ndh7u38dl" path="res://Scripts/Engine/Classes/ScriptRunner.gd" id="2_3ec6f"]
@@ -18,17 +18,17 @@ expand_margin_bottom = 2.0
 [sub_resource type="LabelSettings" id="LabelSettings_j27jd"]
 font_size = 13
 
-[node name="Room" type="Node2D"]
+[node name="Room" type="Node2D" unique_id=1579572305]
 process_priority = 1
 y_sort_enabled = true
 script = ExtResource("1_j27jd")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1222297579]
 anchor_mode = 0
 
-[node name="DoesntExist" type="Node2D" parent="."]
+[node name="DoesntExist" type="Node2D" parent="." unique_id=1163777699]
 
-[node name="LineEdit" type="LineEdit" parent="DoesntExist"]
+[node name="LineEdit" type="LineEdit" parent="DoesntExist" unique_id=1362657701]
 offset_top = 140.0
 offset_right = 320.0
 offset_bottom = 170.0
@@ -39,7 +39,7 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Enter a room name here..."
 alignment = 1
 
-[node name="Label" type="Label" parent="DoesntExist"]
+[node name="Label" type="Label" parent="DoesntExist" unique_id=626031765]
 offset_top = 80.0
 offset_right = 320.0
 offset_bottom = 134.0
@@ -49,11 +49,11 @@ Please enter a room to load instead."
 label_settings = SubResource("LabelSettings_j27jd")
 horizontal_alignment = 1
 
-[node name="BG" type="Sprite2D" parent="."]
+[node name="BG" type="Sprite2D" parent="." unique_id=1390953025]
 z_index = -1
 centered = false
 
-[node name="ScriptRunner" type="Node" parent="." node_paths=PackedStringArray("node")]
+[node name="ScriptRunner" type="Node" parent="." unique_id=1996360563 node_paths=PackedStringArray("node")]
 script = ExtResource("2_3ec6f")
 node = NodePath("..")
 metadata/_custom_type_script = "uid://b6m6ndh7u38dl"
