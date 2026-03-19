@@ -8,14 +8,17 @@ var Path : String = "res://"
 
 var timer : float = 0
 
-func getObjectByClassName(className : String) -> Object:
+func getObjectByClassName(className : String,instantiate : bool = true) -> Object:
 	var object : Object
 	if ClassDB.class_exists(className):
 		object = ClassDB.instantiate(className)
 	else:
 		var class_tscn : PackedScene = load("res://Scenes/Objects/"+className+".tscn")
 		if class_tscn:
-			object = class_tscn.instantiate()
+			if instantiate:
+				object = class_tscn.instantiate()
+			else:
+				object = class_tscn
 	return object
 
 func loadTextAsObjectData(dir : String) -> Dictionary:

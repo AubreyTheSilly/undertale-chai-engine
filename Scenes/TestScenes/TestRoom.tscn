@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dexqxqsprthju" path="res://Scripts/Engine/Objects/text.gd" id="1_letxm"]
 [ext_resource type="Script" uid="uid://daa8kr7e45bhy" path="res://Scripts/Engine/test_room.gd" id="1_wc0jp"]
 [ext_resource type="FontFile" uid="uid://clj8ufd6i6npf" path="res://Fonts/Comic Sans UT.ttf" id="3_wc0jp"]
+[ext_resource type="PackedScene" uid="uid://txeqj7p6n33l" path="res://Scenes/Objects/Player.tscn" id="4_1vk6r"]
 
 [node name="Node2D" type="Node2D" unique_id=943701015]
 y_sort_enabled = true
@@ -11,7 +12,13 @@ script = ExtResource("1_wc0jp")
 [node name="TextObject" type="Node2D" parent="." unique_id=1706365562]
 position = Vector2(5, 5)
 script = ExtResource("1_letxm")
-text = "Placeholder[newline]new line"
+text = "i'm not gonna lie to you, kid.[newline]i remember you're [color:255:0:0]genocides[color:255:255:255]. and for[newline]that?[newline][newline]i'm gonna fucking [color:255:0:0]kill[color:255:255:255] you."
 size = 16
 font = ExtResource("3_wc0jp")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
+
+[node name="Player" parent="." unique_id=579045020 instance=ExtResource("4_1vk6r")]
+
+[node name="Player2" parent="." unique_id=69930700 instance=ExtResource("4_1vk6r")]
+position = Vector2(70, 0)
+CharacterJson = "clover"

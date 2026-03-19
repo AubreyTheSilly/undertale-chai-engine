@@ -32,6 +32,8 @@ func makeObj():
 	var obj = {}
 	obj["position"] = [objpos.x,objpos.y]
 	obj["data"] = {}
+	if $PanelContainer/ObjMode/Property.text != "":
+		obj["data"][$PanelContainer/ObjMode/Property.text] = $PanelContainer/ObjMode/PropertyValue.text
 	obj["name"] = $PanelContainer/ObjMode/ObjName.text
 	obj["type"] = $PanelContainer/ObjMode/Filename.text
 	

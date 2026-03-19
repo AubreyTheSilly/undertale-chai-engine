@@ -77,8 +77,20 @@ func LoadRoom() -> void:
 						for j in objectdata:
 							if j != "extends" and j != "editor_image":
 								object.set(j,objectdata[j])
+						for j in i.data:
+							if j in object:
+								if str_to_var(i.data[j]):
+									object.set(j,str_to_var(i.data[j]))
+								else:
+									object.set(j,i.data[j])
+								print(i.type+"'s property "+j+" has been set to "+i.data[j])
+							else:
+								print(i.type+" does not have property "+j)
+						object.name = i.name
 						object.position = i.position*10
 						layerobj.add_child(object)
+						if object is Character:
+							object.reload_sprite()
 					else:
 						push_error("Object "+i.type+" has an invalid type")
 				else:

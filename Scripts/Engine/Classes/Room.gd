@@ -33,7 +33,7 @@ static func loadRoomFromDictionary(dict : Dictionary) -> Room:
 				obj.position = Vector2(objarray["position"][0],objarray["position"][1])
 				for k in objarray["data"]:
 					var data = objarray["data"][k]
-					obj.data[data[0]] = data[1]
+					obj.data[k] = data
 				layer.Objects.append(obj)
 		room.Layers.append(layer)
 	

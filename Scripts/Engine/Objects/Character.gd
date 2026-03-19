@@ -11,9 +11,16 @@ extends CharacterBody2D
 ## Direction. Can be "left", "down", "up", or "right".
 @export_enum("left","down","up","right") var direction = "down"
 
-func _ready():
-	if CharacterJson:
+func reload_sprite() -> void:
+	print("Character sprite for "+name+" has been reloaded")
+	Character_Sprite = null
+	if CharacterJson != "":
 		Character_Sprite = CharacterSprite.fromJson(CharacterJson+".json")
+	else:
+		Character_Sprite = CharacterSprite.fromJson("player.json")
+
+func _ready():
+	reload_sprite()
 	
 	if Character_Sprite.IdleDown:
 		_sprite.sprite_frames.add_frame("idle_down",Character_Sprite.IdleDown,1,-1)

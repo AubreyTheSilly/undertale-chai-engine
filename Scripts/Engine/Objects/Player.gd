@@ -3,12 +3,7 @@ extends Character
 
 func _ready() -> void:
 	PlayerData.obj = self
-	
-	if CharacterJson:
-		Character_Sprite = CharacterSprite.fromJson(CharacterJson+".json")
-	else:
-		Character_Sprite = CharacterSprite.fromJson("player.json")
-	
+	reload_sprite()
 	if Character_Sprite.IdleDown:
 		_sprite.sprite_frames.add_frame("idle_down",Character_Sprite.IdleDown,1,-1)
 	if Character_Sprite.IdleLeft:
