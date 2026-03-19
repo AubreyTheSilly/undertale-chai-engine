@@ -74,7 +74,9 @@ func loadJsonAsDictionary(dir : String) -> Dictionary:
 		print("JSON to load does not exist. Returning null.")
 		return {}
 	var file = FileAccess.open(Path+dir,FileAccess.READ)
-	var json_string = file.get_line()
+	var json_string = ""
+	while !file.eof_reached():
+		json_string += file.get_line()
 	var json = JSON.new()
 	var parse_result = json.parse(json_string)
 	if not parse_result == OK:
@@ -141,6 +143,7 @@ func _process(_delta) -> void:
 	timer += 1
 
 func load_scene(sceneName : String):
+	PlayerData.room = sceneName
 	get_tree().change_scene_to_packed(preload("res://Scenes/RoomLoader.tscn"))
 
 func _ready():

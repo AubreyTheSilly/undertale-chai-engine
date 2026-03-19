@@ -37,7 +37,7 @@ var vars : Dictionary = {}
 # fires when enemy has stopped shaking and/or dies
 signal damage_done
 # fired by battle scene (TODO)
-signal next
+#signal next
 
 func _predialogue():
 	if hasPreDialogueScript:

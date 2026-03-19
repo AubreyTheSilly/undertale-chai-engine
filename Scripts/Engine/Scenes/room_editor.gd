@@ -128,6 +128,7 @@ func _process(_delta):
 		$PanelContainer/TileMode.visible = false
 		$PanelContainer/ObjMode.visible = false
 		$PanelContainer/Settings.visible = true
+		$"/root/editor/FakeTile".visible = false
 	
 	if $"/root/editor/RoomDisplay".room.has(targetlayer) and editormode == 0:
 		if $"/root/editor/RoomDisplay".room[$OptionButton.get_item_text($OptionButton.selected)]["type"] == "tile":

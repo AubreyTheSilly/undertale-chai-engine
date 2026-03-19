@@ -1,0 +1,91 @@
+{
+	"chara":{
+		"text":"The true name."
+	},
+	"":{
+		"text":"You must choose a name.",
+		"can_pick":false
+	},
+	"aaaaaa":{
+		"text":"Not very creative...?"
+	},
+	"asgore":{
+		"text":"You cannot.",
+		"can_pick":false
+	},
+	"toriel":{
+		"text":"I think you should[newline]think of your own[newline]name, my child.",
+		"can_pick":false
+	},
+	"sans":{
+		"text":"nope.",
+		"can_pick":false
+	},
+	"undyne":{
+		"text":"Get your OWN name!",
+		"can_pick":false
+	},
+	"flowey":{
+		"text":"I already CHOSE[newline]that name.",
+		"can_pick":false
+	},
+	"alphys":{
+		"text":"D-don't do that.",
+		"can_pick":false
+	},
+	"alphy":{
+		"text":"Uh.... OK?"
+	},
+	"papyru":{
+		"text":"I'LL ALLOW IT!!!!"
+	},
+	"napsta":{
+		"text":"............[newline](They're powerless to[newline]stop you.)"
+	},
+	"blooky":{
+		"text":"............[newline](They're powerless to[newline]stop you.)"
+	},
+	"murder":{
+		"text":"That's a little on-[newline]the-nose, isn't it...?"
+	},
+	"mercy":{
+		"text":"That's a little on-[newline]the-nose, isn't it...?"
+	},
+	"asriel":{
+		"text":"...",
+		"can_pick":false
+	},
+	"catty":{
+		"text":"Bratty! Bratty![newline]That's MY name!"
+	},
+	"bratty":{
+		"text":"Like, OK I guess."
+	},
+	"metta":{
+		"text":"OOOOH!!! ARE YOU[newline]PROMOTING MY BRAND?"
+	},
+	"mett":{
+		"text":"OOOOH!!! ARE YOU[newline]PROMOTING MY BRAND?"
+	},
+	"gerson":{
+		"text":"Wah ha ha! Why not?"
+	},
+	"shyren":{
+		"text":"...?"
+	},
+	"aaron":{
+		"text":"Is this name correct? ; )"
+	},
+	"temmie":{
+		"text":"hOI!"
+	},
+	"woshua":{
+		"text":"Clean name."
+	},
+	"jerry":{
+		"text":"Jerry."
+	},
+	"bpants":{
+		"text":"You are really scraping the[newline]bottom of the barrel."
+	}
+}

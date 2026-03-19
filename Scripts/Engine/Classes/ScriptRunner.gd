@@ -855,6 +855,30 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 						Battle.Encounter(runscript.data[line].data[1].value,runscript.data[line].data[2].value)
 					else:
 						Battle.Encounter(runscript.data[line].data[1].value)
+				Token.TokenType.WAIT_FOR_SIGNAL:
+					if runscript.data[line].data.size() != 3:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
+							# reset = true (this caused lag so i moved it to only be in end)
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Node name must be a string")
+						continue
+					if !node.get_node_or_null(runscript.data[line].data[1].value):
+						push_error("line "+str(line+1)+": Target node must exist")
+						continue
+					if runscript.data[line].data[2].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Signal name must be a string")
+						continue
+					if !node.has_signal(runscript.data[line].data[2].value):
+						push_error("line "+str(line+1)+": "+runscript.data[line].data[1].value+" does not have signal "+runscript.data[line].data[2].value)
+						continue
+					
+					await node.get(runscript.data[line].data[2].value)
 				_:
 					await unhandled_function(runscript.data[line])
 		if reset:

@@ -4,6 +4,7 @@ extends Node2D
 
 @export var text : String
 @export var character_spacing : float = 8
+@export var extra_font_spacing : Dictionary[String,float]
 @export var line_spacing : float = 16
 @export var size : int = 13
 @export var font : Font
@@ -49,6 +50,8 @@ func _draw():
 					else:
 						draw_char(font,drawposition+Vector2(0,size),i,size,color)
 					drawposition.x += character_spacing
+					if extra_font_spacing.has(i):
+						drawposition.x += extra_font_spacing[i]
 
 func _process(_delta):
 	queue_redraw()

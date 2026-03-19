@@ -1,4 +1,4 @@
-class_name Portal
+class_name Trigger
 extends Area2D
 
 ### Sends you to 'Data/rooms/[destination].json'.
