@@ -874,11 +874,18 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 					if runscript.data[line].data[2].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Signal name must be a string")
 						continue
-					if !node.has_signal(runscript.data[line].data[2].value):
-						push_error("line "+str(line+1)+": "+runscript.data[line].data[1].value+" does not have signal "+runscript.data[line].data[2].value)
+					if !node.get_node_or_null(runscript.data[line].data[1].value).has_signal(runscript.data[line].data[2].value):
+						push_error("line "+str(line+1)+": "+node.get_node_or_null(runscript.data[line].data[1].value).name+" does not have signal "+runscript.data[line].data[2].value)
 						continue
 					
-					await node.get(runscript.data[line].data[2].value)
+					await node.get_node_or_null(runscript.data[line].data[1].value).get(runscript.data[line].data[2].value)
+				Token.TokenType.START_DIALOGUE:
+					pass
+					#var dialogue = []
+					#for i in runscript.data[line].data:
+						#if i.type != Token.TokenType.PRINT:
+							#msg += str(i.value)+" "
+					#print(msg)
 				_:
 					await unhandled_function(runscript.data[line])
 		if reset:

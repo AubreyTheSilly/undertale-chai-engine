@@ -18,7 +18,7 @@ func _process(_delta) -> void:
 		get_tree().reload_current_scene()
 	for i in get_children():
 		for j in i.get_children():
-			if j.name == "Player":
+			if j is Player:
 				camera.position = j.position-Vector2(160,120)
 	if room:
 		camera.position.x = clamp(camera.position.x,room.CameraBounds.position.x,room.CameraBounds.position.x+(room.CameraBounds.size.x-320))
@@ -45,7 +45,7 @@ func LoadRoom() -> void:
 		$BG.texture = Loader.load_file("Sprites/Backgrounds/"+roomName+".png")
 	room = Room.loadRoomFromDictionary(Undermaker.loadJsonAsDictionary("Data/rooms/"+roomName+".json"))
 	room_valid = true
-	var layernum = 0
+	var layernum = 1
 	for layer in room.Layers:
 		var layerobj = Node2D.new()
 		add_child(layerobj)
@@ -69,14 +69,33 @@ func LoadRoom() -> void:
 				#for j in i.data:
 					#object.set(j,i.data[j])
 				#object.position = i.position*20
-				
-				var objectdata = Undermaker.loadTextAsObjectData(i.type)
-				if objectdata != {}:
-					var object = Undermaker.getObjectByClassName(objectdata["extends"])
+				if FileAccess.file_exists(Undermaker.Path+"Data/Objects/"+i.type+".txt"):
+					var objectdata = Undermaker.loadTextAsObjectData(i.type)
+					if objectdata != {}:
+						var object = Undermaker.getObjectByClassName(objectdata["extends"])
+						if object:
+							for j in objectdata:
+								if j != "extends" and j != "editor_image":
+									object.set(j,objectdata[j])
+							for j in i.data:
+								if j in object:
+									if str_to_var(i.data[j]):
+										object.set(j,str_to_var(i.data[j]))
+									else:
+										object.set(j,i.data[j])
+									print(i.type+"'s property "+j+" has been set to "+i.data[j])
+								else:
+									print(i.type+" does not have property "+j)
+							object.name = i.name
+							object.position = i.position*10
+							layerobj.add_child(object)
+						else:
+							push_error("Object "+i.type+" has an invalid type")
+					else:
+						push_error("Tried to load an invalid object in"+roomName)
+				else:
+					var object = Undermaker.getObjectByClassName(i.type)
 					if object:
-						for j in objectdata:
-							if j != "extends" and j != "editor_image":
-								object.set(j,objectdata[j])
 						for j in i.data:
 							if j in object:
 								if str_to_var(i.data[j]):
@@ -89,12 +108,6 @@ func LoadRoom() -> void:
 						object.name = i.name
 						object.position = i.position*10
 						layerobj.add_child(object)
-						if object is Character:
-							object.reload_sprite()
-					else:
-						push_error("Object "+i.type+" has an invalid type")
-				else:
-					push_error("Tried to load an invalid object in"+roomName)
 		
 		layernum += 1
 	if FileAccess.file_exists(Undermaker.Path+"Scripts/Rooms/"+roomName+".utscript"):

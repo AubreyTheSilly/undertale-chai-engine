@@ -220,6 +220,8 @@ func _process(_delta):
 				$confirm/No.text = "[color:255:255:0]Go back"
 				if Input.is_action_just_pressed("Select"):
 					section = NAMING_SCREEN
+		TRANSITION:
+			$confirm/Name.rotation_degrees = randi_range(0,1)
 
 func start_game() -> void:
 	PlayerData.name = $confirm/Name.text

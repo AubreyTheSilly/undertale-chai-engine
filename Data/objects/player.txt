@@ -1,3 +1,0 @@
-extends=Player
-editor_image=player
-speed=50

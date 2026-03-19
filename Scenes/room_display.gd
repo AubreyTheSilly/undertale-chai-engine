@@ -36,5 +36,5 @@ func updateObjectTextures() -> void:
 		if i is RoomInstanceLayer:
 			for j in i.Objects:
 				var obj : RoomInstance = j
-				var image = Undermaker.loadTextAsObjectData(obj.type)["editor_image"]
+				var image = Undermaker.get_object_image(obj.type)
 				object_textures[obj.name] = image

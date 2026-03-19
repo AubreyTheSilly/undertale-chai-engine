@@ -1,0 +1,2 @@
+wait_for_signal "Layer2/TestTrigger" "triggered"
+start_encounter "dog"

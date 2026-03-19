@@ -8,6 +8,23 @@ var Path : String = "res://"
 
 var timer : float = 0
 
+func get_object_image(objtype : String):
+	if objtype == "Character":
+		return preload("res://Sprites/npc1.png")
+	elif objtype == "Player":
+		return preload("res://Sprites/player.png")
+	elif objtype == "Portal":
+		return preload("res://Sprites/portal.png")
+	elif objtype == "Trigger":
+		return preload("res://Sprites/trigger.png")
+	elif objtype != "" and FileAccess.file_exists(Path+"Data/Objects/"+objtype+".txt"):
+		if Undermaker.loadTextAsObjectData(objtype):
+			return Undermaker.loadTextAsObjectData(objtype)["editor_image"]
+		else:
+			return null
+	else:
+		return null
+
 func getObjectByClassName(className : String,instantiate : bool = true) -> Object:
 	var object : Object
 	if ClassDB.class_exists(className):
@@ -65,7 +82,7 @@ func loadTextAsObjectData(dir : String) -> Dictionary:
 		dict[key] = value
 	print(dict)
 	if not dict.has("extends") or not dict.has("editor_image"):
-		push_error("Missing object data. Make sure you have extended and editor_image values defined!")
+		push_error("Missing required values from "+dir+".txt. Make sure you have extended and editor_image values defined!")
 		return {}
 	return dict
 

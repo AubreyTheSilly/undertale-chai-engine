@@ -8,5 +8,4 @@
 script = ExtResource("1_njg3o")
 
 [node name="Area2D" type="CollisionShape2D" parent="." unique_id=1503134340]
-position = Vector2(10, 10)
 shape = SubResource("RectangleShape2D_htqgg")

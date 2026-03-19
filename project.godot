@@ -25,6 +25,10 @@ boot_splash/use_filter=false
 boot_splash/image="uid://dlf6gl4db6e34"
 config/icon="uid://cld6yyq8mvbqs"
 
+[audio]
+
+buses/default_bus_layout="uid://cvye2e3ye7l5w"
+
 [autoload]
 
 MouseArea="*res://Scenes/Objects/MouseArea.tscn"

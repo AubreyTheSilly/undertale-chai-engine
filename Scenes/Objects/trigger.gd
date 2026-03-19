@@ -9,7 +9,7 @@ signal triggered
 
 func _process(_delta):
 	for i in get_overlapping_bodies():
-		if i.name.to_lower().contains("player"):
+		if i is Player:
 			if !touching:
 				triggered.emit()
 			touching = true
