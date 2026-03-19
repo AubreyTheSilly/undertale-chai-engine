@@ -7,6 +7,9 @@ var prevtilemap : String
 
 var newlayer = false
 
+var objdata : Array[Array] = [["",""]]
+var curobjdata : int = 0
+
 func redraw_room(_text : String = "") -> void:
 	await $"/root/editor/RoomDisplay".updateObjectTextures()
 	$"/root/editor/RoomDisplay".queue_redraw()
@@ -32,8 +35,9 @@ func makeObj():
 	var obj = {}
 	obj["position"] = [objpos.x,objpos.y]
 	obj["data"] = {}
-	if $PanelContainer/ObjMode/Property.text != "":
-		obj["data"][$PanelContainer/ObjMode/Property.text] = $PanelContainer/ObjMode/PropertyValue.text
+	for i in objdata:
+		if i[0] != "":
+			obj["data"][i[0]] = i[1]
 	obj["name"] = $PanelContainer/ObjMode/ObjName.text
 	obj["type"] = $PanelContainer/ObjMode/Filename.text
 	
@@ -89,6 +93,9 @@ func get_optionbutton_items(optionbutton : OptionButton) -> Array[String]:
 	return output
 
 func _process(_delta):
+	$PanelContainer/ObjMode/Label5.text = str(curobjdata+1)+"/"+str(objdata.size())
+	objdata[curobjdata][0] = $PanelContainer/ObjMode/Property.text
+	objdata[curobjdata][1] = $PanelContainer/ObjMode/PropertyValue.text
 	if !visible:
 		return
 	var room_bg = Loader.load_file("Sprites/Backgrounds/"+$LineEdit.text+".png")
@@ -255,3 +262,30 @@ func _on_size_y_text_submitted(_new_text):
 func _on_size_x_text_submitted(_new_text):
 	$"/root/editor/RoomDisplay".room["bounds"] = [float($PanelContainer/Settings/SizeX.text),float($PanelContainer/Settings/SizeY.text)]
 	redraw_room()
+
+func _on_prev_objdata_pressed():
+	if curobjdata == 0:
+		curobjdata = objdata.size()-1
+	else:
+		curobjdata -= 1
+	$PanelContainer/ObjMode/Property.text = objdata[curobjdata][0]
+	$PanelContainer/ObjMode/PropertyValue.text = objdata[curobjdata][1]
+
+func _on_next_objdata_pressed():
+	if curobjdata == objdata.size()-1:
+		curobjdata = 0
+	else:
+		curobjdata += 1
+	$PanelContainer/ObjMode/Property.text = objdata[curobjdata][0]
+	$PanelContainer/ObjMode/PropertyValue.text = objdata[curobjdata][1]
+
+func _on_add_objdata_pressed():
+	objdata.append(["",""])
+	curobjdata = objdata.size()-1
+
+func _on_remove_objdata_pressed():
+	if objdata.size() == 1:
+		return
+	var oldobjdata = curobjdata
+	objdata.remove_at(curobjdata)
+	curobjdata = oldobjdata

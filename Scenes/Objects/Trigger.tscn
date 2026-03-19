@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://beouls6y617y8"]
 
-[ext_resource type="Script" uid="uid://bx6whigq6ogm2" path="res://Scenes/Objects/portal.gd" id="1_fyoep"]
+[ext_resource type="Script" uid="uid://b5qkroaxmy0v3" path="res://Scenes/Objects/trigger.gd" id="1_fyoep"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_htqgg"]
 
-[node name="Portal" type="Area2D" unique_id=1077198307]
+[node name="Trigger" type="Area2D" unique_id=1077198307]
 script = ExtResource("1_fyoep")
 
 [node name="Area2D" type="CollisionShape2D" parent="." unique_id=1503134340]

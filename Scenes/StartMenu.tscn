@@ -34,7 +34,6 @@ font_size = 26
 script = ExtResource("1_h303d")
 
 [node name="controls" type="Node2D" parent="." unique_id=1415009142]
-visible = false
 
 [node name="Label" type="Label" parent="controls" unique_id=756293049]
 offset_left = 84.0
@@ -546,6 +545,7 @@ font = ExtResource("8_o42a4")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
 [node name="confirm" type="Node2D" parent="." unique_id=198649516]
+visible = false
 
 [node name="Name" type="Node2D" parent="confirm" unique_id=322588819]
 position = Vector2(96, 115)

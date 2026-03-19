@@ -726,9 +726,9 @@ metadata/_edit_use_anchors_ = true
 [node name="Label4" type="Label" parent="CanvasLayer/RoomEditor/PanelContainer/ObjMode" unique_id=1523116725]
 layout_mode = 0
 offset_left = 1.26086
-offset_top = 94.0
+offset_top = 88.0
 offset_right = 81.2609
-offset_bottom = 117.0
+offset_bottom = 111.0
 text = "Custom Property"
 label_settings = SubResource("LabelSettings_8howc")
 
@@ -740,9 +740,9 @@ anchor_top = 0.46875
 anchor_right = -0.06020059
 anchor_bottom = 0.46875
 offset_left = 51.2609
-offset_top = 33.0
+offset_top = 27.0
 offset_right = 91.26072
-offset_bottom = 51.0
+offset_bottom = 45.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 8
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
@@ -758,15 +758,88 @@ anchor_top = 0.625
 anchor_right = -0.06020059
 anchor_bottom = 0.625
 offset_left = 51.2609
-offset_top = 33.0
+offset_top = 27.0
 offset_right = 91.26072
-offset_bottom = 51.0
+offset_bottom = 45.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 8
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Value"
 metadata/_edit_use_anchors_ = true
+
+[node name="Prev" type="Button" parent="CanvasLayer/RoomEditor/PanelContainer/ObjMode" unique_id=941214813]
+z_index = 1
+layout_mode = 0
+offset_left = 3.0
+offset_top = 150.0
+offset_right = 12.0
+offset_bottom = 159.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+action_mode = 0
+text = "<"
+
+[node name="Next" type="Button" parent="CanvasLayer/RoomEditor/PanelContainer/ObjMode" unique_id=496990662]
+z_index = 1
+layout_mode = 0
+offset_left = 20.0
+offset_top = 150.0
+offset_right = 29.0
+offset_bottom = 159.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+action_mode = 0
+text = ">"
+
+[node name="Add" type="Button" parent="CanvasLayer/RoomEditor/PanelContainer/ObjMode" unique_id=738855934]
+z_index = 1
+layout_mode = 0
+offset_left = 37.0
+offset_top = 150.0
+offset_right = 46.0
+offset_bottom = 159.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+action_mode = 0
+text = "+"
+
+[node name="Remove" type="Button" parent="CanvasLayer/RoomEditor/PanelContainer/ObjMode" unique_id=1296256273]
+z_index = 1
+layout_mode = 0
+offset_left = 54.0
+offset_top = 150.0
+offset_right = 63.0
+offset_bottom = 159.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a7iym")
+theme_override_styles/hover = SubResource("StyleBoxFlat_24ceq")
+action_mode = 0
+text = "-"
+
+[node name="Label5" type="Label" parent="CanvasLayer/RoomEditor/PanelContainer/ObjMode" unique_id=1146922480]
+layout_mode = 0
+offset_left = 66.0
+offset_top = 149.0
+offset_right = 146.00005
+offset_bottom = 172.0
+text = "1/1"
+label_settings = SubResource("LabelSettings_8howc")
 
 [node name="Settings" type="Control" parent="CanvasLayer/RoomEditor/PanelContainer" unique_id=1850117348]
 visible = false
@@ -1072,6 +1145,10 @@ centered = false
 [connection signal="pressed" from="CharacterEditor/AddSprite" to="CharacterEditor" method="_on_add_sprite_pressed"]
 [connection signal="pressed" from="CharacterEditor/SaveChar" to="CharacterEditor" method="_on_save_pressed"]
 [connection signal="pressed" from="CharacterEditor/LoadChar" to="CharacterEditor" method="_on_load_pressed"]
+[connection signal="pressed" from="CanvasLayer/RoomEditor/PanelContainer/ObjMode/Prev" to="CanvasLayer/RoomEditor" method="_on_prev_objdata_pressed"]
+[connection signal="pressed" from="CanvasLayer/RoomEditor/PanelContainer/ObjMode/Next" to="CanvasLayer/RoomEditor" method="_on_next_objdata_pressed"]
+[connection signal="pressed" from="CanvasLayer/RoomEditor/PanelContainer/ObjMode/Add" to="CanvasLayer/RoomEditor" method="_on_add_objdata_pressed"]
+[connection signal="pressed" from="CanvasLayer/RoomEditor/PanelContainer/ObjMode/Remove" to="CanvasLayer/RoomEditor" method="_on_remove_objdata_pressed"]
 [connection signal="text_submitted" from="CanvasLayer/RoomEditor/PanelContainer/Settings/SizeX" to="CanvasLayer/RoomEditor" method="_on_size_x_text_submitted"]
 [connection signal="text_submitted" from="CanvasLayer/RoomEditor/PanelContainer/Settings/SizeY" to="CanvasLayer/RoomEditor" method="_on_size_y_text_submitted"]
 [connection signal="pressed" from="CanvasLayer/RoomEditor/Save" to="CanvasLayer/RoomEditor" method="_on_save_pressed"]
