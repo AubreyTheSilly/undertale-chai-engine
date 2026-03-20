@@ -1,6 +1,7 @@
 class_name Room
 extends Resource
 
+@export var Music : String
 @export var Layers : Array[RoomLayer] = []
 @export var CameraBounds : Rect2
 
@@ -11,6 +12,9 @@ static func loadRoomFromDictionary(dict : Dictionary) -> Room:
 	for i in json:
 		if i == "bounds":
 			room.CameraBounds = Rect2(0,0,json["bounds"][0]*20,json["bounds"][1]*20)
+			continue
+		if i == "bgm":
+			room.Music = json["bgm"]
 			continue
 		var layerjson : Dictionary = json[i]
 		var layer : RoomLayer

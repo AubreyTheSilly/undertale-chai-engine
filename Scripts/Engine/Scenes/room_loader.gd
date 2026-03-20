@@ -87,7 +87,7 @@ func LoadRoom() -> void:
 								else:
 									print(i.type+" does not have property "+j)
 							object.name = i.name
-							object.position = i.position*10
+							object.position = (i.position+Vector2(1,1))*10
 							layerobj.add_child(object)
 						else:
 							push_error("Object "+i.type+" has an invalid type")
@@ -99,14 +99,14 @@ func LoadRoom() -> void:
 						for j in i.data:
 							if j in object:
 								if str_to_var(i.data[j]):
-									object.set(j,str_to_var(i.data[j]))
+									create_tween().tween_property(object,j,str_to_var(i.data[j]),0.01)
 								else:
-									object.set(j,i.data[j])
+									create_tween().tween_property(object,j,i.data[j],0.01)
 								print(i.type+"'s property "+j+" has been set to "+i.data[j])
 							else:
 								print(i.type+" does not have property "+j)
 						object.name = i.name
-						object.position = i.position*10
+						object.position = (i.position+Vector2(1,1))*10
 						layerobj.add_child(object)
 		
 		layernum += 1

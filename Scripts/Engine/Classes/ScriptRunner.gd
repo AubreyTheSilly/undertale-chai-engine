@@ -220,7 +220,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 						reset = true
 						while_line = -1
 				Token.TokenType.END:
-					if depth:
+					if depth:	
 						if depth == while_depth and while_line != -1:
 							line = while_line-1
 							reset = true
@@ -229,7 +229,10 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 				Token.TokenType.IF:
 					depth += 1
 					if runscript.data[line].data.size() == 2:
-						if !bool(runscript.data[line].data[1].value):
+						if getVariable(runscript.data[line].data[1].lexeme):
+							if !bool(getVariable(runscript.data[line].data[1].lexeme).value):
+								skip_depth += 1
+						elif !bool(runscript.data[line].data[1].value):
 							skip_depth += 1
 					elif !(ifoperators.has(runscript.data[line].data[2].type)):
 						push_error("line "+str(line+1)+": You must add a valid operator for if")
@@ -881,11 +884,50 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 					await node.get_node_or_null(runscript.data[line].data[1].value).get(runscript.data[line].data[2].value)
 				Token.TokenType.START_DIALOGUE:
 					pass
-					#var dialogue = []
-					#for i in runscript.data[line].data:
-						#if i.type != Token.TokenType.PRINT:
-							#msg += str(i.value)+" "
-					#print(msg)
+					var dialogue : Array[String] = []
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.STRING:
+							dialogue.append(i.value)
+					await DialogueHandler.StartDialogue(dialogue)
+				Token.TokenType.SET_FLAG:
+					if runscript.data[line].data.size() != 3:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
+							# reset = true (this caused lag so i moved it to only be in end)
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Flag name must be a string")
+						continue
+					if runscript.data[line].data[2].type != Token.TokenType.BOOLEAN:
+						push_error("line "+str(line+1)+": Flag value must be a bool")
+						continue
+					
+					PlayerData.flags[runscript.data[line].data[1].value] = runscript.data[line].data[2].value
+				Token.TokenType.GET_FLAG:
+					if runscript.data[line].data.size() != 3:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Flag name must be a string")
+						continue
+					if runscript.data[line].data[2].type != Token.TokenType.IDENTIFIER:
+						push_error("line "+str(line+1)+": Variable name must be an identifier")
+						print(runscript.data[line].data[2].type)
+						continue
+					if !getVariable(runscript.data[line].data[2].lexeme):
+						push_error("line "+str(line+1)+": Variable must exist")
+						continue
+					var vari = getVariable(runscript.data[line].data[2].lexeme)
+					if !PlayerData.flags.has(runscript.data[line].data[1].value):
+						push_warning("line "+str(line+1)+": Flag does not exist. Defaulting variable to false.")
+						vari.value = false
+						continue
+					
+					vari.value = PlayerData.flags[runscript.data[line].data[1].value]
 				_:
 					await unhandled_function(runscript.data[line])
 		if reset:

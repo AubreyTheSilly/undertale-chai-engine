@@ -8,6 +8,33 @@ var Path : String = "res://"
 
 var timer : float = 0
 
+@onready var editor_fun := randi_range(1,100)
+
+func get_mods_list(directory : String) -> Array[Dictionary]:
+	var mods : Array[Dictionary] = []
+	
+	if DirAccess.dir_exists_absolute(directory+"/mods"):
+		var mods_folder := DirAccess.open(directory+"/mods")
+		
+		mods_folder.list_dir_begin()
+		
+		var filename := mods_folder.get_next()
+		while filename != "":
+			if mods_folder.current_is_dir():
+				if FileAccess.file_exists(directory+"/mods/"+filename+"/project.json") and filename != "Default Assets Folder":
+					var modDict = loadJsonAsDictionary_absolute(directory+"/mods/"+filename+"/project.json")
+					modDict["filename"] = filename
+					mods.append(modDict)
+				else:
+					push_warning(filename+" does not have a valid project.json")
+			filename = mods_folder.get_next()
+		
+		mods_folder.list_dir_end()
+	else:
+		push_warning("Mods folder does not exist!")
+	
+	return mods
+
 func get_object_image(objtype : String):
 	if objtype == "Character":
 		return preload("res://Sprites/npc1.png")
@@ -17,6 +44,11 @@ func get_object_image(objtype : String):
 		return preload("res://Sprites/portal.png")
 	elif objtype == "Trigger":
 		return preload("res://Sprites/trigger.png")
+	elif objtype == "Wall":
+		if editor_fun >= 40 and editor_fun <= 45:
+			return preload("res://Sprites/wall2.png")
+		else:
+			return preload("res://Sprites/wall1.png")
 	elif objtype != "" and FileAccess.file_exists(Path+"Data/Objects/"+objtype+".txt"):
 		if Undermaker.loadTextAsObjectData(objtype):
 			return Undermaker.loadTextAsObjectData(objtype)["editor_image"]
@@ -102,6 +134,22 @@ func loadJsonAsDictionary(dir : String) -> Dictionary:
 	file.close()
 	return json.data
 
+func loadJsonAsDictionary_absolute(dir : String) -> Dictionary:
+	if !FileAccess.file_exists(dir):
+		print("JSON to load does not exist. Returning null.")
+		return {}
+	var file = FileAccess.open(dir,FileAccess.READ)
+	var json_string = ""
+	while !file.eof_reached():
+		json_string += file.get_line()
+	var json = JSON.new()
+	var parse_result = json.parse(json_string)
+	if not parse_result == OK:
+		print("JSON Parse Error: ", json.get_error_message(), " in ", json_string, " at line ", json.get_error_line())
+		return {}
+	file.close()
+	return json.data
+
 func createJsonFromDictionary(dir : String,dict : Dictionary = {}) -> Error:
 	var file = FileAccess.open(Path+dir,FileAccess.WRITE)
 	print(FileAccess.get_open_error())
@@ -151,7 +199,10 @@ func newProject(newpath : String) -> Error:
 
 func _process(_delta) -> void:
 	if Undermaker.Project.has("gameName"):
-		get_window().title = Project["gameName"]
+		if get_tree():
+			if get_tree().current_scene:
+				if get_tree().current_scene.name != "ModLoader":
+					get_window().title = Project["gameName"]
 	if Input.is_action_just_pressed("Fullscreen"):
 		if get_window().mode == get_window().MODE_FULLSCREEN:
 			get_window().mode = get_window().MODE_WINDOWED

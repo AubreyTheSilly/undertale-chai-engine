@@ -21,8 +21,7 @@ func StartDialogue(dialogue : Array[String],position : int = DOWN) -> void:
 		var command = ""
 		var speed = 1
 		skiptext = false
-		for j in dialogbox.get_children():
-			j.queue_free()
+		$Box/TextObject.text = ""
 		for j in i:
 			match j:
 				"[":
@@ -52,8 +51,10 @@ func StartDialogue(dialogue : Array[String],position : int = DOWN) -> void:
 								textobject.font = Loader.load_file("Fonts/"+".otf")
 							elif Loader.load_file("Fonts/"+".ttf"):
 								textobject.font = Loader.load_file("Fonts/"+".ttf")
+						"sound":
+							$DialoguePlayer.stream = Loader.load_file("Audio/Sounds/"+cmand[1]+".wav")
 						_:
-							$TextObject.text += "["+command+"]"
+							$Box/TextObject.text += "["+command+"]"
 				_:
 					if cmd == true:
 						command += j

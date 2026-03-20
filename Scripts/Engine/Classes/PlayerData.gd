@@ -12,14 +12,16 @@ var INV : int = 30
 var weapon : Item = Items.STICK
 var armor : Item = Items.BANDAGE
 var inventory : Array[Item] = []
-var flags : Dictionary
+var flags : Dictionary[String,bool]
 var fun : int = randi_range(0,100)
 var room = "room_start"
 
 var obj : Player
 var player_can_move = true
 var player_teleporting = false
-var player_teleport_position : Vector2
+var player_teleport_position = null
+var player_position : Vector2
+var player_dir : Vector2
 
 func loadFile(newgame : bool = false):
 	if newgame:

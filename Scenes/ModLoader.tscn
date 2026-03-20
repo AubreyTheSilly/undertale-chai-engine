@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://cc0roou2gsvci"]
+
+[ext_resource type="Script" uid="uid://dpk6totsbjfgp" path="res://Scenes/mod_loader.gd" id="1_gf4tn"]
+[ext_resource type="Texture2D" uid="uid://ciiui7kmdomoi" path="res://Sprites/UIBox.png" id="2_457ts"]
+[ext_resource type="Script" uid="uid://dexqxqsprthju" path="res://Scripts/Engine/Objects/text.gd" id="3_dq1h7"]
+[ext_resource type="FontFile" uid="uid://decmshb7688st" path="res://Fonts/DTM-Mono.otf" id="4_gifmv"]
+[ext_resource type="AudioStream" uid="uid://ct3x682yh2rfm" path="res://Audio/Sounds/snd_select.wav" id="5_gifmv"]
+[ext_resource type="AudioStream" uid="uid://bn7lvw3vdfvte" path="res://Audio/Sounds/snd_squeak.wav" id="6_oic44"]
+
+[node name="ModLoader" type="Node2D" unique_id=1004781532]
+script = ExtResource("1_gf4tn")
+
+[node name="modTemplate" type="Node2D" parent="." unique_id=1918378811]
+position = Vector2(10, 0)
+
+[node name="TextObject" type="Node2D" parent="modTemplate" unique_id=1181325212]
+position = Vector2(0, -8)
+script = ExtResource("3_dq1h7")
+text = "UNDERTALE"
+font = ExtResource("4_gifmv")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1381852160]
+
+[node name="Box" type="NinePatchRect" parent="CanvasLayer" unique_id=1861773425]
+offset_left = 200.0
+offset_right = 489.0
+offset_bottom = 240.0
+texture = ExtResource("2_457ts")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+metadata/_edit_use_anchors_ = true
+
+[node name="TextObject" type="Node2D" parent="CanvasLayer/Box" unique_id=1117426386]
+position = Vector2(7, 100)
+script = ExtResource("3_dq1h7")
+text = "Mod Name Here"
+font = ExtResource("4_gifmv")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
+
+[node name="TextObject2" type="Node2D" parent="CanvasLayer/Box" unique_id=1973399192]
+position = Vector2(7, 120)
+script = ExtResource("3_dq1h7")
+text = "Your Name Here"
+character_spacing = 6.0
+size = 10
+font = ExtResource("4_gifmv")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=487369984]
+position = Vector2(160, 0)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=188477060]
+stream = ExtResource("5_gifmv")
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="." unique_id=1200943937]
+stream = ExtResource("6_oic44")

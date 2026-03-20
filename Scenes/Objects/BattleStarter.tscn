@@ -1,26 +1,26 @@
-[gd_scene load_steps=5 format=3 uid="uid://dhx60k0k70h5x"]
+[gd_scene format=3 uid="uid://dhx60k0k70h5x"]
 
 [ext_resource type="Script" uid="uid://c1phv7elm3mux" path="res://Scripts/Engine/Objects/BattleStarter.gd" id="1_nlbgw"]
 [ext_resource type="AudioStream" uid="uid://bkk7xrq4kyugl" path="res://Audio/Sounds/snd_noise.wav" id="2_dkxli"]
 [ext_resource type="Texture2D" uid="uid://b0rk7jclh5ydd" path="res://Sprites/Battle/spr_heart_0.png" id="2_jueqt"]
 [ext_resource type="Texture2D" uid="uid://nk30f2egad37" path="res://Sprites/Character/Frisk/spr_maincharad_0.png" id="3_n1ar7"]
 
-[node name="BattleStarter" type="CanvasLayer"]
+[node name="BattleStarter" type="CanvasLayer" unique_id=85571963]
 script = ExtResource("1_nlbgw")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=747520710]
 offset_right = 320.0
 offset_bottom = 240.0
 color = Color(0, 0, 0, 1)
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1344746200]
 stream = ExtResource("2_dkxli")
 
-[node name="PlayerSprite" type="Sprite2D" parent="."]
+[node name="PlayerSprite" type="Sprite2D" parent="." unique_id=1713701061]
 position = Vector2(160, 120)
 texture = ExtResource("3_n1ar7")
 
-[node name="Heart" type="Sprite2D" parent="."]
+[node name="Heart" type="Sprite2D" parent="." unique_id=1605393282]
 modulate = Color(1, 0, 0, 1)
 position = Vector2(160, 120)
 scale = Vector2(0.5, 0.5)

@@ -1,20 +1,20 @@
-[gd_scene load_steps=5 format=3 uid="uid://bniq2qap32r4q"]
+[gd_scene format=3 uid="uid://bniq2qap32r4q"]
 
 [ext_resource type="Texture2D" uid="uid://ciiui7kmdomoi" path="res://Sprites/UIBox.png" id="1_q084c"]
 [ext_resource type="Script" uid="uid://cey17ub0nnpy2" path="res://Scripts/Engine/Objects/DialogueHandler.gd" id="1_toi2p"]
 [ext_resource type="Script" uid="uid://dexqxqsprthju" path="res://Scripts/Engine/Objects/text.gd" id="3_81uhv"]
 [ext_resource type="FontFile" uid="uid://decmshb7688st" path="res://Fonts/DTM-Mono.otf" id="4_81uhv"]
 
-[node name="DialogueHandler" type="CanvasLayer"]
+[node name="DialogueHandler" type="CanvasLayer" unique_id=1962879264]
 visible = false
 script = ExtResource("1_toi2p")
 
-[node name="DialoguePlayer" type="AudioStreamPlayer" parent="."]
+[node name="DialoguePlayer" type="AudioStreamPlayer" parent="." unique_id=571746461]
 
-[node name="Box" type="Node2D" parent="."]
+[node name="Box" type="Node2D" parent="." unique_id=578512044]
 position = Vector2(16, 160)
 
-[node name="DialogueRect" type="NinePatchRect" parent="Box"]
+[node name="DialogueRect" type="NinePatchRect" parent="Box" unique_id=982921061]
 offset_right = 289.0
 offset_bottom = 76.0
 texture = ExtResource("1_q084c")
@@ -24,10 +24,10 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 metadata/_edit_use_anchors_ = true
 
-[node name="Face" type="Sprite2D" parent="Box"]
+[node name="Face" type="Sprite2D" parent="Box" unique_id=1626299127]
 position = Vector2(36.5, 35)
 
-[node name="TextObject" type="Node2D" parent="Box"]
+[node name="TextObject" type="Node2D" parent="Box" unique_id=1380433347]
 position = Vector2(8, 9)
 script = ExtResource("3_81uhv")
 text = "* Example text 1.[newline][mode:shaky]* Example text 2.[newline][mode:wavy]* Example text 3."

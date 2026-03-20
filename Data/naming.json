@@ -87,5 +87,9 @@
 	},
 	"bpants":{
 		"text":"You are really scraping the[newline]bottom of the barrel."
+	},
+	"krs":{
+		"text":"KRS?! I told you no KuRSing[newline]during the show!",
+		"":"this was added by my friend lmfao"
 	}
 }

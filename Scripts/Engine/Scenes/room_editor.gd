@@ -39,6 +39,13 @@ func makeObj():
 		if i[0] != "":
 			obj["data"][i[0]] = i[1]
 	obj["name"] = $PanelContainer/ObjMode/ObjName.text
+	var naming = 0
+	if $"/root/editor/RoomDisplay".room[targetlayer]["obj"].has(obj["name"]):
+		naming = 1
+	if naming == 1:
+		while $"/root/editor/RoomDisplay".room[targetlayer]["obj"].has(obj["name"]+str(naming)):
+			naming += 1
+		obj["name"] = $PanelContainer/ObjMode/ObjName.text+str(naming)
 	obj["type"] = $PanelContainer/ObjMode/Filename.text
 	
 	if obj["name"] == "" or obj["type"] == "":
@@ -106,7 +113,7 @@ func _process(_delta):
 		$"/root/editor/RoomDisplay/Sprite2D2".visible = false
 	var roomitems = []
 	for i in $"/root/editor/RoomDisplay".room:
-		if i != "bounds":
+		if i != "bounds" and i != "bgm":
 			roomitems.append(i)
 	if get_optionbutton_items($OptionButton) != roomitems:
 		print(get_optionbutton_items($OptionButton))
@@ -116,19 +123,25 @@ func _process(_delta):
 			j -= 1
 			$OptionButton.remove_item(j)
 		for i in $"/root/editor/RoomDisplay".room:
-			if i != "bounds":
+			if i != "bounds" and i != "bgm":
 				$OptionButton.add_item(i)
 		if newlayer:
 			$OptionButton.selected = get_optionbutton_items($OptionButton).size()-1
 			newlayer = false
 		else:
 			$OptionButton.selected = 0
+	# $CursorPos.text = "X: "+str((($"/root/editor/FakeTile".position-Vector2(10,10)).snapped(Vector2(20,20))/20.0)-($"/root/editor/RoomDisplay".position/20.0).x)+" Y: "+str((($"/root/editor/FakeTile".position-Vector2(10,10)).snapped(Vector2(20,20))/20.0)-($"/root/editor/RoomDisplay".position/20.0).y)
 	var targetlayer = $OptionButton.get_item_text($OptionButton.selected)
 	if $"/root/editor/RoomDisplay".room.has(targetlayer):
 		if $PanelContainer/TileMode.visible and ($"/root/editor/RoomDisplay".room[targetlayer]["type"] == "instance"):
 			$PanelContainer/TileMode.visible = false
 		if $PanelContainer/ObjMode.visible and ($"/root/editor/RoomDisplay".room[targetlayer]["type"] == "tile"):
 			$PanelContainer/ObjMode.visible = false
+		
+		if ($"/root/editor/RoomDisplay".room[targetlayer]["type"] == "tile"):
+			$CursorPos.text = "X: "+str(int(((($"/root/editor/FakeTile".position-Vector2(10,10)).snapped(Vector2(20,20))/20.0)-($"/root/editor/RoomDisplay".position/20.0)).x))+" Y: "+str(int(((($"/root/editor/FakeTile".position-Vector2(10,10)).snapped(Vector2(20,20))/20.0)-($"/root/editor/RoomDisplay".position/20.0)).x))
+		elif ($"/root/editor/RoomDisplay".room[targetlayer]["type"] == "instance"):
+			$CursorPos.text = "X: "+str(int(((($"/root/editor/ObjectDisplay".position-Vector2(10,10)).snapped(Vector2(10,10))/10.0)-($"/root/editor/RoomDisplay".position/10.0)).x)+1)+" Y: "+str(int(((($"/root/editor/ObjectDisplay".position-Vector2(10,10)).snapped(Vector2(10,10))/10.0)-($"/root/editor/RoomDisplay".position/10.0)).y)+1)
 	if $PanelContainer/Settings.visible and editormode == 0:
 		$PanelContainer/Settings.visible = false
 	if !$PanelContainer/Settings.visible and editormode == 1:
@@ -204,6 +217,8 @@ func _on_load_pressed():
 		else:
 			$PanelContainer/Settings/SizeX.text = "16"
 			$PanelContainer/Settings/SizeY.text = "12"
+		if $"/root/editor/RoomDisplay".room.has("bgm"):
+			$PanelContainer/Settings/BGM.text = $"/root/editor/RoomDisplay".room["bgm"]
 		print("loaded room "+$LineEdit.text)
 		redraw_room()
 	else:
@@ -282,10 +297,14 @@ func _on_next_objdata_pressed():
 func _on_add_objdata_pressed():
 	objdata.append(["",""])
 	curobjdata = objdata.size()-1
+	$PanelContainer/ObjMode/Property.text = objdata[curobjdata][0]
+	$PanelContainer/ObjMode/PropertyValue.text = objdata[curobjdata][1]
 
 func _on_remove_objdata_pressed():
 	if objdata.size() == 1:
 		return
 	var oldobjdata = curobjdata
-	objdata.remove_at(curobjdata)
-	curobjdata = oldobjdata
+	curobjdata -= 1
+	objdata.remove_at(oldobjdata)
+	$PanelContainer/ObjMode/Property.text = objdata[curobjdata][0]
+	$PanelContainer/ObjMode/PropertyValue.text = objdata[curobjdata][1]

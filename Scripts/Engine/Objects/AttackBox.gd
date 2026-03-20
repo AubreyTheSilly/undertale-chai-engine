@@ -43,7 +43,7 @@ func runScript(scr : String,enemy_data : EnemyData):
 	await scriptrunner.script_finished
 	attack_over.emit()
 
-func runAttack(attack : Attack,enemy_data : EnemyData):
+func runAttack(attack : AttackData,enemy_data : EnemyData):
 	#if scr == "":
 		#attack_over.emit()
 	#await get_tree().process_frame

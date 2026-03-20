@@ -6,6 +6,7 @@
 
 [node name="Portal" type="Area2D" unique_id=1077198307]
 script = ExtResource("1_njg3o")
+trigger_once = false
 
 [node name="Area2D" type="CollisionShape2D" parent="." unique_id=1503134340]
 shape = SubResource("RectangleShape2D_htqgg")

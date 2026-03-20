@@ -1,12 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://cda5wk21q6ulf"]
+[gd_scene format=3 uid="uid://cda5wk21q6ulf"]
 
 [ext_resource type="Script" uid="uid://djmf1enag8t8y" path="res://Scripts/Engine/Objects/fader.gd" id="1_u7lk4"]
 
-[node name="fader" type="CanvasLayer"]
+[node name="fader" type="CanvasLayer" unique_id=704112931]
 layer = 128
 script = ExtResource("1_u7lk4")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1298017624]
 modulate = Color(1, 1, 1, 0)
 offset_right = 320.0
 offset_bottom = 240.0

@@ -7,7 +7,10 @@ var touching = false
 
 signal triggered
 
-func _process(_delta):
+func _ready() -> void:
+	triggered.connect(_triggered)
+
+func _process(_delta) -> void:
 	for i in get_overlapping_bodies():
 		if i is Player:
 			if !touching:
@@ -15,3 +18,6 @@ func _process(_delta):
 			touching = true
 		elif !trigger_once:
 			touching = false
+
+func _triggered() -> void:
+	pass

@@ -97,7 +97,7 @@ func getAttackConfig(attack : String):
 			print("Invalid number of attack parameters")
 			return null
 		
-		var attack_config = Attack.new()
+		var attack_config = AttackData.new()
 		attack_config.attack_script = attack
 		attack_config.boxSize = Vector2(float(configtext[0]),float(configtext[1]))
 		attack_config.mode = fmod(int(configtext[2]),2)

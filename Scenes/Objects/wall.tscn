@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://cy401h5bopped"]
+
+[ext_resource type="Script" uid="uid://dhs685jypdd3f" path="res://Scenes/Objects/wall.gd" id="1_qb6u8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_htqgg"]
+
+[node name="Wall" type="StaticBody2D" unique_id=1356680165]
+script = ExtResource("1_qb6u8")
+
+[node name="Area2D" type="CollisionShape2D" parent="." unique_id=1503134340]
+shape = SubResource("RectangleShape2D_htqgg")

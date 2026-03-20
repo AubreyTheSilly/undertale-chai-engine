@@ -28,13 +28,23 @@ func _ready() -> void:
 	
 	PlayerData.player_teleporting = false
 	PlayerData.player_can_move = true
-	if PlayerData.player_teleport_position:
+	if PlayerData.player_teleport_position != null:
 		position = PlayerData.player_teleport_position
+		PlayerData.player_teleport_position = null
+	elif PlayerData.player_position:
+		position = PlayerData.player_position
+	if PlayerData.player_dir:
+		_handleAnimation(PlayerData.player_dir)
 	fader.fadeIn()
 
 func _process(_delta) -> void:
 	var can_move = !DialogueHandler.visible and PlayerData.player_can_move and !PlayerData.player_teleporting
 	if can_move:
 		velocity = Vector2(Input.get_axis("Move Left","Move Right"),Input.get_axis("Move Up","Move Down"))*(30*Speed)
+		PlayerData.player_dir = Vector2(Input.get_axis("Move Left","Move Right"),Input.get_axis("Move Up","Move Down"))
+	else:
+		velocity = Vector2.ZERO
 	_handleAnimation(velocity/(30*Speed))
 	move_and_slide()
+	
+	PlayerData.player_position = position
