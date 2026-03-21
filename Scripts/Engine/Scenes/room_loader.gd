@@ -48,6 +48,7 @@ func LoadRoom() -> void:
 	var layernum = 1
 	for layer in room.Layers:
 		var layerobj = Node2D.new()
+		layerobj.y_sort_enabled = true
 		add_child(layerobj)
 		
 		layerobj.name = "Layer"+str(layernum)
@@ -80,9 +81,9 @@ func LoadRoom() -> void:
 							for j in i.data:
 								if j in object:
 									if str_to_var(i.data[j]):
-										object.set(j,str_to_var(i.data[j]))
+										await create_tween().tween_property(object,j,str_to_var(i.data[j]),0).finished
 									else:
-										object.set(j,i.data[j])
+										await create_tween().tween_property(object,j,str_to_var(i.data[j]),0).finished
 									print(i.type+"'s property "+j+" has been set to "+i.data[j])
 								else:
 									print(i.type+" does not have property "+j)
@@ -96,16 +97,16 @@ func LoadRoom() -> void:
 				else:
 					var object = Undermaker.getObjectByClassName(i.type)
 					if object:
+						object.name = i.name
 						for j in i.data:
 							if j in object:
 								if str_to_var(i.data[j]):
-									create_tween().tween_property(object,j,str_to_var(i.data[j]),0.01)
+									await create_tween().tween_property(object,j,str_to_var(i.data[j]),0).finished
 								else:
-									create_tween().tween_property(object,j,i.data[j],0.01)
-								print(i.type+"'s property "+j+" has been set to "+i.data[j])
+									await create_tween().tween_property(object,j,i.data[j],0).finished
+								print(object.name+"'s property "+j+" has been set to "+i.data[j])
 							else:
-								print(i.type+" does not have property "+j)
-						object.name = i.name
+								print(object.name+" does not have property "+j)
 						object.position = (i.position+Vector2(1,1))*10
 						layerobj.add_child(object)
 		

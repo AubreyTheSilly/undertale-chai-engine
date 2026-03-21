@@ -7,6 +7,14 @@ increment legs
 set_property "body" "position:y" body
 set_property "legs" "scale:y" legs
 
+// if dead, set damaging to true automatically
+var num state
+send_property state "self" "state"
+
+if state == 0
+    set damaging true
+end
+
 // hide the animated sprites if being damaged
 if damaging == true
     set_property "body" "visible" false

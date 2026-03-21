@@ -11,13 +11,15 @@ extends CharacterBody2D
 ## Direction. Can be "left", "down", "up", or "right".
 @export_enum("left","down","up","right") var direction = "down"
 
+signal finished_moving
+
 func reload_sprite() -> void:
-	print("Character sprite for "+name+" has been reloaded")
 	Character_Sprite = null
 	if CharacterJson != "":
 		Character_Sprite = CharacterSprite.fromJson(CharacterJson+".json")
 	else:
 		Character_Sprite = CharacterSprite.fromJson("player.json")
+	print("Character sprite for "+name+" has been reloaded ("+CharacterJson+")")
 
 func _ready():
 	reload_sprite()
@@ -65,11 +67,22 @@ func _handleAnimation(dir : Vector2) -> String:
 	return target_animation
 
 func move(steps : int,dir : Vector2) -> void:
+	match dir:
+		Vector2(-1,0):
+			direction = "left"
+		Vector2(0,1):
+			direction = "down"
+		Vector2(0,-1):
+			direction = "up"
+		Vector2(1,0):
+			direction = "right"
 	for i in range(steps):
 		for j in range(20.0/(Speed)):
 			velocity = dir*(30*Speed)
 			await get_tree().process_frame
 	velocity = Vector2.ZERO
+	await get_tree().process_frame
+	finished_moving.emit()
 
 func _process(_delta) -> void:
 	_sprite.speed_scale = Speed/2.0

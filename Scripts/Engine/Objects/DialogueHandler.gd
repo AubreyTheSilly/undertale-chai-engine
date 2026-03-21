@@ -11,7 +11,14 @@ enum {UP=0,DOWN=1}
 
 func StartDialogue(dialogue : Array[String],position : int = DOWN) -> void:
 	visible = true
+	textobject.font = preload("res://Fonts/DTM-Mono.otf")
+	textobject.size = 13
+	textobject.line_spacing = 16
+	textobject.character_spacing = 8
 	var face = "none"
+	facesprite.texture = null
+	textobject.position.x = 8
+	$DialoguePlayer.stream = preload("res://Audio/Sounds/SND_TXT1.wav")
 	if position == 0:
 		$Box.position.y = 5
 	else:
@@ -39,18 +46,26 @@ func StartDialogue(dialogue : Array[String],position : int = DOWN) -> void:
 						"face":
 							face = cmand[1]
 							if face == "empty":
-								facesprite.sprite = null
+								facesprite.texture = null
 								textobject.position.x = 8
 							else:
-								facesprite.sprite = Loader.load_file("Sprites/Dialogue Faces/"+face+".png")
+								facesprite.texture = Loader.load_file("Sprites/Dialogue Faces/"+face+".png")
 								textobject.position.x = 72
 						"speed":
 							speed = int(cmand[1])
 						"font":
-							if Loader.load_file("Fonts/"+".otf"):
-								textobject.font = Loader.load_file("Fonts/"+".otf")
-							elif Loader.load_file("Fonts/"+".ttf"):
-								textobject.font = Loader.load_file("Fonts/"+".ttf")
+							#if Loader.load_file("Fonts/"+".otf"):
+								#textobject.font = Loader.load_file("Fonts/"+".otf")
+							#elif Loader.load_file("Fonts/"+".ttf"):
+								#textobject.font = Loader.load_file("Fonts/"+".ttf")
+							var font = FontFile.new()
+							font.load_dynamic_font(Undermaker.Path+"Fonts/"+cmand[1])
+							if font:
+								textobject.font = font
+						"font_size":
+							textobject.size = int(cmand[1])
+							textobject.character_spacing = float(cmand[2])
+							textobject.line_spacing = float(cmand[3])
 						"sound":
 							$DialoguePlayer.stream = Loader.load_file("Audio/Sounds/"+cmand[1]+".wav")
 						_:

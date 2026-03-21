@@ -4,8 +4,8 @@ signal done
 
 func _ready():
 	if PlayerData.obj:
-		$PlayerSprite.global_position = PlayerData.obj.position-get_viewport().get_camera_2d().position
-		$Heart.global_position = PlayerData.obj.position-get_viewport().get_camera_2d().position
+		$PlayerSprite.global_position = (PlayerData.obj.position-get_viewport().get_camera_2d().position)+PlayerData.obj.get_node("Sprite").position
+		$Heart.global_position = $PlayerSprite.global_position
 		var dir = PlayerData.obj.direction
 		dir[0] = dir[0].to_upper()
 		$PlayerSprite.texture = PlayerData.obj.Character_Sprite.get("Idle"+dir)

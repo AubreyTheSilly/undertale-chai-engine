@@ -31,8 +31,17 @@ func _process(_delta) -> void:
 		i.get_node("TextObject").text = i.name
 	modNodes[modChoice].get_node("TextObject").text = "[color:255:255:0]"+modNodes[modChoice].name
 	$Camera2D.position.y = lerpf($Camera2D.position.y,modNodes[modChoice].position.y,0.3)
+	if FileAccess.file_exists(OS.get_executable_path().get_base_dir()+"/mods/"+mods[modChoice]["filename"]+"/thumb.png"):
+		print("Loading thumbnail")
+		$CanvasLayer/Box/TextureRect.texture = Loader.load_file_absolute(OS.get_executable_path().get_base_dir()+"/mods/"+mods[modChoice]["filename"]+"/thumb.png")
+	else:
+		print("No thumbnail")
+		$CanvasLayer/Box/TextureRect.texture = preload("res://Sprites/missing_thumb.png")
 	$CanvasLayer/Box/TextObject.text = mods[modChoice]["gameName"]
 	$CanvasLayer/Box/TextObject2.text = mods[modChoice]["creator"]
+	$CanvasLayer/Box/TextObject3.text = mods[modChoice]["desc"]
+	$CanvasLayer/Box/TextObject2.position.y = 116+(($CanvasLayer/Box/TextObject.get_line_count()-1)*$CanvasLayer/Box/TextObject.get_line_height())+($CanvasLayer/Box/TextObject.get_line_height()/2)
+	$CanvasLayer/Box/TextObject3.position.y = $CanvasLayer/Box/TextObject2.position.y+18
 	
 	if !can_select:
 		return
@@ -50,9 +59,10 @@ func _process(_delta) -> void:
 		else:
 			modChoice += 1
 	if Input.is_action_just_pressed("Select"):
+		create_tween().tween_property($AudioStreamPlayer3,"volume_db",-60,1)
 		$AudioStreamPlayer.play()
 		can_select = false
-		await get_tree().create_timer(1).timeout
+		await get_tree().create_timer(1.25).timeout
 		await fader.fadeOut()
 		if mods[modChoice]["filename"] != "Default Assets Folder":
 			Undermaker.Project = mods[modChoice]

@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://dexqxqsprthju" path="res://Scripts/Engine/Objects/text.gd" id="1_letxm"]
 [ext_resource type="Script" uid="uid://daa8kr7e45bhy" path="res://Scripts/Engine/test_room.gd" id="1_wc0jp"]
-[ext_resource type="PackedScene" uid="uid://txeqj7p6n33l" path="res://Scenes/Objects/Player.tscn" id="4_1vk6r"]
 
 [sub_resource type="Image" id="Image_wc0jp"]
 data = {
@@ -355,9 +354,3 @@ text = "i'm not gonna lie to you, kid.[newline]i remember you're [color:255:0:0]
 size = 16
 font = SubResource("FontFile_50bfx")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
-
-[node name="Player" parent="." unique_id=579045020 instance=ExtResource("4_1vk6r")]
-
-[node name="Player2" parent="." unique_id=69930700 instance=ExtResource("4_1vk6r")]
-position = Vector2(70, 0)
-CharacterJson = "clover"

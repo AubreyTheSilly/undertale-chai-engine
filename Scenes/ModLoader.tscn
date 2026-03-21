@@ -2,13 +2,33 @@
 
 [ext_resource type="Script" uid="uid://dpk6totsbjfgp" path="res://Scenes/mod_loader.gd" id="1_gf4tn"]
 [ext_resource type="Texture2D" uid="uid://ciiui7kmdomoi" path="res://Sprites/UIBox.png" id="2_457ts"]
+[ext_resource type="Texture2D" uid="uid://dhvvgqh8egxad" path="res://Sprites/loaderbg.png" id="2_oic44"]
 [ext_resource type="Script" uid="uid://dexqxqsprthju" path="res://Scripts/Engine/Objects/text.gd" id="3_dq1h7"]
 [ext_resource type="FontFile" uid="uid://decmshb7688st" path="res://Fonts/DTM-Mono.otf" id="4_gifmv"]
 [ext_resource type="AudioStream" uid="uid://ct3x682yh2rfm" path="res://Audio/Sounds/snd_select.wav" id="5_gifmv"]
+[ext_resource type="Texture2D" uid="uid://dh3ob00i08k12" path="res://Sprites/missing_thumb.png" id="6_6u8e5"]
 [ext_resource type="AudioStream" uid="uid://bn7lvw3vdfvte" path="res://Audio/Sounds/snd_squeak.wav" id="6_oic44"]
+[ext_resource type="AudioStream" uid="uid://cmjhopwj13yka" path="res://Audio/BGM/dogcheck.ogg" id="9_7ht18"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_gifmv"]
+font_size = 13
+
+[sub_resource type="LabelSettings" id="LabelSettings_oic44"]
+font_size = 10
+
+[sub_resource type="LabelSettings" id="LabelSettings_6u8e5"]
+font_size = 8
 
 [node name="ModLoader" type="Node2D" unique_id=1004781532]
 script = ExtResource("1_gf4tn")
+
+[node name="Parallax2D" type="Parallax2D" parent="." unique_id=1585619485]
+scroll_scale = Vector2(0, 0.25)
+
+[node name="Sprite2D" type="Sprite2D" parent="Parallax2D" unique_id=155815407]
+modulate = Color(1, 1, 1, 0.5)
+position = Vector2(160, 160)
+texture = ExtResource("2_oic44")
 
 [node name="modTemplate" type="Node2D" parent="." unique_id=1918378811]
 position = Vector2(10, 0)
@@ -33,21 +53,66 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 metadata/_edit_use_anchors_ = true
 
-[node name="TextObject" type="Node2D" parent="CanvasLayer/Box" unique_id=1117426386]
-position = Vector2(7, 100)
-script = ExtResource("3_dq1h7")
+[node name="TextObject" type="Label" parent="CanvasLayer/Box" unique_id=1402943525]
+z_index = 1
+layout_mode = 0
+offset_left = 7.0
+offset_top = 100.0
+offset_right = 115.0
+offset_bottom = 116.0
 text = "Mod Name Here"
-font = ExtResource("4_gifmv")
-metadata/_custom_type_script = "uid://dexqxqsprthju"
+label_settings = SubResource("LabelSettings_gifmv")
+autowrap_mode = 2
 
-[node name="TextObject2" type="Node2D" parent="CanvasLayer/Box" unique_id=1973399192]
-position = Vector2(7, 120)
-script = ExtResource("3_dq1h7")
+[node name="TextObject2" type="Label" parent="CanvasLayer/Box" unique_id=158164138]
+z_index = 1
+layout_mode = 0
+offset_left = 7.0
+offset_top = 116.0
+offset_right = 8.0
+offset_bottom = 136.0
 text = "Your Name Here"
-character_spacing = 6.0
-size = 10
-font = ExtResource("4_gifmv")
-metadata/_custom_type_script = "uid://dexqxqsprthju"
+label_settings = SubResource("LabelSettings_oic44")
+
+[node name="TextObject3" type="Label" parent="CanvasLayer/Box" unique_id=407699249]
+z_index = 1
+layout_mode = 0
+offset_left = 7.0
+offset_top = 134.0
+offset_right = 115.0
+offset_bottom = 231.0
+text = "Your Name Here"
+label_settings = SubResource("LabelSettings_6u8e5")
+autowrap_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Box" unique_id=1672430943]
+z_index = 1
+layout_mode = 0
+offset_left = 10.0
+offset_top = 15.0
+offset_right = 110.0
+offset_bottom = 90.0
+texture = ExtResource("6_6u8e5")
+expand_mode = 1
+
+[node name="Box" type="NinePatchRect" parent="CanvasLayer/Box/TextureRect" unique_id=1524115486]
+z_as_relative = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.03
+anchor_top = -0.093333334
+anchor_right = -2.03
+anchor_bottom = -0.093333334
+offset_left = 200.0
+offset_top = 4.0
+offset_right = 306.0
+offset_bottom = 85.0
+texture = ExtResource("2_457ts")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+metadata/_edit_use_anchors_ = true
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=487369984]
 position = Vector2(160, 0)
@@ -57,3 +122,8 @@ stream = ExtResource("5_gifmv")
 
 [node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="." unique_id=1200943937]
 stream = ExtResource("6_oic44")
+
+[node name="AudioStreamPlayer3" type="AudioStreamPlayer" parent="." unique_id=592262641]
+stream = ExtResource("9_7ht18")
+autoplay = true
+parameters/looping = true

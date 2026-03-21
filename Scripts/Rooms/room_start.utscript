@@ -1,8 +1,26 @@
 var bool has_fought_sans
 get_flag "sans" has_fought_sans
+var bool has_fought_sans_post
+get_flag "sanspost" has_fought_sans_post
 if has_fought_sans == false
     wait_for_signal "Layer2/TestTrigger" "triggered"
-    start_dialogue "* ererer"
+    set_player_move false
+    start_dialogue "[face:spr_face_sansnoeyes_0][sound:snd_txtsans][font:Comic Sans UT.ttf][font_size:16:8:16]* ererer"
+    move_character "Layer2/plr" "LEFT" 0
+    wait_frames 30
+    move_character "Layer2/plr" "RIGHT" 0
+    wait_frames 30
+    move_character "Layer2/plr" "DOWN" 0
+    wait_frames 60
+    start_dialogue "* Oh no."
+    set_property "Layer2/sans/CollisionShape2D" "disabled" true
+    move_character "Layer2/sans" "DOWN" 11
     start_encounter "ohfuck"
     set_flag "sans" true
+end
+if has_fought_sans
+    if has_fought_sans_post == false
+        set_flag "sanspost" true
+        start_dialogue "* oh" "* ok then"
+    end
 end

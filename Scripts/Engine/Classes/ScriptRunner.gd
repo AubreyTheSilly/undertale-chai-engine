@@ -928,6 +928,48 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 						continue
 					
 					vari.value = PlayerData.flags[runscript.data[line].data[1].value]
+				Token.TokenType.SET_PLAYER_MOVE:
+					if runscript.data[line].data.size() != 2:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.BOOLEAN:
+						push_error("line "+str(line+1)+": Player movable must be a boolean")
+						continue
+					
+					PlayerData.player_can_move = runscript.data[line].data[1].value
+				Token.TokenType.MOVE_CHARA:
+					if runscript.data[line].data.size() != 4:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Character name must be a string")
+						continue
+					if !node.get_node_or_null(runscript.data[line].data[1].value):
+						push_error("line "+str(line+1)+": Character node must exist")
+						continue
+					if node.get_node_or_null(runscript.data[line].data[1].value) is not Character:
+						push_error("line "+str(line+1)+": "+runscript.data[line].data[1].value+" is not a Character")
+						continue
+					if runscript.data[line].data[2].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Character direction must be a string")
+						continue
+					if runscript.data[line].data[3].type != Token.TokenType.NUMBER:
+						push_error("line "+str(line+1)+": Amount of tiles must be a number")
+						continue
+					var character : Character = node.get_node_or_null(runscript.data[line].data[1].value)
+					match runscript.data[line].data[2].value.to_lower():
+						"up":
+							character.move(floori(runscript.data[line].data[3].value),Vector2.UP)
+						"down":
+							character.move(floori(runscript.data[line].data[3].value),Vector2.DOWN)
+						"left":
+							character.move(floori(runscript.data[line].data[3].value),Vector2.LEFT)
+						"right":
+							character.move(floori(runscript.data[line].data[3].value),Vector2.RIGHT)
+						_:
+							push_error("line "+str(line+1)+": Character direction is invalid. Must be UP, DOWN, LEFT, or RIGHT")
+							continue
+					await character.finished_moving
 				_:
 					await unhandled_function(runscript.data[line])
 		if reset:

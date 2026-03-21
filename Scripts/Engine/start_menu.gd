@@ -224,7 +224,7 @@ func _process(_delta):
 			$confirm/Name.rotation_degrees = randi_range(0,1)
 
 func start_game() -> void:
-	PlayerData.name = $confirm/Name.text
+	PlayerData.Name = $confirm/Name.text
 	section = TRANSITION
 	$confirm/Quote.visible = false
 	$confirm/No.visible = false

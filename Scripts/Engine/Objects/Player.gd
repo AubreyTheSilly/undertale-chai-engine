@@ -34,7 +34,16 @@ func _ready() -> void:
 	elif PlayerData.player_position:
 		position = PlayerData.player_position
 	if PlayerData.player_dir:
-		_handleAnimation(PlayerData.player_dir)
+		match PlayerData.player_dir:
+			Vector2(-1,0):
+				direction = "left"
+			Vector2(0,1):
+				direction = "down"
+			Vector2(0,-1):
+				direction = "up"
+			Vector2(1,0):
+				direction = "right"
+		_handleAnimation(Vector2.ZERO)
 	fader.fadeIn()
 
 func _process(_delta) -> void:
