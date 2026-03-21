@@ -9,7 +9,9 @@ var skiptext = false
 
 enum {UP=0,DOWN=1}
 
-func StartDialogue(dialogue : Array[String],position : int = DOWN) -> void:
+signal dialogue_finished
+
+func StartDialogue(dialogue : Array,position : int = DOWN) -> void:
 	visible = true
 	textobject.font = preload("res://Fonts/DTM-Mono.otf")
 	textobject.size = 13
@@ -84,6 +86,7 @@ func StartDialogue(dialogue : Array[String],position : int = DOWN) -> void:
 		while !Input.is_action_just_pressed("Select"):
 			await get_tree().process_frame
 	visible = false
+	dialogue_finished.emit()
 
 func _process(_delta) -> void:
 	if visible and Input.is_action_just_pressed("Back"):

@@ -11,7 +11,7 @@ var DEF : int = 0
 var INV : int = 30
 var weapon : Item = Items.STICK
 var armor : Item = Items.BANDAGE
-var inventory : Array[Item] = []
+var inventory : Array[Item] = [Items.MONSTER_CANDY,Items.MONSTER_CANDY,Items.MONSTER_CANDY]
 var flags : Dictionary[String,bool]
 var fun : int = randi_range(0,100)
 var room := "room_start"

@@ -5,11 +5,13 @@
 [ext_resource type="Script" uid="uid://dexqxqsprthju" path="res://Scripts/Engine/Objects/text.gd" id="3_vsrq0"]
 [ext_resource type="FontFile" uid="uid://decmshb7688st" path="res://Fonts/DTM-Mono.otf" id="4_w3k6v"]
 [ext_resource type="FontFile" uid="uid://bwv20uaopj4hd" path="res://Fonts/undertale-crypt-of-tommorow.otf" id="5_kgsvj"]
-[ext_resource type="Texture2D" uid="uid://b2ym38j5fdq2g" path="res://Images/Call.png" id="6_k46cm"]
-[ext_resource type="Texture2D" uid="uid://fnjitvmv5f4x" path="res://Images/CMenu.png" id="7_d83tg"]
+[ext_resource type="Texture2D" uid="uid://bfnmjyg1ca1vu" path="res://Images/Items.png" id="6_d83tg"]
+[ext_resource type="Texture2D" uid="uid://cei1als13tp34" path="res://Images/MenuItemChoice.png" id="7_d83tg"]
 [ext_resource type="AudioStream" uid="uid://bn7lvw3vdfvte" path="res://Audio/Sounds/snd_squeak.wav" id="7_w3k6v"]
 [ext_resource type="AudioStream" uid="uid://ct3x682yh2rfm" path="res://Audio/Sounds/snd_select.wav" id="8_kgsvj"]
+[ext_resource type="AudioStream" uid="uid://hmqbidb0qgpa" path="res://Audio/Sounds/snd_item.wav" id="10_ff814"]
 [ext_resource type="Texture2D" uid="uid://b7rdjexjj0s41" path="res://Sprites/spr_heartsmall_0.png" id="10_oej56"]
+[ext_resource type="AudioStream" uid="uid://c1bnekcigd1yp" path="res://Audio/Sounds/snd_heal_c.wav" id="11_n7c1o"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_y547t"]
 resource_local_to_scene = true
@@ -72,7 +74,6 @@ position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_oqwab")
 
 [node name="Menu" type="CanvasLayer" parent="." unique_id=1576146582]
-visible = false
 
 [node name="NameHealthGold" type="NinePatchRect" parent="Menu" unique_id=1055484480]
 offset_left = 16.0
@@ -355,7 +356,6 @@ font = ExtResource("4_w3k6v")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
 [node name="Items" type="NinePatchRect" parent="Menu" unique_id=227521551]
-visible = false
 offset_left = 94.0
 offset_top = 26.0
 offset_right = 267.0
@@ -418,6 +418,7 @@ font = ExtResource("4_w3k6v")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
 [node name="Call" type="NinePatchRect" parent="Menu" unique_id=555515753]
+visible = false
 offset_left = 94.0
 offset_top = 26.0
 offset_right = 267.0
@@ -448,7 +449,7 @@ visible = false
 modulate = Color(1, 1, 1, 0.24700001)
 position = Vector2(-0.5, -16)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("6_k46cm")
+texture = ExtResource("6_d83tg")
 centered = false
 
 [node name="Sprite2D2" type="Sprite2D" parent="Menu" unique_id=456988761]
@@ -464,7 +465,13 @@ stream = ExtResource("7_w3k6v")
 [node name="Select" type="AudioStreamPlayer" parent="Menu" unique_id=479472314]
 stream = ExtResource("8_kgsvj")
 
+[node name="Equip" type="AudioStreamPlayer" parent="Menu" unique_id=780254436]
+stream = ExtResource("10_ff814")
+
+[node name="Heal" type="AudioStreamPlayer" parent="Menu" unique_id=1711783461]
+stream = ExtResource("11_n7c1o")
+
 [node name="heart" type="Sprite2D" parent="Menu" unique_id=1287788167]
 modulate = Color(1, 0, 0, 1)
-position = Vector2(32.5, 102.5)
+position = Vector2(108.5, 188.5)
 texture = ExtResource("10_oej56")

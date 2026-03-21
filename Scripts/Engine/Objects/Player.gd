@@ -6,7 +6,8 @@ enum MENU_STATE {
 	STATS,
 	ITEM,
 	ITEM_CHOICE,
-	CALL
+	CALL,
+	DIALOGUE
 }
 
 var menu_state : MENU_STATE = MENU_STATE.CHOICE
@@ -95,10 +96,14 @@ func _process(_delta) -> void:
 	$Menu/Stats/ARMOR2.text = ": "+PlayerData.armor.itemName
 	$Menu/Stats/GOLD.text = "GOLD: "+str(PlayerData.GOLD)
 	
-	var can_open_menu = !DialogueHandler.visible and PlayerData.player_can_move and !PlayerData.player_teleporting and !$Menu/Stats.visible
+	var can_open_menu = !DialogueHandler.visible and PlayerData.player_can_move and !PlayerData.player_teleporting and menu_state == MENU_STATE.CHOICE
 	if can_open_menu and Input.is_action_just_pressed("Menu"):
+		if !$Menu.visible:
+			menumove.play()
 		$Menu.visible = !$Menu.visible
-		menumove.play()
+	$Menu/Items/Items.text = ""
+	for i in PlayerData.inventory:
+		$Menu/Items/Items.text += i.itemName+"[newline]"
 	
 	$Menu/Stats.visible = false
 	$Menu/Items.visible = false
@@ -108,6 +113,8 @@ func _process(_delta) -> void:
 	if $Menu.visible:
 		match menu_state:
 			MENU_STATE.CHOICE:
+				menu_choice2 = 0
+				
 				if PlayerData.inventory.size() != 0:
 					$Menu/MenuChoices/Item.text = "ITEM"
 				else:
@@ -147,5 +154,67 @@ func _process(_delta) -> void:
 				$Menu/heart.visible = false
 				if Input.is_action_just_pressed("Back"):
 					menu_state = MENU_STATE.CHOICE
+			MENU_STATE.ITEM:
+				menu_choice3 = 0
+				$Menu/Items.visible = true
+				$Menu/heart.position = Vector2(108.5,48.5+(16*menu_choice2))
+				
+				if Input.is_action_just_pressed("Move Up"):
+					if menu_choice2 != 0:
+						menumove.play()
+						menu_choice2 -= 1
+				if Input.is_action_just_pressed("Move Down"):
+					if menu_choice2 != PlayerData.inventory.size()-1:
+						menumove.play()
+						menu_choice2 += 1
+				if Input.is_action_just_pressed("Select"):
+					menuselect.play()
+					menu_state = MENU_STATE.ITEM_CHOICE
+				if Input.is_action_just_pressed("Back"):
+					menu_state = MENU_STATE.CHOICE
+			MENU_STATE.ITEM_CHOICE:
+				$Menu/Items.visible = true
+				# 6.5 pixel difference between the text
+				match menu_choice3:
+					0:
+						$Menu/heart.position = Vector2(108.5,188.5)
+					1:
+						$Menu/heart.position = Vector2(156.5,188.5)
+					2:
+						$Menu/heart.position = Vector2(213.5,188.5)
+				if Input.is_action_just_pressed("Move Left"):
+					if menu_choice3 != 0:
+						menumove.play()
+						menu_choice3 -= 1
+				if Input.is_action_just_pressed("Move Right"):
+					if menu_choice3 != 2:
+						menumove.play()
+						menu_choice3 += 1
+				if Input.is_action_just_pressed("Select"):
+					menu_state = MENU_STATE.DIALOGUE
+					# using these from the battle script as reference...
+					#if PlayerData.HP == PlayerData.MaxHP:
+						#await FlavorBox.StartBattleDialogue([PlayerData.inventory[playeritemchoice+(4*itemmenu)].use.pick_random()+"[wait 2][newline]* Your HP was maxed out."])
+					#else:
+						#await FlavorBox.StartBattleDialogue([PlayerData.inventory[playeritemchoice+(4*itemmenu)].use.pick_random()+"[wait 2][newline]* You recovered "+str(PlayerData.inventory[playeritemchoice+(4*itemmenu)].value)+" HP!"])
+					match menu_choice3:
+						0:
+							match PlayerData.inventory[menu_choice2].type:
+								0:
+									$Menu/Heal.play()
+									PlayerData.HP += PlayerData.inventory[menu_choice2].value
+									if PlayerData.HP >= PlayerData.MaxHP:
+										DialogueHandler.StartDialogue([PlayerData.inventory[menu_choice2].use.pick_random()+"[wait 2][newline]* Your HP was maxed out."])
+										PlayerData.HP = PlayerData.MaxHP
+									else:
+										DialogueHandler.StartDialogue([PlayerData.inventory[menu_choice2].use.pick_random()+"[wait 2][newline]* You recovered "+str(PlayerData.inventory[menu_choice2].value)+" HP!"])
+										PlayerData.HP += PlayerData.inventory[menu_choice2].value
+									PlayerData.inventory.remove_at(menu_choice2)
+									await DialogueHandler.dialogue_finished
+									$Menu.visible = false
+				if Input.is_action_just_pressed("Back"):
+					menu_state = MENU_STATE.ITEM
+			MENU_STATE.DIALOGUE:
+				$Menu/heart.visible = false
 	else:
 		menu_state = MENU_STATE.CHOICE
