@@ -120,7 +120,7 @@ func loadTextAsObjectData(dir : String) -> Dictionary:
 
 func loadJsonAsDictionary(dir : String) -> Dictionary:
 	if !FileAccess.file_exists(Path+dir):
-		print("JSON to load does not exist. Returning null.")
+		push_warning("JSON to load ("+Path+dir+") does not exist. Returning null.")
 		return {}
 	var file = FileAccess.open(Path+dir,FileAccess.READ)
 	var json_string = ""
@@ -129,7 +129,7 @@ func loadJsonAsDictionary(dir : String) -> Dictionary:
 	var json = JSON.new()
 	var parse_result = json.parse(json_string)
 	if not parse_result == OK:
-		print("JSON Parse Error: ", json.get_error_message(), " in ", json_string, " at line ", json.get_error_line())
+		push_warning("JSON Parse Error: ", json.get_error_message(), " in ", json_string, " at line ", json.get_error_line())
 		return {}
 	file.close()
 	return json.data

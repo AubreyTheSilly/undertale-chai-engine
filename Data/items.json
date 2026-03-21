@@ -1,0 +1,11 @@
+{
+	"MonsterCandy":{
+		"itemName":"Monster Candy",
+		"type":0,
+		"value":10,
+		"check":["* Monster Candy - Heals 10 HP[wait 2][newline]  Has a distinct, non-licorice[newline]  flavor."],
+		"use":["* You ate the Monster Candy.[wait 2][newline]  Very un-licorice-like.","* You ate the Monster Candy.[wait 2][newline]  ...tastes like licorice."],
+		"short":"MnstrCandy",
+		"serious":"Candy"
+	}
+}

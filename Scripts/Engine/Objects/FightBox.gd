@@ -30,9 +30,9 @@ func _attack(enemydata : EnemyData) -> int:
 		dmg += randi_range(0,2)
 		print(bonusfactor)
 		if bonusfactor <= 12:
-			dmg = round(((PlayerData.ATK+10) - enemydata.DEF + randi_range(0,2)) * 2.2)
+			dmg = round(((PlayerData.ATK+PlayerData.weapon.value+10) - enemydata.DEF + randi_range(0,2)) * 2.2)
 		if bonusfactor > 12:
-			dmg = round(((PlayerData.ATK+10) - enemydata.DEF + randi_range(0,2)) * (1 - bonusfactor/273) * 2)
+			dmg = round(((PlayerData.ATK+PlayerData.weapon.value+10) - enemydata.DEF + randi_range(0,2)) * (1 - bonusfactor/273) * 2)
 		if dmg <= 0:
 			dmg = 0
 		return dmg

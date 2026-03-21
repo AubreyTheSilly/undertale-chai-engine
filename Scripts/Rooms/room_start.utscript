@@ -1,3 +1,6 @@
+set_playerdata "has_cell_phone" true
+give_item "MonsterCandy"
+
 var bool has_fought_sans
 get_flag "sans" has_fought_sans
 var bool has_fought_sans_post

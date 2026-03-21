@@ -125,6 +125,7 @@ metadata/_edit_use_anchors_ = true
 position = Vector2(11, 10.5)
 script = ExtResource("6_ybx13")
 text = "* [mode:wavy]yeah"
+line_spacing = 18.0
 font = ExtResource("7_xtlnh")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 

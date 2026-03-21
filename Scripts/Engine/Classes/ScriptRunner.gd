@@ -708,11 +708,11 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Item name must be a string")
 						continue
-					var item = Item.LoadItemFromFile(runscript.data[line].data[1].value)
-					if item:
-						PlayerData.inventory.append(item)
+					var items = Item.GetItemList()
+					if items.has(runscript.data[line].data[1].value):
+						PlayerData.inventory.append(items[runscript.data[line].data[1].value])
 					else:
-						push_error("line "+str(line+1)+": Item does not exist")
+						push_error("line "+str(line+1)+": Item does not exist. Valid item list is: "+str(items))
 				Token.TokenType.REPARENT:
 					if runscript.data[line].data.size() != 3:
 						push_error("line "+str(line+1)+": Invalid number of arguments")
@@ -970,6 +970,41 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							push_error("line "+str(line+1)+": Character direction is invalid. Must be UP, DOWN, LEFT, or RIGHT")
 							continue
 					await character.finished_moving
+				Token.TokenType.ADD_PLAYER_CALL:
+					if runscript.data[line].data.size() != 2:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Caller name must be a string")
+						continue
+					
+					PlayerData.callers.append(runscript.data[line].data[1].value)
+				Token.TokenType.REMOVE_PLAYER_CALL:
+					if runscript.data[line].data.size() != 2:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Caller name must be a string")
+						continue
+					if not PlayerData.callers.has(runscript.data[line].data[1].value):
+						push_error("line "+str(line+1)+": Caller is not defined in PlayerData.callers")
+						continue
+					
+					PlayerData.callers.erase(runscript.data[line].data[1].value)
+				Token.TokenType.SET_PLAYERDATA:
+					if runscript.data[line].data.size() != 3:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Value name must be a string")
+						continue
+					if not (runscript.data[line].data[1].value) in PlayerData:
+						push_error("line "+str(line+1)+": Value must exist")
+						continue
+					if (PlayerData.get(runscript.data[line].data[1].value) is not bool) and (PlayerData.get(runscript.data[line].data[1].value) is not String) and (PlayerData.get(runscript.data[line].data[1].value) is not float) and (PlayerData.get(runscript.data[line].data[1].value) is not int):
+						push_error("line "+str(line+1)+": Value is not a valid type")
+						continue
+					PlayerData.set(runscript.data[line].data[1].value,runscript.data[line].data[2].value)
 				_:
 					await unhandled_function(runscript.data[line])
 		if reset:

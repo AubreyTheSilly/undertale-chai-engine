@@ -34,3 +34,34 @@ static func LoadItemFromFile(itemname : String) -> Item:
 	itemFile.close()
 	var item = Item.new(itemArray[0],int(itemArray[1]),int(itemArray[2]),itemArray[3].split("|"),itemArray[4].split("|"),itemArray[5],itemArray[6])
 	return item
+
+static func GetItemList() -> Dictionary:
+	var itemArray := {}
+	var itemFile = Undermaker.loadJsonAsDictionary("Data/items.json")
+	if !itemFile:
+		return {}
+	for i in itemFile:
+		var item = itemFile[i]
+		print(i,item)
+		if item is not Dictionary:
+			push_error("Item "+i+" is invalid.")
+			continue
+		elif !item.has("itemName"):
+			push_error("Item "+i+" is missing an item name.")
+			continue
+		elif !item.has("type"):
+			push_error("Item "+i+" is missing a type.")
+			continue
+		elif !item.has("value"):
+			continue
+		elif !item.has("use"):
+			continue
+		elif !item.has("check"):
+			continue
+		var newitem = Item.new(item["itemName"],item["type"],item["value"],item["check"],item["use"])
+		if item.has("short"):
+			newitem.short = item["short"]
+		if item.has("serious"):
+			newitem.serious = item["serious"]
+		itemArray[i] = newitem
+	return itemArray

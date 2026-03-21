@@ -18,6 +18,28 @@ var menu_choice3 : int = 0
 @onready var menumove : AudioStreamPlayer = $Menu/Move
 @onready var menuselect : AudioStreamPlayer = $Menu/Select
 
+var phonenumbers = []
+var phonecalls = {}
+
+func get_phone_dialogue(caller : String) -> Array:
+	var dialogue = ["* Ring.."]
+	
+	if phonecalls.has(caller.to_lower()):
+		if phonecalls[caller.to_lower()].has(PlayerData.room):
+			dialogue.append_array(phonecalls[caller.to_lower()][PlayerData.room])
+			dialogue.append("[sound:SND_TXT1][face:empty][font:DTM-Mono.otf][font-size:13:8:18]* Click...")
+		elif phonecalls[caller.to_lower()].has("all"):
+			dialogue.append_array(phonecalls[caller.to_lower()]["all"])
+			dialogue.append("[sound:SND_TXT1][face:empty][font:DTM-Mono.otf][font-size:13:8:18]* Click...")
+		else:
+			dialogue.append("* ...")
+			dialogue.append("* Nobody picked up.")
+	else:
+		dialogue.append("* ...")
+		dialogue.append("* Nobody picked up.")
+	
+	return dialogue
+
 func _ready() -> void:
 	$Menu.visible = false
 	PlayerData.obj = self
@@ -76,7 +98,20 @@ func _process(_delta) -> void:
 	
 	PlayerData.player_position = position
 	
+	# handle phone call loading
+	if phonenumbers != PlayerData.callers and PlayerData.has_cell_phone:
+		phonenumbers = PlayerData.callers
+		phonecalls = Undermaker.loadJsonAsDictionary("Data/calls.json")
+	
 	# menu handling
+	var menu_bottom = false
+	var playerpos = position
+	if get_viewport().get_camera_2d():
+		playerpos = (position-get_viewport().get_camera_2d().position)
+	if playerpos.y > 120:
+		menu_bottom = true
+	$Menu/NameHealthGold.position.y = 26+(135*int(menu_bottom))
+	
 	$Menu/NameHealthGold/Name.text = PlayerData.Name
 	$Menu/NameHealthGold/LVValue.text = str(PlayerData.LV)
 	$Menu/NameHealthGold/HPValue.text = str(PlayerData.HP)+"/"+str(PlayerData.MaxHP)
@@ -104,6 +139,9 @@ func _process(_delta) -> void:
 	$Menu/Items/Items.text = ""
 	for i in PlayerData.inventory:
 		$Menu/Items/Items.text += i.itemName+"[newline]"
+	$Menu/Call/Items.text = ""
+	for i in PlayerData.callers:
+		$Menu/Call/Items.text += i+"[newline]"
 	
 	$Menu/Stats.visible = false
 	$Menu/Items.visible = false
@@ -119,6 +157,11 @@ func _process(_delta) -> void:
 					$Menu/MenuChoices/Item.text = "ITEM"
 				else:
 					$Menu/MenuChoices/Item.text = "[color:128:128:128]ITEM"
+				
+				if PlayerData.callers.size() != 0:
+					$Menu/MenuChoices/Cell.text = "CELL"
+				else:
+					$Menu/MenuChoices/Cell.text = "[color:128:128:128]CELL"
 				
 				$Menu/heart.position = Vector2(32.5,$Menu/MenuChoices.get_children()[menu_choice1].global_position.y+8.5)
 				$Menu/heart.visible = true
@@ -147,8 +190,9 @@ func _process(_delta) -> void:
 							menuselect.play()
 							menu_state = MENU_STATE.STATS
 						2:
-							menuselect.play()
-							menu_state = MENU_STATE.CALL
+							if PlayerData.callers.size() != 0:
+								menuselect.play()
+								menu_state = MENU_STATE.CALL
 			MENU_STATE.STATS:
 				$Menu/Stats.visible = true
 				$Menu/heart.visible = false
@@ -204,16 +248,69 @@ func _process(_delta) -> void:
 									$Menu/Heal.play()
 									PlayerData.HP += PlayerData.inventory[menu_choice2].value
 									if PlayerData.HP >= PlayerData.MaxHP:
-										DialogueHandler.StartDialogue([PlayerData.inventory[menu_choice2].use.pick_random()+"[wait 2][newline]* Your HP was maxed out."])
+										DialogueHandler.StartDialogue([PlayerData.inventory[menu_choice2].use.pick_random()+"[wait 2][newline]* Your HP was maxed out."],int(!menu_bottom))
 										PlayerData.HP = PlayerData.MaxHP
 									else:
-										DialogueHandler.StartDialogue([PlayerData.inventory[menu_choice2].use.pick_random()+"[wait 2][newline]* You recovered "+str(PlayerData.inventory[menu_choice2].value)+" HP!"])
+										DialogueHandler.StartDialogue([PlayerData.inventory[menu_choice2].use.pick_random()+"[wait 2][newline]* You recovered "+str(PlayerData.inventory[menu_choice2].value)+" HP!"],int(!menu_bottom))
 										PlayerData.HP += PlayerData.inventory[menu_choice2].value
 									PlayerData.inventory.remove_at(menu_choice2)
-									await DialogueHandler.dialogue_finished
-									$Menu.visible = false
+								1:
+									$Menu/Equip.play()
+									PlayerData.inventory.append(PlayerData.weapon)
+									PlayerData.weapon = PlayerData.inventory[menu_choice2]
+									DialogueHandler.StartDialogue([PlayerData.inventory[menu_choice2].use.pick_random()],int(!menu_bottom))
+									PlayerData.inventory.remove_at(menu_choice2)
+								2:
+									$Menu/Equip.play()
+									PlayerData.inventory.append(PlayerData.armor)
+									PlayerData.armor = PlayerData.inventory[menu_choice2]
+									DialogueHandler.StartDialogue([PlayerData.inventory[menu_choice2].use.pick_random()],int(!menu_bottom))
+									PlayerData.inventory.remove_at(menu_choice2)
+								3:
+									DialogueHandler.StartDialogue([PlayerData.inventory[menu_choice2].use.pick_random()],int(!menu_bottom))
+									PlayerData.inventory.remove_at(menu_choice2)
+						1:
+							DialogueHandler.StartDialogue(PlayerData.inventory[menu_choice2].check,int(!menu_bottom))
+						2:
+							var throwaway = randi_range(0,17)
+							match throwaway:
+								0:
+									DialogueHandler.StartDialogue(["* You bid a quiet farewell[newline] to the"+PlayerData.inventory[menu_choice2].itemName+""],int(!menu_bottom))
+								1:
+									DialogueHandler.StartDialogue(["* You put the "+PlayerData.inventory[menu_choice2].itemName+"[newline]  on the ground and gave it a[newline]  little pat."],int(!menu_bottom))
+								2:
+									DialogueHandler.StartDialogue(["* You abandoned the "+PlayerData.inventory[menu_choice2].itemName+"."],int(!menu_bottom))
+								3:
+									DialogueHandler.StartDialogue(["* You threw the "+PlayerData.inventory[menu_choice2].itemName+" on the ground like the piece[newline]  of trash it is."],int(!menu_bottom))
+								_:
+									DialogueHandler.StartDialogue(["* The "+PlayerData.inventory[menu_choice2].itemName+" was[newline]  thrown away."],int(!menu_bottom))
+							PlayerData.inventory.remove_at(menu_choice2)
+					await DialogueHandler.dialogue_finished
+					$Menu.visible = false
 				if Input.is_action_just_pressed("Back"):
 					menu_state = MENU_STATE.ITEM
+			MENU_STATE.CALL:
+				menu_choice3 = 0
+				$Menu/Call.visible = true
+				$Menu/heart.position = Vector2(108.5,48.5+(16*menu_choice2))
+				
+				if Input.is_action_just_pressed("Move Up"):
+					if menu_choice2 != 0:
+						menumove.play()
+						menu_choice2 -= 1
+				if Input.is_action_just_pressed("Move Down"):
+					if menu_choice2 != PlayerData.callers.size()-1:
+						menumove.play()
+						menu_choice2 += 1
+				if Input.is_action_just_pressed("Select"):
+					menuselect.play()
+					$Menu/Call2.play()
+					menu_state = MENU_STATE.DIALOGUE
+					DialogueHandler.StartDialogue(get_phone_dialogue(PlayerData.callers[menu_choice2]),int(!menu_bottom))
+					await DialogueHandler.dialogue_finished
+					$Menu.visible = false
+				if Input.is_action_just_pressed("Back"):
+					menu_state = MENU_STATE.CHOICE
 			MENU_STATE.DIALOGUE:
 				$Menu/heart.visible = false
 	else:
