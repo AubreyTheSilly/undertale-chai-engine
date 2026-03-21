@@ -14,7 +14,8 @@ var armor : Item = Items.BANDAGE
 var inventory : Array[Item] = []
 var flags : Dictionary[String,bool]
 var fun : int = randi_range(0,100)
-var room = "room_start"
+var room := "room_start"
+var has_cell_phone : bool = false
 
 var obj : Player
 var player_can_move = true
