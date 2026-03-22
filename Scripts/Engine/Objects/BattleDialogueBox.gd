@@ -44,6 +44,7 @@ func StartFlavorDialogue(dialogue : String) -> void:
 						for k in range(speed):
 							await get_tree().process_frame
 							await get_tree().process_frame
+
 func StartBattleDialogue(dialogue : Array) -> void:
 	for i in dialogue:
 		var sound = "SND_TXT2"

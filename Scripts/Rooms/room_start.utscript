@@ -20,7 +20,8 @@ if has_fought_sans == false
     //start_dialogue "* Oh no."
     //set_property "Layer2/sans/CollisionShape2D" "disabled" true
     //move_character "Layer2/sans" "DOWN" 11
-   // start_encounter "ohfuck"
+    // start_encounter "ohfuck"
+    start_encounter "test"
     set_flag "sans" true
 end
 if has_fought_sans

@@ -1,0 +1,1 @@
+* Test:TestMonster:none:none:0:mus_battle2:yes

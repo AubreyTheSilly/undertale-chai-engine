@@ -125,7 +125,6 @@ metadata/_edit_use_anchors_ = true
 position = Vector2(11, 10.5)
 script = ExtResource("6_ybx13")
 text = "* [mode:wavy]yeah"
-line_spacing = 18.0
 font = ExtResource("7_xtlnh")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -198,7 +197,6 @@ polygon = PackedVector2Array(-144, -35.25, -144, 35.25, 144, 35.25, 144, -35.25)
 uv = PackedVector2Array(-307, 4, -128, -14, -107, 40, -290, 51)
 
 [node name="ChoiceBox" type="Node2D" parent="." unique_id=1619216673]
-visible = false
 position = Vector2(15.5, 124.5)
 
 [node name="DialogueRect" type="NinePatchRect" parent="ChoiceBox" unique_id=401769076]
@@ -269,7 +267,6 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("21_hn3x6")
 
 [node name="EnemyHealth1" type="TextureProgressBar" parent="ChoiceBox" unique_id=375471894]
-visible = false
 offset_left = 119.0
 offset_top = 15.5
 offset_right = 169.5
@@ -280,7 +277,6 @@ texture_under = ExtResource("17_sx1gs")
 texture_progress = ExtResource("12_mugwg")
 
 [node name="EnemyHealth2" type="TextureProgressBar" parent="ChoiceBox" unique_id=506012186]
-visible = false
 offset_left = 119.0
 offset_top = 31.5
 offset_right = 169.5
@@ -291,7 +287,6 @@ texture_under = ExtResource("17_sx1gs")
 texture_progress = ExtResource("12_mugwg")
 
 [node name="EnemyHealth3" type="TextureProgressBar" parent="ChoiceBox" unique_id=2016732966]
-visible = false
 offset_left = 119.0
 offset_top = 47.5
 offset_right = 169.5

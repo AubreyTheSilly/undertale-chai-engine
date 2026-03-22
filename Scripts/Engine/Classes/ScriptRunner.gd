@@ -1005,6 +1005,16 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 						push_error("line "+str(line+1)+": Value is not a valid type")
 						continue
 					PlayerData.set(runscript.data[line].data[1].value,runscript.data[line].data[2].value)
+				Token.TokenType.FADEIN:
+					if runscript.data[line].data.size() != 1:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					fader.fadeIn()
+				Token.TokenType.FADEOUT:
+					if runscript.data[line].data.size() != 1:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					fader.fadeOut()
 				_:
 					await unhandled_function(runscript.data[line])
 		if reset:

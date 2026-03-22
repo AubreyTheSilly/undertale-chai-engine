@@ -10,7 +10,7 @@
 [ext_resource type="AudioStream" uid="uid://bn7lvw3vdfvte" path="res://Audio/Sounds/snd_squeak.wav" id="7_w3k6v"]
 [ext_resource type="AudioStream" uid="uid://ct3x682yh2rfm" path="res://Audio/Sounds/snd_select.wav" id="8_kgsvj"]
 [ext_resource type="AudioStream" uid="uid://hmqbidb0qgpa" path="res://Audio/Sounds/snd_item.wav" id="10_ff814"]
-[ext_resource type="Texture2D" uid="uid://p32sle4y7la0" path="res://Sprites/spr_heartsmall_0.png" id="10_oej56"]
+[ext_resource type="Texture2D" uid="uid://b7rdjexjj0s41" path="res://Sprites/spr_heartsmall_0.png" id="10_oej56"]
 [ext_resource type="AudioStream" uid="uid://c1bnekcigd1yp" path="res://Audio/Sounds/snd_heal_c.wav" id="11_n7c1o"]
 [ext_resource type="AudioStream" uid="uid://clptk68cpej2s" path="res://Audio/Sounds/snd_phone.wav" id="12_n7c1o"]
 

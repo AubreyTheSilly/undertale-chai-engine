@@ -9,6 +9,12 @@ extends Sprite2D
 @onready var hp = get_parent().get_node("Page1/HP")
 @onready var atk = get_parent().get_node("Page1/ATK")
 @onready var def = get_parent().get_node("Page1/DEF")
+@onready var bubbletype : OptionButton = get_parent().get_node("Page2/BubbleType")
+@onready var bubbleX : LineEdit = get_parent().get_node("Page2/BubbleX")
+@onready var bubbleY : LineEdit = get_parent().get_node("Page2/BubbleY")
+@onready var offsetX : LineEdit = get_parent().get_node("Page2/OffsetX")
+@onready var offsetY : LineEdit = get_parent().get_node("Page2/OffsetY")
+@onready var check : LineEdit = get_parent().get_node("Page2/Check")
 
 var lastsprite = ""
 var lasthurtsprite = ""
@@ -31,6 +37,14 @@ func _process(_delta):
 	enemydata.HP = int(hp.text)
 	enemydata.ATK = int(atk.text)
 	enemydata.DEF = int(def.text)
+	enemydata.BubbleType = bubbletype.get_item_text(bubbletype.selected)
+	$SpeechBubble.bubbleType = bubbletype.get_item_text(bubbletype.selected)
+	enemydata.BubbleOffset.x = float(bubbleX.text)
+	enemydata.BubbleOffset.y = float(bubbleY.text)
+	$SpeechBubble.pos = enemydata.BubbleOffset
+	enemydata.offset.x = float(offsetX.text)
+	enemydata.offset.y = float(offsetY.text)
+	enemydata.Check = [check.text]
 	
 	if damaging:
 		texture = enemydata.EnemyHurtSprite

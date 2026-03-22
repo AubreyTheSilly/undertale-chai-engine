@@ -190,6 +190,7 @@ func _process(_delta):
 				$ChoiceBox/Choice0.visible = false
 			else:
 				$ChoiceBox/EnemyHealth1.visible = true
+				$ChoiceBox/EnemyHealth1.position.x = 95+((enemies[0].enemy_data.EnemyName).length()*8)
 				$ChoiceBox/EnemyHealth1.value = enemies[0].get_node("HPBar").value
 				$ChoiceBox/EnemyHealth1.max_value = enemies[0].get_node("HPBar").max_value
 			$ChoiceBox/Choice1.visible = false
@@ -202,6 +203,7 @@ func _process(_delta):
 					$ChoiceBox/Choice2.text = "* "+enemies[1].enemy_data.EnemyName
 					$ChoiceBox/Choice2.visible = true
 					$ChoiceBox/EnemyHealth2.visible = true
+					$ChoiceBox/EnemyHealth2.position.x = 95+((enemies[1].enemy_data.EnemyName).length()*8)
 					$ChoiceBox/EnemyHealth2.value = enemies[1].get_node("HPBar").value
 					$ChoiceBox/EnemyHealth2.max_value = enemies[1].get_node("HPBar").max_value
 					if enemies[1].spare == true:
@@ -211,6 +213,7 @@ func _process(_delta):
 					$ChoiceBox/Choice4.text = "* "+enemies[2].enemy_data.EnemyName
 					$ChoiceBox/Choice4.visible = true
 					$ChoiceBox/EnemyHealth3.visible = true
+					$ChoiceBox/EnemyHealth3.position.x = 95+((enemies[2].enemy_data.EnemyName).length()*8)
 					$ChoiceBox/EnemyHealth3.value = enemies[2].get_node("HPBar").value
 					$ChoiceBox/EnemyHealth3.max_value = enemies[2].get_node("HPBar").max_value
 					if enemies[2].spare == true:
