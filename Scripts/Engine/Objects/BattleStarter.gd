@@ -3,6 +3,7 @@ extends CanvasLayer
 signal done
 
 func _ready():
+	BGM.stream_paused = true
 	if PlayerData.obj:
 		$PlayerSprite.global_position = (PlayerData.obj.position-get_viewport().get_camera_2d().position)+PlayerData.obj.get_node("Sprite").position
 		$Heart.global_position = $PlayerSprite.global_position

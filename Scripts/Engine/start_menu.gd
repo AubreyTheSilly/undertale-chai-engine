@@ -102,7 +102,7 @@ func _process(_delta):
 			name_chars[char_choice].text = "[color:255:255:0]"+name_chars[char_choice].text
 			if Input.is_action_just_pressed("Move Left"):
 				match char_choice:
-					0:
+					0,52:
 						pass
 					_:
 						char_choice -= 1

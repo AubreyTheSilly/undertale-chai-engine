@@ -45,6 +45,13 @@ func LoadRoom() -> void:
 		$BG.texture = Loader.load_file("Sprites/Backgrounds/"+roomName+".png")
 	room = Room.loadRoomFromDictionary(Undermaker.loadJsonAsDictionary("Data/rooms/"+roomName+".json"))
 	room_valid = true
+	BGM.playBGM(room.Music)
+	if BGM.stream_paused:
+		print("fade in")
+		BGM.fadeIn()
+	else:
+		BGM.fadeval = 0
+		BGM.targetfade = 0
 	var layernum = 1
 	for layer in room.Layers:
 		var layerobj = Node2D.new()

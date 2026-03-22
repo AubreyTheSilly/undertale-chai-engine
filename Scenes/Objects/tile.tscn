@@ -1,8 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://daairxvg6er2x"]
+[gd_scene format=3 uid="uid://daairxvg6er2x"]
 
 [ext_resource type="Texture2D" uid="uid://caogtecxffsqr" path="res://Sprites/Tilemaps/ruins.png" id="1_rfg1w"]
 
-[node name="Tile" type="Sprite2D"]
+[node name="Tile" type="Sprite2D" unique_id=1089311169]
 texture = ExtResource("1_rfg1w")
 centered = false
 region_enabled = true
+region_filter_clip_enabled = true

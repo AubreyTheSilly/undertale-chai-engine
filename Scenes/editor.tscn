@@ -916,19 +916,17 @@ label_settings = SubResource("LabelSettings_1k58v")
 [node name="BGM" type="LineEdit" parent="CanvasLayer/RoomEditor/PanelContainer/Settings" unique_id=1764568621]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -0.009708738
-anchor_top = 0.08125
-anchor_right = 0.42718446
-anchor_bottom = 0.025
-offset_left = 2.0
-offset_top = 60.0
-offset_right = 42.0
-offset_bottom = 85.0
+anchor_left = 0.009708738
+anchor_top = 0.45
+anchor_right = 0.009708738
+anchor_bottom = 0.45
+offset_right = 85.0
+offset_bottom = 18.0
 focus_mode = 1
 theme_override_font_sizes/font_size = 6
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
-text = "Audio/BGM/[name].ogg"
+placeholder_text = "Audio/BGM/[name].ogg"
 metadata/_edit_use_anchors_ = true
 
 [node name="Save" type="Button" parent="CanvasLayer/RoomEditor" unique_id=1173255480]

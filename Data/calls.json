@@ -1,5 +1,6 @@
 {
-	"aubrey":{
-		"all":["* hi","* fuck you"]
+	"test caller":{
+		"room_snow":["* WHY IS THERE SO MUCH SNOW"],
+		"room_start":["* how was the fall"]
 	}
 }

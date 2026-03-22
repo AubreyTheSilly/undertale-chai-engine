@@ -100,6 +100,7 @@ func get_optionbutton_items(optionbutton : OptionButton) -> Array[String]:
 	return output
 
 func _process(_delta):
+	$"/root/editor/RoomDisplay".room["bgm"] = $PanelContainer/Settings/BGM.text
 	$PanelContainer/ObjMode/Label5.text = str(curobjdata+1)+"/"+str(objdata.size())
 	objdata[curobjdata][0] = $PanelContainer/ObjMode/Property.text
 	objdata[curobjdata][1] = $PanelContainer/ObjMode/PropertyValue.text
@@ -219,6 +220,8 @@ func _on_load_pressed():
 			$PanelContainer/Settings/SizeY.text = "12"
 		if $"/root/editor/RoomDisplay".room.has("bgm"):
 			$PanelContainer/Settings/BGM.text = $"/root/editor/RoomDisplay".room["bgm"]
+		else:
+			$PanelContainer/Settings/BGM.text = ""
 		print("loaded room "+$LineEdit.text)
 		redraw_room()
 	else:

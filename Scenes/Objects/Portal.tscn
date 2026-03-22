@@ -5,6 +5,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_htqgg"]
 
 [node name="Portal" type="Area2D" unique_id=1077198307]
+visible = false
 script = ExtResource("1_njg3o")
 trigger_once = false
 
