@@ -315,3 +315,5 @@ func _process(_delta) -> void:
 				$Menu/heart.visible = false
 	else:
 		menu_state = MENU_STATE.CHOICE
+	
+	PlayerData.can_move_internal = can_move

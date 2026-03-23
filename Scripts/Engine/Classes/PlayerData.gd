@@ -24,6 +24,7 @@ var player_teleporting = false
 var player_teleport_position = null
 var player_position : Vector2
 var player_dir : Vector2 = Vector2.DOWN
+var can_move_internal := false
 
 func loadFile(newgame : bool = false):
 	if newgame:
