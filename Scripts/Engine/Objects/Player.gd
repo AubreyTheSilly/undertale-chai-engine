@@ -87,7 +87,7 @@ func _ready() -> void:
 	fader.fadeIn()
 
 func _process(_delta) -> void:
-	var can_move = !DialogueHandler.visible and PlayerData.player_can_move and !PlayerData.player_teleporting and !$Menu.visible
+	var can_move = !DialogueHandler.visible and PlayerData.player_can_move and !PlayerData.player_teleporting and !$Menu.visible and SaveMenu.visible
 	if can_move:
 		velocity = Vector2(Input.get_axis("Move Left","Move Right"),Input.get_axis("Move Up","Move Down"))*(30*Speed)
 		PlayerData.player_dir = Vector2(Input.get_axis("Move Left","Move Right"),Input.get_axis("Move Up","Move Down"))
@@ -131,7 +131,7 @@ func _process(_delta) -> void:
 	$Menu/Stats/ARMOR2.text = ": "+PlayerData.armor.itemName
 	$Menu/Stats/GOLD.text = "GOLD: "+str(PlayerData.GOLD)
 	
-	var can_open_menu = !DialogueHandler.visible and PlayerData.player_can_move and !PlayerData.player_teleporting and menu_state == MENU_STATE.CHOICE
+	var can_open_menu = !DialogueHandler.visible and PlayerData.player_can_move and !PlayerData.player_teleporting and menu_state == MENU_STATE.CHOICE and SaveMenu.visible
 	if can_open_menu and Input.is_action_just_pressed("Menu"):
 		if !$Menu.visible:
 			menumove.play()

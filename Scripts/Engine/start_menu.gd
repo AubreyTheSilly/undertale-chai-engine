@@ -232,4 +232,4 @@ func start_game() -> void:
 	$AudioStreamPlayer.stop()
 	$AudioStreamPlayer2.play()
 	await create_tween().tween_property($ColorRect,"color:a",1,6).finished
-	get_tree().change_scene_to_packed(preload("res://Scenes/RoomLoader.tscn"))
+	PlayerData.loadFile(true)

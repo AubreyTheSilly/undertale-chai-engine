@@ -1015,6 +1015,29 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 						push_error("line "+str(line+1)+": Invalid number of arguments")
 						continue
 					fader.fadeOut()
+				Token.TokenType.ROUND:
+					var j = -1
+					for i in runscript.data[line].data:
+						j += 1
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme) and j != 1:
+							var variabl = getVariable(i.lexeme)
+							i.type = types[variabl.type]
+							i.value = variabl.value
+							# reset = true (this caused lag so i moved it to only be in end)
+					if runscript.data[line].data.size() != 2:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.IDENTIFIER:
+						push_error("line "+str(line+1)+": Output variable name must be an identifier")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.IDENTIFIER:
+						push_error("line "+str(line+1)+": Output variable name must be an identifier")
+						continue
+					if !getVariable(runscript.data[line].data[1].lexeme):
+						push_error("line "+str(line+1)+": Output variable must exist")
+						continue
+					var variable = getVariable(runscript.data[line].data[1].lexeme)
+					variable.value = snapped(variable.value,0.5)
 				_:
 					await unhandled_function(runscript.data[line])
 		if reset:

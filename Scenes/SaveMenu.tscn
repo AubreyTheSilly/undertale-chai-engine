@@ -1,0 +1,141 @@
+[gd_scene format=3 uid="uid://cx0jyhh163q01"]
+
+[ext_resource type="Script" uid="uid://400by721kqgc" path="res://Scripts/save_menu.gd" id="1_ywhij"]
+[ext_resource type="Texture2D" uid="uid://ciiui7kmdomoi" path="res://Sprites/UIBox.png" id="2_2sw8f"]
+[ext_resource type="Script" uid="uid://dexqxqsprthju" path="res://Scripts/Engine/Objects/text.gd" id="3_1w74l"]
+[ext_resource type="FontFile" uid="uid://decmshb7688st" path="res://Fonts/DTM-Mono.otf" id="4_c4r11"]
+[ext_resource type="Texture2D" uid="uid://b7rdjexjj0s41" path="res://Sprites/spr_heartsmall_0.png" id="5_r2yvs"]
+[ext_resource type="Texture2D" uid="uid://df2jtsc22bfrp" path="res://Images/Save.png" id="6_bjpci"]
+
+[node name="SaveMenu" type="CanvasLayer" unique_id=350192823]
+script = ExtResource("1_ywhij")
+
+[node name="DialogueRect" type="NinePatchRect" parent="." unique_id=611619841]
+offset_left = 54.0
+offset_top = 59.0
+offset_right = 266.0
+offset_bottom = 146.0
+texture = ExtResource("2_2sw8f")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+metadata/_edit_use_anchors_ = true
+
+[node name="Place" type="Node2D" parent="DialogueRect" unique_id=986990677]
+position = Vector2(15, 31)
+script = ExtResource("3_1w74l")
+text = "The place where it rained"
+character_spacing = 7.0
+extra_font_spacing = Dictionary[String, float]({
+" ": -4.0,
+"M": 1.0,
+"W": 1.0,
+"m": 1.0,
+"w": 1.0
+})
+font = ExtResource("4_c4r11")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
+
+[node name="Name" type="Node2D" parent="DialogueRect" unique_id=1199686913]
+position = Vector2(15, 11)
+script = ExtResource("3_1w74l")
+text = "Aubrey"
+character_spacing = 7.0
+extra_font_spacing = Dictionary[String, float]({
+" ": -4.0,
+"M": 1.0,
+"W": 1.0,
+"m": 1.0,
+"w": 1.0
+})
+font = ExtResource("4_c4r11")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
+
+[node name="LV" type="Node2D" parent="DialogueRect" unique_id=1002690340]
+position = Vector2(102, 11)
+script = ExtResource("3_1w74l")
+text = "LV 2"
+character_spacing = 7.0
+extra_font_spacing = Dictionary[String, float]({
+" ": -4.0,
+"M": 1.0,
+"W": 1.0,
+"m": 1.0,
+"w": 1.0
+})
+font = ExtResource("4_c4r11")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
+
+[node name="Time" type="Node2D" parent="DialogueRect" unique_id=845526158]
+position = Vector2(171, 11)
+script = ExtResource("3_1w74l")
+text = "4 20"
+character_spacing = 7.0
+extra_font_spacing = Dictionary[String, float]({
+" ": -4.0,
+"M": 1.0,
+"W": 1.0,
+"m": 1.0,
+"w": 1.0
+})
+font = ExtResource("4_c4r11")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
+
+[node name="TimeColon" type="Node2D" parent="DialogueRect" unique_id=1424881231]
+position = Vector2(176, 11)
+script = ExtResource("3_1w74l")
+text = ":"
+character_spacing = 7.0
+extra_font_spacing = Dictionary[String, float]({
+" ": -4.0,
+"M": 1.0,
+"W": 1.0,
+"m": 1.0,
+"w": 1.0
+})
+font = ExtResource("4_c4r11")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
+
+[node name="Save" type="Node2D" parent="DialogueRect" unique_id=1191612269]
+position = Vector2(30, 61)
+script = ExtResource("3_1w74l")
+text = "Save"
+character_spacing = 7.0
+extra_font_spacing = Dictionary[String, float]({
+" ": -4.0,
+"M": 1.0,
+"W": 1.0,
+"m": 1.0,
+"w": 1.0
+})
+font = ExtResource("4_c4r11")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
+
+[node name="Return" type="Node2D" parent="DialogueRect" unique_id=282785477]
+position = Vector2(120, 61)
+script = ExtResource("3_1w74l")
+text = "Return"
+character_spacing = 7.0
+extra_font_spacing = Dictionary[String, float]({
+" ": -4.0,
+"M": 1.0,
+"W": 1.0,
+"m": 1.0,
+"w": 1.0
+})
+font = ExtResource("4_c4r11")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
+
+[node name="heart" type="Sprite2D" parent="DialogueRect" unique_id=34992035]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(21.5, 68.5)
+texture = ExtResource("5_r2yvs")
+
+[node name="Save" type="Sprite2D" parent="." unique_id=1385013540]
+visible = false
+modulate = Color(1, 1, 1, 0.416)
+position = Vector2(-0.5, -16)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("6_bjpci")
+centered = false

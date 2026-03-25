@@ -49,6 +49,8 @@ func get_object_image(objtype : String):
 			return preload("res://Sprites/wall2.png")
 		else:
 			return preload("res://Sprites/wall1.png")
+	elif objtype == "SavePoint":
+		return preload("res://Sprites/spr_savepoint_0.png")
 	elif objtype != "" and FileAccess.file_exists(Path+"Data/Objects/"+objtype+".txt"):
 		if Undermaker.loadTextAsObjectData(objtype):
 			return Undermaker.loadTextAsObjectData(objtype)["editor_image"]

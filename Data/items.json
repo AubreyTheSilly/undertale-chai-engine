@@ -7,5 +7,14 @@
 		"use":["* You ate the Monster Candy.[wait 2][newline]  Very un-licorice-like.","* You ate the Monster Candy.[wait 2][newline]  ...tastes like licorice."],
 		"short":"MnstrCandy",
 		"serious":"Candy"
+	},
+	"EvilWeapon":{
+		"itemName":"EVIL weapon",
+		"type":1,
+		"value":10,
+		"check":["* Evil"],
+		"use":["* mwahaha"],
+		"short":"EvilSword",
+		"serious":"EvilSword"
 	}
 }
