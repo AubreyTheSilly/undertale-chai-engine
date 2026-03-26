@@ -1,7 +1,8 @@
 extends Node2D
 
-enum {START_MENU,NAMING_SCREEN,ACCEPT_NAME,TRANSITION,SETTINGS}
+enum {START_MENU,NAMING_SCREEN,ACCEPT_NAME,TRANSITION,SETTINGS,MAIN_MENU}
 var section = START_MENU
+var full_menu := false
 
 var start_choice := 0
 
@@ -20,6 +21,10 @@ var name_tween2 : Tween
 @onready var names := Undermaker.loadJsonAsDictionary("Data/naming.json")
 
 func _ready():
+	full_menu = PlayerData.get_save_file() != {"name":"EMPTY","lv":0,"time":0,"save_name":"---"}
+	if full_menu:
+		section = MAIN_MENU
+	
 	for i in names:
 		if names[i] is not Dictionary:
 			print("erased "+i+" from naming easter egg list because it is not a dictionary")
@@ -76,7 +81,7 @@ func _process(_delta):
 			if Input.is_action_just_pressed("Select"):
 				if start_choice == 0:
 					section = NAMING_SCREEN
-					#start_game()
+					#new_game()
 				else:
 					print("settings dont work yet")
 					#section = SETTINGS
@@ -214,7 +219,7 @@ func _process(_delta):
 						0:
 							section = NAMING_SCREEN
 						1:
-							start_game()
+							new_game()
 			else:
 				$confirm/Yes.visible = false
 				$confirm/No.text = "[color:255:255:0]Go back"
@@ -223,7 +228,7 @@ func _process(_delta):
 		TRANSITION:
 			$confirm/Name.rotation_degrees = randi_range(0,1)
 
-func start_game() -> void:
+func new_game() -> void:
 	PlayerData.Name = $confirm/Name.text
 	section = TRANSITION
 	$confirm/Quote.visible = false
@@ -232,4 +237,4 @@ func start_game() -> void:
 	$AudioStreamPlayer.stop()
 	$AudioStreamPlayer2.play()
 	await create_tween().tween_property($ColorRect,"color:a",1,6).finished
-	PlayerData.loadFile(false)
+	PlayerData.loadFile(true)

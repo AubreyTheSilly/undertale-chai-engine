@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://ciiui7kmdomoi" path="res://Sprites/UIBox.png" id="2_2sw8f"]
 [ext_resource type="Script" uid="uid://dexqxqsprthju" path="res://Scripts/Engine/Objects/text.gd" id="3_1w74l"]
 [ext_resource type="FontFile" uid="uid://decmshb7688st" path="res://Fonts/DTM-Mono.otf" id="4_c4r11"]
-[ext_resource type="Texture2D" uid="uid://p32sle4y7la0" path="res://Sprites/spr_heartsmall_0.png" id="5_r2yvs"]
+[ext_resource type="Texture2D" uid="uid://b7rdjexjj0s41" path="res://Sprites/spr_heartsmall_0.png" id="5_r2yvs"]
 [ext_resource type="Texture2D" uid="uid://uan2nelvrspj" path="res://Images/Save2.png" id="6_ywhij"]
 [ext_resource type="AudioStream" uid="uid://bn7lvw3vdfvte" path="res://Audio/Sounds/snd_squeak.wav" id="7_1w74l"]
 [ext_resource type="AudioStream" uid="uid://cu45djtuvdc67" path="res://Audio/Sounds/snd_save.wav" id="8_c4r11"]
