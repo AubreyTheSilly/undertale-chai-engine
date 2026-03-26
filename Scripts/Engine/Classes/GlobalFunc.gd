@@ -161,8 +161,20 @@ func createJsonFromDictionary(dir : String,dict : Dictionary = {}) -> Error:
 	file.store_line(string)
 	return OK
 
+func createJsonFromDictionary_absolute(dir : String,dict : Dictionary = {}) -> Error:
+	var file = FileAccess.open(dir,FileAccess.WRITE)
+	print(FileAccess.get_open_error())
+	if !file:
+		return FAILED
+	var string = JSON.stringify(dict)
+	file.store_line(string)
+	return OK
+
 func createDirectory(dir : String) -> void:
 	DirAccess.make_dir_absolute(Path+dir)
+
+func createDirectory_absolute(dir : String) -> void:
+	DirAccess.make_dir_absolute(dir)
 
 func loadProject() -> Error:
 	Project = loadJsonAsDictionary("project.json")

@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://innktjuqftxb" path="res://Sprites/spr_savepoint_0.png" id="2_jpaw0"]
 [ext_resource type="Texture2D" uid="uid://bnrrf7a64uyh6" path="res://Sprites/spr_savepoint_1.png" id="3_vfr60"]
 [ext_resource type="PackedScene" uid="uid://c6c0lvaxnmhyv" path="res://Scenes/Objects/Interactible.tscn" id="4_melss"]
+[ext_resource type="AudioStream" uid="uid://c1bnekcigd1yp" path="res://Audio/Sounds/snd_heal_c.wav" id="5_jpaw0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2dao0"]
 
@@ -21,7 +22,7 @@ animations = [{
 "speed": 6.0
 }]
 
-[node name="Save" type="StaticBody2D" unique_id=729866648]
+[node name="SavePoint" type="StaticBody2D" unique_id=729866648]
 script = ExtResource("1_cmwde")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1403836221]
@@ -29,8 +30,12 @@ shape = SubResource("RectangleShape2D_2dao0")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1352678648]
 sprite_frames = SubResource("SpriteFrames_y6v7h")
+autoplay = "default"
 frame_progress = 0.10734706
 
 [node name="Interactible" parent="." unique_id=432576210 instance=ExtResource("4_melss")]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1517889338]
+stream = ExtResource("5_jpaw0")
 
 [connection signal="interact" from="Interactible" to="." method="_on_interact"]

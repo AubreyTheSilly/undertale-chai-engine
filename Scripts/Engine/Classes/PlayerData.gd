@@ -12,11 +12,11 @@ var INV : int = 30
 var weapon : Item = Items.STICK
 var armor : Item = Items.BANDAGE
 var inventory : Array[Item] = []
-var flags : Dictionary[String,bool]
+var flags : Dictionary
 var fun : int = randi_range(0,100)
 var room := "room_start"
 var has_cell_phone : bool = false
-var callers : Array[String] = []
+var callers : Array = []
 var time : int = 0
 var timecounter : float = 0
 var count_time : bool = false
@@ -29,6 +29,40 @@ var player_teleport_position = null
 var player_position : Vector2
 var player_dir : Vector2 = Vector2.DOWN
 var can_move_internal := false
+
+func get_save_file() -> Dictionary:
+	var save := {"name":"EMPTY","lv":0,"time":0,"save_name":"---"}
+	var saveFile = Undermaker.loadJsonAsDictionary_absolute("user://save_"+Undermaker.Project["projectName"]+".json")
+	if saveFile != {}:
+		save = saveFile
+	return save
+
+func savefile_to_dictionary() -> Dictionary:
+	var save := {}
+	
+	save["name"] = Name
+	save["HP"] = MaxHP
+	save["MaxHP"] = MaxHP
+	save["lv"] = LV
+	save["atk"] = ATK
+	save["def"] = DEF
+	save["inventory"] = var_to_str(inventory)
+	save["weapon"] = var_to_str(weapon)
+	save["armor"] = var_to_str(armor)
+	save["callers"] = callers
+	save["has_cell_phone"] = has_cell_phone
+	save["exp"] = EXP
+	save["gold"] = GOLD
+	save["save_name"] = save_name
+	save["time"] = time
+	save["room"] = room
+	save["flags"] = flags
+	save["fun"] = fun
+	
+	return save
+
+func save_game() -> void:
+	Undermaker.createJsonFromDictionary_absolute("user://save_"+Undermaker.Project["projectName"]+".json",savefile_to_dictionary())
 
 func loadFile(newgame : bool = false):
 	if newgame:
@@ -57,8 +91,25 @@ func loadFile(newgame : bool = false):
 		time = 0
 		save_name = ""
 	else:
-		# TODO
-		pass
+		var save = get_save_file()
+		Name = save["name"]
+		MaxHP = save["HP"]
+		MaxHP = save["MaxHP"]
+		LV = save["lv"]
+		ATK = save["atk"]
+		DEF = save["def"]
+		inventory = str_to_var(save["inventory"])
+		weapon = str_to_var(save["weapon"])
+		armor = str_to_var(save["armor"])
+		callers = save["callers"]
+		has_cell_phone = save["has_cell_phone"]
+		EXP = save["exp"]
+		GOLD = save["gold"]
+		save_name = save["save_name"]
+		time = save["time"]
+		room = save["room"]
+		flags = save["flags"]
+		fun = save["fun"]
 	count_time = true
 	get_tree().change_scene_to_file("res://Scenes/RoomLoader.tscn")
 
