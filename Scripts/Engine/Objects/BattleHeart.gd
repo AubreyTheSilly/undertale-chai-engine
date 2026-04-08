@@ -31,6 +31,24 @@ func calculateDamage(atk : int):
 
 	return(round(atk + HPmod - (def / 5.0)))
 
+func _ready() -> void:
+	var colors = Undermaker.loadJsonAsDictionary("Data/soul_colors.json")
+	if colors != {}:
+		for i in colors:
+			var color : Color = Color.WHITE
+			if not colors[i].has("id"):
+				return
+			if colors[i].has("r"):
+				color.r8 =  colors[i]["r"]
+			if colors[i].has("g"):
+				color.g8 = colors[i]["g"]
+			if colors[i].has("b"):
+				color.b8 = colors[i]["b"]
+			if soul_colors.size()-1 < int(colors[i]["id"]):
+				for j in range(int(colors[i]["id"])-soul_colors.size()+1):
+					soul_colors.append(Color.WHITE)
+			soul_colors[int(colors[i]["id"])] = color
+
 func _process(_delta) -> void:
 	position.x = clampf(position.x,box.get_node("AttackRect").global_position.x,box.get_node("AttackRect").global_position.x+box.get_node("AttackRect").size.x)
 	position.y = clampf(position.y,box.get_node("AttackRect").global_position.y,box.get_node("AttackRect").global_position.y+box.get_node("AttackRect").size.y)
@@ -42,11 +60,6 @@ func _process(_delta) -> void:
 		battle.ENEMY_ATTACK:
 			visible = true
 			match battle.soulMode:
-				Battle.SOULMODES.RED:
-					velocity = Vector2.ZERO
-					velocity = (Input.get_vector("Move Left","Move Right","Move Up","Move Down")*(30*SPEED))
-					bluedir = 0
-					bluevel = Vector2.ZERO
 				Battle.SOULMODES.BLUE:
 					var left = "Move Left"
 					var right = "Move Right"
@@ -120,6 +133,11 @@ func _process(_delta) -> void:
 						bluevel.y = 8
 					
 					velocity = (bluevel*(30)).rotated(deg_to_rad(bluedir))
+				_, Battle.SOULMODES.RED:
+					velocity = Vector2.ZERO
+					velocity = (Input.get_vector("Move Left","Move Right","Move Up","Move Down")*(30*SPEED))
+					bluedir = 0
+					bluevel = Vector2.ZERO
 			for i in $soul.get_overlapping_areas():
 				if i.name == "attack" and !invincible:
 					var attack = i.get_parent()

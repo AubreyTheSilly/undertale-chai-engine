@@ -21,7 +21,8 @@ var name_tween2 : Tween
 @onready var names := Undermaker.loadJsonAsDictionary("Data/naming.json")
 
 func _ready():
-	full_menu = PlayerData.get_save_file() != {"name":"EMPTY","lv":0,"time":0,"save_name":"---"}
+	print(PlayerData.get_save_file())
+	full_menu = PlayerData.get_save_file() != {"name":"EMPTY","lv":0,"time":0,"save_name":"---"} and PlayerData.get_save_file() != null
 	if full_menu:
 		section = MAIN_MENU
 	
