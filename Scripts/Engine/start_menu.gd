@@ -5,10 +5,13 @@ var section = START_MENU
 var full_menu := false
 
 var start_choice := 0
+var menuchoice := 0
 
 @onready var settings = [$settings/exit]
 var settingsData = []
 var setting := 0
+
+@onready var loadmenu_choices = [$loadmenu/continue,$loadmenu/settings,$loadmenu/reset]
 
 var name_chars : Array[TextObject]
 var char_positions : Array[Vector2]
@@ -25,9 +28,23 @@ var name_tween2 : Tween
 func _ready():
 	PlayerData.load_settings()
 	
-	#full_menu = PlayerData.get_save_file() != {"name":"EMPTY","lv":0,"time":0,"save_name":"---"}
+	var save_file = PlayerData.get_save_file()
+	$loadmenu/name.text = save_file["name"]
+	$loadmenu/lv.text = "LV "+str(int(save_file["lv"]))
+	$loadmenu/place.text = save_file["save_name"]
+	
+	if str(int(fmod(save_file["time"],60))).length() == 1:
+		$loadmenu/time.text = str(int(floor(save_file["time"]/60)))+" 0"+str(int(fmod(save_file["time"],60)))
+	else:
+		$loadmenu/time.text = str(int(floor(save_file["time"]/60)))+" "+str(int(fmod(save_file["time"],60)))
+	
+	full_menu = save_file != {"name":"EMPTY","lv":0,"time":0,"save_name":"---"}
+	
 	if full_menu:
 		section = MAIN_MENU
+	for i in PlayerData.settings:
+		if not settingsJson.has(i):
+			PlayerData.settings.erase(i)
 	
 	for i in settingsJson:
 		if settingsJson[i] is not Dictionary:
@@ -38,7 +55,10 @@ func _ready():
 			continue
 		settingsData.append(settingsJson[i])
 		if !PlayerData.settings.has(i):
-			PlayerData.settings[i] = settingsJson[i]["default"]
+			if settingsJson[i]["type"] == "value":
+				PlayerData.settings[i] = settingsJson[i]["default"]
+			else:
+				PlayerData.settings[i] = settingsJson[i]["default"]
 		var settingNode := $settings/TempSetting.duplicate()
 		$settings.add_child(settingNode)
 		settingNode.position.y = 40+((settings.size())*30)
@@ -109,6 +129,7 @@ func _process(_delta):
 		$settings.visible = false
 		$name.visible = false
 		$confirm.visible = false
+		$loadmenu.visible = false
 	$controls/start.label_settings.font_color = Color.WHITE
 	$controls/settings.label_settings.font_color = Color.WHITE
 	$controls/Label3.text = Undermaker.Project["gameName"]+" BY "+Undermaker.Project["creator"]+"\nUSING UNDERTALE CHAI ENGINE (ALPHA)"
@@ -247,6 +268,8 @@ func _process(_delta):
 					$confirm/Quote.text = names[i]["text"]
 					if names[i].has("can_pick"):
 						can_pick = names[i]["can_pick"]
+			if full_menu:
+				$confirm/Quote.text = "A name has already[newline]been chosen."
 			
 			if can_pick:
 				$confirm/Yes.visible = true
@@ -263,7 +286,10 @@ func _process(_delta):
 				if Input.is_action_just_pressed("Select"):
 					match confirm_choice:
 						0:
-							section = NAMING_SCREEN
+							if full_menu:
+								section = MAIN_MENU
+							else:
+								section = NAMING_SCREEN
 						1:
 							new_game()
 			else:
@@ -272,7 +298,39 @@ func _process(_delta):
 				if Input.is_action_just_pressed("Select"):
 					section = NAMING_SCREEN
 		MAIN_MENU:
+			if name_tween1 or name_tween2:
+				name_tween1.kill()
+				name_tween2.kill()
 			$loadmenu.visible = true
+			
+			if Input.is_action_just_pressed("Move Left"):
+				menuchoice = 0
+			if Input.is_action_just_pressed("Move Down"):
+				menuchoice = 1
+			if Input.is_action_just_pressed("Move Right"):
+				menuchoice = 2
+			if Input.is_action_just_pressed("Move Up") and menuchoice == 1:
+				menuchoice = 0
+			
+			for i in loadmenu_choices:
+				i.modulate = Color.WHITE
+			loadmenu_choices[menuchoice].modulate = Color.YELLOW
+			
+			if Input.is_action_just_pressed("Select"):
+				match menuchoice:
+					0:
+						PlayerData.loadFile(false)
+					1:
+						section = SETTINGS
+					2:
+						$name/Name.text = PlayerData.get_save_file()["name"]
+						$confirm/Name.position = Vector2(138.5,55.0)
+						$confirm/Name.scale = Vector2(1.0,1.0)
+						name_tween1 = create_tween()
+						name_tween1.tween_property($confirm/Name,"position",Vector2(96.0,115.0),4)
+						name_tween2 = create_tween()
+						name_tween2.tween_property($confirm/Name,"scale",Vector2(3.5,3.5),4)
+						section = ACCEPT_NAME
 		TRANSITION:
 			$confirm/Name.rotation_degrees = randi_range(0,1)
 		SETTINGS:

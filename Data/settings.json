@@ -1,6 +1,20 @@
 {
 	"silly mode":{
 		"type":"bool",
-		"default":false
+		"default":false,
+		"true-text":"ON",
+		"false-text":"OFF"
+	},
+	"awesome slider":{
+		"type":"slider",
+		"default":0,
+		"min":0,
+		"max":420,
+		"increment":10
+	},
+	"language":{
+		"type":"value",
+		"default":0,
+		"values":["English","Japanese","EVIL language","EVILER language","silly language :3","the language of the gods","Spanish"]
 	}
 }
