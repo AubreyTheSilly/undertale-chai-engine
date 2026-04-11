@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://ghjeqv20751v"]
+[gd_scene format=3 uid="uid://ghjeqv20751v"]
 
 [ext_resource type="Script" uid="uid://b8hxmfu6ccyo5" path="res://Scripts/Engine/Objects/enemy.gd" id="1_f7ytk"]
 [ext_resource type="Texture2D" uid="uid://cdlpvwckj8axf" path="res://Sprites/Battle/Enemies/spr_dummybattle_0.png" id="1_yatfw"]
@@ -490,13 +490,13 @@ animations = [{
 "speed": 7.0
 }]
 
-[node name="Enemy" type="Node2D"]
+[node name="Enemy" type="Node2D" unique_id=1386669365]
 script = ExtResource("1_f7ytk")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1915754088]
 texture = ExtResource("1_yatfw")
 
-[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=1466849471]
 emitting = false
 amount = 2560
 texture = SubResource("GradientTexture1D_6wei6")
@@ -506,7 +506,7 @@ explosiveness = 1.0
 process_material = SubResource("ShaderMaterial_wl211")
 script = ExtResource("3_25xbn")
 
-[node name="HPBar" type="TextureProgressBar" parent="."]
+[node name="HPBar" type="TextureProgressBar" parent="." unique_id=217317686]
 visible = false
 z_index = 1
 offset_left = -24.0
@@ -519,24 +519,24 @@ nine_patch_stretch = true
 texture_under = ExtResource("6_sn47w")
 texture_progress = ExtResource("7_pcqe5")
 
-[node name="DamageText" parent="." instance=ExtResource("8_1o3so")]
+[node name="DamageText" parent="." unique_id=1364014123 instance=ExtResource("8_1o3so")]
 visible = false
 z_index = 1
 position = Vector2(-48.5, -53)
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1104510035]
 z_index = 1
 scale = Vector2(0.75, 0.75)
 sprite_frames = SubResource("SpriteFrames_qkdun")
 frame = 6
 frame_progress = 1.0
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1835744883]
 stream = ExtResource("13_6wei6")
 
-[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="." unique_id=1146644100]
 
-[node name="SpeechBubble" type="Sprite2D" parent="."]
+[node name="SpeechBubble" type="Sprite2D" parent="." unique_id=405509110]
 visible = false
 position = Vector2(0, -60)
 scale = Vector2(0.5, 0.5)
@@ -544,7 +544,7 @@ texture = ExtResource("16_xmk3q")
 script = ExtResource("17_fvwyc")
 bubbleType = "Above"
 
-[node name="TextObject" type="Node2D" parent="SpeechBubble"]
+[node name="TextObject" type="Node2D" parent="SpeechBubble" unique_id=768976146]
 position = Vector2(-78, -39)
 script = ExtResource("18_xmk3q")
 text = "[color:0:0:0]Test dialogue.[newline]Lol"
@@ -553,7 +553,7 @@ size = 12
 font = ExtResource("16_fvwyc")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
-[node name="ScriptRunner" type="Node" parent="." node_paths=PackedStringArray("node")]
+[node name="ScriptRunner" type="Node" parent="." unique_id=1539374326 node_paths=PackedStringArray("node")]
 script = ExtResource("18_fvwyc")
 node = NodePath("..")
 metadata/_custom_type_script = "uid://b6m6ndh7u38dl"

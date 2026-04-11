@@ -1037,7 +1037,27 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 						push_error("line "+str(line+1)+": Output variable must exist")
 						continue
 					var variable = getVariable(runscript.data[line].data[1].lexeme)
-					variable.value = snapped(variable.value,0.5)
+					variable.value = snapped(float(variable.value),0.25)
+				Token.TokenType.GET_SETTING:
+					if runscript.data[line].data.size() != 3:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Setting name must be a string")
+						continue
+					if runscript.data[line].data[2].type != Token.TokenType.IDENTIFIER:
+						push_error("line "+str(line+1)+": Variable name must be an identifier")
+						print(runscript.data[line].data[2].type)
+						continue
+					if !getVariable(runscript.data[line].data[2].lexeme):
+						push_error("line "+str(line+1)+": Variable must exist")
+						continue
+					var vari = getVariable(runscript.data[line].data[2].lexeme)
+					if !PlayerData.settings.has(runscript.data[line].data[1].value):
+						push_error("line "+str(line+1)+": Setting does not exist.")
+						continue
+					
+					vari.value = PlayerData.settings[runscript.data[line].data[1].value]
 				_:
 					await unhandled_function(runscript.data[line])
 		if reset:

@@ -1,0 +1,6 @@
+{
+	"silly mode":{
+		"type":"bool",
+		"default":false
+	}
+}

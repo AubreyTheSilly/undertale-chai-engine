@@ -30,12 +30,23 @@ var player_position : Vector2
 var player_dir : Vector2 = Vector2.DOWN
 var can_move_internal := false
 
+var settings = {}
+
 func get_save_file() -> Dictionary:
 	var save := {"name":"EMPTY","lv":0,"time":0,"save_name":"---"}
 	var saveFile = Undermaker.loadJsonAsDictionary_absolute("user://save_"+Undermaker.Project["projectName"]+".json")
 	if saveFile != {}:
 		save = saveFile
 	return save
+
+func save_settings() -> void:
+	Undermaker.createJsonFromDictionary_absolute("user://settings_"+Undermaker.Project["projectName"]+".json",settings)
+
+func load_settings() -> void:
+	var settingsJson = Undermaker.loadJsonAsDictionary_absolute("user://settings_"+Undermaker.Project["projectName"]+".json")
+	
+	if settingsJson != {}:
+		settings = settingsJson
 
 func savefile_to_dictionary() -> Dictionary:
 	var save := {}

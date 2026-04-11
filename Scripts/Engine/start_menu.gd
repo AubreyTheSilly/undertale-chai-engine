@@ -6,7 +6,8 @@ var full_menu := false
 
 var start_choice := 0
 
-var settings : Array[Setting] = [Setting.new("TestOption",Setting.TYPE.BOOL_ONOFF)]
+@onready var settings = [$settings/exit]
+var settingsData = []
 var setting := 0
 
 var name_chars : Array[TextObject]
@@ -19,28 +20,50 @@ var name_tween1 : Tween
 var name_tween2 : Tween
 
 @onready var names := Undermaker.loadJsonAsDictionary("Data/naming.json")
+@onready var settingsJson := Undermaker.loadJsonAsDictionary("Data/settings.json")
 
 func _ready():
-	full_menu = PlayerData.get_save_file() != {"name":"EMPTY","lv":0,"time":0,"save_name":"---"}
+	PlayerData.load_settings()
+	
+	#full_menu = PlayerData.get_save_file() != {"name":"EMPTY","lv":0,"time":0,"save_name":"---"}
 	if full_menu:
 		section = MAIN_MENU
 	
+	for i in settingsJson:
+		if settingsJson[i] is not Dictionary:
+			push_warning("Setting "+i+" is not a dictionary, it will be ignored")
+			continue
+		elif !settingsJson[i].has("type"):
+			push_warning("Setting "+i+" does not have a type, it will be ignored")
+			continue
+		settingsData.append(settingsJson[i])
+		if !PlayerData.settings.has(i):
+			PlayerData.settings[i] = settingsJson[i]["default"]
+		var settingNode := $settings/TempSetting.duplicate()
+		$settings.add_child(settingNode)
+		settingNode.position.y = 40+((settings.size())*30)
+		settingNode.name = i
+		settingNode.get_node("setting").text = i.to_upper()
+		settingNode.get_node("value").position.x = settingNode.get_node("setting").get_font_end_offset().x+30
+		settings.append(settingNode)
+	$settings/TempSetting.queue_free()
+	
 	for i in names:
 		if names[i] is not Dictionary:
-			print("erased "+i+" from naming easter egg list because it is not a dictionary")
+			push_warning("erased "+i+" from naming easter egg list because it is not a dictionary")
 			names.erase(i)
 			continue
 		elif !names[i].has("text"):
-			print("erased "+i+" from naming easter egg list because there is no text set")
+			push_warning("erased "+i+" from naming easter egg list because there is no text set")
 			names.erase(i)
 			continue
 		elif names[i]["text"] is not String:
-			print("erased "+i+" from naming easter egg list because text is not a string")
+			push_warning("erased "+i+" from naming easter egg list because text is not a string")
 			names.erase(i)
 			continue
 		elif names[i].has("can_pick"):
 			if names[i]["can_pick"] is not bool:
-				print("erased "+i+" from naming easter egg list because can_pick is not a bool")
+				push_warning("erased "+i+" from naming easter egg list because can_pick is not a bool")
 				names.erase(i)
 				continue
 	$AudioStreamPlayer.stream = Loader.load_file("Audio/BGM/mus_menu0.ogg")
@@ -54,6 +77,30 @@ func _ready():
 	name_chars.append($name/Done)
 
 func _process(_delta):
+	for i in settings:
+		if i.name == "exit":
+			continue
+		if settingsJson[i.name]["type"] == "slider":
+			i.get_node("value").text = str(int(PlayerData.settings[i.name]))
+		elif settingsJson[i.name]["type"] == "value":
+			var val = settingsJson[i.name]["values"][PlayerData.settings[i.name]]
+			if val is float:
+				i.get_node("value").text = str(int(val))
+			else:
+				i.get_node("value").text = str(val)
+		elif settingsJson[i.name]["type"] == "bool":
+			var val = PlayerData.settings[i.name]
+			if val == true:
+				if settingsJson[i.name].has("true-text"):
+					i.get_node("value").text = settingsJson[i.name]["true-text"]
+				else:
+					i.get_node("value").text = "TRUE"
+			if val == false:
+				if settingsJson[i.name].has("false-text"):
+					i.get_node("value").text = settingsJson[i.name]["false-text"]
+				else:
+					i.get_node("value").text = "FALSE"
+	
 	if $name/Name.text.to_lower() == "gaster":
 		get_tree().change_scene_to_file("res://Scenes/launch.tscn")
 	
@@ -83,8 +130,7 @@ func _process(_delta):
 					section = NAMING_SCREEN
 					#new_game()
 				else:
-					print("settings dont work yet")
-					#section = SETTINGS
+					section = SETTINGS
 		NAMING_SCREEN:
 			confirm_choice = 0
 			if name_tween1 or name_tween2:
@@ -225,8 +271,63 @@ func _process(_delta):
 				$confirm/No.text = "[color:255:255:0]Go back"
 				if Input.is_action_just_pressed("Select"):
 					section = NAMING_SCREEN
+		MAIN_MENU:
+			$loadmenu.visible = true
 		TRANSITION:
 			$confirm/Name.rotation_degrees = randi_range(0,1)
+		SETTINGS:
+			$settings.visible = true
+			for i in settings:
+				i.modulate = Color.WHITE
+			settings[setting].modulate = Color.YELLOW
+			if Input.is_action_just_pressed("Move Down"):
+				if setting == settings.size()-1:
+					setting = 0
+				else:
+					setting += 1
+			if Input.is_action_just_pressed("Move Up"):
+				if setting == 0:
+					setting = settings.size()-1
+				else:
+					setting -= 1
+			
+			if Input.is_action_just_pressed("Move Left"):
+				if settings[setting].name == "exit":
+					return
+				var type = settingsData[setting-1]["type"]
+				if type == "value":
+					if PlayerData.settings[settings[setting].name] == 0:
+						PlayerData.settings[settings[setting].name] = settingsData[setting-1]["values"].size()-1
+					else:
+						PlayerData.settings[settings[setting].name] -= 1
+				if type == "slider":
+					if PlayerData.settings[settings[setting].name] > settingsData[setting-1]["min"]:
+						PlayerData.settings[settings[setting].name] -= settingsData[setting-1]["increment"]
+			
+			if Input.is_action_just_pressed("Move Right"):
+				if settings[setting].name == "exit":
+					return
+				var type = settingsData[setting-1]["type"]
+				if type == "value":
+					if PlayerData.settings[settings[setting].name] == settingsData[setting-1]["values"].size()-1:
+						PlayerData.settings[settings[setting].name] = 0
+					else:
+						PlayerData.settings[settings[setting].name] += 1
+				if type == "slider":
+					if PlayerData.settings[settings[setting].name] < settingsData[setting-1]["max"]:
+						PlayerData.settings[settings[setting].name] += settingsData[setting-1]["increment"]
+			
+			if Input.is_action_just_pressed("Select"):
+				if settings[setting].name == "exit":
+					PlayerData.save_settings()
+					if full_menu:
+						section = MAIN_MENU
+					else:
+						section = START_MENU
+					return
+				var type = settingsData[setting-1]["type"]
+				if type == "bool":
+					PlayerData.settings[settings[setting].name] = !PlayerData.settings[settings[setting].name]
 
 func new_game() -> void:
 	PlayerData.Name = $confirm/Name.text

@@ -9,11 +9,32 @@ extends Node2D
 @export var size : int = 13
 @export var font : Font
 
+func get_font_end_offset() -> Vector2:
+	var drawposition = Vector2.ZERO
+	var _cmd = false
+	
+	if !font:
+		return Vector2.ZERO
+	
+	for i in text:
+		if _cmd:
+			continue
+		match i:
+			"[":
+				_cmd = true
+			"]":
+				_cmd = false
+			_:
+				drawposition.x += character_spacing
+				if extra_font_spacing.has(i):
+					drawposition.x += extra_font_spacing[i]
+	return drawposition
+
 func _draw():
 	if !font:
 		return
 	var mode = "normal"
-	var drawposition = Vector2(0,0)
+	var drawposition = Vector2.ZERO
 	var color = Color.WHITE
 	var cmd = false
 	var command = ""

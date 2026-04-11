@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://8h6arvyce38n" path="res://Scripts/Engine/start_menu.gd" id="1_h303d"]
 [ext_resource type="FontFile" uid="uid://dmp8kt2skg8oj" path="res://Sprites/DTM-Sans.otf" id="2_dl0pg"]
 [ext_resource type="FontFile" uid="uid://bwv20uaopj4hd" path="res://Fonts/undertale-crypt-of-tommorow.otf" id="3_dl0pg"]
+[ext_resource type="Texture2D" uid="uid://dexst85jotsiq" path="res://Images/Menu.png" id="4_o6asp"]
 [ext_resource type="AudioStream" uid="uid://dcreykwpiiwbp" path="res://Audio/BGM/mus_menu0.ogg" id="5_ujd4t"]
 [ext_resource type="AudioStream" uid="uid://8ky16bysmole" path="res://Audio/Sounds/mus_cymbal.ogg" id="6_dibtv"]
 [ext_resource type="Script" uid="uid://dexqxqsprthju" path="res://Scripts/Engine/Objects/text.gd" id="7_o6asp"]
@@ -26,14 +27,11 @@ font = ExtResource("3_dl0pg")
 font_size = 5
 font_color = Color(1, 1, 1, 0.5)
 
-[sub_resource type="LabelSettings" id="LabelSettings_dibtv"]
-font = ExtResource("2_dl0pg")
-font_size = 26
-
 [node name="Node2D" type="Node2D" unique_id=322459290]
 script = ExtResource("1_h303d")
 
 [node name="controls" type="Node2D" parent="." unique_id=1415009142]
+visible = false
 
 [node name="Label" type="Label" parent="controls" unique_id=756293049]
 offset_left = 84.0
@@ -82,32 +80,113 @@ USING UNDERTALE CHAI ENGINE (ALPHA)"
 label_settings = SubResource("LabelSettings_ujd4t")
 horizontal_alignment = 1
 
-[node name="settings" type="Node2D" parent="." unique_id=616045529]
+[node name="loadmenu" type="Node2D" parent="." unique_id=676569409]
 visible = false
 
-[node name="Label" type="Label" parent="settings" unique_id=754475218]
-offset_left = 10.0
-offset_top = 10.0
-offset_right = 199.0
-offset_bottom = 159.0
+[node name="Label3" type="Label" parent="loadmenu" unique_id=404585125]
+offset_left = -160.0
+offset_top = 223.0
+offset_right = 480.0
+offset_bottom = 243.0
+text = "TEMPLATE
+USING UNDERTALE CHAI ENGINE (ALPHA)"
+label_settings = SubResource("LabelSettings_ujd4t")
+horizontal_alignment = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="loadmenu" unique_id=573696277]
+modulate = Color(1, 1, 1, 0.34300002)
+position = Vector2(160, 112)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_o6asp")
+
+[node name="continue" type="Node2D" parent="loadmenu" unique_id=572069980]
+position = Vector2(84, 105)
+script = ExtResource("7_o6asp")
+text = "Continue"
+character_spacing = 7.0
+extra_font_spacing = Dictionary[String, float]({
+" ": -4.0,
+"m": 1.0
+})
+font = ExtResource("8_o42a4")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
+
+[node name="reset" type="Node2D" parent="loadmenu" unique_id=83102921]
+position = Vector2(194, 105)
+script = ExtResource("7_o6asp")
+text = "Reset"
+character_spacing = 7.0
+extra_font_spacing = Dictionary[String, float]({
+" ": -4.0,
+"m": 1.0
+})
+font = ExtResource("8_o42a4")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
+
+[node name="continue3" type="Node2D" parent="loadmenu" unique_id=21217259]
+position = Vector2(131, 125)
+script = ExtResource("7_o6asp")
+text = "Settings"
+character_spacing = 7.0
+extra_font_spacing = Dictionary[String, float]({
+" ": -4.0,
+"m": 1.0
+})
+font = ExtResource("8_o42a4")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
+
+[node name="settings" type="Node2D" parent="." unique_id=616045529]
+
+[node name="title" type="Node2D" parent="settings" unique_id=1160268046]
+position = Vector2(102.25, 10)
+scale = Vector2(2, 2)
+script = ExtResource("7_o6asp")
 text = "SETTINGS"
-label_settings = SubResource("LabelSettings_dibtv")
+character_spacing = 7.0
+extra_font_spacing = Dictionary[String, float]({
+" ": -4.0,
+"m": 1.0
+})
+font = ExtResource("8_o42a4")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
 
-[node name="start" type="Label" parent="settings" unique_id=304685094]
-offset_left = 84.0
-offset_top = 176.0
-offset_right = 273.0
-offset_bottom = 325.0
-text = "Start Game"
-label_settings = SubResource("LabelSettings_ql1sk")
+[node name="exit" type="Node2D" parent="settings" unique_id=1941103876]
+position = Vector2(19, 40)
+script = ExtResource("7_o6asp")
+text = "EXIT"
+character_spacing = 7.0
+extra_font_spacing = Dictionary[String, float]({
+" ": -4.0,
+"m": 1.0
+})
+font = ExtResource("8_o42a4")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
 
-[node name="settings" type="Label" parent="settings" unique_id=1315734161]
-offset_left = 84.0
-offset_top = 176.0
-offset_right = 273.0
-offset_bottom = 325.0
-text = "Start Game"
-label_settings = SubResource("LabelSettings_ql1sk")
+[node name="TempSetting" type="Node2D" parent="settings" unique_id=1024226098]
+position = Vector2(19, 70)
+
+[node name="setting" type="Node2D" parent="settings/TempSetting" unique_id=341537092]
+script = ExtResource("7_o6asp")
+text = "LANGUAGE"
+character_spacing = 7.0
+extra_font_spacing = Dictionary[String, float]({
+" ": -4.0,
+"m": 1.0
+})
+font = ExtResource("8_o42a4")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
+
+[node name="value" type="Node2D" parent="settings/TempSetting" unique_id=982997919]
+position = Vector2(72, 0)
+script = ExtResource("7_o6asp")
+text = "ENGLISH"
+character_spacing = 7.0
+extra_font_spacing = Dictionary[String, float]({
+" ": -4.0,
+"m": 1.0
+})
+font = ExtResource("8_o42a4")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1741549465]
 stream = ExtResource("5_ujd4t")
