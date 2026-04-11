@@ -37,6 +37,8 @@ func get_save_file() -> Dictionary:
 	var saveFile = Undermaker.loadJsonAsDictionary_absolute("user://save_"+Undermaker.Project["projectName"]+".json")
 	if saveFile != {}:
 		save = saveFile
+	
+	var color : Color
 	return save
 
 func save_settings() -> void:
