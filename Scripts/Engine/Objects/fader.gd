@@ -11,7 +11,7 @@ func fadeIn():
 		if stopfadingIn:
 			stopfadingIn = false
 			return
-		$ColorRect.modulate.a += -0.16
+		$ColorRect.modulate.a += -0.08
 		await get_tree().process_frame
 	$ColorRect.modulate.a = 0
 	stopfadingOut = false
@@ -24,7 +24,10 @@ func fadeOut():
 		if stopfadingOut:
 			stopfadingOut = false
 			return
-		$ColorRect.modulate.a += 0.16
+		$ColorRect.modulate.a += 0.08
 		await get_tree().process_frame
 	$ColorRect.modulate.a = 1
 	stopfadingIn = false
+
+func setFade(fadeVal : float) -> void:
+	$ColorRect.modulate.a = fadeVal

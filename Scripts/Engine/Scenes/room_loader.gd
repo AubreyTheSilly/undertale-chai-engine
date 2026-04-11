@@ -32,6 +32,7 @@ func clear_room() -> void:
 			i.queue_free()
 
 func LoadRoom() -> void:
+	visible = false
 	room_valid = false
 	$BG.texture = null
 	$DoesntExist.visible = false
@@ -120,6 +121,7 @@ func LoadRoom() -> void:
 		layernum += 1
 	if FileAccess.file_exists(Undermaker.Path+"Scripts/Rooms/"+roomName+".utscript"):
 		$ScriptRunner.run_script("Rooms/"+roomName+".utscript")
+	visible = true
 
 func _on_line_edit_text_submitted(new_text):
 	roomName = new_text
