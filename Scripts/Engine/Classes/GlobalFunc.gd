@@ -36,7 +36,7 @@ func get_mods_list(directory : String) -> Array[Dictionary]:
 	return mods
 
 func get_object_image(objtype : String):
-	if objtype == "Character":
+	if objtype == "Character" or objtype == "NPC":
 		return preload("res://Sprites/npc1.png")
 	elif objtype == "Player":
 		return preload("res://Sprites/player.png")

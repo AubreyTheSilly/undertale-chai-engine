@@ -28,7 +28,8 @@ func _draw():
 				var obj : RoomInstance = j
 				draw_rect(Rect2((obj.position*10),Vector2(20,20)),Color.BLACK,false,1.0)
 				var image = object_textures[obj.name]
-				draw_texture(image,((obj.position*10)+Vector2(10,10))-(image.get_size()/2))
+				if image:
+					draw_texture(image,((obj.position*10)+Vector2(10,10))-(image.get_size()/2))
 		index += 1
 
 func updateObjectTextures() -> void:

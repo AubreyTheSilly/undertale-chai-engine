@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://oeq0oxag5mae"]
+
+[ext_resource type="PackedScene" uid="uid://c500t7ga4syg2" path="res://Scenes/Objects/Character.tscn" id="1_rio0a"]
+[ext_resource type="Script" uid="uid://du3ifitt4lpb3" path="res://Scripts/Engine/Objects/NPC.gd" id="2_oitdq"]
+[ext_resource type="PackedScene" uid="uid://c6c0lvaxnmhyv" path="res://Scenes/Objects/Interactible.tscn" id="3_8weoo"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3rxpy"]
+resource_local_to_scene = true
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"idle_down",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle_left",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle_right",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle_up",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"move_down",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"move_left",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"move_right",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"move_up",
+"speed": 5.0
+}]
+
+[node name="NPC" unique_id=92183050 instance=ExtResource("1_rio0a")]
+script = ExtResource("2_oitdq")
+
+[node name="Sprite" parent="." index="0" unique_id=1597151738]
+sprite_frames = SubResource("SpriteFrames_3rxpy")
+
+[node name="Interactible" parent="." index="2" unique_id=432576210 instance=ExtResource("3_8weoo")]
+
+[connection signal="interact" from="Interactible" to="." method="_on_interact"]

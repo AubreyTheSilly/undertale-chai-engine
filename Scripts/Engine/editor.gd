@@ -66,6 +66,7 @@ func _on_save_settings_pressed():
 	#$Settings/LineEdit2.text = Undermaker.Project["gameName"]
 	Undermaker.Project["projectName"] = $Settings/LineEdit.text
 	Undermaker.Project["gameName"] = $Settings/LineEdit2.text
+	Undermaker.Project["description"] = $Settings/LineEdit3.text
 	print(Undermaker.Path+"project.json")
 	print(Undermaker.createJsonFromDictionary("project.json",Undermaker.Project))
 
