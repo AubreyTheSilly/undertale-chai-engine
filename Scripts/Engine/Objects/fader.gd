@@ -3,7 +3,7 @@ extends CanvasLayer
 var stopfadingIn := false
 var stopfadingOut := false
 
-func fadeIn():
+func fadeIn(speed := 0.08):
 	stopfadingIn = false
 	stopfadingOut = true
 	$ColorRect.modulate.a = 1
@@ -11,12 +11,12 @@ func fadeIn():
 		if stopfadingIn:
 			stopfadingIn = false
 			return
-		$ColorRect.modulate.a += -0.08
+		$ColorRect.modulate.a += -speed
 		await get_tree().process_frame
 	$ColorRect.modulate.a = 0
 	stopfadingOut = false
 
-func fadeOut():
+func fadeOut(speed := 0.08):
 	stopfadingIn = true
 	stopfadingOut = false
 	$ColorRect.modulate.a = 0
@@ -24,7 +24,7 @@ func fadeOut():
 		if stopfadingOut:
 			stopfadingOut = false
 			return
-		$ColorRect.modulate.a += 0.08
+		$ColorRect.modulate.a += speed
 		await get_tree().process_frame
 	$ColorRect.modulate.a = 1
 	stopfadingIn = false

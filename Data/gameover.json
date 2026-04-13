@@ -1,0 +1,11 @@
+{
+	"texts":[
+		"You cannot give[newline]up just yet...",
+		"Our fate rests[newline]upon you...",
+		"You're going to[newline]be alright...",
+		"Don't lose hope!",
+		"It cannot end[newline]now!"
+	],
+	"endingtext":"%![wait:10][newline]Stay determined...",
+	"sound":"snd_txtasg"
+}

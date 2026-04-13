@@ -4,7 +4,9 @@
 [ext_resource type="Script" uid="uid://dexqxqsprthju" path="res://Scripts/Engine/Objects/text.gd" id="1_qpupn"]
 [ext_resource type="Texture2D" uid="uid://b0rk7jclh5ydd" path="res://Sprites/Battle/spr_heart_0.png" id="4_6kwjr"]
 [ext_resource type="Texture2D" uid="uid://chu66v36bsbue" path="res://Sprites/spr_gameoverbg_0.png" id="4_vnjje"]
+[ext_resource type="AudioStream" uid="uid://c1slwj8h5smt3" path="res://Audio/Sounds/snd_break1_c.wav" id="5_a57xw"]
 [ext_resource type="AudioStream" uid="uid://bhy0nqbklg17i" path="res://Audio/BGM/mus_gameover.ogg" id="5_bb3cs"]
+[ext_resource type="AudioStream" uid="uid://vk7v7x1863s2" path="res://Audio/Sounds/snd_break2_c.wav" id="6_qjy16"]
 
 [sub_resource type="Image" id="Image_2oltb"]
 data = {
@@ -1613,11 +1615,11 @@ script = ExtResource("1_2oltb")
 [node name="TextObject" type="Node2D" parent="." unique_id=1899078305]
 position = Vector2(50, 150)
 script = ExtResource("1_qpupn")
-text = "  Chara![newline]  Stay determined..."
 font = SubResource("FontFile_wxkdt")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
-[node name="SprGameoverbg0" type="Sprite2D" parent="." unique_id=1490783656]
+[node name="Text" type="Sprite2D" parent="." unique_id=1490783656]
+modulate = Color(1, 1, 1, 0)
 position = Vector2(50.5, 16.5)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("4_vnjje")
@@ -1629,8 +1631,13 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("4_6kwjr")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=116876640]
+stream = ExtResource("5_a57xw")
 
 [node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="." unique_id=163882101]
+stream = ExtResource("6_qjy16")
 
 [node name="AudioStreamPlayer3" type="AudioStreamPlayer" parent="." unique_id=901815475]
+stream = ExtResource("5_bb3cs")
+
+[node name="DialoguePlayer" type="AudioStreamPlayer" parent="." unique_id=275755380]
 stream = ExtResource("5_bb3cs")

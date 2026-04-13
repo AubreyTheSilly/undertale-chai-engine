@@ -1216,7 +1216,7 @@ shape = SubResource("RectangleShape2D_1k58v")
 z_index = 1
 offset_left = 82.0
 offset_top = 216.0
-offset_right = 142.0
+offset_right = 166.0
 offset_bottom = 240.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
@@ -1229,9 +1229,9 @@ text = "Room"
 
 [node name="Enemy" type="Button" parent="CanvasLayer" unique_id=239746415]
 z_index = 1
-offset_left = 144.0
+offset_left = 168.0
 offset_top = 216.0
-offset_right = 204.0
+offset_right = 246.0
 offset_bottom = 240.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
@@ -1243,6 +1243,7 @@ action_mode = 0
 text = "Enemy"
 
 [node name="Npc" type="Button" parent="CanvasLayer" unique_id=485973322]
+visible = false
 z_index = 1
 offset_left = 206.0
 offset_top = 216.0
