@@ -1,6 +1,6 @@
 extends Node2D
 
-var fade = false
+var fade = 0
 
 var soul_colors = [Color.RED]
 
@@ -53,11 +53,19 @@ func StartDialogue(dialog : Array) -> void:
 		while !Input.is_action_just_pressed("Select"):
 			await get_tree().process_frame
 
+# this only exists to make the code more readable. lol
+func makeShard(offset : Vector2) -> void:
+	var shard = preload("res://Scenes/Objects/heartshard.tscn").instantiate()
+	add_child(shard)
+	shard.modulate = $Sprite2D.modulate
+	shard.position = PlayerData.battle_soul_pos+offset
+
 func timer(frames : int):
 	for i in range(frames):
 		await get_tree().process_frame
 
 func _ready() -> void:
+	$Sprite2D.position = PlayerData.battle_soul_pos
 	var colors = Undermaker.loadJsonAsDictionary("Data/soul_colors.json")
 	if colors != {}:
 		for i in colors:
@@ -77,28 +85,33 @@ func _ready() -> void:
 	var dialog = Undermaker.loadJsonAsDictionary("Data/gameover.json")
 	if dialog != {}:
 		dialogue = dialog
-	dialogue["endingtext"].replace("%",PlayerData.Name)
+	dialogue["endingtext"] = dialogue["endingtext"].replace("%",PlayerData.Name)
 	$Sprite2D.modulate = soul_colors[0]
-	# TODO - code the soul shattering n stuff
 	await timer(20)
 	$AudioStreamPlayer.play()
 	$Sprite2D.texture = preload("res://Sprites/Battle/spr_heartbreak_0.png")
 	await timer(40)
 	$AudioStreamPlayer2.play()
 	$Sprite2D.visible = false
+	makeShard(Vector2(-2,0))
+	makeShard(Vector2(0,3))
+	makeShard(Vector2(2,6))
+	makeShard(Vector2(8,0))
+	makeShard(Vector2(10,3))
+	makeShard(Vector2(12,6))
 	await timer(50)
-	fade = true
+	fade = 1
 	$AudioStreamPlayer3.play()
 	await timer(80)
 	await StartDialogue([dialogue["texts"].pick_random(),dialogue["endingtext"]," "])
-	fader.fadeOut(0.03)
+	fade = 2
 	await timer(40)
 	PlayerData.loadFile()
 
 func _process(_delta) -> void:
-	if fade:
+	if fade == 1:
 		if $Text.modulate.a < 1:
 			$Text.modulate.a += 0.02
-	#else:
-		#if $Text.modulate.a < 1:
-			#$Text.modulate.a += 0.02
+	elif fade == 2:
+		$Text.modulate.a -= 0.03
+		$AudioStreamPlayer3.volume_db -= (80*0.03)

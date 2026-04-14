@@ -28,6 +28,7 @@ var player_teleporting = false
 var player_teleport_position = null
 var player_position : Vector2
 var player_dir : Vector2 = Vector2.DOWN
+var battle_soul_pos : Vector2 = Vector2(160,120)
 var can_move_internal := false
 
 var settings = {}

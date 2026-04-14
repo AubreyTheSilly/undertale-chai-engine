@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://dicokho82wwdc"]
+
+[ext_resource type="Texture2D" uid="uid://qefy0ia6trpl" path="res://Sprites/Battle/spr_heartshards/spr_heartshards_0.png" id="1_vx142"]
+[ext_resource type="Texture2D" uid="uid://dudoet5p44h54" path="res://Sprites/Battle/spr_heartshards/spr_heartshards_1.png" id="2_k8kw1"]
+[ext_resource type="Texture2D" uid="uid://di4kqgyt6m5fo" path="res://Sprites/Battle/spr_heartshards/spr_heartshards_2.png" id="3_ttfik"]
+[ext_resource type="Texture2D" uid="uid://b0xc8ox1yi12m" path="res://Sprites/Battle/spr_heartshards/spr_heartshards_3.png" id="4_7xvry"]
+[ext_resource type="Script" uid="uid://b5dca3rcuybs5" path="res://Scripts/Engine/Objects/heartshard.gd" id="5_r4lsx"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_c27mj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_vx142")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_k8kw1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_ttfik")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_7xvry")
+}],
+"loop": true,
+"name": &"default",
+"speed": 7.5
+}]
+
+[node name="heartshard" type="AnimatedSprite2D" unique_id=935214983]
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_c27mj")
+autoplay = "default"
+frame_progress = 0.34003323
+script = ExtResource("5_r4lsx")

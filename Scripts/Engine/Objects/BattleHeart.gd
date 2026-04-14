@@ -164,6 +164,8 @@ func _process(_delta) -> void:
 	if slamtimer > 0:
 		slamtimer-=1
 	$Soul.rotation_degrees = bluedir
+	
+	PlayerData.battle_soul_pos = position
 
 func damage(dmg : int):
 	$AudioStreamPlayer.stream = preload("res://Audio/Sounds/snd_hurt1_c.wav")
