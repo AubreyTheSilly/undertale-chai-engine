@@ -1,1 +1,0 @@
-Armor:2:999:* Armor - +999 DEF:* Example text:CoolArmor:Armor

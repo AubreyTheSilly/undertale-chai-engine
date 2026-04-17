@@ -1,1 +1,0 @@
-HealingItem:0:999:* Heal - Heals All HP:* Example text:HealItem:Heal

@@ -81,25 +81,19 @@ func LoadRoom() -> void:
 				if FileAccess.file_exists(Undermaker.Path+"Data/Objects/"+i.type+".txt"):
 					var objectdata = Undermaker.loadTextAsObjectData(i.type)
 					if objectdata != {}:
-						var object = Undermaker.getObjectByClassName(objectdata["extends"])
-						if object:
-							for j in objectdata:
-								if j != "extends" and j != "editor_image":
-									object.set(j,objectdata[j])
-							for j in i.data:
-								if j in object:
-									if str_to_var(i.data[j]):
-										await create_tween().tween_property(object,j,str_to_var(i.data[j]),0).finished
-									else:
-										await create_tween().tween_property(object,j,str_to_var(i.data[j]),0).finished
-									print(i.type+"'s property "+j+" has been set to "+i.data[j])
+						var object = Undermaker.loadCustomObject(i.type)
+						for j in i.data:
+							if j in object:
+								if str_to_var(i.data[j]):
+									await create_tween().tween_property(object,j,str_to_var(i.data[j]),0).finished
 								else:
-									print(i.type+" does not have property "+j)
-							object.name = i.name
-							object.position = (i.position+Vector2(1,1))*10
-							layerobj.add_child(object)
-						else:
-							push_error("Object "+i.type+" has an invalid type")
+									await create_tween().tween_property(object,j,str_to_var(i.data[j]),0).finished
+								print(i.type+"'s property "+j+" has been set to "+i.data[j])
+							else:
+								print(i.type+" does not have property "+j)
+						object.name = i.name
+						object.position = (i.position+Vector2(1,1))*10
+						layerobj.add_child(object)
 					else:
 						push_error("Tried to load an invalid object in"+roomName)
 				else:

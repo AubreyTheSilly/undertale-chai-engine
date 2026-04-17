@@ -56,10 +56,43 @@ func makeObj():
 	else:
 		$"/root/editor/RoomDisplay".room[targetlayer]["obj"][obj["name"]] = obj
 	
+	# i don't think clearing the properties is neccessary but one of my testers basically begged me to.......
+	$PanelContainer/ObjMode/ObjName.text = ""
+	$PanelContainer/ObjMode/Filename.text = ""
+	objdata = [["",""]]
+	curobjdata = 0
+	
+	$PanelContainer/ObjMode/Property.text = ""
+	$PanelContainer/ObjMode/PropertyValue.text = ""
+	
 	redraw_room()
 
 func _fix_layers():
 	print("Layers changed")
+
+func loadObjectIntoObjectEditor(obj : Dictionary) -> void:
+	$PanelContainer/ObjMode/ObjName.text = obj["name"]
+	$PanelContainer/ObjMode/Filename.text = obj["type"]
+	objdata = []
+	curobjdata = 0
+	
+	for i in obj["data"]:
+		objdata.append([i,obj["data"][i]])
+	
+	if objdata == []:
+		objdata = [["",""]]
+	
+	$PanelContainer/ObjMode/Property.text = objdata[curobjdata][0]
+	$PanelContainer/ObjMode/PropertyValue.text = objdata[curobjdata][1]
+
+func getObjAtCursor() -> Dictionary:
+	var targetlayer = $OptionButton.get_item_text($OptionButton.selected)
+	var objpos = (($"/root/editor/ObjectDisplay".position-Vector2(10,10)).snapped(Vector2(10,10))/10.0)-($"/root/editor/RoomDisplay".position/10.0)
+	
+	if checkforobj($"/root/editor/RoomDisplay".room[targetlayer]["obj"],objpos) != "":
+		return $"/root/editor/RoomDisplay".room[targetlayer]["obj"][checkforobj($"/root/editor/RoomDisplay".room[targetlayer]["obj"],objpos)]
+	
+	return {}
 
 func removeObj():
 	var targetlayer = $OptionButton.get_item_text($OptionButton.selected)
@@ -183,6 +216,15 @@ func _process(_delta):
 				$PanelContainer/ObjMode.visible = true
 			$"/root/editor/ObjectDisplay".visible = true
 			$"/root/editor/FakeTile".visible = false
+			
+			$"/root/editor/ObjectDisplay/Label2".text = ""
+			var obj_at_cursor = getObjAtCursor()
+			if obj_at_cursor != {}:
+				$"/root/editor/ObjectDisplay/Label2".text = obj_at_cursor["name"]+"\nType: "+obj_at_cursor["type"]
+				for i in obj_at_cursor["data"]:
+					$"/root/editor/ObjectDisplay/Label2".text += "\n"+i+": "+obj_at_cursor["data"][i]
+				if Input.is_action_just_pressed("MiddleClick"):
+					loadObjectIntoObjectEditor(obj_at_cursor)
 		
 			$"/root/editor/ObjectDisplay".position = (get_tree().current_scene.get_global_mouse_position()).snapped(Vector2(10,10))
 			#$"/root/editor/ObjectDisplay"/Label.text = $PanelContainer/ObjMode/ObjName.text+"\n("+$PanelContainer/ObjMode/Filename.text+")"

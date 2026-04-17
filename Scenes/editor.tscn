@@ -177,6 +177,9 @@ animations = [{
 "speed": 4.0
 }]
 
+[sub_resource type="LabelSettings" id="LabelSettings_cnbw5"]
+font_size = 7
+
 [node name="editor" type="Node2D" unique_id=1107466175]
 process_priority = 1
 script = ExtResource("1_24ceq")
@@ -835,7 +838,6 @@ placeholder_text = "Filename"
 metadata/_edit_use_anchors_ = true
 
 [node name="ObjMode" type="Control" parent="CanvasLayer/RoomEditor/PanelContainer" unique_id=1898401371]
-visible = false
 layout_mode = 2
 mouse_filter = 1
 
@@ -1014,6 +1016,7 @@ text = "1/1"
 label_settings = SubResource("LabelSettings_8howc")
 
 [node name="Settings" type="Control" parent="CanvasLayer/RoomEditor/PanelContainer" unique_id=1850117348]
+visible = false
 layout_mode = 2
 mouse_filter = 1
 
@@ -1335,6 +1338,14 @@ centered = false
 
 [node name="ObjectDisplay" parent="." unique_id=211679151 instance=ExtResource("8_eo2o7")]
 visible = false
+
+[node name="Label2" type="Label" parent="ObjectDisplay" unique_id=1248752670]
+offset_left = 11.0
+offset_top = -11.0
+offset_right = 131.0
+offset_bottom = 9.0
+label_settings = SubResource("LabelSettings_cnbw5")
+autowrap_mode = 3
 
 [connection signal="pressed" from="Settings/Save" to="." method="_on_save_settings_pressed"]
 [connection signal="pressed" from="EnemyEditor/Hurt" to="EnemyEditor/FakeEnemy" method="Shudder"]

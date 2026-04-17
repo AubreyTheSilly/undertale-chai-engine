@@ -1058,6 +1058,35 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 						continue
 					
 					vari.value = PlayerData.settings[runscript.data[line].data[1].value]
+				Token.TokenType.LOAD_CUSTOM_OBJECT:
+					if runscript.data[line].data.size() != 5:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
+							# reset = true (this caused lag so i moved it to only be in end)
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Object name must be a string")
+						continue
+					if runscript.data[line].data[2].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Object type must be a string")
+						continue
+					if !Undermaker.loadCustomObject(runscript.data[line].data[2].value):
+						push_error("line "+str(line+1)+": Object must be a valid custom object")
+						continue
+					if runscript.data[line].data[3].type != Token.TokenType.NUMBER:
+						push_error("line "+str(line+1)+": Object X position must be a number")
+						continue
+					if runscript.data[line].data[4].type != Token.TokenType.NUMBER:
+						push_error("line "+str(line+1)+": Object Y position must be a number")
+						continue
+					var obj = Undermaker.loadCustomObject(runscript.data[line].data[2].value)
+					obj.name = runscript.data[line].data[1].value
+					obj.position = Vector2(runscript.data[line].data[3].value,runscript.data[line].data[4].value)
+					node.add_child(obj)
 				_:
 					await unhandled_function(runscript.data[line])
 		if reset:

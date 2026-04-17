@@ -7,3 +7,7 @@ func _ready():
 func _process(_delta):
 	if script_to_run:
 		run_script(script_to_run,"Update")
+
+func _physics_process(_delta):
+	if script_to_run:
+		run_script(script_to_run,"PhysicsUpdate")

@@ -38,8 +38,8 @@ func get_save_file() -> Dictionary:
 	var saveFile = Undermaker.loadJsonAsDictionary_absolute("user://save_"+Undermaker.Project["projectName"]+".json")
 	if saveFile != {}:
 		save = saveFile
-	
-	var color : Color
+	# why the fuck is this here. i genuinely don't remember. in the event that it turns out this was meant for something i've commented it out instead of deleting it
+	# var color : Color
 	return save
 
 func save_settings() -> void:

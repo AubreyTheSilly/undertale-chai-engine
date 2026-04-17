@@ -1,1 +1,0 @@
-Weapon:1:999:* Weapon - +999 ATK:* Example text:Weapon:Weapon

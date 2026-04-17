@@ -72,6 +72,23 @@ func getObjectByClassName(className : String,instantiate : bool = true) -> Objec
 				object = class_tscn
 	return object
 
+func loadCustomObject(objname : String):
+	var objectdata = Undermaker.loadTextAsObjectData(objname)
+	if objectdata == {}:
+		return null
+	var object = Undermaker.getObjectByClassName(objectdata["extends"])
+	if object:
+		for j in objectdata:
+			if j != "extends" and j != "editor_image":
+				object.set(j,objectdata[j])
+	var script = UTScript.loadScriptFromFile("Objects/"+objname+".utscript")
+	if script:
+		var runner = preload("res://Scenes/Objects/object_script_runner.tscn").instantiate()
+		runner.script_to_run = "Objects/"+objname+".utscript"
+		runner.node = object
+		object.add_child(runner)
+	return object
+
 func loadTextAsObjectData(dir : String) -> Dictionary:
 	if !FileAccess.file_exists(Path+"Data/Objects/"+dir+".txt"):
 		print("Object to load does not exist. Returning null.")
