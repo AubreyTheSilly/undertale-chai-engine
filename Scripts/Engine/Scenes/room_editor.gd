@@ -57,6 +57,18 @@ func makeObj():
 		$"/root/editor/RoomDisplay".room[targetlayer]["obj"][obj["name"]] = obj
 	
 	# i don't think clearing the properties is neccessary but one of my testers basically begged me to.......
+	# UPDATE: this has been moved to the clearObjectProperties function and now happens when you press the delete key.
+	#$PanelContainer/ObjMode/ObjName.text = ""
+	#$PanelContainer/ObjMode/Filename.text = ""
+	#objdata = [["",""]]
+	#curobjdata = 0
+	#
+	#$PanelContainer/ObjMode/Property.text = ""
+	#$PanelContainer/ObjMode/PropertyValue.text = ""
+	
+	redraw_room()
+
+func clearObjectProperties() -> void:
 	$PanelContainer/ObjMode/ObjName.text = ""
 	$PanelContainer/ObjMode/Filename.text = ""
 	objdata = [["",""]]
@@ -64,8 +76,6 @@ func makeObj():
 	
 	$PanelContainer/ObjMode/Property.text = ""
 	$PanelContainer/ObjMode/PropertyValue.text = ""
-	
-	redraw_room()
 
 func _fix_layers():
 	print("Layers changed")
@@ -225,6 +235,8 @@ func _process(_delta):
 					$"/root/editor/ObjectDisplay/Label2".text += "\n"+i+": "+obj_at_cursor["data"][i]
 				if Input.is_action_just_pressed("MiddleClick"):
 					loadObjectIntoObjectEditor(obj_at_cursor)
+			if Input.is_action_just_pressed("delete"):
+				clearObjectProperties()
 		
 			$"/root/editor/ObjectDisplay".position = (get_tree().current_scene.get_global_mouse_position()).snapped(Vector2(10,10))
 			#$"/root/editor/ObjectDisplay"/Label.text = $PanelContainer/ObjMode/ObjName.text+"\n("+$PanelContainer/ObjMode/Filename.text+")"

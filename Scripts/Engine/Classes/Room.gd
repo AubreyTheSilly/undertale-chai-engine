@@ -9,6 +9,9 @@ static func loadRoomFromDictionary(dict : Dictionary) -> Room:
 	var room = Room.new()
 	var json = dict
 	
+	room.CameraBounds = Rect2(0,0,16*20,12*20)
+	room.Music = ""
+	
 	for i in json:
 		if i == "bounds":
 			room.CameraBounds = Rect2(0,0,json["bounds"][0]*20,json["bounds"][1]*20)
