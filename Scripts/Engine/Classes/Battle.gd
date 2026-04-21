@@ -14,7 +14,10 @@ var loadedBattle = {
 func Encounter(id : String,transition : bool = true):
 	PlayerData.player_can_move = false
 	var encounterFile = FileAccess.open(Undermaker.Path+"Data/Encounters/"+id+".txt",FileAccess.READ)
-	var encounter = encounterFile.get_line().split(":")
+	var encounterText := encounterFile.get_as_text()
+	var encounter : Array = encounterText.split("\n")
+	if encounter.size() <= 2:
+		encounter = encounterText.split(":")
 	encounterFile.close()
 	loadedBattle["encounterText"] = encounter[0]
 	loadedBattle["enemies"] = []
