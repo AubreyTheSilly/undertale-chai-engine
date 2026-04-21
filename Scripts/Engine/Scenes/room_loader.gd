@@ -104,7 +104,7 @@ func LoadRoom() -> void:
 						object.name = i.name
 						for j in i.data:
 							if j in object:
-								if str_to_var(i.data[j]):
+								if str_to_var(i.data[j]) != null:
 									await create_tween().tween_property(object,j,str_to_var(i.data[j]),0).finished
 								else:
 									await create_tween().tween_property(object,j,i.data[j],0).finished

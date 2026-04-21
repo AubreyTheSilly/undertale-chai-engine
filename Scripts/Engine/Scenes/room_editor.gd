@@ -237,6 +237,22 @@ func _process(_delta):
 					loadObjectIntoObjectEditor(obj_at_cursor)
 			if Input.is_action_just_pressed("delete"):
 				clearObjectProperties()
+			
+			var Scale = Vector2(1,1)
+			var rot = 0
+			
+			for i in objdata:
+				if i[0] == "scale" and str_to_var(i[1]) is Vector2:
+					Scale = str_to_var(i[1])
+				elif i[0] == "scale:x" and (str_to_var(i[1]) is float or str_to_var(i[1]) is int):
+					Scale.x = str_to_var(i[1])
+				elif i[0] == "scale:y" and (str_to_var(i[1]) is float or str_to_var(i[1]) is int):
+					Scale.y = str_to_var(i[1])
+				elif i[0] == "rotation_degrees" and (str_to_var(i[1]) is float or str_to_var(i[1]) is int):
+					rot = str_to_var(i[1])
+			
+			$"/root/editor/ObjectDisplay/Sprite2D".scale = Scale
+			$"/root/editor/ObjectDisplay/Sprite2D".rotation_degrees = rot
 		
 			$"/root/editor/ObjectDisplay".position = (get_tree().current_scene.get_global_mouse_position()).snapped(Vector2(10,10))
 			#$"/root/editor/ObjectDisplay"/Label.text = $PanelContainer/ObjMode/ObjName.text+"\n("+$PanelContainer/ObjMode/Filename.text+")"

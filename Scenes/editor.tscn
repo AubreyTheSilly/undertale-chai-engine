@@ -724,7 +724,6 @@ focus_mode = 1
 theme_override_font_sizes/font_size = 7
 theme_override_styles/normal = SubResource("StyleBoxFlat_7wlcy")
 theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
-text = "room_test1"
 placeholder_text = "Room Name"
 
 [node name="OptionButton" type="OptionButton" parent="CanvasLayer/RoomEditor" unique_id=1032949314]

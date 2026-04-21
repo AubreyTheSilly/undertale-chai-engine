@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bnlemlij54gl4"]
+
+[node name="DiagonalWall" type="StaticBody2D" unique_id=1356680165]
+
+[node name="Area2D" type="CollisionPolygon2D" parent="." unique_id=1067304881]
+polygon = PackedVector2Array(10, 10, 10, -10, -10, 10)

@@ -44,6 +44,11 @@ func get_object_image(objtype : String):
 		return preload("res://Sprites/portal.png")
 	elif objtype == "Trigger":
 		return preload("res://Sprites/trigger.png")
+	elif objtype == "DiagonalWall":
+		if editor_fun >= 40 and editor_fun <= 45:
+			return preload("res://Sprites/wall-diagonal2.png")
+		else:
+			return preload("res://Sprites/wall-diagonal1.png")
 	elif objtype == "Wall":
 		if editor_fun >= 40 and editor_fun <= 45:
 			return preload("res://Sprites/wall2.png")

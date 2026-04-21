@@ -62,6 +62,9 @@ animations = [{
 size = Vector2(20, 10)
 
 [node name="Player" type="CharacterBody2D" unique_id=993824088]
+floor_stop_on_slope = false
+floor_block_on_wall = false
+floor_max_angle = 1.5707964
 script = ExtResource("1_e2oef")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=1638087306]
