@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://djmf1enag8t8y" path="res://Scripts/Engine/Objects/fader.gd" id="1_u7lk4"]
 
 [node name="fader" type="CanvasLayer" unique_id=704112931]
-layer = 128
+layer = 126
 script = ExtResource("1_u7lk4")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1298017624]

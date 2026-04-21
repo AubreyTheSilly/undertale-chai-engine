@@ -690,16 +690,24 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
 						continue
-					if !node.get_node_or_null(runscript.data[line].data[1].value):
+					if !node.get_node_or_null(runscript.data[line].data[1].value) and runscript.data[line].data[1].value != "self":
 						push_error("line "+str(line+1)+": Target node must exist")
 						continue
-					if !node.get_node(runscript.data[line].data[1].value) is Sprite2D:
-						push_error("line "+str(line+1)+": Target node must be a sprite")
-						continue
+					if runscript.data[line].data[1].value != "self":
+						if !node.get_node(runscript.data[line].data[1].value) is Sprite2D:
+							push_error("line "+str(line+1)+": Target node must be a sprite")
+							continue
+					elif not node is Sprite2D:
+							push_error("line "+str(line+1)+": Target node must be a sprite")
+							continue
 					if !Loader.load_file("Sprites/"+runscript.data[line].data[2].value):
 						push_error("line "+str(line+1)+": Sprite path must lead to a valid image file (Path: "+"Sprites/"+runscript.data[line].data[2].value+")")
 						continue
-					var sprite = node.get_node(runscript.data[line].data[1].value)
+					var sprite
+					if runscript.data[line].data[1].value == "self":
+						sprite = node
+					else:
+						sprite = node.get_node(runscript.data[line].data[1].value)
 					sprite.texture = Loader.load_file("Sprites/"+runscript.data[line].data[2].value)
 				Token.TokenType.GIVE_ITEM:
 					if runscript.data[line].data.size() != 2:
@@ -1092,6 +1100,8 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 		if reset:
 			runscript = ogrunscript.copy()
 			reset = false
+	if !get_tree():
+		return Error.ERR_TIMEOUT
 	await get_tree().process_frame
 	script_finished.emit()
 	return OK

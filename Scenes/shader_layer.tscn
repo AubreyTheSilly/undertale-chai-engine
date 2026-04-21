@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://b4wr16oj43w4g"]
+
+[ext_resource type="Script" uid="uid://bg85bkdu6x3ti" path="res://Scripts/Engine/shader_layer.gd" id="1_qbbk5"]
+
+[node name="ShaderLayer" type="CanvasLayer" unique_id=156454078]
+layer = 127
+script = ExtResource("1_qbbk5")
+
+[node name="ShaderTemplate" type="BackBufferCopy" parent="." unique_id=24040373]
+visible = false
+copy_mode = 2
+rect = Rect2(0, 0, 640, 480)
+
+[node name="ColorRect" type="ColorRect" parent="ShaderTemplate" unique_id=389225819]
+offset_right = 320.0
+offset_bottom = 240.0

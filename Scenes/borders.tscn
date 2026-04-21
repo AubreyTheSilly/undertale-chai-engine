@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://ih8bwe2ol1dt"]
+
+[ext_resource type="Shader" uid="uid://cao2q8s7n450p" path="res://BorderShader.gdshader" id="1_1r7dd"]
+[ext_resource type="Script" uid="uid://ctwqv3k4exqv5" path="res://Scripts/borders.gd" id="1_p8jor"]
+[ext_resource type="Texture2D" uid="uid://dwr38e71vxklh" path="res://Sprites/Borders/default.png" id="2_a7e48"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a7e48"]
+shader = ExtResource("1_1r7dd")
+
+[node name="Borders" type="CanvasLayer" unique_id=42077459]
+layer = 127
+visible = false
+script = ExtResource("1_p8jor")
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="." unique_id=1332706757]
+visible = false
+copy_mode = 2
+rect = Rect2(0, 0, 320, 240)
+
+[node name="ColorRect" type="ColorRect" parent="BackBufferCopy" unique_id=352295692]
+material = SubResource("ShaderMaterial_a7e48")
+offset_left = 80.0
+offset_top = 15.0
+offset_right = 560.0
+offset_bottom = 285.0
+
+[node name="Border" type="Sprite2D" parent="." unique_id=2113663632]
+position = Vector2(160, 120)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_a7e48")

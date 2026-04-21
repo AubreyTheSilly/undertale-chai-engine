@@ -31,7 +31,6 @@ position = Vector2(36.5, 35)
 [node name="TextObject" type="Node2D" parent="Box" unique_id=1380433347]
 position = Vector2(14, 10)
 script = ExtResource("3_81uhv")
-text = "* (The shadow of the ruins[newline]  looms above, filling you with[newline]  determination.)"
 extra_font_spacing = Dictionary[String, float]({
 "(": 2.0
 })

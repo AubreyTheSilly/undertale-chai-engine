@@ -131,7 +131,8 @@ func loadTextAsObjectData(dir : String) -> Dictionary:
 			value = str_to_var(value)
 		
 		dict[key] = value
-	print(dict)
+	# THIS PRINTED SO MUCH SHIT BUT ITS GONE NOW
+	# print(dict)
 	if not dict.has("extends") or not dict.has("editor_image"):
 		push_error("Missing required values from "+dir+".txt. Make sure you have extended and editor_image values defined!")
 		return {}

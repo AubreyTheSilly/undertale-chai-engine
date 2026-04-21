@@ -41,6 +41,8 @@ fader="*res://Scenes/Objects/fader.tscn"
 Loader="*res://Scripts/Engine/Loader.gd"
 BGM="*uid://cvjn3c20gea5r"
 SaveMenu="*uid://cx0jyhh163q01"
+ShaderLayer="*uid://b4wr16oj43w4g"
+Borders="*uid://ih8bwe2ol1dt"
 
 [display]
 

@@ -13,5 +13,5 @@ func _on_interact():
 	PlayerData.save_name = saveName
 	SaveMenu.setup_save_screen()
 	await get_tree().process_frame
-	SaveMenu.visible = true
+	SaveMenu.visible = true	
 	PlayerData.player_can_move = true
