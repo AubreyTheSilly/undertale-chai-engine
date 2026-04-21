@@ -1,4 +1,3 @@
 extends=NPC
 editor_image=npc1
-CharacterJson="clover"
 dialog=["* test"]

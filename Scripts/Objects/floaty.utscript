@@ -1,0 +1,5 @@
+function process
+  var num floaty
+  send_sin floaty 0.2 2
+  set_property "Sprite" "position:y" floaty
+end

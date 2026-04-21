@@ -28,7 +28,6 @@ var battleOver := false
 var attackStarted := false
 var dialoguejustStarted = false
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	fader.fadeIn()
 	$BGM.stream = Loader.load_file("Audio/BGM/"+Battle.loadedBattle["music"]+".ogg")
@@ -68,6 +67,9 @@ func _ready():
 	state = Battle.loadedBattle["state"]
 	if state == 0:
 		_PlayerTurn()
+
+	#await get_tree().process_frame
+	#visible = true
 
 func _process(_delta):
 	if PlayerData.inventory.size() != 0:

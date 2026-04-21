@@ -82,15 +82,17 @@ func LoadRoom() -> void:
 					var objectdata = Undermaker.loadTextAsObjectData(i.type)
 					if objectdata != {}:
 						var object = Undermaker.loadCustomObject(i.type)
+						if !object:
+							continue
 						for j in i.data:
 							if j in object:
 								if str_to_var(i.data[j]):
 									await create_tween().tween_property(object,j,str_to_var(i.data[j]),0).finished
 								else:
-									await create_tween().tween_property(object,j,str_to_var(i.data[j]),0).finished
+									await create_tween().tween_property(object,j,i.data[j],0).finished
 								print(i.type+"'s property "+j+" has been set to "+i.data[j])
 							else:
-								print(i.type+" does not have property "+j)
+								push_warning(i.type+" does not have property "+j)
 						object.name = i.name
 						object.position = (i.position+Vector2(1,1))*10
 						layerobj.add_child(object)

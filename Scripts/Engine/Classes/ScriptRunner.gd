@@ -1095,6 +1095,172 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 					obj.name = runscript.data[line].data[1].value
 					obj.position = Vector2(runscript.data[line].data[3].value,runscript.data[line].data[4].value)
 					node.add_child(obj)
+				Token.TokenType.LOAD_SHADER:
+					if runscript.data[line].data.size() % 2 != 0 or runscript.data[line].data.size() == 0:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
+							# reset = true (this caused lag so i moved it to only be in end)
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Shader name must be a string")
+						continue
+					
+					ShaderLayer.load_shader(runscript.data[line].data[1].value)
+				Token.TokenType.REMOVE_SHADER:
+					if runscript.data[line].data.size() != 2:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
+							# reset = true (this caused lag so i moved it to only be in end)
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Shader name must be a string")
+						continue
+					
+					ShaderLayer.remove_shader(runscript.data[line].data[1].value)
+				Token.TokenType.CREATE_TEXT:
+					if runscript.data[line].data.size() != 5:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
+							# reset = true (this caused lag so i moved it to only be in end)
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Object name must be a string")
+						continue
+					if runscript.data[line].data[2].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Object text must be a string")
+						continue
+					if runscript.data[line].data[3].type != Token.TokenType.NUMBER:
+						push_error("line "+str(line+1)+": Object X position must be a number")
+						continue
+					if runscript.data[line].data[4].type != Token.TokenType.NUMBER:
+						push_error("line "+str(line+1)+": Object Y position must be a number")
+						continue
+					
+					var text = TextObject.new()
+					text.font = preload("res://Fonts/DTM-Mono.otf")
+					text.name = runscript.data[line].data[1].value
+					text.text = runscript.data[line].data[2].value
+					text.position.x = runscript.data[line].data[3].value
+					text.position.y = runscript.data[line].data[4].value
+					node.add_child(text)
+				Token.TokenType.SET_TEXT_FONT:
+					if runscript.data[line].data.size() != 6:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
+							# reset = true (this caused lag so i moved it to only be in end)
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Object name must be a string")
+						continue
+					if not node.get_node_or_null(runscript.data[line].data[1].value):
+						push_error("line "+str(line+1)+": Object doesn't exist")
+						continue
+					if node.get_node(runscript.data[line].data[1].value) is not TextObject:
+						push_error("line "+str(line+1)+": Object is not a TextObject")
+						continue
+					if runscript.data[line].data[2].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Font name must be a string")
+						continue
+					if runscript.data[line].data[3].type != Token.TokenType.NUMBER:
+						push_error("line "+str(line+1)+": Font size must be a number")
+						continue
+					if runscript.data[line].data[4].type != Token.TokenType.NUMBER:
+						push_error("line "+str(line+1)+": Font character spacing must be a number")
+						continue
+					if runscript.data[line].data[5].type != Token.TokenType.NUMBER:
+						push_error("line "+str(line+1)+": Font line spacing must be a number")
+						continue
+					
+					var text = node.get_node(runscript.data[line].data[1].value)
+					
+					# using this code from DialogueHandler as reference
+					#var font = FontFile.new()
+					#font.load_dynamic_font(Undermaker.Path+"Fonts/"+cmand[1])
+					#if font:
+						#textobject.font = font
+					
+					#textobject.size = int(cmand[1])
+					#textobject.character_spacing = float(cmand[2])
+					#textobject.line_spacing = float(cmand[3])
+					
+					var font = FontFile.new()
+					font.load_dynamic_font(Undermaker.Path+"Fonts/"+runscript.data[line].data[2].value)
+					if font:
+						text.font = font
+					
+					font.size = int(runscript.data[line].data[5].value)
+					font.character_spacing = runscript.data[line].data[5].value
+					font.line_spacing = runscript.data[line].data[5].value
+				Token.TokenType.SET_SCRIPT_VARAIBLE:
+					# using this code from enemy as reference
+					#var variable = $ScriptRunner.getVariable(cmand[1])
+					#if variable:
+						#if variable.type == Token.TokenType.TYPE_STRING:
+							#variable.value = cmand[2]
+						#elif variable.type == Token.TokenType.TYPE_NUM:
+							#variable.value = float(cmand[2])
+						#elif variable.type == Token.TokenType.TYPE_BOOL:
+							#if cmand[2] == "true":
+								#variable.value = true
+							#elif cmand[2] == "false":
+								#variable.value = false
+					if runscript.data[line].data.size() != 4:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
+							# reset = true (this caused lag so i moved it to only be in end)
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Object name must be a string")
+						continue
+					if not node.get_node_or_null(runscript.data[line].data[1].value):
+						push_error("line "+str(line+1)+": Object doesn't exist")
+						continue
+					var scriptrunner : ScriptRunner = null
+					for i in node.get_node(runscript.data[line].data[1].value).get_children():
+						if i is ScriptRunner:
+							scriptrunner = i
+					if not scriptrunner:
+						push_error("line "+str(line+1)+": Object does not contain a ScriptRunner")
+						continue
+					if runscript.data[line].data[2].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Variable name must be a string")
+						continue
+					var variable = scriptrunner.getVariable(runscript.data[line].data[2].value)
+					if not variable:
+						push_error("line "+str(line+1)+": Variable does not exist")
+						continue
+					
+					if variable.type == Token.TokenType.STRING and runscript.data[line].data[3].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Type mismatch, value should be String")
+						continue
+					if variable.type == Token.TokenType.NUMBER and runscript.data[line].data[3].type != Token.TokenType.NUMBER:
+						push_error("line "+str(line+1)+": Type mismatch, value should be Number")
+						continue
+					if variable.type == Token.TokenType.BOOLEAN and runscript.data[line].data[3].type != Token.TokenType.BOOLEAN:
+						push_error("line "+str(line+1)+": Type mismatch, value should be Boolean")
+						continue
+					
+					variable.value = runscript.data[line].data[3].value
 				_:
 					await unhandled_function(runscript.data[line])
 		if reset:

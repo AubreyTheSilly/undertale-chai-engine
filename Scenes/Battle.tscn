@@ -125,7 +125,6 @@ metadata/_edit_use_anchors_ = true
 [node name="TextObject" type="Node2D" parent="FlavorBox" unique_id=1501017412]
 position = Vector2(11, 10.5)
 script = ExtResource("6_ybx13")
-text = "* [mode:wavy]yeah"
 font = ExtResource("7_xtlnh")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -198,6 +197,7 @@ polygon = PackedVector2Array(-144, -35.25, -144, 35.25, 144, 35.25, 144, -35.25)
 uv = PackedVector2Array(-307, 4, -128, -14, -107, 40, -290, 51)
 
 [node name="ChoiceBox" type="Node2D" parent="." unique_id=1619216673]
+visible = false
 position = Vector2(15.5, 124.5)
 
 [node name="DialogueRect" type="NinePatchRect" parent="ChoiceBox" unique_id=401769076]
