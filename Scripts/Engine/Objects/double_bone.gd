@@ -12,12 +12,12 @@ func _draw():
 	var drawheight = height/2
 	
 	if pap:
-		draw_texture_rect(preload("res://Sprites/Battle/Attacks/bone_pap.png"),Rect2(Vector2(-3.25,-drawheight+1),Vector2(6.5,5)),false)
-		draw_texture_rect(preload("res://Sprites/Battle/Attacks/bone_pap.png"),Rect2(Vector2(-3.25,drawheight-6),Vector2(6.5,-5)),false)
+		draw_texture_rect(preload("res://Sprites/Battle/Attacks/bone_pap.png"),Rect2(Vector2(-3.25,-drawheight+0.5),Vector2(6.5,5)),false)
+		draw_texture_rect(preload("res://Sprites/Battle/Attacks/bone_pap.png"),Rect2(Vector2(-3.25,drawheight-5.5),Vector2(6.5,-5)),false)
 		draw_rect(Rect2(Vector2(-1.25,(-height/2)+5),Vector2(2.5,height-10)),Color.WHITE)
 	else:
-		draw_texture_rect(preload("res://Sprites/Battle/Attacks/bone.png"),Rect2(Vector2(-2.5,-drawheight+1),Vector2(5,5)),false)
-		draw_texture_rect(preload("res://Sprites/Battle/Attacks/bone.png"),Rect2(Vector2(-2.5,drawheight-6),Vector2(5,-5)),false)
+		draw_texture_rect(preload("res://Sprites/Battle/Attacks/bone.png"),Rect2(Vector2(-2.5,-drawheight+0.5),Vector2(5,5)),false)
+		draw_texture_rect(preload("res://Sprites/Battle/Attacks/bone.png"),Rect2(Vector2(-2.5,drawheight-5.5),Vector2(5,-5)),false)
 		draw_rect(Rect2(Vector2(-1.5,(-height/2)+5),Vector2(3,height-10)),Color.WHITE)
 
 func _process(_delta):
