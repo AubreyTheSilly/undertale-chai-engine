@@ -269,7 +269,10 @@ func _process(_delta) -> void:
 
 func load_scene(sceneName : String):
 	PlayerData.room = sceneName
-	get_tree().change_scene_to_packed(preload("res://Scenes/RoomLoader.tscn"))
+	if get_tree().current_scene.name == "Room":
+		get_tree().reload_current_scene()
+	else:
+		get_tree().change_scene_to_packed(preload("res://Scenes/RoomLoader.tscn"))
 
 func _ready():
 	if OS.is_debug_build():

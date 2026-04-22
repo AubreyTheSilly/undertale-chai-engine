@@ -328,9 +328,13 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 					if runscript.data[line].data[2].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node property must be a string")
 						continue
-					var variable = getVariable(runscript.data[line].data[3].lexeme)
-					if variable:
-						runscript.data[line].data[3].value = variable.value
+					# this is from the old system i think
+					#var variable = getVariable(runscript.data[line].data[3].lexeme)
+					#if variable:
+						#runscript.data[line].data[3].value = variable.value
+					if runscript.data[line].data[3].type == Token.TokenType.STRING:
+						if str_to_var(runscript.data[line].data[3].value):
+							runscript.data[line].data[3].value = str_to_var(runscript.data[line].data[3].value)
 					if runscript.data[line].data[1].value == "self":
 						create_tween().tween_property(node,runscript.data[line].data[2].value,runscript.data[line].data[3].value,0)
 					else:
@@ -357,6 +361,9 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 					if runscript.data[line].data[4].type != Token.TokenType.NUMBER:
 						push_error("line "+str(line+1)+": Tween time must be a valid number")
 						continue
+					if runscript.data[line].data[3].type == Token.TokenType.STRING:
+						if str_to_var(runscript.data[line].data[3].value):
+							runscript.data[line].data[3].value = str_to_var(runscript.data[line].data[3].value)
 					if runscript.data[line].data.size() == 5:
 						create_tween().tween_property(node.get_node(runscript.data[line].data[1].value),runscript.data[line].data[2].value,runscript.data[line].data[3].value,runscript.data[line].data[4].value)
 					elif runscript.data[line].data.size() > 6:
@@ -1017,12 +1024,12 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 					if runscript.data[line].data.size() != 1:
 						push_error("line "+str(line+1)+": Invalid number of arguments")
 						continue
-					fader.fadeIn()
+					await fader.fadeIn()
 				Token.TokenType.FADEOUT:
 					if runscript.data[line].data.size() != 1:
 						push_error("line "+str(line+1)+": Invalid number of arguments")
 						continue
-					fader.fadeOut()
+					await fader.fadeOut()
 				Token.TokenType.ROUND:
 					var j = -1
 					for i in runscript.data[line].data:
@@ -1309,6 +1316,37 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							push_error("line "+str(line+1)+": You must enter an existing variable for cos")
 					else:
 						push_error("line "+str(line+1)+": You must enter a valid identifier for cos")
+				Token.TokenType.IS_KEY_PRESSED:
+					if runscript.data[line].data.size() != 3:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.IDENTIFIER:
+						push_error("line "+str(line+1)+": Variable name must be an identifier")
+						continue
+					if !getVariable(runscript.data[line].data[1].lexeme):
+						push_error("line "+str(line+1)+": Variable must exist")
+						continue
+					if getVariable(runscript.data[line].data[1].lexeme).type != Token.TokenType.TYPE_BOOL:
+						push_error("line "+str(line+1)+": Variable must be a boolean")
+						continue
+					if runscript.data[line].data[2].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Keycode must be a string")
+						continue
+					if OS.find_keycode_from_string(runscript.data[line].data[2].value) == KEY_NONE:
+						push_error("line "+str(line+1)+": Invalid keycode")
+						continue
+					var variable = getVariable(runscript.data[line].data[1].lexeme)
+					var value
+					value = Input.is_key_pressed(OS.find_keycode_from_string(runscript.data[line].data[2].value))
+					variable.value = value
+				Token.TokenType.LOAD_ROOM:
+					if runscript.data[line].data.size() != 2:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Room name must be a string")
+						continue
+					Undermaker.load_scene(runscript.data[line].data[1].value)
 				_:
 					await unhandled_function(runscript.data[line])
 		if reset:
