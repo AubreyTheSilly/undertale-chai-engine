@@ -1,17 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://cdsybqvbbd3pq"]
+[gd_scene format=3 uid="uid://cdsybqvbbd3pq"]
 
 [ext_resource type="Script" uid="uid://cf1q4hk7wokhj" path="res://Scripts/Engine/Objects/bone.gd" id="1_aref0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hltlb"]
 resource_local_to_scene = true
-size = Vector2(4, 20)
+size = Vector2(2, 12)
 
-[node name="BoneAttack" type="Node2D"]
+[node name="BoneAttack" type="Node2D" unique_id=1330228635]
 script = ExtResource("1_aref0")
-height = 15.0
+height = 12.0
+pap = true
 
-[node name="attack" type="Area2D" parent="."]
+[node name="attack" type="Area2D" parent="." unique_id=176115217]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="attack"]
-position = Vector2(0.75, -10)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="attack" unique_id=1844372530]
+position = Vector2(0, -6)
 shape = SubResource("RectangleShape2D_hltlb")
