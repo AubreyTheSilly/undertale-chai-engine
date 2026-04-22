@@ -35,6 +35,26 @@ func get_mods_list(directory : String) -> Array[Dictionary]:
 	
 	return mods
 
+func get_encounter_list() -> Array[String]:
+	var encounters : Array[String] = []
+	
+	if DirAccess.dir_exists_absolute(Path+"Data/Encounters"):
+		var mods_folder := DirAccess.open(Path+"Data/Encounters")
+		
+		mods_folder.list_dir_begin()
+		
+		var filename := mods_folder.get_next()
+		while filename != "":
+			if filename.ends_with(".txt"):
+				encounters.append(filename.trim_suffix(".txt"))
+			filename = mods_folder.get_next()
+		
+		mods_folder.list_dir_end()
+	else:
+		push_warning("Encounter folder does not exist!")
+	
+	return encounters
+
 func get_object_image(objtype : String):
 	if objtype == "Character" or objtype == "NPC":
 		return preload("res://Sprites/npc1.png")

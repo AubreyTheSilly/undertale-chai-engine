@@ -10,6 +10,6 @@ func _ready():
 	elif flags.has("--creator"):
 		get_tree().change_scene_to_packed(preload("res://Scenes/editor.tscn"))
 	elif flags.has("--battle"):
-		get_tree().change_scene_to_packed(preload("res://Scenes/BattleLoader.tscn"))
+		get_tree().change_scene_to_packed(preload("res://Scenes/NewBattleLoader.tscn"))
 	else:
 		get_tree().change_scene_to_packed(preload("res://Scenes/intro.tscn"))
