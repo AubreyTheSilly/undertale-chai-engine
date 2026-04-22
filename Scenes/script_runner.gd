@@ -389,7 +389,7 @@ func _pre_run():
 	vars["DOWN"].value = 0
 
 func _pre_line():
-	vars["LEFT"].value = -get_parent().box_width/2
-	vars["RIGHT"].value = get_parent().box_width/2
-	vars["UP"].value = -get_parent().box_height/2
-	vars["DOWN"].value = get_parent().box_height/2
+	vars["LEFT"].value = (-get_parent().box_width/2)+3
+	vars["RIGHT"].value = (get_parent().box_width/2)-3
+	vars["UP"].value = (-get_parent().box_height/2)+3
+	vars["DOWN"].value = (get_parent().box_height/2)-3

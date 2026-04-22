@@ -4,12 +4,10 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hltlb"]
 resource_local_to_scene = true
-size = Vector2(2, 10)
+size = Vector2(3, 10)
 
 [node name="BoneAttack" type="Node2D" unique_id=1755412892]
 script = ExtResource("1_eysu3")
-height = 10.0
-pap = true
 
 [node name="attack" type="Area2D" parent="." unique_id=181391107]
 
