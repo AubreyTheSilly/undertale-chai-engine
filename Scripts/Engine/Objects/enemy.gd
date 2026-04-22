@@ -92,6 +92,12 @@ func getAttackConfig(attack : String):
 		while !config.eof_reached():
 			configtext.append(config.get_line())
 		config.close()
+		var index = -1
+		for i in configtext:
+			index += 1
+			if i == "":
+				configtext.remove_at(index)
+				index -= 1
 		
 		if configtext.size() != 3:
 			print("Invalid number of attack parameters")

@@ -4,6 +4,7 @@ extends Node2D
 @export var damage := 1
 
 func _ready():
+	$AudioStreamPlayer.play()
 	$AnimatedSprite2D.position.y -= 560
 	await create_tween().tween_property($AnimatedSprite2D,"position:y",0,1.1).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC).finished
 	$AnimatedSprite2D.play("ready")

@@ -5,6 +5,7 @@ var frame = 0
 var running = true
 
 func unhandled_function(tokens : TokenArray):
+	print(tokens.data[0].lexeme)
 	match tokens.data[0].lexeme:
 		"create_attack":
 			for i in tokens.data:
@@ -365,6 +366,7 @@ func unhandled_function(tokens : TokenArray):
 					return
 		"end_attack":
 			running = false
+			#print("hi")
 		_:
 			print(tokens.data[0].lexeme)
 

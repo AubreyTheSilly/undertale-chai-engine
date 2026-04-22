@@ -645,9 +645,9 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							else:
 								push_error("line "+str(line+1)+": Variable must be a num!")
 						else:
-							push_error("line "+str(line+1)+": You must enter an existing variable for sin")
+							push_error("line "+str(line+1)+": You must enter an existing variable for rand")
 					else:
-						push_error("line "+str(line+1)+": You must enter a valid identifier for sin")
+						push_error("line "+str(line+1)+": You must enter a valid identifier for rand")
 				Token.TokenType.CREATE_OBJECT:
 					if runscript.data[line].data.size() != 5:
 						push_error("line "+str(line+1)+": Invalid number of arguments")
@@ -1261,6 +1261,54 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 						continue
 					
 					variable.value = runscript.data[line].data[3].value
+				Token.TokenType.CUSTOM_SIN:
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme) and i != runscript.data[line].data[1]:
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
+							# reset = true (this caused lag so i moved it to only be in end)
+					if runscript.data[line].data.size() != 3:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type == Token.TokenType.IDENTIFIER:
+						var variable = getVariable(runscript.data[line].data[1].lexeme)
+						if variable:
+							if variable.type == Token.TokenType.TYPE_NUM:
+								if runscript.data[line].data[2].type == Token.TokenType.NUMBER:
+									variable.value = sin(deg_to_rad(runscript.data[line].data[2].value))
+								else:
+									push_error("line "+str(line+1)+": Angle must be a num!")
+							else:
+								push_error("line "+str(line+1)+": Variable must be a num!")
+						else:
+							push_error("line "+str(line+1)+": You must enter an existing variable for sin")
+					else:
+						push_error("line "+str(line+1)+": You must enter a valid identifier for sin")
+				Token.TokenType.CUSTOM_COS:
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme) and i != runscript.data[line].data[1]:
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
+							# reset = true (this caused lag so i moved it to only be in end)
+					if runscript.data[line].data.size() != 3:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type == Token.TokenType.IDENTIFIER:
+						var variable = getVariable(runscript.data[line].data[1].lexeme)
+						if variable:
+							if variable.type == Token.TokenType.TYPE_NUM:
+								if runscript.data[line].data[2].type == Token.TokenType.NUMBER:
+									variable.value = cos(deg_to_rad(runscript.data[line].data[2].value))
+								else:
+									push_error("line "+str(line+1)+": Angle must be a num!")
+							else:
+								push_error("line "+str(line+1)+": Variable must be a num!")
+						else:
+							push_error("line "+str(line+1)+": You must enter an existing variable for cos")
+					else:
+						push_error("line "+str(line+1)+": You must enter a valid identifier for cos")
 				_:
 					await unhandled_function(runscript.data[line])
 		if reset:
