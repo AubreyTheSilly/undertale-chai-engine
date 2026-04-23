@@ -10,6 +10,8 @@ var timer : float = 0
 
 @onready var editor_fun := randi_range(1,100)
 
+var discord_working := false
+
 func get_mods_list(directory : String) -> Array[Dictionary]:
 	var mods : Array[Dictionary] = []
 	
@@ -280,3 +282,37 @@ func _ready():
 	else:
 		Path=OS.get_executable_path().get_base_dir()+"/asset/"
 	loadProject()
+	
+	# discord rpc
+	
+	# Application ID
+	DiscordRPC.app_id = 1496670605519487027
+	# this is boolean if everything worked
+	discord_working = DiscordRPC.get_is_discord_working()
+	if discord_working:
+		print("Discord RPC is working! Yaaayyy :3")
+		# Set the first custom text row of the activity here
+		DiscordRPC.details = "An UNDERTALE fangame engine."
+		# Set the second custom text row of the activity here
+		#DiscordRPC.state = "Loading..."
+		# Image key for small image from "Art Assets" from the Discord Developer website
+		#DiscordRPC.large_image = "game"
+		# Tooltip text for the large image
+		#DiscordRPC.large_image_text = "Try it now!"
+		# Image key for large image from "Art Assets" from the Discord Developer website
+		#DiscordRPC.small_image = "boss"
+		# Tooltip text for the small image
+		#DiscordRPC.small_image_text = "Fighting the end boss! D:"
+		# "02:41 elapsed" timestamp for the activity
+		DiscordRPC.start_timestamp = int(Time.get_unix_time_from_system())
+		# "59:59 remaining" timestamp for the activity
+		#DiscordRPC.end_timestamp = int(Time.get_unix_time_from_system()) + 3600
+		# Always refresh after changing the values!
+		DiscordRPC.refresh()
+	else:
+		push_error("Discord RPC failed.")
+
+func set_rpc_state(status : String) -> void:
+	if discord_working:
+		DiscordRPC.state = status
+		DiscordRPC.refresh()

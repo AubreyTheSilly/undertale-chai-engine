@@ -25,6 +25,8 @@ func _ready() -> void:
 		modNodes.append(mod)
 		pos += 24
 	modTemplate.queue_free()
+	
+	Undermaker.set_rpc_state("In the Mod Menu")
 
 func _process(_delta) -> void:
 	for i in modNodes:
@@ -68,6 +70,9 @@ func _process(_delta) -> void:
 			Undermaker.Project = mods[modChoice]
 			Undermaker.Path = Undermaker.Path.left(Undermaker.Path.length()-6)+"mods/"+Undermaker.Project["filename"]+"/"
 			print(Undermaker.Path)
+			Undermaker.set_rpc_state("Playing "+mods[modChoice]["gameName"])
+		else:
+			Undermaker.set_rpc_state("Playing via the default assets folder")
 		var flags = OS.get_cmdline_args()
 		await get_tree().process_frame
 		fader.fadeIn()

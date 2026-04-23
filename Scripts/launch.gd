@@ -7,9 +7,11 @@ func _ready():
 	await get_tree().process_frame
 	if mods.size() >= 1:
 		get_tree().change_scene_to_packed(preload("res://Scenes/ModLoader.tscn"))
+		return
 	elif flags.has("--creator"):
 		get_tree().change_scene_to_packed(preload("res://Scenes/editor.tscn"))
 	elif flags.has("--battle"):
 		get_tree().change_scene_to_packed(preload("res://Scenes/NewBattleLoader.tscn"))
 	else:
 		get_tree().change_scene_to_packed(preload("res://Scenes/intro.tscn"))
+	Undermaker.set_rpc_state("Playing via the default assets folder")
