@@ -12,6 +12,8 @@ var timer : float = 0
 
 var discord_working := false
 
+var font_glyphs = {}
+
 func get_mods_list(directory : String) -> Array[Dictionary]:
 	var mods : Array[Dictionary] = []
 	
@@ -56,6 +58,50 @@ func get_encounter_list() -> Array[String]:
 		push_warning("Encounter folder does not exist!")
 	
 	return encounters
+
+func get_list_of_files_in_folder(folder : String) -> Array[String]:
+	var files : Array[String] = []
+	
+	if DirAccess.dir_exists_absolute(Path+folder):
+		var mods_folder := DirAccess.open(Path+folder)
+		
+		mods_folder.list_dir_begin()
+		
+		var filename : StringName = mods_folder.get_next()
+		while filename != "":
+			if mods_folder.current_is_dir() or filename.get_extension() == "import":
+				filename = mods_folder.get_next()
+				continue
+			files.append(filename.get_file())
+			filename = mods_folder.get_next()
+		
+		mods_folder.list_dir_end()
+	else:
+		push_warning("Folder "+folder+" does not exist!")
+	
+	return files
+
+func get_list_of_files_in_folder_absolute(folder : String) -> Array[String]:
+	var files : Array[String] = []
+	
+	if DirAccess.dir_exists_absolute(folder):
+		var mods_folder := DirAccess.open(folder)
+		
+		mods_folder.list_dir_begin()
+		
+		var filename : StringName = mods_folder.get_next()
+		while filename != "":
+			if mods_folder.current_is_dir() or filename.get_extension() == "import":
+				filename = mods_folder.get_next()
+				continue
+			files.append(filename.get_file() as StringName)
+			filename = mods_folder.get_next()
+		
+		mods_folder.list_dir_end()
+	else:
+		push_warning("Folder "+folder+" does not exist!")
+	
+	return files
 
 func get_object_image(objtype : String):
 	if objtype == "Character" or objtype == "NPC":
@@ -154,8 +200,10 @@ func loadTextAsObjectData(dir : String) -> Dictionary:
 			value = true
 		elif value == "false":
 			value = false
-		else:
+		elif str_to_var(value) != null:
 			value = str_to_var(value)
+		elif value == "null":
+			value = null
 		
 		dict[key] = value
 	# THIS PRINTED SO MUCH SHIT BUT ITS GONE NOW
@@ -277,6 +325,8 @@ func load_scene(sceneName : String):
 		get_tree().change_scene_to_packed(preload("res://Scenes/RoomLoader.tscn"))
 
 func _ready():
+	# load_font_glyphs()
+	
 	if OS.is_debug_build():
 		Path="res://"
 	else:
@@ -316,3 +366,43 @@ func set_rpc_state(status : String) -> void:
 	if discord_working:
 		DiscordRPC.state = status
 		DiscordRPC.refresh()
+
+func load_font_glyphs() -> void:
+	var base_fonts = get_list_of_files_in_folder_absolute("res://Fonts")
+	# print(base_fonts)
+	var mod_fonts = get_list_of_files_in_folder("Fonts")
+	# print(mod_fonts)
+	var fonts = {}
+	
+	for i in base_fonts:
+		var font = FontFile.new()
+		# font.load_dynamic_font(Undermaker.Path+"Fonts/"+i)
+		font.load_dynamic_font("res://Fonts/"+i)
+		# var font : FontFile = load("res://Fonts/"+i)
+		font.multichannel_signed_distance_field = false
+		font.antialiasing = 0
+		font.oversampling = 0
+		
+		if !font:
+			print("Font "+i+" does not exist")
+			continue
+		
+		if fonts.has(font.get_font_name()):
+			continue
+		
+		var glyphdata = {}
+		
+		for j in font.get_supported_chars():
+			var glyph := font.get_glyph_index(13,ord(j),0)
+			var glyph_rect := font.get_glyph_uv_rect(0,Vector2i(13,13),glyph)
+			if !glyph_rect:
+				continue
+			var atlas := font.get_texture_image(0,Vector2i(13,13),0)
+			glyphdata["atlas"] = ImageTexture.create_from_image(atlas)
+			# get the image and convert to texture
+			var glyph_image = atlas.get_region(glyph_rect)
+			glyphdata[j] = ImageTexture.create_from_image(glyph_image)
+		
+		#fonts[font.get_font_name()] = glyphdata
+	
+	font_glyphs = fonts

@@ -69,7 +69,18 @@ func _draw():
 					elif mode == "wavy" and !Engine.is_editor_hint():
 						draw_char(font,drawposition+Vector2(0,size)+(Vector2(cos((Undermaker.timer+(index*5))/10),sin((Undermaker.timer+(index*5))/10))*1),i,size,color)
 					else:
-						draw_char(font,drawposition+Vector2(0,size),i,size,color)
+						# draw_char(font,drawposition+Vector2(0,size),i,size,color)
+						# draw_string(font,drawposition+Vector2(0,size),i,0,-1,size,color)
+						# PLEASE fucking work
+						if Undermaker.font_glyphs.has(font.get_font_name()):
+							if Undermaker.font_glyphs[font.get_font_name()].has(i):
+								var tex = Undermaker.font_glyphs[font.get_font_name()][i]
+								draw_texture(tex,drawposition+(Vector2(0,size)),color)
+							else:
+								draw_char(font,drawposition+Vector2(0,size),i,size,color)
+						else:
+							draw_char(font,drawposition+Vector2(0,size),i,size,color)
+						
 					drawposition.x += character_spacing
 					if extra_font_spacing.has(i):
 						drawposition.x += extra_font_spacing[i]

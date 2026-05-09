@@ -1,0 +1,6 @@
+{
+	"Animation1":{
+		"frames":["spr_savepoint_0","spr_savepoint_1"],
+		"fps":7.5
+	}
+}

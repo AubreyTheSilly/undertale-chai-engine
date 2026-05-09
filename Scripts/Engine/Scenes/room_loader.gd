@@ -97,7 +97,7 @@ func LoadRoom() -> void:
 						object.position = (i.position+Vector2(1,1))*10
 						layerobj.add_child(object)
 					else:
-						push_error("Tried to load an invalid object in"+roomName)
+						push_error("Tried to load an invalid object in "+roomName)
 				else:
 					var object = Undermaker.getObjectByClassName(i.type)
 					if object:

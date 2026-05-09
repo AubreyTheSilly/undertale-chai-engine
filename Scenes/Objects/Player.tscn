@@ -61,6 +61,9 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oqwab"]
 size = Vector2(20, 10)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n7c1o"]
+size = Vector2(2, 2)
+
 [node name="Player" type="CharacterBody2D" unique_id=993824088]
 floor_stop_on_slope = false
 floor_block_on_wall = false
@@ -482,3 +485,9 @@ stream = ExtResource("12_n7c1o")
 modulate = Color(1, 0, 0, 1)
 position = Vector2(108.5, 188.5)
 texture = ExtResource("10_oej56")
+
+[node name="PlayerInteraction" type="Area2D" parent="." unique_id=1472132326]
+position = Vector2(0, -5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerInteraction" unique_id=1927739901]
+shape = SubResource("RectangleShape2D_n7c1o")

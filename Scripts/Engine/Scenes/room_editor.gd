@@ -335,7 +335,9 @@ func _add_object_layer():
 func _on_remove_layer_pressed():
 	var roomitems = []
 	for i in $"/root/editor/RoomDisplay".room:
-		roomitems.append(i)
+		if $"/root/editor/RoomDisplay".room[i] is Dictionary:
+			if ($"/root/editor/RoomDisplay".room[i]).has("type"):
+				roomitems.append(i)
 	if roomitems.size() != 1:
 		print("removed "+roomitems[$OptionButton.selected])
 		$"/root/editor/RoomDisplay".room.erase(roomitems[$OptionButton.selected])

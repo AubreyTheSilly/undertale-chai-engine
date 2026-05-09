@@ -54,7 +54,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 	var ogrunscript : UTScript = UTScript.loadScriptFromFile(script,verbose)
 	if !ogrunscript:
 		push_error("Script load failed!")
-		return ERR_DOES_NOT_EXIST
+		return ERR_SCRIPT_FAILED
 	var runscript : UTScript = ogrunscript.copy()
 	vars.clear()
 	
@@ -67,8 +67,20 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 	
 	_pre_run()
 	
+	var ind = -1
+	var ind2 = -1
+	var ogvalues := []
+	for l in runscript.data:
+		ind2 += 1
+		ind = -1
+		ogvalues.append({})
+		for i in l.data:
+			ind += 1
+			ogvalues[ind2][str(ind)] = i.value
+	
 	while line < runscript.data.size()-1:
 		line += 1
+		# pretty much still here just for. like. reasons? mostly so stuff doesn't break while i'm writing the fix.
 		var reset = false
 		_pre_line()
 		
@@ -101,7 +113,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							else:
 								end = index
 						if start!=-1 and end!=-1:
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 							replace = i.value.substr(start,(end-start)+1)
 							replacevar = replace.rstrip("%").lstrip("%")
 							var variable = getVariable(replacevar)
@@ -304,7 +316,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data[1].type != Token.TokenType.NUMBER:
 						push_error("line "+str(line+1)+": You must input a valid number")
 						continue
@@ -318,7 +330,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variabl = getVariable(i.lexeme)
 							i.type = types[variabl.type]
 							i.value = variabl.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
 						continue
@@ -335,6 +347,8 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 					if runscript.data[line].data[3].type == Token.TokenType.STRING:
 						if str_to_var(runscript.data[line].data[3].value):
 							runscript.data[line].data[3].value = str_to_var(runscript.data[line].data[3].value)
+						elif runscript.data[line].data[3].value == "null":
+							runscript.data[line].data[3].value = null
 					if runscript.data[line].data[1].value == "self":
 						create_tween().tween_property(node,runscript.data[line].data[2].value,runscript.data[line].data[3].value,0)
 					else:
@@ -348,7 +362,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
 						continue
@@ -394,7 +408,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 						if i.type == Token.TokenType.IDENTIFIER and variable:
 							i.type = types[variable.type]
 							i.value = variable.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Sprite name must be a string")
 						continue
@@ -493,7 +507,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 						continue
 					node.get_node(runscript.data[line].data[1].value).sprite_frames.add_frame("default",Loader.load_file("Sprites/"+runscript.data[line].data[2].value))
 				Token.TokenType.PLAY_ANIMATED_SPRITE:
-					if runscript.data[line].data.size() != 2:
+					if runscript.data[line].data.size() != 2 and runscript.data[line].data.size() != 3:
 						push_error("line "+str(line+1)+": Invalid number of arguments")
 						continue
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
@@ -503,7 +517,14 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 						push_error("line "+str(line+1)+": Target node must exist")
 						continue
 					if node.get_node(runscript.data[line].data[1].value) is AnimatedSprite2D:
-						node.get_node(runscript.data[line].data[1].value).play()
+						if runscript.data[line].data.size() == 3:
+							if runscript.data[line].data[2].type != Token.TokenType.STRING:
+								push_error("line "+str(line+1)+": Node name must be a string")
+								continue
+							else:
+								node.get_node(runscript.data[line].data[1].value).play(runscript.data[line].data[2].value)
+						else:
+							node.get_node(runscript.data[line].data[1].value).play()
 					else:
 						push_error("line "+str(line+1)+": Target node must be an animatedsprite")
 						continue
@@ -603,7 +624,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variabl = getVariable(i.lexeme)
 							i.type = types[variabl.type]
 							i.value = variabl.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data.size() != 5:
 						push_error("line "+str(line+1)+": Invalid number of arguments")
 						continue
@@ -664,7 +685,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Object name must be a string")
 						continue
@@ -693,7 +714,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
 						continue
@@ -754,7 +775,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
 						continue
@@ -765,7 +786,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 						push_error("line "+str(line+1)+": Target node must be a audio player")
 						continue
 					if !Loader.load_file("Audio/BGM/"+runscript.data[line].data[2].value):
-						push_error("line "+str(line+1)+": Audio path must lead to a valid image file (Path: "+"Audio/BGM/"+runscript.data[line].data[2].value+")")
+						push_error("line "+str(line+1)+": Audio path must lead to a valid audio file (Path: "+"Audio/BGM/"+runscript.data[line].data[2].value+")")
 						continue
 					var audiuo = node.get_node(runscript.data[line].data[1].value)
 					audiuo.stream = Loader.load_file("Audio/BGM/"+runscript.data[line].data[2].value)
@@ -778,7 +799,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
 						continue
@@ -799,7 +820,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
 						continue
@@ -820,7 +841,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variabl = getVariable(i.lexeme)
 							i.type = types[variabl.type]
 							i.value = variabl.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
 						continue
@@ -847,7 +868,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data[1].type != Token.TokenType.NUMBER:
 						push_error("line "+str(line+1)+": You must input a valid number")
 						continue
@@ -862,7 +883,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Encounter name must be a string")
 						continue
@@ -882,7 +903,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Node name must be a string")
 						continue
@@ -904,6 +925,13 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 						if i.type == Token.TokenType.STRING:
 							dialogue.append(i.value)
 					await DialogueHandler.StartDialogue(dialogue)
+				Token.TokenType.START_DIALOGUE_TOP:
+					pass
+					var dialogue : Array[String] = []
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.STRING:
+							dialogue.append(i.value)
+					await DialogueHandler.StartDialogue(dialogue,DialogueHandler.UP)
 				Token.TokenType.SET_FLAG:
 					if runscript.data[line].data.size() != 3:
 						push_error("line "+str(line+1)+": Invalid number of arguments")
@@ -913,7 +941,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Flag name must be a string")
 						continue
@@ -1038,7 +1066,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variabl = getVariable(i.lexeme)
 							i.type = types[variabl.type]
 							i.value = variabl.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data.size() != 2:
 						push_error("line "+str(line+1)+": Invalid number of arguments")
 						continue
@@ -1082,7 +1110,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Object name must be a string")
 						continue
@@ -1111,7 +1139,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Shader name must be a string")
 						continue
@@ -1126,7 +1154,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Shader name must be a string")
 						continue
@@ -1141,7 +1169,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Object name must be a string")
 						continue
@@ -1171,7 +1199,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Object name must be a string")
 						continue
@@ -1235,7 +1263,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data[1].type != Token.TokenType.STRING:
 						push_error("line "+str(line+1)+": Object name must be a string")
 						continue
@@ -1274,7 +1302,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data.size() != 3:
 						push_error("line "+str(line+1)+": Invalid number of arguments")
 						continue
@@ -1298,7 +1326,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value
-							# reset = true (this caused lag so i moved it to only be in end)
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
 					if runscript.data[line].data.size() != 3:
 						push_error("line "+str(line+1)+": Invalid number of arguments")
 						continue
@@ -1347,10 +1375,82 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 						push_error("line "+str(line+1)+": Room name must be a string")
 						continue
 					Undermaker.load_scene(runscript.data[line].data[1].value)
+				Token.TokenType.LOAD_ANIMATION:
+					for i in runscript.data[line].data:
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme) and i != runscript.data[line].data[1]:
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
+					if runscript.data[line].data.size() != 3:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if runscript.data[line].data[1].type != Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Node name must be a string")
+						continue
+					if !node.get_node_or_null(runscript.data[line].data[1].value) and runscript.data[line].data[1].value != "self":
+						push_error("line "+str(line+1)+": Target node must exist")
+						continue
+					if node.get_node(runscript.data[line].data[1].value) is AnimatedSprite2D:
+						if runscript.data[line].data[2].type != Token.TokenType.STRING:
+							push_error("line "+str(line+1)+": Node name must be a string")
+							continue
+						var animationDict := Undermaker.loadJsonAsDictionary("Data/animations/"+runscript.data[line].data[2].value+".json")
+						var spriteframes := SpriteFrames.new()
+						for anim in animationDict:
+							var animation = animationDict[anim]
+							spriteframes.add_animation(anim)
+							for i in animation["frames"]:
+								var frame = Loader.load_file("Sprites/"+i+".png")
+								if frame:
+									spriteframes.add_frame(anim,frame)
+								else:
+									push_error("Error loading animation "+anim+": Frame \""+"Sprites/"+i+".png\" does not exist")
+							spriteframes.set_animation_speed(anim,animation["fps"])
+							if animation.has("loop"):
+								spriteframes.set_animation_loop(anim,animation["loop"])
+						node.get_node(runscript.data[line].data[1].value).sprite_frames = spriteframes
+					else:
+						push_error("line "+str(line+1)+": Target node must be an animatedsprite")
+						continue
+				Token.TokenType.PLAY_BGM:
+					if runscript.data[line].data.size() != 2:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					#var index = -1
+					for i in runscript.data[line].data:
+						#index += 1
+						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+							#ogvalues[str(index)] = i.value
+							var variable = getVariable(i.lexeme)
+							i.type = types[variable.type]
+							i.value = variable.value
+							reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
+					if !runscript.data[line].data[1].type == Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": BGM name must be a string")
+						continue
+					if !Loader.load_file("Audio/BGM/"+runscript.data[line].data[1].value+".ogg"):
+						push_error("line "+str(line+1)+": Audio path must lead to a valid audio file (Path: "+"Audio/BGM/"+runscript.data[line].data[2].value+".ogg)")
+						continue
+					BGM.playBGM(runscript.data[line].data[1].value)
+				Token.TokenType.FADE_BGM_IN:
+					if runscript.data[line].data.size() != 1:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					BGM.fadeIn()
+				Token.TokenType.FADE_BGM_OUT:
+					if runscript.data[line].data.size() != 1:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					BGM.fadeOut()
 				_:
 					await unhandled_function(runscript.data[line])
 		if reset:
-			runscript = ogrunscript.copy()
+			for i in ogvalues[line]:
+				#print(i+": "+str(ogvalues[line][i]))
+				runscript.data[line].data[int(i)].value = ogvalues[line][i]
+			# OLD VERSION
+			# runscript = ogrunscript.copy()
 			reset = false
 	if !get_tree():
 		return Error.ERR_TIMEOUT

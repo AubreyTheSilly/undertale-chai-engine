@@ -6,6 +6,7 @@ extends CanvasLayer
 @onready var facesprite : Sprite2D = $Box/Face
 
 var skiptext = false
+var can_skip = true
 
 enum {UP=0,DOWN=1}
 
@@ -26,6 +27,7 @@ func StartDialogue(dialogue : Array,position : int = DOWN) -> void:
 	else:
 		$Box.position.y = 160
 	for i in dialogue:
+		can_skip = true
 		var cmd = false
 		var command = ""
 		var speed = 1
@@ -70,6 +72,11 @@ func StartDialogue(dialogue : Array,position : int = DOWN) -> void:
 							textobject.line_spacing = float(cmand[3])
 						"sound":
 							$DialoguePlayer.stream = Loader.load_file("Audio/Sounds/"+cmand[1]+".wav")
+						"clear":
+							textobject.text = ""
+							skiptext = false
+						"set_skip":
+							can_skip = bool(int(cmand[1]))
 						_:
 							$Box/TextObject.text += "["+command+"]"
 				_:
@@ -82,14 +89,14 @@ func StartDialogue(dialogue : Array,position : int = DOWN) -> void:
 						if !skiptext:
 							for k in range(speed):
 								await get_tree().process_frame
-								await get_tree().process_frame
+								#await get_tree().process_frame
 		while !Input.is_action_just_pressed("Select"):
 			await get_tree().process_frame
 	visible = false
 	dialogue_finished.emit()
 
 func _process(_delta) -> void:
-	if visible and Input.is_action_just_pressed("Back"):
+	if visible and Input.is_action_just_pressed("Back") and can_skip:
 		skiptext = true
 	
 	# What the fuck was this line doing. Like I don't remember why it exists (commented it out 1/12/2025??)

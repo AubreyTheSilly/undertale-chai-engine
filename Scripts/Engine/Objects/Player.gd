@@ -148,6 +148,16 @@ func _process(_delta) -> void:
 	$Menu/Call.visible = false
 	$Menu/MenuChoices/Cell.visible = PlayerData.has_cell_phone
 	
+	match direction:
+		"left":
+			$PlayerInteraction.position = Vector2(-10,-5)
+		"down":
+			$PlayerInteraction.position = Vector2(0,0)
+		"up":
+			$PlayerInteraction.position = Vector2(0,-10)
+		"right":
+			$PlayerInteraction.position = Vector2(10,-5)
+	
 	if $Menu.visible:
 		match menu_state:
 			MENU_STATE.CHOICE:
