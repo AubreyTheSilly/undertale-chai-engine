@@ -1,0 +1,13 @@
+{
+	"default":"bg_border_line",
+	"anime":"bg_border_anime",
+	"snow":"bg_border_tundra",
+	"truelab":"bg_border_truelab",
+	"hotland":"bg_border_fire",
+	"dog":"bg_border_dog",
+	"water":"bg_border_water1",
+	"beauty":"bg_border_rad",
+	"ruins":"bg_border_ruins",
+	"sepia":"bg_border_sepia",
+	"castle":"bg_border_castle"
+}

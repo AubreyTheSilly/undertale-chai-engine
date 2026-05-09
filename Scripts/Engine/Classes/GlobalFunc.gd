@@ -367,42 +367,39 @@ func set_rpc_state(status : String) -> void:
 		DiscordRPC.state = status
 		DiscordRPC.refresh()
 
-func load_font_glyphs() -> void:
-	var base_fonts = get_list_of_files_in_folder_absolute("res://Fonts")
+# this entire section is unused because it turned out that i couldn't actually convert the fonts to textures. also the solution to fixing the font scaling issue was just disabling oversampling. so that's fun
+#func load_font_glyphs() -> void:
+	#var base_fonts = get_list_of_files_in_folder_absolute("res://Fonts")
 	# print(base_fonts)
-	var mod_fonts = get_list_of_files_in_folder("Fonts")
+	#var mod_fonts = get_list_of_files_in_folder("Fonts")
 	# print(mod_fonts)
-	var fonts = {}
-	
-	for i in base_fonts:
-		var font = FontFile.new()
-		# font.load_dynamic_font(Undermaker.Path+"Fonts/"+i)
-		font.load_dynamic_font("res://Fonts/"+i)
-		# var font : FontFile = load("res://Fonts/"+i)
-		font.multichannel_signed_distance_field = false
-		font.antialiasing = 0
-		font.oversampling = 0
-		
-		if !font:
-			print("Font "+i+" does not exist")
-			continue
-		
-		if fonts.has(font.get_font_name()):
-			continue
-		
-		var glyphdata = {}
-		
-		for j in font.get_supported_chars():
-			var glyph := font.get_glyph_index(13,ord(j),0)
-			var glyph_rect := font.get_glyph_uv_rect(0,Vector2i(13,13),glyph)
-			if !glyph_rect:
-				continue
-			var atlas := font.get_texture_image(0,Vector2i(13,13),0)
-			glyphdata["atlas"] = ImageTexture.create_from_image(atlas)
-			# get the image and convert to texture
-			var glyph_image = atlas.get_region(glyph_rect)
-			glyphdata[j] = ImageTexture.create_from_image(glyph_image)
-		
-		#fonts[font.get_font_name()] = glyphdata
-	
-	font_glyphs = fonts
+	#var fonts = {}
+	#
+	#for i in base_fonts:
+		#var font = FontFile.new()
+		#font.load_dynamic_font("res://Fonts/"+i)
+		#font.multichannel_signed_distance_field = false
+		#font.antialiasing = 0
+		#font.oversampling = 0
+		#
+		#if !font:
+			#print("Font "+i+" does not exist")
+			#continue
+		#
+		#if fonts.has(font.get_font_name()):
+			#continue
+		#
+		#var glyphdata = {}
+		#
+		#for j in font.get_supported_chars():
+			#var glyph := font.get_glyph_index(13,ord(j),0)
+			#var glyph_rect := font.get_glyph_uv_rect(0,Vector2i(13,13),glyph)
+			#if !glyph_rect:
+				#continue
+			#var atlas := font.get_texture_image(0,Vector2i(13,13),0)
+			#glyphdata["atlas"] = ImageTexture.create_from_image(atlas)
+			#var glyph_image = atlas.get_region(glyph_rect)
+			#glyphdata[j] = ImageTexture.create_from_image(glyph_image)
+		#
+	#
+	#font_glyphs = fonts

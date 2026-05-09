@@ -1443,6 +1443,14 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 						push_error("line "+str(line+1)+": Invalid number of arguments")
 						continue
 					BGM.fadeOut()
+				Token.TokenType.SET_BORDER:
+					if runscript.data[line].data.size() != 2:
+						push_error("line "+str(line+1)+": Invalid number of arguments")
+						continue
+					if !runscript.data[line].data[1].type == Token.TokenType.STRING:
+						push_error("line "+str(line+1)+": Border name must be a string")
+						continue
+					Borders.set_border(runscript.data[line].data[1].value)
 				_:
 					await unhandled_function(runscript.data[line])
 		if reset:
