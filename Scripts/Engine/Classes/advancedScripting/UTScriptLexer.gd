@@ -15,7 +15,8 @@ enum TokenType {
 	SEMICOLON,
 	EOF,
 	EQUALS,
-	OPERATOR
+	OPERATOR,
+	ARITHMETIC_OPERATOR
 }
 
 class AdvancedToken:
@@ -45,11 +46,23 @@ func tokenize(code:String) -> Array:
 	var script = []
 	var tokens = []
 	
+	var comment = false
+	
 	while pos < source.length():
 		var c = source[pos]
 		
+		if comment:
+			if c == "\n":
+				comment = false
+			pos += 1
+			continue
+		
 		match c:
 			" ", "\t", "\n", "\r":
+				pos += 1
+			"/":
+				if source[pos+1] == "/":
+					comment = true
 				pos += 1
 			"(":
 				tokens.append(AdvancedToken.new(TokenType.LPAREN))

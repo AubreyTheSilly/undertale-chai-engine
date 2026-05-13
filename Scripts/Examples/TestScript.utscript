@@ -1,1 +1,4 @@
+print("Test");
 startDialogue(["* Dialogue 1","* Yeah"]);
+
+foo1();
