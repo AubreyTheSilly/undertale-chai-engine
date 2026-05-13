@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-var borders_setup = false
+var borders_setup = true
 
 @onready var bordersprite = $Border
 @onready var fakebordersprite = $FakeBorder
@@ -40,6 +40,11 @@ func set_border(border) -> void:
 	bordersprite.texture = sprite
 
 func _process(_delta) -> void:
+	$BackBufferCopy.visible = true
+	if get_viewport().get_camera_2d():
+		if get_viewport().get_camera_2d().anchor_mode == Camera2D.AnchorMode.ANCHOR_MODE_DRAG_CENTER:
+			$BackBufferCopy.visible = false
+	
 	var diff = (bordersprite.texture.get_size()/Vector2(960,540))
 	bordersprite.scale = Vector2(0.5/diff.x,0.5/diff.y)
 	

@@ -16,7 +16,7 @@ signal attack_over
 
 func _process(_delta):
 	frame += 1
-	$AttackRect.size=lerp($AttackRect.size,rect.size,0.4)
+	$AttackRect.size = lerp($AttackRect.size,rect.size,0.4)
 	var offset = -$AttackRect.size/2.0
 	var targetPos = Vector2(144.0,35.25)
 	$AttackRect.position = targetPos+offset

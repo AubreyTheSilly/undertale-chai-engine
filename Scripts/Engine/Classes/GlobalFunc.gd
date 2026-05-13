@@ -162,6 +162,18 @@ func loadCustomObject(objname : String):
 		object.add_child(runner)
 	return object
 
+func loadFileAsString(path : String) -> String:
+	if !FileAccess.file_exists(Path+path):
+		push_error("File does not exist. Returning null.")
+		return ""
+	var file = FileAccess.open(Path+path,FileAccess.READ)
+	if !file:
+		return ""
+	var string = ""
+	while !file.eof_reached():
+		string += file.get_line()+"\n"
+	return string
+
 func loadTextAsObjectData(dir : String) -> Dictionary:
 	if !FileAccess.file_exists(Path+"Data/Objects/"+dir+".txt"):
 		print("Object to load does not exist. Returning null.")

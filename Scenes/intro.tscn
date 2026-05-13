@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://riy6skoqrwqc"]
 
 [ext_resource type="Script" uid="uid://cewaullb0begd" path="res://Scripts/Engine/Scenes/intro.gd" id="1_b226h"]
+[ext_resource type="Script" uid="uid://dexqxqsprthju" path="res://Scripts/Engine/Objects/text.gd" id="2_alxvg"]
+[ext_resource type="FontFile" uid="uid://decmshb7688st" path="res://Fonts/DTM-Mono.otf" id="3_geirw"]
 
 [node name="Intro" type="Node2D" unique_id=863333540]
 script = ExtResource("1_b226h")
@@ -8,8 +10,13 @@ script = ExtResource("1_b226h")
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1410321783]
 centered = false
 
-[node name="Node2D" type="Node2D" parent="." unique_id=1747761261]
+[node name="Node2D" type="Node2D" parent="." unique_id=1221919279]
 position = Vector2(59, 160)
+script = ExtResource("2_alxvg")
+character_spacing = 9.0
+line_spacing = 18.0
+font = ExtResource("3_geirw")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=50718746]
 

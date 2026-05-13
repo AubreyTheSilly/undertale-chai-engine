@@ -10,7 +10,7 @@
 [ext_resource type="AudioStream" uid="uid://bn7lvw3vdfvte" path="res://Audio/Sounds/snd_squeak.wav" id="6_oic44"]
 [ext_resource type="AudioStream" uid="uid://cmjhopwj13yka" path="res://Audio/BGM/dogcheck.ogg" id="9_7ht18"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_gifmv"]
+[sub_resource type="LabelSettings" id="LabelSettings_7ht18"]
 font_size = 13
 
 [sub_resource type="LabelSettings" id="LabelSettings_oic44"]
@@ -24,10 +24,11 @@ script = ExtResource("1_gf4tn")
 
 [node name="Parallax2D" type="Parallax2D" parent="." unique_id=1585619485]
 scroll_scale = Vector2(0, 0.25)
+scroll_offset = Vector2(79, 40)
 
 [node name="Sprite2D" type="Sprite2D" parent="Parallax2D" unique_id=155815407]
 modulate = Color(1, 1, 1, 0.5)
-position = Vector2(160, 160)
+position = Vector2(80, 120)
 texture = ExtResource("2_oic44")
 
 [node name="modTemplate" type="Node2D" parent="." unique_id=1918378811]
@@ -38,6 +39,8 @@ position = Vector2(0, -8)
 script = ExtResource("3_dq1h7")
 text = "UNDERTALE"
 font = ExtResource("4_gifmv")
+use_boundary = null
+boundary = null
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1381852160]
@@ -53,15 +56,15 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 metadata/_edit_use_anchors_ = true
 
-[node name="TextObject" type="Label" parent="CanvasLayer/Box" unique_id=1402943525]
+[node name="TextObject" type="Label" parent="CanvasLayer/Box" unique_id=1621206168]
 z_index = 1
 layout_mode = 0
 offset_left = 7.0
-offset_top = 100.0
-offset_right = 115.0
-offset_bottom = 116.0
-text = "Mod Name Here"
-label_settings = SubResource("LabelSettings_gifmv")
+offset_top = 98.0
+offset_right = 113.0
+offset_bottom = 171.0
+text = "Your Game Name Here"
+label_settings = SubResource("LabelSettings_7ht18")
 autowrap_mode = 2
 
 [node name="TextObject2" type="Label" parent="CanvasLayer/Box" unique_id=158164138]
@@ -115,7 +118,8 @@ patch_margin_bottom = 4
 metadata/_edit_use_anchors_ = true
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=487369984]
-position = Vector2(160, 0)
+position = Vector2(0, -120)
+anchor_mode = 0
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=188477060]
 stream = ExtResource("5_gifmv")

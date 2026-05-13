@@ -8,7 +8,7 @@ script = ExtResource("1_u7lk4")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1298017624]
 modulate = Color(1, 1, 1, 0)
-offset_right = 320.0
-offset_bottom = 240.0
+offset_right = 960.0
+offset_bottom = 540.0
 mouse_filter = 2
 color = Color(0, 0, 0, 1)

@@ -32,17 +32,17 @@ func _process(_delta) -> void:
 	for i in modNodes:
 		i.get_node("TextObject").text = i.name
 	modNodes[modChoice].get_node("TextObject").text = "[color:255:255:0]"+modNodes[modChoice].name
-	$Camera2D.position.y = lerpf($Camera2D.position.y,modNodes[modChoice].position.y,0.3)
+	$Camera2D.position.y = lerpf($Camera2D.position.y,modNodes[modChoice].position.y-120,0.3)
 	if FileAccess.file_exists(OS.get_executable_path().get_base_dir()+"/mods/"+mods[modChoice]["filename"]+"/thumb.png"):
-		print("Loading thumbnail")
+		# print("Loading thumbnail")
 		$CanvasLayer/Box/TextureRect.texture = Loader.load_file_absolute(OS.get_executable_path().get_base_dir()+"/mods/"+mods[modChoice]["filename"]+"/thumb.png")
 	else:
-		print("No thumbnail")
+		# print("No thumbnail")
 		$CanvasLayer/Box/TextureRect.texture = preload("res://Sprites/missing_thumb.png")
 	$CanvasLayer/Box/TextObject.text = mods[modChoice]["gameName"]
 	$CanvasLayer/Box/TextObject2.text = mods[modChoice]["creator"]
 	$CanvasLayer/Box/TextObject3.text = mods[modChoice]["desc"]
-	$CanvasLayer/Box/TextObject2.position.y = 116+(($CanvasLayer/Box/TextObject.get_line_count()-1)*$CanvasLayer/Box/TextObject.get_line_height())+($CanvasLayer/Box/TextObject.get_line_height()/2)
+	$CanvasLayer/Box/TextObject2.position.y = 116+(($CanvasLayer/Box/TextObject.get_line_count()-1)*13)+(6.5)
 	$CanvasLayer/Box/TextObject3.position.y = $CanvasLayer/Box/TextObject2.position.y+18
 	
 	if !can_select:
@@ -82,3 +82,4 @@ func _process(_delta) -> void:
 			get_tree().change_scene_to_packed(preload("res://Scenes/NewBattleLoader.tscn"))
 		else:
 			get_tree().change_scene_to_packed(preload("res://Scenes/intro.tscn"))
+			Borders.visible = true

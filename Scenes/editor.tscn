@@ -180,17 +180,17 @@ animations = [{
 [sub_resource type="LabelSettings" id="LabelSettings_cnbw5"]
 font_size = 7
 
-[node name="editor" type="Node2D" unique_id=1107466175]
+[node name="editor" type="Node2D" unique_id=1120636502]
 process_priority = 1
 script = ExtResource("1_24ceq")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=755908483]
 z_index = -10
 z_as_relative = false
-offset_left = -5000.0
-offset_top = -5000.0
-offset_right = 5000.0
-offset_bottom = 5000.0
+offset_left = -4965.0
+offset_top = -4973.0
+offset_right = 5035.0
+offset_bottom = 5027.0
 mouse_filter = 2
 color = Color(0.7, 0.7, 0.75, 1)
 
@@ -1320,7 +1320,7 @@ texture = ExtResource("9_1k58v")
 centered = false
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1116815674]
-position = Vector2(160, 120)
+enabled = false
 
 [node name="FakeTile" type="Sprite2D" parent="." unique_id=902088625]
 visible = false

@@ -4,6 +4,7 @@ var enemypage := 0
 var lastpressed := false
 
 func _ready():
+	Borders.visible = false
 	while !Undermaker.Project.has("projectName"):
 		await get_tree().process_frame
 	$Settings/LineEdit.text = Undermaker.Project["projectName"]
