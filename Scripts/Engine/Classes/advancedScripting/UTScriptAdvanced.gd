@@ -99,25 +99,62 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 				#t = oldt
 				await executeCodeBlock(token,_node)
 			elif token.value:
-				if _get_variable(str(token.value)):
+				if _get_variable(str(token.value)) and t < script[l].size()-2:
 					var variable = _get_variable(token.value)
-					if next_token.type == Lexer.TokenType.EQUALS and t < script[l].size()-2:
-						# handle loading the value if it's a function lol
-						var vars = await _convert_variables([script[l][t+2]])
-						script[l][t+2] = vars[0]
-						
-						# handle setting the variable
-						if variable.type == VariableType.STRING and script[l][t+2].value is String:
-							_set_variable(token.value,script[l][t+2].value)
-						elif variable.type == VariableType.NUMBER and script[l][t+2].value is float:
-							_set_variable(token.value,script[l][t+2].value)
-						elif variable.type == VariableType.BOOL and script[l][t+2].value is bool:
-							_set_variable(token.value,script[l][t+2].value)
-						elif variable.type == VariableType.ARRAY and script[l][t+2].value is Array:
-							_set_variable(token.value,script[l][t+2].value)
-						else:
-							push_error('Line '+str(total_l)+': Type of variable '+str(token.params[0].value)+' does not match with target value')
-						t += 2
+					match next_token.type:
+						Lexer.TokenType.EQUALS:
+							# handle loading the value if it's a function lol
+							var vars = await _convert_variables([script[l][t+2]])
+							#script[l][t+2] = vars[0]
+							
+							# handle setting the variable
+							if variable.type == VariableType.STRING and vars[0].value is String:
+								_set_variable(token.value,vars[0].value)
+							elif variable.type == VariableType.NUMBER and vars[0].value is float:
+								_set_variable(token.value,vars[0].value)
+							elif variable.type == VariableType.BOOL and vars[0].value is bool:
+								_set_variable(token.value,vars[0].value)
+							elif variable.type == VariableType.ARRAY and vars[0].value is Array:
+								_set_variable(token.value,vars[0].value)
+							else:
+								push_error('Line '+str(total_l)+': Type of variable '+str(token.params[0].value)+' does not match with target value')
+							t += 2
+						Lexer.TokenType.ARITHMETIC_OPERATOR:
+							# handle loading the value if it's a function lol
+							var vars = await _convert_variables([script[l][t+2]])
+							#print(script[l][t+2].value)
+							#print(vars[0].value)
+							
+							#print(vars[0].value)
+							
+							var change = 0.0
+							change = vars[0]
+							var result = _get_variable(token.value).value
+							if next_token.value == "-=" and change.value is float:
+								result -= change.value
+							elif next_token.value == "*=" and change.value is float:
+								result *= change.value
+							elif next_token.value == "*=" and change.value is float:
+								result /= change.value
+							elif next_token.value == "+=" and change.value is float or change.value is String:
+								result += change.value
+							
+							# handle setting the variable
+							if variable.type == VariableType.STRING and vars[0].value is String:
+								if next_token.value == "-=":
+									push_error('Line '+str(total_l+1)+': Subtraction operation cannot be performed on a string')
+								else:
+									_set_variable(token.value,result)
+							elif variable.type == VariableType.NUMBER and change.value is float:
+								_set_variable(token.value,result)
+							elif variable.type == VariableType.BOOL and vars[0].value is bool:
+								push_error('Line '+str(total_l+1)+': Booleans cannot have arithmetic performed on them')
+							elif variable.type == VariableType.ARRAY and vars[0].value is Array:
+								push_error('Line '+str(total_l+1)+': Arrays cannot have arithmetic performed on them')
+								#_set_variable(token.value,script[l][t+2].value)
+							else:
+								push_error('Line '+str(total_l+1)+': Type of variable '+str(token.value)+' does not match with target value\'s type ('+type_string(typeof(change.value))+")")
+							t += 2
 				else:
 					match token.value:
 						"await":
@@ -176,12 +213,15 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 	while index < param.size():
 		if _get_variable(str(param[index].value),verbose) and param[index].type == Lexer.TokenType.IDENTIFIER and !exceptions.has(index):
 			#print("yeah")
+			#print(param[index].value)
 			param[index].value = _get_variable(param[index].value).value
+			#print(type_string(typeof(param[index].value)))
 			match type_string(typeof(param[index].value)):
 				"String":
 					param[index].type = Lexer.TokenType.STRING
 				"float":
 					param[index].type = Lexer.TokenType.NUMBER
+					#print(param[index].value)
 				"bool":
 					param[index].type = Lexer.TokenType.BOOLEAN
 		elif param[index] is Lexer.FunctionToken and !exceptions.has(index):
@@ -454,6 +494,8 @@ func executeFunction(line : Array,wait := false):
 					return
 				if should_continue_while:
 					await executeCodeBlock(line[t+1],node)
+				else:
+					total_l += line[t+1].value.size()+1
 			print("while loop ended")
 			t += 1
 		"if":
@@ -499,6 +541,8 @@ func executeFunction(line : Array,wait := false):
 			
 			if should_continue_block:
 				await executeCodeBlock(line[t+1],node)
+			else:
+				total_l += line[t+1].value.size()+1
 			
 			t += 1
 		"elif":
@@ -538,6 +582,8 @@ func executeFunction(line : Array,wait := false):
 			
 			if should_continue_block:
 				await executeCodeBlock(line[t+1],node)
+			else:
+				total_l += line[t+1].value.size()+1
 			
 			t += 1
 		"wait":
@@ -651,11 +697,11 @@ func executeFunction(line : Array,wait := false):
 				return
 			var expr = Expression.new()
 			var err = expr.parse(params[0].value)
-			print("Executing "+params[0].value)
+			#print("Executing "+params[0].value)
 			if err == OK:
 				var result = expr.execute([],node)
 				if not expr.has_execute_failed():
-					print(result)
+					#print(result)
 					return result
 				else:
 					push_error('Line '+str(total_l)+': Execution of expr() failed')

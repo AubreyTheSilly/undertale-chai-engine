@@ -3,17 +3,23 @@ initvar(spritey,NUMBER,get("Sprite2D","position:y"));
 initvar(speed,NUMBER,2);
 
 while (true) {
+    if (is_key_pressed("Shift")) {
+        speed = 4;
+    } else {
+        speed = 2;
+    };
+
     if (is_key_pressed("Left")) {
-        spritex = expr("{spritex} - {speed}");
+        spritex -= speed;
     };
     if (is_key_pressed("Right")) {
-        spritex = expr("{spritex} + {speed}");
+        spritex += speed;
     };
     if (is_key_pressed("Up")) {
-        spritey = expr("{spritey} - {speed}");
+        spritey -= speed;
     };
     if (is_key_pressed("Down")) {
-        spritey = expr("{spritey} + {speed}");
+        spritey += speed;
     };
 
     set("Sprite2D","position:x",spritex);

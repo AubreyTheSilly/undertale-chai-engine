@@ -75,15 +75,19 @@ func tokenize(code:String) -> Array:
 			continue
 		
 		match c:
+			# white space
 			" ", "\t", "\n", "\r":
 				pos += 1
+			# colons (for dictionaries when i add them) (if i have added them by time of reading js ignore this)
 			":":
 				tokens.append(AdvancedToken.new(TokenType.COLON))
 				pos += 1
+			# comments
 			"/":
 				if source[pos+1] == "/":
 					comment = true
 				pos += 1
+			# brackets
 			"(":
 				tokens.append(AdvancedToken.new(TokenType.LPAREN))
 				pos += 1
@@ -102,15 +106,18 @@ func tokenize(code:String) -> Array:
 			"}":
 				tokens.append(AdvancedToken.new(TokenType.RPARENCURLY))
 				pos += 1
+			# comma
 			",":
 				tokens.append(AdvancedToken.new(TokenType.COMMA))
 				pos += 1
+			# semicolon (ends line)
 			";":
 				tokens.append(AdvancedToken.new(TokenType.SEMICOLON))
 				pos += 1
 				
 				script.append(tokens.duplicate(true))
 				tokens = []
+			# operators/equals
 			"=":
 				if source[pos+1] == "=":
 					tokens.append(AdvancedToken.new(TokenType.OPERATOR,c+"="))
@@ -132,9 +139,18 @@ func tokenize(code:String) -> Array:
 				else:
 					push_error("Unexpected character ("+c+")")
 				pos += 1
+			# arithmetic
+			"+","-":
+				if source[pos+1] == "=":
+					tokens.append(AdvancedToken.new(TokenType.ARITHMETIC_OPERATOR,c+"="))
+					pos += 1
+				else:
+					tokens.append(AdvancedToken.new(TokenType.ARITHMETIC_OPERATOR,c))
+				pos += 1
+			# strings
 			'"':
 				tokens.append(read_string())
-			
+			# identifiers and numbers
 			_:
 				if is_alpha(c):
 					tokens.append(read_identifier())
@@ -246,12 +262,14 @@ func parse(code:Array) -> Array:
 	return script
 
 func read_codeblock() -> CodeToken:
-	#print("reading codeblock")
+	# print("reading codeblock")
 	
 	var code : CodeToken = CodeToken.new(TokenType.CODE_BLOCK,[])
 	
 	var interpreted = []
 	var line = []
+	
+	#print(parsertoken)
 	
 	parsertoken += 1
 	var token : AdvancedToken = parsersource[parserline][parsertoken]
@@ -259,15 +277,17 @@ func read_codeblock() -> CodeToken:
 	var ignorecurly := 0
 	
 	while parserline < parsersource.size() and !(token.type == TokenType.RPARENCURLY and ignorecurly == 0):
-		# print(parsertoken < parsersource[parserline].size(),parserline < parsersource.size())
-		#print("yeah")
-		
 		while parsertoken < parsersource[parserline].size() and !(token.type == TokenType.RPARENCURLY and ignorecurly == 0):
 			if token.type == TokenType.LPARENCURLY:
+				print("nested codeblock began")
 				ignorecurly += 1
+				print("ignorecurly ",ignorecurly)
 			if token.type == TokenType.RPARENCURLY:
+				print("nested codeblock ended")
 				ignorecurly -= 1
-			# print(token.value)
+				print("ignorecurly ",ignorecurly)
+				parsertoken += 1
+			#print(TokenType.keys()[token.type]+" "+str(token.value))
 			token = parsersource[parserline][parsertoken]
 			line.append(token.duplicate())
 			parsertoken += 1
@@ -282,8 +302,6 @@ func read_codeblock() -> CodeToken:
 	
 	if line.size() != 0:
 		interpreted.append(line.duplicate(true))
-	
-	#print("finished reading codeblock")
 	#for i in interpreted:
 		#for j in i:
 			#print(j.value)
@@ -298,7 +316,7 @@ func read_codeblock() -> CodeToken:
 	# print("yeah")
 	# print(interpreted)
 	
-	parsertoken += 1
+	# parsertoken += 1
 	
 	if parserline == parsersource.size() and code.value.size() != 0:
 		parserline -= 1
@@ -310,13 +328,11 @@ func read_function() -> FunctionToken:
 	
 	var token : AdvancedToken = parsersource[parserline][parsertoken]
 	var function : FunctionToken = FunctionToken.new(token.type,token.value)
-	#print(token.value)
+	print(token.value)
 	parsertoken += 2
 	
 	while parsertoken < parsersource[parserline].size() and parsersource[parserline][parsertoken].type != TokenType.RPAREN:
-		#print("hi")
 		token = parsersource[parserline][parsertoken]
-		#print(TokenType.keys()[token.type]," ",token.value)
 		if token.type == TokenType.LPARENSQUARE:
 			function.params.append(read_array())
 			#print("addded array token")
@@ -338,7 +354,7 @@ func read_function() -> FunctionToken:
 	#for i in function.params:
 		#print(i.value)
 	
-	#print("finished reading function")
+	#print("finished reading function")	
 	
 	return function
 
