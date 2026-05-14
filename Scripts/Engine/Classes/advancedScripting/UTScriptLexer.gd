@@ -19,7 +19,8 @@ enum TokenType {
 	EQUALS,
 	OPERATOR,
 	ARITHMETIC_OPERATOR,
-	CODE_BLOCK
+	CODE_BLOCK,
+	COLON
 }
 
 class AdvancedToken:
@@ -29,6 +30,16 @@ class AdvancedToken:
 	func _init(t:TokenType,v:Variant=null):
 		type = t
 		value = v
+	
+	func duplicate():
+		if self is FunctionToken:
+			var token = FunctionToken.new(type,value)
+			token.params = self.params
+			return token
+		if self is CodeToken:
+			return CodeToken.new(type,value)
+		elif self is AdvancedToken:
+			return AdvancedToken.new(type,value)
 
 class FunctionToken:
 	extends AdvancedToken
@@ -65,6 +76,9 @@ func tokenize(code:String) -> Array:
 		
 		match c:
 			" ", "\t", "\n", "\r":
+				pos += 1
+			":":
+				tokens.append(AdvancedToken.new(TokenType.COLON))
 				pos += 1
 			"/":
 				if source[pos+1] == "/":
@@ -194,7 +208,7 @@ func parse(code:Array) -> Array:
 	parserline = 0
 	
 	while parserline < parsersource.size():
-		#print("PARSING LINE")
+		# print("PARSING LINE")
 		parsertoken = 0
 		while parsertoken < parsersource[parserline].size():
 			var token = parsersource[parserline][parsertoken]
@@ -206,7 +220,7 @@ func parse(code:Array) -> Array:
 					if nexttoken.type == TokenType.LPAREN:
 						line.append(read_function())
 					else:
-						line.append(token)
+						line.append(token.duplicate())
 						parsertoken += 1
 				TokenType.LPARENSQUARE:
 					line.append(read_array())
@@ -215,7 +229,7 @@ func parse(code:Array) -> Array:
 					#print("hi")
 					#parsertoken += 1
 				_:
-					line.append(token)
+					line.append(token.duplicate())
 					parsertoken += 1
 			#parsertoken += 1
 		script.append(line.duplicate(true))
@@ -223,9 +237,17 @@ func parse(code:Array) -> Array:
 		parserline += 1
 		#print("FINISHED PARSING LINE")
 	
+	# debugging
+	#for i in script:
+		#for j in i:
+			#print(TokenType.keys()[j.type]," ",j.value)
+		#print()
+	
 	return script
 
 func read_codeblock() -> CodeToken:
+	#print("reading codeblock")
+	
 	var code : CodeToken = CodeToken.new(TokenType.CODE_BLOCK,[])
 	
 	var interpreted = []
@@ -233,12 +255,21 @@ func read_codeblock() -> CodeToken:
 	
 	parsertoken += 1
 	var token : AdvancedToken = parsersource[parserline][parsertoken]
+		
+	var ignorecurly := 0
 	
-	while parserline < parsersource.size() and token.type != TokenType.RPARENCURLY:
-		while parsertoken < parsersource[parserline].size() and token.type != TokenType.RPARENCURLY:
-			#print(token.value)
+	while parserline < parsersource.size() and !(token.type == TokenType.RPARENCURLY and ignorecurly == 0):
+		# print(parsertoken < parsersource[parserline].size(),parserline < parsersource.size())
+		#print("yeah")
+		
+		while parsertoken < parsersource[parserline].size() and !(token.type == TokenType.RPARENCURLY and ignorecurly == 0):
+			if token.type == TokenType.LPARENCURLY:
+				ignorecurly += 1
+			if token.type == TokenType.RPARENCURLY:
+				ignorecurly -= 1
+			# print(token.value)
 			token = parsersource[parserline][parsertoken]
-			line.append(token)
+			line.append(token.duplicate())
 			parsertoken += 1
 		interpreted.append(line.duplicate(true))
 		line = []
@@ -246,10 +277,13 @@ func read_codeblock() -> CodeToken:
 			parserline += 1
 			parsertoken = 0
 			token = parsersource[parserline][parsertoken]
+		else:
+			break
 	
 	if line.size() != 0:
 		interpreted.append(line.duplicate(true))
 	
+	#print("finished reading codeblock")
 	#for i in interpreted:
 		#for j in i:
 			#print(j.value)
@@ -269,14 +303,14 @@ func read_codeblock() -> CodeToken:
 	if parserline == parsersource.size() and code.value.size() != 0:
 		parserline -= 1
 	
-	
 	return code
 
 func read_function() -> FunctionToken:
-	# print("reading function")
+	#print("reading function")
 	
 	var token : AdvancedToken = parsersource[parserline][parsertoken]
 	var function : FunctionToken = FunctionToken.new(token.type,token.value)
+	#print(token.value)
 	parsertoken += 2
 	
 	while parsertoken < parsersource[parserline].size() and parsersource[parserline][parsertoken].type != TokenType.RPAREN:
@@ -285,10 +319,13 @@ func read_function() -> FunctionToken:
 		#print(TokenType.keys()[token.type]," ",token.value)
 		if token.type == TokenType.LPARENSQUARE:
 			function.params.append(read_array())
+			#print("addded array token")
 		elif token.type == TokenType.IDENTIFIER and parsersource[parserline][parsertoken+1].type == TokenType.LPAREN:
 			function.params.append(read_function())
+			#print("added function token")
 		elif token.type != TokenType.COMMA:
-			function.params.append(token)
+			function.params.append(token.duplicate())
+			#print("added general token")
 			parsertoken += 1
 		else:
 			parsertoken += 1
@@ -298,7 +335,10 @@ func read_function() -> FunctionToken:
 	if parsertoken == parsersource[parserline].size():
 		push_error("Line "+str(parserline+1)+" - Unfinished function")
 	
-	# print("finished reading function")
+	#for i in function.params:
+		#print(i.value)
+	
+	#print("finished reading function")
 	
 	return function
 
@@ -320,6 +360,6 @@ func read_array() -> AdvancedToken:
 	if parsertoken == parsersource[parserline].size():
 		push_error("Line "+str(parserline+1)+" - Unfinished array")
 	
-	parsertoken += 1
+	#parsertoken += 1
 	
 	return array

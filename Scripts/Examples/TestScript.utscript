@@ -1,3 +1,22 @@
-initvar(color,ARRAY,[0,0,255]);
+initvar(spritex,NUMBER,get("Sprite2D","position:x"));
+initvar(spritey,NUMBER,get("Sprite2D","position:y"));
+initvar(speed,NUMBER,2);
 
-print(color);
+while (true) {
+    if (is_key_pressed("Left")) {
+        spritex = expr("{spritex} - {speed}");
+    };
+    if (is_key_pressed("Right")) {
+        spritex = expr("{spritex} + {speed}");
+    };
+    if (is_key_pressed("Up")) {
+        spritey = expr("{spritey} - {speed}");
+    };
+    if (is_key_pressed("Down")) {
+        spritey = expr("{spritey} + {speed}");
+    };
+
+    set("Sprite2D","position:x",spritex);
+    set("Sprite2D","position:y",spritey);
+    await process_frame;
+};
