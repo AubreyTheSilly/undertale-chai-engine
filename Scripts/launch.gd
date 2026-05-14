@@ -14,5 +14,5 @@ func _ready():
 		get_tree().change_scene_to_packed(preload("res://Scenes/NewBattleLoader.tscn"))
 	else:
 		get_tree().change_scene_to_packed(preload("res://Scenes/intro.tscn"))
-		Borders.visible = true
+		#Borders.visible = true
 	Undermaker.set_rpc_state("Playing via the default assets folder")

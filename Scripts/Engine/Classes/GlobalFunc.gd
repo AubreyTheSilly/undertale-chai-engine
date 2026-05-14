@@ -372,7 +372,7 @@ func _ready():
 		# Always refresh after changing the values!
 		DiscordRPC.refresh()
 	else:
-		push_error("Discord RPC failed.")
+		push_warning("Discord RPC failed to initialize.")
 
 func set_rpc_state(status : String) -> void:
 	if discord_working:

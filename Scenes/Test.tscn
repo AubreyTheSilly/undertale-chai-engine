@@ -1,6 +1,11 @@
 [gd_scene format=3 uid="uid://covycwduclcc0"]
 
 [ext_resource type="Script" uid="uid://dbfnswshxvcxb" path="res://Scripts/Test.gd" id="1_ko2s7"]
+[ext_resource type="Texture2D" uid="uid://innktjuqftxb" path="res://Sprites/spr_savepoint_0.png" id="2_gxb1y"]
 
 [node name="Node2D" type="Node2D" unique_id=204751250]
 script = ExtResource("1_ko2s7")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1070999112]
+position = Vector2(160, 120)
+texture = ExtResource("2_gxb1y")

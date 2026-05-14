@@ -73,5 +73,5 @@ func _process(_delta) -> void:
 			#get_tree().change_scene_to_packed(preload("res://Scenes/BattleLoader.tscn"))
 		#else:
 			#get_tree().change_scene_to_packed(preload("res://Scenes/intro.tscn"))
-		Borders.visible = true
+		#Borders.visible = true
 		Battle.Encounter(mods[modChoice],false)

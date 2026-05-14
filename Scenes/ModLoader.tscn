@@ -39,8 +39,6 @@ position = Vector2(0, -8)
 script = ExtResource("3_dq1h7")
 text = "UNDERTALE"
 font = ExtResource("4_gifmv")
-use_boundary = null
-boundary = null
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1381852160]
