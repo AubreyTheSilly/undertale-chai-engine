@@ -1,14 +1,80 @@
 initvar(player_position,ARRAY,[get("Sprite2D","position:x"),get("Sprite2D","position:y")]);
 initvar(playersp,NUMBER,2);
+initvar(target_enemy_velocity,VECTOR2,vec2(0,0));
+initvar(enemy_velocity,VECTOR2,vec2(0,0));
+initvar(enemy_position,ARRAY,[get("Sprite2D2","position:x"),get("Sprite2D2","position:y")]);
+initvar(enemy_vector,VECTOR2,get("Sprite2D2","position"));
+initvar(enemysp,NUMBER,2);
 
-print(get_at_index(["FUCK","fuck2"],1));
+initvar(temppos,NUMBER,0)
 
 while (true) {
-    if (is_key_pressed("Left")) {
-        player_x -= playersp;
-    };
+    // PLAYER MOVEMENT
 
+    // running
+    if (is_key_pressed("Shift")) {
+        playersp = 3;
+    } else {
+        playersp = 2;
+    };
+    // directions
+    if (is_key_pressed("Left")) {
+        temppos = get_at_index(player_position,0);
+        temppos -= playersp;
+        set_at_index(player_position,0,temppos);
+    };
+    if (is_key_pressed("Right")) {
+        temppos = get_at_index(player_position,0);
+        temppos += playersp;
+        set_at_index(player_position,0,temppos);
+    };
+    if (is_key_pressed("Up")) {
+        temppos = get_at_index(player_position,1);
+        temppos -= playersp;
+        set_at_index(player_position,1,temppos);
+    };
+    if (is_key_pressed("Down")) {
+        temppos = get_at_index(player_position,1);
+        temppos += playersp;
+        set_at_index(player_position,1,temppos);
+    };
+    
+    // update player position
     set("Sprite2D","position",vec2(get_at_index(player_position,0),get_at_index(player_position,1)));
 
+    // ENEMY MOVEMENT
+
+    // update enemy position variables
+    enemy_position = [get("Sprite2D2","position:x"),get("Sprite2D2","position:y")];
+
+    // directions (labelled bc it's less obvious than the player input)
+    target_enemy_velocity = vec2(0,0);
+    // left
+    if (get_at_index(player_position,0) < get_at_index(enemy_position,0)) {
+        target_enemy_velocity += DIR_LEFT;
+    };
+    // right
+    if (get_at_index(player_position,0) > get_at_index(enemy_position,0)) {
+        target_enemy_velocity += DIR_RIGHT;
+    };
+    // up
+    if (get_at_index(player_position,1) < get_at_index(enemy_position,1)) {
+        target_enemy_velocity += DIR_UP;
+    };
+    // down
+    if (get_at_index(player_position,1) > get_at_index(enemy_position,1)) {
+        target_enemy_velocity += DIR_DOWN;
+    };
+
+    
+    target_enemy_velocity *= enemysp;
+    enemy_velocity = lerp(enemy_velocity,target_enemy_velocity,0.05);
+
+    enemy_vector += enemy_velocity;
+    
+    // update enemy position
+    set("Sprite2D2","position",enemy_vector);
+
+    // wait for frame to pass
     await process_frame;
 };

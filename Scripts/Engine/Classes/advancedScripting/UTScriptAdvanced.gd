@@ -63,7 +63,7 @@ func initConstants() -> void:
 	global_variables["TRANS_BACK"] = Variable.new("TRANS_BACK",VariableType.NUMBER,10.0)
 	global_variables["TRANS_SPRING"] = Variable.new("TRANS_SPRING",VariableType.NUMBER,11.0)
 	
-	global_variables["DIR_LEFT"] = Variable.new("DIR_UP",VariableType.VECTOR,Vector2.LEFT)
+	global_variables["DIR_LEFT"] = Variable.new("DIR_LEFT",VariableType.VECTOR,Vector2.LEFT)
 	global_variables["DIR_DOWN"] = Variable.new("DIR_DOWN",VariableType.VECTOR,Vector2.DOWN)
 	global_variables["DIR_UP"] = Variable.new("DIR_UP",VariableType.VECTOR,Vector2.UP)
 	global_variables["DIR_RIGHT"] = Variable.new("DIR_RIGHT",VariableType.VECTOR,Vector2.RIGHT)
@@ -107,6 +107,8 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 				#l = oldl
 				#t = oldt
 				await executeCodeBlock(token,_node)
+			#elif token.type == Lexer.TokenType.COMMENT:
+				#total_l += 1
 			elif token.value:
 				if _get_variable(str(token.value)) and t < script[l].size()-2:
 					var variable = _get_variable(token.value)
@@ -125,8 +127,10 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 								_set_variable(token.value,vars[0].value)
 							elif variable.type == VariableType.ARRAY and vars[0].value is Array:
 								_set_variable(token.value,vars[0].value)
+							elif variable.type == VariableType.VECTOR and vars[0].value is Vector2:
+								_set_variable(token.value,vars[0].value)
 							else:
-								push_error('Line '+str(total_l+1)+': Type of variable '+str(token.params[0].value)+' does not match with target value')
+								push_error('Line '+str(total_l+1)+': Type of variable '+str(token.value)+' does not match with target value')
 							t += 2
 						Lexer.TokenType.ARITHMETIC_OPERATOR:
 							# handle loading the value if it's a function lol
@@ -137,20 +141,20 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 							#print(vars[0].value)
 							
 							var change = 0.0
-							change = vars[0]
+							change = vars[0].value
 							var result = _get_variable(token.value).value
-							if (result is float or change.value is float) and (result is Vector2 and change.value is Vector2):
+							if (result is float and change is float) or (result is Vector2 and change is Vector2) or (result is Vector2 and change is float):
 								match next_token.value:
 									"-=":
-										result -= change.value
+										result -= change
 									"*=":
-										result *= change.value
+										result *= change
 									"/=":
-										result /= change.value
+										result /= change
 									"+=":
-										result += change.value
-							elif next_token.value == "+=" and change.value is String and result is String:
-								result += change.value
+										result += change
+							elif next_token.value == "+=" and change is String and result is String:
+								result += change
 							
 							# handle setting the variable
 							if variable.type == VariableType.STRING and vars[0].value is String:
@@ -158,17 +162,20 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 									push_error('Line '+str(total_l+1)+': Subtraction operation cannot be performed on a string')
 								else:
 									_set_variable(token.value,result)
-							elif variable.type == VariableType.NUMBER and change.value is float:
+							elif variable.type == VariableType.NUMBER and change is float:
+								#print("setting ",token.value," to ",result)
 								_set_variable(token.value,result)
-							elif variable.type == VariableType.VECTOR and change.value is Vector2:
+							elif variable.type == VariableType.VECTOR and change is Vector2:
 								_set_variable(token.value,result)
-							elif variable.type == VariableType.BOOL and vars[0].value is bool:
+							elif variable.type == VariableType.VECTOR and change is float:
+								_set_variable(token.value,result)
+							elif variable.type == VariableType.BOOL and vars[0] is bool:
 								push_error('Line '+str(total_l+1)+': Booleans cannot have arithmetic performed on them')
-							elif variable.type == VariableType.ARRAY and vars[0].value is Array:
+							elif variable.type == VariableType.ARRAY and vars[0] is Array:
 								push_error('Line '+str(total_l+1)+': Arrays cannot have arithmetic performed on them')
 								#_set_variable(token.value,script[l][t+2].value)
 							else:
-								push_error('Line '+str(total_l+1)+': Type of variable '+str(token.value)+' does not match with target value\'s type ('+type_string(typeof(change.value))+")")
+								push_error('Line '+str(total_l+1)+': Type of variable '+str(token.value)+" ("+str(_get_variable(token.value).value)+" : "+type_string(typeof(_get_variable(token.value).value))+') does not match with target value\'s type ('+str(change)+' : '+type_string(typeof(change))+")")
 							t += 2
 				else:
 					match token.value:
@@ -204,6 +211,8 @@ func _get_variable(variable:String,verbose:=false):
 	if variables.has(node.name):
 		if variables[node.name].has(variable):
 			return variables[node.name][variable]
+		elif global_variables.has(variable):
+			return global_variables[variable]
 	elif global_variables.has(variable):
 		return global_variables[variable]
 	if verbose:
@@ -231,6 +240,7 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 	while index < param.size():
 		if param[index] is not Lexer.AdvancedToken:
 			print("default value (index:"+str(index)+")")
+			index += 1
 			continue
 		#print(param[index].value," ",param[index] is Lexer.FunctionToken)
 		if _get_variable(str(param[index].value),verbose) and param[index].type == Lexer.TokenType.IDENTIFIER and !exceptions.has(index):
@@ -242,17 +252,17 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 					param[index].type = Lexer.TokenType.STRING
 				"float":
 					param[index].type = Lexer.TokenType.NUMBER
-					#print(param[index].value)
 				"bool":
 					param[index].type = Lexer.TokenType.BOOLEAN
 				"Array":
 					param[index].type = Lexer.TokenType.ARRAY
+				"Vector2":
+					param[index].type = Lexer.TokenType.VECTOR
 		elif param[index] is Lexer.FunctionToken and !exceptions.has(index):
 			#print("function variable ",param[index].value)
 			var val = await executeFunction([param[index]])
 			param[index] = Lexer.AdvancedToken.new(Lexer.TokenType.IDENTIFIER,val)
 			#print(type_string(typeof(param[index].value)))
-			
 			match type_string(typeof(param[index].value)):
 				"String":
 					param[index].type = Lexer.TokenType.STRING
@@ -262,6 +272,8 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 					param[index].type = Lexer.TokenType.BOOLEAN
 				"Array":
 					param[index].type = Lexer.TokenType.ARRAY
+				"Vector2":
+					param[index].type = Lexer.TokenType.VECTOR
 		elif param[index].type == Lexer.TokenType.STRING:
 			var targettext := ""
 			var ignore := false
@@ -291,12 +303,13 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 					targettext += i
 			param[index].value = targettext
 		if param[index].type == Lexer.TokenType.ARRAY:
-			#print(param[index].value)
-			#for i in param[index].value:
-				#print(Lexer.TokenType.keys()[i.type]," ",i.value)
-			param[index].value = await _convert_variables(param[index].value)
-			#for i in param[index].value:
-				#print(Lexer.TokenType.keys()[i.type]," ",i.value)
+			# print(param[index].value)
+			var has_tokens := false
+			for i in param[index].value:
+				if i is Lexer.AdvancedToken:
+					has_tokens = true
+			if has_tokens:
+				param[index].value = await _convert_variables(param[index].value)
 		index += 1
 	return param
 
@@ -796,7 +809,7 @@ func executeFunction(line : Array,wait := false):
 				push_error('Line '+str(total_l+1)+': Weight must be a number')
 				return
 			
-			return lerp(params[0],params[1],params[2])
+			return lerp(params[0].value,params[1].value,params[2].value)
 		"vec2":
 			if token.params.size() != 2:
 				push_error('Line '+str(total_l+1)+': vec2() requires exactly two parameters')
@@ -887,8 +900,26 @@ func executeFunction(line : Array,wait := false):
 			if params[1].type != Lexer.TokenType.NUMBER:
 				push_error('Line '+str(total_l+1)+': Array position must be a number')
 				return
-			#print(token.params[0].value)
-			return token.params[0].value[token.params[1].value]
+			return params[0].value[params[1].value].value
+		"set_at_index":
+			if token.params.size() != 3:
+				push_error('Line '+str(total_l+1)+': set_at_index() requires exactly two parameters')
+				return
+			
+			var params = await _convert_variables(token.params)
+			
+			if params[0].type != Lexer.TokenType.ARRAY:
+				push_error('Line '+str(total_l+1)+': Array must be a valid array')
+				return
+			if params[1].type != Lexer.TokenType.NUMBER:
+				push_error('Line '+str(total_l+1)+': Array position must be a number')
+				return
+			
+			params[0].value[params[1].value].value = params[2].value
+			var variab = _get_variable(token.params[0].value)
+			if variab:
+				_set_variable(token.params[0].value,params[0].value)
+			return params[0].value
 
 func executeCodeBlock(codeblock : Lexer.CodeToken,_node:Node) -> void:
 	# print("Started to execute code block")

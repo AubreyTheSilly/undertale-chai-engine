@@ -20,7 +20,9 @@ enum TokenType {
 	OPERATOR,
 	ARITHMETIC_OPERATOR,
 	CODE_BLOCK,
-	COLON
+	COLON,
+	VECTOR, # not used in the lexer, but instead used for vector values in interpreting
+	COMMENT
 }
 
 class AdvancedToken:
@@ -85,7 +87,10 @@ func tokenize(code:String) -> Array:
 			# comments
 			"/":
 				if source[pos+1] == "/":
+					#tokens.append(AdvancedToken.new(TokenType.COMMENT))
 					comment = true
+				elif source[pos+1] == "=":
+					tokens.append(AdvancedToken.new(TokenType.ARITHMETIC_OPERATOR,c+"="))
 				pos += 1
 			# brackets
 			"(":
@@ -140,7 +145,7 @@ func tokenize(code:String) -> Array:
 					push_error("Unexpected character ("+c+")")
 				pos += 1
 			# arithmetic
-			"+","-":
+			"+","-","*":
 				if source[pos+1] == "=":
 					tokens.append(AdvancedToken.new(TokenType.ARITHMETIC_OPERATOR,c+"="))
 					pos += 1
