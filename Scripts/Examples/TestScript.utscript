@@ -1,28 +1,14 @@
-initvar(spritex,NUMBER,get("Sprite2D","position:x"));
-initvar(spritey,NUMBER,get("Sprite2D","position:y"));
-initvar(speed,NUMBER,2);
+initvar(player_position,ARRAY,[get("Sprite2D","position:x"),get("Sprite2D","position:y")]);
+initvar(playersp,NUMBER,2);
+
+print(get_at_index(["FUCK","fuck2"],1));
 
 while (true) {
-    if (is_key_pressed("Shift")) {
-        speed = 4;
-    } else {
-        speed = 2;
-    };
-
     if (is_key_pressed("Left")) {
-        spritex -= speed;
-    };
-    if (is_key_pressed("Right")) {
-        spritex += speed;
-    };
-    if (is_key_pressed("Up")) {
-        spritey -= speed;
-    };
-    if (is_key_pressed("Down")) {
-        spritey += speed;
+        player_x -= playersp;
     };
 
-    set("Sprite2D","position:x",spritex);
-    set("Sprite2D","position:y",spritey);
+    set("Sprite2D","position",vec2(get_at_index(player_position,0),get_at_index(player_position,1)));
+
     await process_frame;
 };

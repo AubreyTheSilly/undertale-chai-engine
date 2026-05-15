@@ -262,7 +262,7 @@ func parse(code:Array) -> Array:
 	return script
 
 func read_codeblock() -> CodeToken:
-	# print("reading codeblock")
+	#print("reading codeblock")
 	
 	var code : CodeToken = CodeToken.new(TokenType.CODE_BLOCK,[])
 	
@@ -273,33 +273,73 @@ func read_codeblock() -> CodeToken:
 	
 	parsertoken += 1
 	var token : AdvancedToken = parsersource[parserline][parsertoken]
-		
-	var ignorecurly := 0
 	
-	while parserline < parsersource.size() and !(token.type == TokenType.RPARENCURLY and ignorecurly == 0):
-		while parsertoken < parsersource[parserline].size() and !(token.type == TokenType.RPARENCURLY and ignorecurly == 0):
-			if token.type == TokenType.LPARENCURLY:
-				print("nested codeblock began")
-				ignorecurly += 1
-				print("ignorecurly ",ignorecurly)
-			if token.type == TokenType.RPARENCURLY:
-				print("nested codeblock ended")
-				ignorecurly -= 1
-				print("ignorecurly ",ignorecurly)
-				parsertoken += 1
-			#print(TokenType.keys()[token.type]+" "+str(token.value))
-			token = parsersource[parserline][parsertoken]
-			line.append(token.duplicate())
+	var blockdepth := 0
+	var done := false
+	
+	# old code that FORGOT I COULD DO NESTED LOOPS IM SO STUPID AHAHAHAHAHHHHAHAHA
+	#while parserline < parsersource.size() and !(token.type == TokenType.RPARENCURLY and ignorecurly == 0):
+		#while parsertoken < parsersource[parserline].size() and !(token.type == TokenType.RPARENCURLY and ignorecurly == 0):
+			#if token.type == TokenType.LPARENCURLY:
+				#print("nested codeblock began")
+				#ignorecurly += 1
+				#print("ignorecurly ",ignorecurly)
+			#elif token.type == TokenType.RPARENCURLY:
+				#print("nested codeblock ended")
+				#ignorecurly -= 1
+				#print("ignorecurly ",ignorecurly)
+			#elif token.type == TokenType.IDENTIFIER:
+				#print(token.value)
+			#token = parsersource[parserline][parsertoken]
+			#line.append(token.duplicate())
+			#parsertoken += 1
+		#var dupe = []
+		#for i in line:
+			#dupe.append(i.duplicate())
+		#interpreted.append(dupe)
+		#print(parsersource[parserline])
+		#line = []
+		#if parserline+1 >= parsersource.size():
+			#push_warning("Code block reached end of script")
+			#break
+		#elif parsertoken > parsersource[parserline].size():
+			#parserline += 1
+			#parsertoken = 0
+			#token = parsersource[parserline][parsertoken]
+		#else:
+			#parsertoken += 1
+	
+	while parserline < parsersource.size() and !done:
+		while parsertoken < parsersource[parserline].size() and !done:
+			match token.type:
+				Lexer.TokenType.LPARENCURLY:
+					#print("Nested block start")
+					blockdepth += 1
+					line.append(token.duplicate())
+				Lexer.TokenType.RPARENCURLY:
+					if blockdepth == 0:
+						done = true
+						break
+					else:
+						#print("Nested block end")
+						blockdepth -= 1
+						line.append(token.duplicate())
+				_:
+					line.append(token.duplicate())
 			parsertoken += 1
+			if parsertoken < parsersource[parserline].size():
+				token = parsersource[parserline][parsertoken]
 		interpreted.append(line.duplicate(true))
 		line = []
-		if parserline != parsersource.size()-1:
+		if parserline+1 >= parsersource.size():
+			push_warning("Code block reached end of script")
+			break
+		elif !done:
 			parserline += 1
 			parsertoken = 0
 			token = parsersource[parserline][parsertoken]
-		else:
-			break
 	
+	#print("finished reading codeblock, parsing")
 	if line.size() != 0:
 		interpreted.append(line.duplicate(true))
 	#for i in interpreted:
@@ -313,10 +353,12 @@ func read_codeblock() -> CodeToken:
 	parserline = oldline
 	parsersource = oldsource
 	
+	#print("finished parsing codeblock!")
+	
 	# print("yeah")
 	# print(interpreted)
 	
-	# parsertoken += 1
+	#parsertoken += 1
 	
 	if parserline == parsersource.size() and code.value.size() != 0:
 		parserline -= 1
@@ -328,7 +370,7 @@ func read_function() -> FunctionToken:
 	
 	var token : AdvancedToken = parsersource[parserline][parsertoken]
 	var function : FunctionToken = FunctionToken.new(token.type,token.value)
-	print(token.value)
+	#print(token.value)
 	parsertoken += 2
 	
 	while parsertoken < parsersource[parserline].size() and parsersource[parserline][parsertoken].type != TokenType.RPAREN:
@@ -345,6 +387,8 @@ func read_function() -> FunctionToken:
 			parsertoken += 1
 		else:
 			parsertoken += 1
+		#print(TokenType.keys()[token.type]," ",token.value)
+	#print()
 	
 	parsertoken += 1
 	
@@ -360,21 +404,37 @@ func read_function() -> FunctionToken:
 
 func read_array() -> AdvancedToken:
 	var token : AdvancedToken = parsersource[parserline][parsertoken]
+	var nexttoken : AdvancedToken
 	var array : AdvancedToken = AdvancedToken.new(TokenType.ARRAY,[])
 	parsertoken += 1
 	
-	while parsertoken < parsersource[parserline].size() and parsersource[parserline][parsertoken].type != TokenType.RPARENSQUARE:
-		token = parsersource[parserline][parsertoken]
-		if token.type != TokenType.COMMA:
-			array.value.append(token.value)
-		parsertoken += 1
+	var cont = true
 	
-	parsertoken += 1
+	while parsertoken < parsersource[parserline].size() and cont:
+		#print(parsertoken)
+		token = parsersource[parserline][parsertoken]
+		nexttoken = AdvancedToken.new(TokenType.IDENTIFIER)
+		if parsertoken+1 < parsersource[parserline].size():
+			nexttoken = parsersource[parserline][parsertoken+1]
+		if token.type == TokenType.IDENTIFIER and nexttoken.type == TokenType.LPAREN:
+			array.value.append(read_function())
+			parsertoken -= 1
+		elif token.type == TokenType.RPARENSQUARE:
+			#print("DISABLE CONT")
+			cont = false
+			parsertoken += 1
+			continue
+		elif token.type != TokenType.COMMA:
+			array.value.append(token.value)
+		#print(TokenType.keys()[token.type]," ",token.value)
+		parsertoken += 1
 	
 	#print(array.value)
 	
-	if parsertoken == parsersource[parserline].size():
+	if parsertoken >= parsersource[parserline].size():
 		push_error("Line "+str(parserline+1)+" - Unfinished array")
+	
+	#parsertoken += 1
 	
 	#parsertoken += 1
 	

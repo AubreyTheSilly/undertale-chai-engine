@@ -87,9 +87,9 @@ func LoadRoom() -> void:
 						for j in i.data:
 							if j in object:
 								if str_to_var(i.data[j]):
-									await create_tween().tween_property(object,j,str_to_var(i.data[j]),0).finished
+									object.set_indexed(j,i.str_to_var(i.data[j]))
 								else:
-									await create_tween().tween_property(object,j,i.data[j],0).finished
+									object.set_indexed(j,i.data[j])
 								print(i.type+"'s property "+j+" has been set to "+i.data[j])
 							else:
 								push_warning(i.type+" does not have property "+j)
@@ -105,10 +105,10 @@ func LoadRoom() -> void:
 						for j in i.data:
 							if j in object:
 								if str_to_var(i.data[j]) != null:
-									await create_tween().tween_property(object,j,str_to_var(i.data[j]),0).finished
+									object.set_indexed(j,i.str_to_var(i.data[j]))
 									print(object.name+"'s property "+j+" has been set to "+i.data[j])
 								elif object.get(j) is String:
-									await create_tween().tween_property(object,j,i.data[j],0).finished
+									object.set_indexed(j,i.data[j])
 									print(object.name+"'s property "+j+" has been set to "+i.data[j])
 								else:
 									push_warning(object.name+"'s property "+j+" is not a string")
