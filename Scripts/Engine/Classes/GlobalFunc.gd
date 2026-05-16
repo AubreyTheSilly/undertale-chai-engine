@@ -145,6 +145,23 @@ func getObjectByClassName(className : String,instantiate : bool = true) -> Objec
 				object = class_tscn
 	return object
 
+func loadSpriteFramesFromFile(json : String) -> SpriteFrames:
+	var animationDict := Undermaker.loadJsonAsDictionary("Data/animations/"+json+".json")
+	var spriteframes := SpriteFrames.new()
+	for anim in animationDict:
+		var animation = animationDict[anim]
+		spriteframes.add_animation(anim)
+		for i in animation["frames"]:
+			var frame = Loader.load_file("Sprites/"+i+".png")
+			if frame:
+				spriteframes.add_frame(anim,frame)
+			else:
+				push_error("Error loading animation "+anim+": Frame \""+"Sprites/"+i+".png\" does not exist")
+		spriteframes.set_animation_speed(anim,animation["fps"])
+		if animation.has("loop"):
+			spriteframes.set_animation_loop(anim,animation["loop"])
+	return spriteframes
+
 func loadCustomObject(objname : String):
 	var objectdata = Undermaker.loadTextAsObjectData(objname)
 	if objectdata == {}:

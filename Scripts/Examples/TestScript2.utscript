@@ -1,0 +1,6 @@
+createSprite("legs","Battle/Enemies/dustlegs",vec2(160,120));
+createSprite("body","Battle/Enemies/dustbody",vec2(160,120));
+
+createAnimatedSprite("test",vec2(40,160));
+set("test","sprite_frames",getAnimation("TestAnimation"));
+playAnimation("test","Animation1");

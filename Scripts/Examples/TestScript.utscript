@@ -1,12 +1,17 @@
-initvar(player_position,ARRAY,[get("Sprite2D","position:x"),get("Sprite2D","position:y")]);
+createSprite("player","spr_heartsmall_0",vec2(40,120));
+createSprite("enemy","spr_heartsmall_0",vec2(280,120));
+set("player","modulate",C_BLUE);
+set("enemy","modulate",C_RED);
+
+initvar(player_position,ARRAY,[get("player","position:x"),get("player","position:y")]);
 initvar(playersp,NUMBER,2);
 initvar(target_enemy_velocity,VECTOR2,vec2(0,0));
 initvar(enemy_velocity,VECTOR2,vec2(0,0));
-initvar(enemy_position,ARRAY,[get("Sprite2D2","position:x"),get("Sprite2D2","position:y")]);
-initvar(enemy_vector,VECTOR2,get("Sprite2D2","position"));
+initvar(enemy_position,ARRAY,[get("enemy","position:x"),get("enemy","position:y")]);
+initvar(enemy_vector,VECTOR2,get("enemy","position"));
 initvar(enemysp,NUMBER,2);
 
-initvar(temppos,NUMBER,0)
+initvar(temppos,NUMBER,0);
 
 while (true) {
     // PLAYER MOVEMENT
@@ -40,12 +45,12 @@ while (true) {
     };
     
     // update player position
-    set("Sprite2D","position",vec2(get_at_index(player_position,0),get_at_index(player_position,1)));
+    set("player","position",vec2(get_at_index(player_position,0),get_at_index(player_position,1)));
 
     // ENEMY MOVEMENT
 
     // update enemy position variables
-    enemy_position = [get("Sprite2D2","position:x"),get("Sprite2D2","position:y")];
+    enemy_position = [get("enemy","position:x"),get("enemy","position:y")];
 
     // directions (labelled bc it's less obvious than the player input)
     target_enemy_velocity = vec2(0,0);
@@ -73,7 +78,7 @@ while (true) {
     enemy_vector += enemy_velocity;
     
     // update enemy position
-    set("Sprite2D2","position",enemy_vector);
+    set("enemy","position",enemy_vector);
 
     // wait for frame to pass
     await process_frame;

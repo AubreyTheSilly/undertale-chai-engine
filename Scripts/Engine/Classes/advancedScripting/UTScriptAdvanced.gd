@@ -12,7 +12,7 @@ var variableTypes := {
 	"ARRAY":VariableType.ARRAY,
 	"COLOR":VariableType.COLOR,
 	"VECTOR2":VariableType.VECTOR,
-	"STRUCT":VariableType.STRUCT
+	"STRUCT":VariableType.STRUCT,
 }
 
 class Variable:
@@ -43,13 +43,18 @@ var should_break := false
 var end_script := false
 
 func initConstants() -> void:
-	variables[node.name] = {}
+	if !variables.has(node.name):
+		variables[node.name] = {}
+	
+	# timer in seconds
 	global_variables["TIMER"] = Variable.new("TIMER",VariableType.NUMBER,0.0)
 	
+	# tween eases
 	global_variables["EASE_IN"] = Variable.new("EASE_IN",VariableType.NUMBER,0.0)
 	global_variables["EASE_OUT"] = Variable.new("EASE_OUT",VariableType.NUMBER,1.0)
 	global_variables["EASE_IN_OUT"] = Variable.new("EASE_IN_OUT",VariableType.NUMBER,2.0)
 	global_variables["EASE_OUT_IN"] = Variable.new("EASE_OUT_IN",VariableType.NUMBER,3.0)
+	# tween transitions
 	global_variables["TRANS_LINEAR"] = Variable.new("TRANS_LINEAR",VariableType.NUMBER,0.0)
 	global_variables["TRANS_SINE"] = Variable.new("TRANS_SINE",VariableType.NUMBER,1.0)
 	global_variables["TRANS_QUINT"] = Variable.new("TRANS_QUINT",VariableType.NUMBER,2.0)
@@ -63,12 +68,35 @@ func initConstants() -> void:
 	global_variables["TRANS_BACK"] = Variable.new("TRANS_BACK",VariableType.NUMBER,10.0)
 	global_variables["TRANS_SPRING"] = Variable.new("TRANS_SPRING",VariableType.NUMBER,11.0)
 	
+	# direction constants
 	global_variables["DIR_LEFT"] = Variable.new("DIR_LEFT",VariableType.VECTOR,Vector2.LEFT)
 	global_variables["DIR_DOWN"] = Variable.new("DIR_DOWN",VariableType.VECTOR,Vector2.DOWN)
 	global_variables["DIR_UP"] = Variable.new("DIR_UP",VariableType.VECTOR,Vector2.UP)
 	global_variables["DIR_RIGHT"] = Variable.new("DIR_RIGHT",VariableType.VECTOR,Vector2.RIGHT)
+	
+	# color constants (THESE ARE ALL FROM GAMEMAKER!!!!
+	global_variables["C_AQUA"] = Variable.new("C_AQUA",VariableType.COLOR,Color.from_rgba8(0,255,255))
+	global_variables["C_BLACK"] = Variable.new("C_BLACK",VariableType.COLOR,Color.from_rgba8(0,0,0))
+	global_variables["C_BLUE"] = Variable.new("C_BLUE",VariableType.COLOR,Color.from_rgba8(0,0,255))
+	global_variables["C_DARKGRAY"] = Variable.new("C_DARKGRAY",VariableType.COLOR,Color.from_rgba8(64,64,64))
+	global_variables["C_FUCHSIA"] = Variable.new("C_FUCHSIA",VariableType.COLOR,Color.from_rgba8(255,0,255))
+	global_variables["C_GRAY"] = Variable.new("C_GRAY",VariableType.COLOR,Color.from_rgba8(128,128,128))
+	global_variables["C_GREEN"] = Variable.new("C_GREEN",VariableType.COLOR,Color.from_rgba8(0,128,0))
+	global_variables["C_LIME"] = Variable.new("C_LIME",VariableType.COLOR,Color.from_rgba8(0,255,0))
+	global_variables["C_LIGHTGRAY"] = Variable.new("C_LIGHTGRAY",VariableType.COLOR,Color.from_rgba8(192,192,192))
+	global_variables["C_MAROON"] = Variable.new("C_MAROON",VariableType.COLOR,Color.from_rgba8(128,0,0))
+	global_variables["C_NAVY"] = Variable.new("C_NAVY",VariableType.COLOR,Color.from_rgba8(0,0,128))
+	global_variables["C_OLIVE"] = Variable.new("C_OLIVE",VariableType.COLOR,Color.from_rgba8(128,128,0))
+	global_variables["C_ORANGE"] = Variable.new("C_ORANGE",VariableType.COLOR,Color.from_rgba8(255,160,64))
+	global_variables["C_PURPLE"] = Variable.new("C_PURPLE",VariableType.COLOR,Color.from_rgba8(128,0,128))
+	global_variables["C_RED"] = Variable.new("C_RED",VariableType.COLOR,Color.from_rgba8(255,0,0))
+	global_variables["C_SILVER"] = Variable.new("C_SILVER",VariableType.COLOR,Color.from_rgba8(192,192,192))
+	global_variables["C_TEAL"] = Variable.new("C_TEAL",VariableType.COLOR,Color.from_rgba8(0,128,128))
+	global_variables["C_WHITE"] = Variable.new("C_WHITE",VariableType.COLOR,Color.from_rgba8(255,255,255))
+	global_variables["C_YELLOW"] = Variable.new("C_YELLOW",VariableType.COLOR,Color.from_rgba8(255,255,0))
 
 func updateConstants() -> void:
+	# update timer
 	if dt_changed:
 		global_variables["TIMER"].value += dt
 
@@ -129,8 +157,12 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 								_set_variable(token.value,vars[0].value)
 							elif variable.type == VariableType.VECTOR and vars[0].value is Vector2:
 								_set_variable(token.value,vars[0].value)
+							elif variable.type == VariableType.COLOR and vars[0].value is Color:
+								_set_variable(token.value,vars[0].value)
+							elif type_string(typeof(variable.value)) == type_string(typeof(vars[0].value)):
+								_set_variable(token.value,vars[0].value)
 							else:
-								push_error('Line '+str(total_l+1)+': Type of variable '+str(token.value)+' does not match with target value')
+								push_error('Line '+str(total_l+1)+': Type of variable '+str(token.value)+" ("+str(_get_variable(token.value).value)+" : "+type_string(typeof(_get_variable(token.value).value))+') does not match with target value\'s type ('+str(script[l][t+2].value)+' : '+type_string(typeof(vars[0].value))+")")
 							t += 2
 						Lexer.TokenType.ARITHMETIC_OPERATOR:
 							# handle loading the value if it's a function lol
@@ -173,7 +205,6 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 								push_error('Line '+str(total_l+1)+': Booleans cannot have arithmetic performed on them')
 							elif variable.type == VariableType.ARRAY and vars[0] is Array:
 								push_error('Line '+str(total_l+1)+': Arrays cannot have arithmetic performed on them')
-								#_set_variable(token.value,script[l][t+2].value)
 							else:
 								push_error('Line '+str(total_l+1)+': Type of variable '+str(token.value)+" ("+str(_get_variable(token.value).value)+" : "+type_string(typeof(_get_variable(token.value).value))+') does not match with target value\'s type ('+str(change)+' : '+type_string(typeof(change))+")")
 							t += 2
@@ -258,6 +289,10 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 					param[index].type = Lexer.TokenType.ARRAY
 				"Vector2":
 					param[index].type = Lexer.TokenType.VECTOR
+				"Color":
+					param[index].type = Lexer.TokenType.COLOR
+				"SpriteFrames":
+					param[index].type = Lexer.TokenType.SPRITEFRAMES
 		elif param[index] is Lexer.FunctionToken and !exceptions.has(index):
 			#print("function variable ",param[index].value)
 			var val = await executeFunction([param[index]])
@@ -274,6 +309,10 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 					param[index].type = Lexer.TokenType.ARRAY
 				"Vector2":
 					param[index].type = Lexer.TokenType.VECTOR
+				"Color":
+					param[index].type = Lexer.TokenType.COLOR
+				"SpriteFrames":
+					param[index].type = Lexer.TokenType.SPRITEFRAMES
 		elif param[index].type == Lexer.TokenType.STRING:
 			var targettext := ""
 			var ignore := false
@@ -397,10 +436,13 @@ func executeFunction(line : Array,wait := false):
 			var target : Node = node
 			if params[0].value != "self":
 				target = node.get_node_or_null(params[0].value)
-			if target.get_indexed(params[1].value) == null:
-				push_error('Line '+str(total_l+1)+': Target node property must exist')
+			var propertylist := []
+			for i in target.get_property_list():
+				propertylist.append(i["name"])
+			if !propertylist.has(params[1].value):
+				push_error('Line '+str(total_l+1)+': Target node does not have property "'+str(params[0].value)+'"')
 				return
-			
+			# print("setting ",target.name,"'s property ",params[1].value," to ",params[2].value)
 			target.set_indexed(params[1].value,params[2].value)
 		"tween_property":
 			if token.params.size() < 4 and token.params.size() > 6:
@@ -894,13 +936,17 @@ func executeFunction(line : Array,wait := false):
 			
 			var params = await _convert_variables(token.params)
 			
-			if params[0].type != Lexer.TokenType.ARRAY:
-				push_error('Line '+str(total_l+1)+': Array must be a valid array')
+			if params[0].type != Lexer.TokenType.ARRAY and params[0].type != Lexer.TokenType.VECTOR:
+				push_error('Line '+str(total_l+1)+': Object to get value from must be a valid array or vector')
 				return
 			if params[1].type != Lexer.TokenType.NUMBER:
-				push_error('Line '+str(total_l+1)+': Array position must be a number')
+				push_error('Line '+str(total_l+1)+': Index must be a number')
 				return
-			return params[0].value[params[1].value].value
+			var val = params[0].value[params[1].value]
+			if val is Lexer.AdvancedToken:
+				return val.value
+			else:
+				return val
 		"set_at_index":
 			if token.params.size() != 3:
 				push_error('Line '+str(total_l+1)+': set_at_index() requires exactly two parameters')
@@ -920,6 +966,123 @@ func executeFunction(line : Array,wait := false):
 			if variab:
 				_set_variable(token.params[0].value,params[0].value)
 			return params[0].value
+		"createSprite":
+			# using this code from the og scriptrunner as reference
+			
+			#var sprite = Sprite2D.new()
+			#sprite.name = runscript.data[line].data[1].value
+			#sprite.texture = Loader.load_file("Sprites/"+runscript.data[line].data[2].value)
+			#sprite.position = Vector2(runscript.data[line].data[3].value,runscript.data[line].data[4].value)
+			#node.add_child(sprite)
+			
+			if token.params.size() != 3:
+				push_error('Line '+str(total_l+1)+': create_sprite() requires exactly three parameters')
+				return
+			var params = await _convert_variables(token.params)
+			
+			if params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Sprite object name must be a string')
+				return
+			if params[1].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Sprite path must be a valid string')
+				return
+			if params[2].type != Lexer.TokenType.VECTOR:
+				push_error('Line '+str(total_l+1)+': Sprite position must be a vector')
+				return
+			
+			var sprite := Sprite2D.new()
+			sprite.name = params[0].value
+			sprite.texture = Loader.load_file("Sprites/"+params[1].value+".png")
+			sprite.position = params[2].value
+			node.add_child(sprite)
+		"createAnimatedSprite":
+			if token.params.size() != 2 and token.params.size() != 3:
+				push_error('Line '+str(total_l+1)+': create_sprite() requires between two an three parameters')
+				return
+			var params = await _convert_variables(token.params)
+			
+			if params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Sprite object name must be a string')
+				return
+			if params[1].type != Lexer.TokenType.VECTOR:
+				push_error('Line '+str(total_l+1)+': Sprite position must be a vector')
+				return
+			
+			var sprite := AnimatedSprite2D.new()
+			sprite.name = params[0].value
+			sprite.position = params[1].value
+			if params.size() == 3:
+				if params[2].type != Lexer.TokenType.VECTOR:
+					push_error('Line '+str(total_l+1)+': Sprite position must be a vector')
+					return
+			node.add_child(sprite)
+		"font":
+			if token.params.size() != 1:
+				push_error('Line '+str(total_l+1)+': font() requires exactly one parameter')
+				return
+			var font = FontFile.new()
+			font.load_dynamic_font(Undermaker.Path+"Fonts/"+token.params[0].value)
+			
+			if font:
+				return font
+			else:
+				push_error('Line '+str(total_l+1)+': Font '+token.params[0].value+' does not exist')
+				return
+		"getAnimation":
+			if token.params.size() != 1:
+				push_error('Line '+str(total_l+1)+': getAnimation() requires exactly one parameter')
+				return
+			
+			if token.params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Animation json name must be a string')
+				return
+			
+			return Undermaker.loadSpriteFramesFromFile(token.params[0].value)
+		"stopAnimation":
+			if token.params.size() != 1:
+				push_error('Line '+str(total_l+1)+': stopAnimation() requires exactly one parameter')
+				return
+			var params = await _convert_variables(token.params)
+			if params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Node name must be a string')
+				return
+			
+			var sprite = node.get_node_or_null(params[0].value)
+			if !sprite:
+				push_error('Line '+str(total_l+1)+': Sprite must exist')
+				return
+			if sprite is not AnimatedSprite:
+				push_error('Line '+str(total_l+1)+': Node is not an AnimationFrame')
+				return
+			
+			sprite.stop()
+		"playAnimation":
+			if token.params.size() != 1 and token.params.size() != 2:
+				push_error('Line '+str(total_l+1)+': playAnimation() requires between one and two parameters')
+				return
+			var params = await _convert_variables(token.params)
+			if params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Sprite node name must be a string')
+				return
+			
+			var sprite = node.get_node_or_null(params[0].value)
+			if !sprite:
+				push_error('Line '+str(total_l+1)+': Sprite node must exist')
+				return
+			if sprite is not AnimatedSprite2D:
+				push_error('Line '+str(total_l+1)+': Node is not an AnimatedSprite2D')
+				return
+			
+			if params.size() == 2:
+				if params[1].type != Lexer.TokenType.STRING:
+					push_error('Line '+str(total_l+1)+': Animation name must be a string')
+					return
+				if !sprite.sprite_frames.get_animation_names().has(params[1].value):
+					push_error('Line '+str(total_l+1)+': Animation ',params[1].value,' does not exist')
+					return
+				sprite.play(params[1].value)
+			else:
+				sprite.play()
 
 func executeCodeBlock(codeblock : Lexer.CodeToken,_node:Node) -> void:
 	# print("Started to execute code block")

@@ -21,7 +21,11 @@ enum TokenType {
 	ARITHMETIC_OPERATOR,
 	CODE_BLOCK,
 	COLON,
-	VECTOR, # not used in the lexer, but instead used for vector values in interpreting
+	# next types are not used in the lexer, but instead used for vector values in interpreting
+	VECTOR,
+	COLOR,
+	SPRITEFRAMES,
+	# end of unused lexer types
 	COMMENT
 }
 

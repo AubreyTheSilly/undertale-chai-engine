@@ -2,14 +2,13 @@
 
 [ext_resource type="Shader" uid="uid://cao2q8s7n450p" path="res://BorderShader.gdshader" id="1_1r7dd"]
 [ext_resource type="Script" uid="uid://ctwqv3k4exqv5" path="res://Scripts/borders.gd" id="1_p8jor"]
-[ext_resource type="Texture2D" uid="uid://b7ugkhlpv0xqn" path="res://Sprites/Borders/bg_border_line.png" id="3_p8jor"]
+[ext_resource type="Texture2D" uid="uid://bgwc1dmt408yw" path="res://Sprites/Borders/bg_border_line.png" id="3_p8jor"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a7e48"]
 shader = ExtResource("1_1r7dd")
 
 [node name="Borders" type="CanvasLayer" unique_id=42077459]
 layer = 127
-visible = false
 script = ExtResource("1_p8jor")
 
 [node name="BackBufferCopy" type="BackBufferCopy" parent="." unique_id=1332706757]

@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-var borders_setup = false
+var borders_setup = true
 
 @onready var bordersprite = $Border
 @onready var fakebordersprite = $FakeBorder
