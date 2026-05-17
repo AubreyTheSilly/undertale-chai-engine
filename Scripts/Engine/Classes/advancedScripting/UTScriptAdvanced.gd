@@ -451,7 +451,7 @@ func executeFunction(line : Array,wait := false):
 			for i in target.get_property_list():
 				propertylist.append(i["name"])
 			if !propertylist.has(params[1].value):
-				push_error('Line '+str(total_l+1)+': Target node does not have property "'+str(params[0].value)+'"')
+				push_error('Line '+str(total_l+1)+': Target node does not have property "'+str(params[1].value)+'"')
 				return
 			# print("setting ",target.name,"'s property ",params[1].value," to ",params[2].value)
 			target.set_indexed(params[1].value,params[2].value)
@@ -750,16 +750,22 @@ func executeFunction(line : Array,wait := false):
 			
 			return randf_range(params[0].value,params[1].value)
 		"round":
-			if token.params.size() != 1:
-				push_error('Line '+str(total_l+1)+': round() requires exactly one parameter')
+			if token.params.size() != 1 and token.params.size() != 2:
+				push_error('Line '+str(total_l+1)+': round() requires between one and two parameters')
 				return
 			var params = await _convert_variables(token.params)
 			
 			if params[0].type != Lexer.TokenType.NUMBER:
-				push_error('Line '+str(total_l+1)+': Input for randf() must be a number')
+				push_error('Line '+str(total_l+1)+': Input for round() must be a number')
 				return
+			var step := 1.0
+			if params.size() == 2:
+				if params[1].type != Lexer.TokenType.NUMBER:
+					push_error('Line '+str(total_l+1)+': Step must be a number')
+					return
+				step = params[1].value
 			
-			return round(params[0].value)
+			return snapped(params[0].value,step)
 		"is_key_pressed":
 			#print("keypress check")
 			if token.params.size() != 1:

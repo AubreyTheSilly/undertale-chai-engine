@@ -6,11 +6,17 @@ createSprite("body","Battle/Enemies/dustbody",vec2(160,120));
 initvar(legs,NODE,getNode("legs"));
 initvar(body,NODE,getNode("body"));
 
+initvar(timer,NUMBER,0);
+
 reparent(legs,getNode("sans"));
 reparent(body,getNode("sans"));
 
 while (true) {
     // animation
+    timer = TIMER;
+    timer *= 3;
 
-    await process_frame
-}
+    set(body,"position",vec2(0,round(sin(timer,2,3),0.5)));
+
+    await process_frame;
+};
