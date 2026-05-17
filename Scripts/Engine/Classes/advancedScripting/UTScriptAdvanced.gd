@@ -1,7 +1,7 @@
 extends Node
 
 enum VariableType {
-	STRING,NUMBER,BOOL,UNDEFINED,ARRAY,COLOR,VECTOR,STRUCT
+	STRING,NUMBER,BOOL,UNDEFINED,ARRAY,COLOR,VECTOR,STRUCT,NODE
 }
 
 var variableTypes := {
@@ -13,6 +13,7 @@ var variableTypes := {
 	"COLOR":VariableType.COLOR,
 	"VECTOR2":VariableType.VECTOR,
 	"STRUCT":VariableType.STRUCT,
+	"NODE":VariableType.NODE
 }
 
 class Variable:
@@ -43,11 +44,12 @@ var should_break := false
 var end_script := false
 
 func initConstants() -> void:
-	if !variables.has(node.name):
-		variables[node.name] = {}
+	if !variables.has(str(node.get_instance_id())):
+		variables[str(node.get_instance_id())] = {}
 	
-	# timer in seconds
+	# timer stuff
 	global_variables["TIMER"] = Variable.new("TIMER",VariableType.NUMBER,0.0)
+	global_variables["DELTA"] = Variable.new("DELTA",VariableType.NUMBER,dt)
 	
 	# tween eases
 	global_variables["EASE_IN"] = Variable.new("EASE_IN",VariableType.NUMBER,0.0)
@@ -94,11 +96,16 @@ func initConstants() -> void:
 	global_variables["C_TEAL"] = Variable.new("C_TEAL",VariableType.COLOR,Color.from_rgba8(0,128,128))
 	global_variables["C_WHITE"] = Variable.new("C_WHITE",VariableType.COLOR,Color.from_rgba8(255,255,255))
 	global_variables["C_YELLOW"] = Variable.new("C_YELLOW",VariableType.COLOR,Color.from_rgba8(255,255,0))
+	
+	# self
+	variables[str(node.get_instance_id())]["self"] = Variable.new("self",VariableType.NODE,node)
 
 func updateConstants() -> void:
-	# update timer
+	# update timers
 	if dt_changed:
 		global_variables["TIMER"].value += dt
+		global_variables["DELTA"].value = dt
+		dt_changed = false
 
 func loadScriptFromFile(script : String) -> Array:
 	var scr := Undermaker.loadFileAsString("Scripts/"+script+".utscript")
@@ -158,6 +165,8 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 							elif variable.type == VariableType.VECTOR and vars[0].value is Vector2:
 								_set_variable(token.value,vars[0].value)
 							elif variable.type == VariableType.COLOR and vars[0].value is Color:
+								_set_variable(token.value,vars[0].value)
+							elif variable.type == VariableType.NODE and vars[0].value is Node:
 								_set_variable(token.value,vars[0].value)
 							elif type_string(typeof(variable.value)) == type_string(typeof(vars[0].value)):
 								_set_variable(token.value,vars[0].value)
@@ -239,9 +248,9 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 	return OK
 
 func _get_variable(variable:String,verbose:=false):
-	if variables.has(node.name):
-		if variables[node.name].has(variable):
-			return variables[node.name][variable]
+	if variables.has(str(node.get_instance_id())):
+		if variables[str(node.get_instance_id())].has(variable):
+			return variables[str(node.get_instance_id())][variable]
 		elif global_variables.has(variable):
 			return global_variables[variable]
 	elif global_variables.has(variable):
@@ -251,9 +260,9 @@ func _get_variable(variable:String,verbose:=false):
 	return
 
 func _set_variable(variable:String,value:Variant):
-	if variables.has(node.name):
-		if variables[node.name].has(variable):
-			variables[node.name][variable].value = value
+	if variables.has(str(node.get_instance_id())):
+		if variables[str(node.get_instance_id())].has(variable):
+			variables[str(node.get_instance_id())][variable].value = value
 	elif global_variables.has(variable):
 		global_variables[variable].value = value
 	else:
@@ -276,8 +285,8 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 		#print(param[index].value," ",param[index] is Lexer.FunctionToken)
 		if _get_variable(str(param[index].value),verbose) and param[index].type == Lexer.TokenType.IDENTIFIER and !exceptions.has(index):
 			#print("yeah")
-			#print(param[index].value)
 			param[index].value = _get_variable(str(param[index].value)).value
+			#print(type_string(typeof(param[index].value)))
 			match type_string(typeof(param[index].value)):
 				"String":
 					param[index].type = Lexer.TokenType.STRING
@@ -291,8 +300,11 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 					param[index].type = Lexer.TokenType.VECTOR
 				"Color":
 					param[index].type = Lexer.TokenType.COLOR
-				"SpriteFrames":
-					param[index].type = Lexer.TokenType.SPRITEFRAMES
+				_:
+					if param[index].value is SpriteFrames:
+						param[index].type = Lexer.TokenType.SPRITEFRAMES
+					elif param[index].value is Node:
+						param[index].type = Lexer.TokenType.NODE
 		elif param[index] is Lexer.FunctionToken and !exceptions.has(index):
 			#print("function variable ",param[index].value)
 			var val = await executeFunction([param[index]])
@@ -311,8 +323,12 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 					param[index].type = Lexer.TokenType.VECTOR
 				"Color":
 					param[index].type = Lexer.TokenType.COLOR
-				"SpriteFrames":
-					param[index].type = Lexer.TokenType.SPRITEFRAMES
+				# for object classes like nodes
+				_:
+					if param[index].value is SpriteFrames:
+						param[index].type = Lexer.TokenType.SPRITEFRAMES
+					elif param[index].value is Node:
+						param[index].type = Lexer.TokenType.NODE
 		elif param[index].type == Lexer.TokenType.STRING:
 			var targettext := ""
 			var ignore := false
@@ -383,7 +399,7 @@ func executeFunction(line : Array,wait := false):
 			if variables.has(params[0].value):
 				push_warning('Line '+str(total_l+1)+': Variable '+params[0].value+' is already defined and will be overwritten')
 			
-			variables[node.name][params[0].value] = variab
+			variables[str(node.get_instance_id())][params[0].value] = variab
 		"initglobal":
 			if token.params.size() != 2 and token.params.size() != 3:
 				push_error('Line '+str(total_l+1)+': initglobal() requires between two and three parameters')
@@ -400,7 +416,7 @@ func executeFunction(line : Array,wait := false):
 			if global_variables.has(params[0].value):
 				push_warning('Line '+str(total_l+1)+': Variable '+params[0].value+' is already defined and will be overwritten')
 			
-			variables[node.name][params[0].value] = variab
+			variables[str(node.get_instance_id())][params[0].value] = variab
 		"startDialogue":
 			if token.params.size() != 1 and token.params.size() != 2:
 				push_error('Line '+str(total_l+1)+': startDialogue() requires between one and two parameters')
@@ -424,18 +440,13 @@ func executeFunction(line : Array,wait := false):
 				push_error('Line '+str(total_l+1)+': set() requires three parameters')
 				return
 			var params = await _convert_variables(token.params)
-			if params[0].type != Lexer.TokenType.STRING:
-				push_error('Line '+str(total_l+1)+': Target node name must be a string')
-				return
-			if !node.get_node_or_null(params[0].value) and params[0].value != "self":
-				push_error('Line '+str(total_l+1)+': Target node must exist')
+			if params[0].type != Lexer.TokenType.NODE:
+				push_error('Line '+str(total_l+1)+': Target node must be a Node')
 				return
 			if params[1].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': Target node property must be a string')
 				return
-			var target : Node = node
-			if params[0].value != "self":
-				target = node.get_node_or_null(params[0].value)
+			var target : Node = params[0].value
 			var propertylist := []
 			for i in target.get_property_list():
 				propertylist.append(i["name"])
@@ -449,18 +460,13 @@ func executeFunction(line : Array,wait := false):
 				push_error('Line '+str(total_l+1)+': tween_property() requires between four and five parameters')
 				return
 			var params = await _convert_variables(token.params)
-			if params[0].type != Lexer.TokenType.STRING:
+			if params[0].type != Lexer.TokenType.NODE:
 				push_error('Line '+str(total_l+1)+': Target node name must be a string')
-				return
-			if !node.get_node_or_null(params[0].value) and params[0].value != "self":
-				push_error('Line '+str(total_l+1)+': Target node must exist')
 				return
 			if params[1].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': Target node property must be a string')
 				return
-			var target : Node = node
-			if params[0].value != "self":
-				target = node.get_node_or_null(params[0].value)
+			var target : Node = params[0].value
 			if target.get_indexed(params[1].value) == null:
 				push_error('Line '+str(total_l+1)+': Target node property must exist')
 				return
@@ -490,18 +496,13 @@ func executeFunction(line : Array,wait := false):
 				push_error('Line '+str(total_l+1)+': get() requires two parameters')
 				return
 			var params = await _convert_variables(token.params)
-			if params[0].type != Lexer.TokenType.STRING:
-				push_error('Line '+str(total_l+1)+': Target node name must be a string')
-				return
-			if !node.get_node_or_null(params[0].value) and params[0].value != "self":
-				push_error('Line '+str(total_l+1)+': Target node must exist')
+			if params[0].type != Lexer.TokenType.NODE:
+				push_error('Line '+str(total_l+1)+': Target node must be a Node')
 				return
 			if params[1].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': Target node property must be a string')
 				return
-			var target : Node = node
-			if params[0].value != "self":
-				target = node.get_node_or_null(params[0].value)
+			var target : Node = params[0].value
 			if target.get_indexed(params[1].value) == null:
 				push_error('Line '+str(total_l+1)+': Target node property must exist')
 				return
@@ -622,6 +623,12 @@ func executeFunction(line : Array,wait := false):
 				# comparison version
 				if params[1].type != Lexer.TokenType.OPERATOR:
 					push_error('Line '+str(total_l+1)+': Invalid comparison operator')
+					return
+				if params[0].value == null:
+					push_error('Line '+str(total_l+1)+': Cannot compare nil (',str(params[0].value),' and ',(params[2].value),')')
+					return
+				if params[2].value == null:
+					push_error('Line '+str(total_l+1)+': Cannot compare nil (',str(params[0].value),' and ',(params[2].value),')')
 					return
 				match params[1].value:
 					"<=":
@@ -1012,9 +1019,10 @@ func executeFunction(line : Array,wait := false):
 			sprite.name = params[0].value
 			sprite.position = params[1].value
 			if params.size() == 3:
-				if params[2].type != Lexer.TokenType.VECTOR:
-					push_error('Line '+str(total_l+1)+': Sprite position must be a vector')
+				if params[2].type != Lexer.TokenType.SPRITEFRAMES:
+					push_error('Line '+str(total_l+1)+': Sprite animation must be a SpriteFrames')
 					return
+				sprite.sprite_frames = params[2].value
 			node.add_child(sprite)
 		"font":
 			if token.params.size() != 1:
@@ -1043,14 +1051,11 @@ func executeFunction(line : Array,wait := false):
 				push_error('Line '+str(total_l+1)+': stopAnimation() requires exactly one parameter')
 				return
 			var params = await _convert_variables(token.params)
-			if params[0].type != Lexer.TokenType.STRING:
-				push_error('Line '+str(total_l+1)+': Node name must be a string')
+			if params[0].type != Lexer.TokenType.NODE:
+				push_error('Line '+str(total_l+1)+': Node must be a Node type')
 				return
 			
-			var sprite = node.get_node_or_null(params[0].value)
-			if !sprite:
-				push_error('Line '+str(total_l+1)+': Sprite must exist')
-				return
+			var sprite = params[0].value
 			if sprite is not AnimatedSprite:
 				push_error('Line '+str(total_l+1)+': Node is not an AnimationFrame')
 				return
@@ -1061,14 +1066,11 @@ func executeFunction(line : Array,wait := false):
 				push_error('Line '+str(total_l+1)+': playAnimation() requires between one and two parameters')
 				return
 			var params = await _convert_variables(token.params)
-			if params[0].type != Lexer.TokenType.STRING:
-				push_error('Line '+str(total_l+1)+': Sprite node name must be a string')
+			if params[0].type != Lexer.TokenType.NODE:
+				push_error('Line '+str(total_l+1)+': Sprite must be a node')
 				return
 			
-			var sprite = node.get_node_or_null(params[0].value)
-			if !sprite:
-				push_error('Line '+str(total_l+1)+': Sprite node must exist')
-				return
+			var sprite = params[0].value
 			if sprite is not AnimatedSprite2D:
 				push_error('Line '+str(total_l+1)+': Node is not an AnimatedSprite2D')
 				return
@@ -1083,6 +1085,92 @@ func executeFunction(line : Array,wait := false):
 				sprite.play(params[1].value)
 			else:
 				sprite.play()
+		"getNode":
+			if token.params.size() != 1:
+				push_error('Line '+str(total_l+1)+': getNode() requires exactly one parameter')
+				return
+			var params = await _convert_variables(token.params)
+			if params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Node name must be a string')
+				return
+			var obj = node.get_node_or_null(params[0].value)
+			if !is_instance_valid(obj):
+				push_error('Line '+str(total_l+1)+': Object ',params[0].value,' does not exist')
+				return
+			return obj
+		"setBorder":
+			if token.params.size() != 1:
+				push_error('Line '+str(total_l+1)+': setBorder() requires exactly one parameter')
+				return
+			if token.params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Border name must be a string')
+				return
+			Borders.set_border(token.params[0].value)
+		"createNode":
+			# original scriptrunner function reference
+			#if runscript.data[line].data.size() != 5:
+				#push_error("line "+str(line+1)+": Invalid number of arguments")
+				#continue
+			#for i in runscript.data[line].data:
+				#if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+					#var variable = getVariable(i.lexeme)
+					#i.type = types[variable.type]
+					#i.value = variable.value
+					#reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
+			#if runscript.data[line].data[1].type != Token.TokenType.STRING:
+				#push_error("line "+str(line+1)+": Object name must be a string")
+				#continue
+			#if runscript.data[line].data[2].type != Token.TokenType.STRING:
+				#push_error("line "+str(line+1)+": Object type must be a string")
+				#continue
+			#if !ClassDB.class_exists(runscript.data[line].data[2].value) or !ClassDB.can_instantiate(runscript.data[line].data[2].value):
+				#push_error("line "+str(line+1)+": Object type must be a valid class, check the Godot documentation")
+				#continue
+			#if runscript.data[line].data[3].type != Token.TokenType.NUMBER:
+				#push_error("line "+str(line+1)+": Object X position must be a number")
+				#continue
+			#if runscript.data[line].data[4].type != Token.TokenType.NUMBER:
+				#push_error("line "+str(line+1)+": Object Y position must be a number")
+				#continue
+			#var obj = ClassDB.instantiate(runscript.data[line].data[2].value)
+			#obj.name = runscript.data[line].data[1].value
+			#obj.position = Vector2(runscript.data[line].data[3].value,runscript.data[line].data[4].value)
+			#node.add_child(obj)
+			if token.params.size() != 3:
+				push_error('Line '+str(total_l+1)+': createNode() requires exactly three parameters')
+				return
+			var params = await _convert_variables(token.params)
+			
+			if params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Node name must be a String')
+				return
+			if params[1].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Node type must be a String')
+				return
+			if !ClassDB.class_exists(params[1].value) or !ClassDB.can_instantiate(params[1].value):
+				push_error('Line '+str(total_l+1)+": NOde type must be a valid Object subclass, check the Godot documentation")
+				return
+			if params[2].type != Lexer.TokenType.VECTOR:
+				push_error('Line '+str(total_l+1)+": Node position must be a Vector2")
+				return
+			var obj = ClassDB.instantiate(params[1].value)
+			obj.name = params[0].value
+			obj.position = params[2].value
+			node.add_child(obj)
+		"reparent":
+			if token.params.size() != 2:
+				push_error('Line '+str(total_l+1)+': reparent() requires exactly two parameters')
+				return
+			var params = await _convert_variables(token.params)
+			
+			if params[0].type != Lexer.TokenType.NODE:
+				push_error('Line '+str(total_l+1)+': Child node must be a Node')
+				return
+			if params[1].type != Lexer.TokenType.NODE:
+				push_error('Line '+str(total_l+1)+': Parent node must be a Node')
+				return
+			
+			params[0].value.reparent(params[1].value)
 
 func executeCodeBlock(codeblock : Lexer.CodeToken,_node:Node) -> void:
 	# print("Started to execute code block")

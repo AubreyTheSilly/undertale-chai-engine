@@ -1,3 +1,10 @@
-create_animated_sprite "AnimSprite" 120 120
-load_animation "AnimSprite" "TestAnimation"
-play_animated_sprite "AnimSprite" "Animation1"
+//create_animated_sprite "AnimSprite" 120 120
+//load_animation "AnimSprite" "TestAnimation"
+//play_animated_sprite "AnimSprite" "Animation1"
+
+createAnimatedSprite("AnimSprite",vec2(120,120),getAnimation("TestAnimation"));
+playAnimation(getNode("AnimSprite"),"Animation1");
+
+// createAnimatedSprite("test",vec2(40,160));
+// set("test","sprite_frames",getAnimation("TestAnimation"));
+// playAnimation("test","Animation1");

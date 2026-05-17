@@ -25,6 +25,7 @@ enum TokenType {
 	VECTOR,
 	COLOR,
 	SPRITEFRAMES,
+	NODE,
 	# end of unused lexer types
 	COMMENT
 }

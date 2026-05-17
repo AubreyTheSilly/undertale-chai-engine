@@ -105,7 +105,7 @@ func LoadRoom() -> void:
 						for j in i.data:
 							if j in object:
 								if str_to_var(i.data[j]) != null:
-									object.set_indexed(j,i.str_to_var(i.data[j]))
+									object.set_indexed(j,str_to_var(i.data[j]))
 									print(object.name+"'s property "+j+" has been set to "+i.data[j])
 								elif object.get(j) is String:
 									object.set_indexed(j,i.data[j])
@@ -119,7 +119,9 @@ func LoadRoom() -> void:
 		
 		layernum += 1
 	if FileAccess.file_exists(Undermaker.Path+"Scripts/Rooms/"+roomName+".utscript"):
-		$ScriptRunner.run_script("Rooms/"+roomName+".utscript")
+		# old scripting
+		# $ScriptRunner.run_script("Rooms/"+roomName+".utscript")
+		UTScriptAdvanced.runScript(UTScriptAdvanced.loadScriptFromFile("Rooms/"+roomName),self)
 	visible = true
 
 func _on_line_edit_text_submitted(new_text):

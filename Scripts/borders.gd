@@ -17,7 +17,7 @@ func set_window_size(size : Vector2i) -> void:
 	
 	DisplayServer.window_set_position(get_window().position - window_offset)
 
-func set_border(border) -> void:
+func set_border(border : String) -> void:
 	var borderdata = Undermaker.loadJsonAsDictionary("Sprites/Borders/borders.json")
 	var sprite : Texture2D
 	if borderdata.has(border):
