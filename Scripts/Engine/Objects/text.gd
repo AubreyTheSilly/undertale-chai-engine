@@ -9,8 +9,7 @@ extends Node2D
 @export var size : int = 13
 @export var font : Font
 
-@export var use_boundary := false
-@export var boundary : Vector2 = Vector2.ZERO
+@export var centered := false
 
 func get_processed_text() -> String:
 	var Text = ""
@@ -40,28 +39,30 @@ func get_processed_text() -> String:
 		xoffset += character_spacing
 		if extra_font_spacing.has(i):
 			xoffset += extra_font_spacing[i]
-		if use_boundary and xoffset >= boundary.x:
-			xoffset = 0
-			Text += "[newline]"
-			newlining = true
 	
 	return Text
 
 func get_font_end_offset() -> Vector2:
 	var drawposition = Vector2.ZERO
 	var _cmd = false
+	var cmd = ""
 	
 	if !font:
 		return Vector2.ZERO
 	
 	for i in get_processed_text():
-		if _cmd:
+		if _cmd and i != "]":
+			cmd += i
 			continue
 		match i:
 			"[":
 				_cmd = true
+				cmd = ""
 			"]":
 				_cmd = false
+				if cmd == "newline":
+					drawposition.x = 0
+					drawposition.y += line_spacing
 			_:
 				drawposition.x += character_spacing
 				if extra_font_spacing.has(i):
@@ -69,9 +70,6 @@ func get_font_end_offset() -> Vector2:
 	return drawposition
 
 func _draw():
-	if use_boundary and Engine.is_editor_hint():
-		draw_rect(Rect2(Vector2.ZERO,boundary),Color.BLUE,false,1)
-	
 	if !font:
 		return
 	var mode = "normal"

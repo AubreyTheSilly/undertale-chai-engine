@@ -1,1 +1,1 @@
-set_border "snow"
+setBorder("snow");

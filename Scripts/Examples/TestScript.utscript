@@ -1,9 +1,16 @@
-createSprite("player","spr_heartsmall_0",vec2(40,120));
-createSprite("enemy","spr_heartsmall_0",vec2(280,120));
-initvar(player,NODE,getNode("player"));
-initvar(enemy,NODE,getNode("enemy"));
+//createSprite("player","spr_heartsmall_0",vec2(40,120));
+//createSprite("enemy","spr_heartsmall_0",vec2(280,120));
+
+initvar(player,NODE,createSprite("player","spr_heartsmall_0",vec2(40,120)));
+initvar(enemy,NODE,createSprite("enemy","spr_heartsmall_0",vec2(280,120)));
 set(player,"modulate",C_BLUE);
 set(enemy,"modulate",C_RED);
+
+initvar(textobj,NODE,createNode("text","Label",vec2(0,0)));
+set(textobj,"size",vec2(320,80));
+set(textobj,"text","gaming");
+set(textobj,"horizontal_alignment",1);
+set(textobj,"vertical_alignment",1);
 
 initvar(player_position,ARRAY,[get(player,"position:x"),get(player,"position:y")]);
 initvar(playersp,NUMBER,2);
@@ -11,11 +18,13 @@ initvar(target_enemy_velocity,VECTOR2,vec2(0,0));
 initvar(enemy_velocity,VECTOR2,vec2(0,0));
 initvar(enemy_position,ARRAY,[get(enemy,"position:x"),get(enemy,"position:y")]);
 initvar(enemy_vector,VECTOR2,get(enemy,"position"));
-initvar(enemysp,NUMBER,2);
+initvar(enemysp,NUMBER,10);
 
 initvar(temppos,NUMBER,0);
 
-setBorder("snow");
+//setBorder("snow");
+
+playBGM("mus_prebattle1");
 
 while (true) {
     // PLAYER MOVEMENT
@@ -77,12 +86,18 @@ while (true) {
 
     
     target_enemy_velocity *= enemysp;
-    enemy_velocity = lerp(enemy_velocity,target_enemy_velocity,0.05);
+    enemy_velocity = lerp(enemy_velocity,target_enemy_velocity,0.02);
+    // testing this out for funsies (didn't work well)
+    //enemy_velocity += target_enemy_velocity;
 
     enemy_vector += enemy_velocity;
     
     // update enemy position
     set(enemy,"position",enemy_vector);
+
+    if (is_key_pressed("C")) {
+      loadRoom("room_start");  
+    };
 
     // wait for frame to pass
     await process_frame;

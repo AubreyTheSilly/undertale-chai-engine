@@ -21,11 +21,13 @@ enum TokenType {
 	ARITHMETIC_OPERATOR,
 	CODE_BLOCK,
 	COLON,
-	# next types are not used in the lexer, but instead used for vector values in interpreting
+	# next types are not used in the lexer, but instead used for values in interpreting e.g. colors and vectors
 	VECTOR,
 	COLOR,
 	SPRITEFRAMES,
 	NODE,
+	FONT,
+	AUDIO,
 	# end of unused lexer types
 	COMMENT
 }
@@ -77,6 +79,8 @@ func tokenize(code:String) -> Array:
 		
 		if comment:
 			if c == "\n":
+				script.append(tokens.duplicate(true))
+				tokens = []
 				comment = false
 			pos += 1
 			continue
@@ -92,7 +96,7 @@ func tokenize(code:String) -> Array:
 			# comments
 			"/":
 				if source[pos+1] == "/":
-					#tokens.append(AdvancedToken.new(TokenType.COMMENT))
+					tokens.append(AdvancedToken.new(TokenType.COMMENT))
 					comment = true
 				elif source[pos+1] == "=":
 					tokens.append(AdvancedToken.new(TokenType.ARITHMETIC_OPERATOR,c+"="))
@@ -280,8 +284,11 @@ func read_codeblock() -> CodeToken:
 	var line = []
 	
 	#print(parsertoken)
-	
-	parsertoken += 1
+	if parsersource[parserline].size()-1 == parsertoken:
+		parsertoken = 0
+		parserline += 1
+	else:
+		parsertoken += 1
 	var token : AdvancedToken = parsersource[parserline][parsertoken]
 	
 	var blockdepth := 0

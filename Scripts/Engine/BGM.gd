@@ -32,6 +32,7 @@ func playBGM(bgm : String) -> void:
 	if audio:
 		if !(audio == stream and playing):
 			stream = audio
+			stream.loop = true
 			play()
 		elif stream_paused:
 			stream_paused = false

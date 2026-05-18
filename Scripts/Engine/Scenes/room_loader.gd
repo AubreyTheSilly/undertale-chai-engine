@@ -87,7 +87,7 @@ func LoadRoom() -> void:
 						for j in i.data:
 							if j in object:
 								if str_to_var(i.data[j]):
-									object.set_indexed(j,i.str_to_var(i.data[j]))
+									object.set_indexed(j,str_to_var(i.data[j]))
 								else:
 									object.set_indexed(j,i.data[j])
 								print(i.type+"'s property "+j+" has been set to "+i.data[j])

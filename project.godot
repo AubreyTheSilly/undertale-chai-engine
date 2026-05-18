@@ -56,6 +56,7 @@ window/size/window_width_override=960
 window/size/window_height_override=540
 window/subwindows/embed_subwindows=false
 window/stretch/mode="canvas_items"
+window/stretch/scale_mode="integer"
 window/per_pixel_transparency/allowed=true
 
 [editor_plugins]

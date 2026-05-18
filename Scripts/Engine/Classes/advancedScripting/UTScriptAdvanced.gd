@@ -13,7 +13,7 @@ var variableTypes := {
 	"COLOR":VariableType.COLOR,
 	"VECTOR2":VariableType.VECTOR,
 	"STRUCT":VariableType.STRUCT,
-	"NODE":VariableType.NODE
+	"NODE":VariableType.NODE,
 }
 
 class Variable:
@@ -113,19 +113,24 @@ func loadScriptFromFile(script : String) -> Array:
 	return lexer.parse(lexer.tokenize(scr))
 
 func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
+	if end_script:
+		return ERR_LOCKED
 	node = _node
 	if reinit_vars:
 		initConstants()
 		total_l = 0
+		end_script = false
 	l = 0
 	t = 0
+	if !is_instance_valid(node):
+		return ERR_DOES_NOT_EXIST
 	while l < script.size() and !end_script:
-		if !is_instance_valid(node):
-			return ERR_DOES_NOT_EXIST
+		#print(l)
 		total_l += 1
 		updateConstants()
 		t = 0
 		while t < script[l].size() and !end_script:
+			#print(t)
 			if !is_instance_valid(node):
 				return ERR_DOES_NOT_EXIST
 			var token = script[l][t]
@@ -234,7 +239,7 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 											await node.get_indexed(next_token.value)
 											t += 1
 						"else":
-							if next_token is Lexer.CodeToken and !should_continue_block:
+							if next_token is Lexer.CodeToken and !should_continue_block and !end_script:
 								await executeCodeBlock(next_token,node)
 							t += 1
 						"break":
@@ -243,8 +248,9 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 					
 			t += 1
 		l += 1
-	end_script = false
-	
+	if reinit_vars:
+		end_script = false
+		print("Script finished")
 	return OK
 
 func _get_variable(variable:String,verbose:=false):
@@ -305,6 +311,10 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 						param[index].type = Lexer.TokenType.SPRITEFRAMES
 					elif param[index].value is Node:
 						param[index].type = Lexer.TokenType.NODE
+					elif param[index].value is Font:
+						param[index].type = Lexer.TokenType.FONT
+					elif param[index].value is AudioStream:
+						param[index].type = Lexer.TokenType.AUDIO
 		elif param[index] is Lexer.FunctionToken and !exceptions.has(index):
 			#print("function variable ",param[index].value)
 			var val = await executeFunction([param[index]])
@@ -329,6 +339,10 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 						param[index].type = Lexer.TokenType.SPRITEFRAMES
 					elif param[index].value is Node:
 						param[index].type = Lexer.TokenType.NODE
+					elif param[index].value is Font:
+						param[index].type = Lexer.TokenType.FONT
+					elif param[index].value is AudioStream:
+						param[index].type = Lexer.TokenType.AUDIO
 		elif param[index].type == Lexer.TokenType.STRING:
 			var targettext := ""
 			var ignore := false
@@ -554,7 +568,7 @@ func executeFunction(line : Array,wait := false):
 			
 			should_continue_while = true
 			
-			while should_continue_while:
+			while should_continue_while and !end_script:
 				total_l = ogline
 				params = []
 				for i in ogparams:
@@ -989,7 +1003,7 @@ func executeFunction(line : Array,wait := false):
 			#node.add_child(sprite)
 			
 			if token.params.size() != 3:
-				push_error('Line '+str(total_l+1)+': create_sprite() requires exactly three parameters')
+				push_error('Line '+str(total_l+1)+': createSprite() requires exactly three parameters')
 				return
 			var params = await _convert_variables(token.params)
 			
@@ -1008,9 +1022,11 @@ func executeFunction(line : Array,wait := false):
 			sprite.texture = Loader.load_file("Sprites/"+params[1].value+".png")
 			sprite.position = params[2].value
 			node.add_child(sprite)
+			
+			return sprite
 		"createAnimatedSprite":
 			if token.params.size() != 2 and token.params.size() != 3:
-				push_error('Line '+str(total_l+1)+': create_sprite() requires between two an three parameters')
+				push_error('Line '+str(total_l+1)+': createAnimatedSprite() requires between two an three parameters')
 				return
 			var params = await _convert_variables(token.params)
 			
@@ -1030,6 +1046,8 @@ func executeFunction(line : Array,wait := false):
 					return
 				sprite.sprite_frames = params[2].value
 			node.add_child(sprite)
+			
+			return sprite
 		"font":
 			if token.params.size() != 1:
 				push_error('Line '+str(total_l+1)+': font() requires exactly one parameter')
@@ -1163,6 +1181,8 @@ func executeFunction(line : Array,wait := false):
 			obj.name = params[0].value
 			obj.position = params[2].value
 			node.add_child(obj)
+			
+			return obj
 		"reparent":
 			if token.params.size() != 2:
 				push_error('Line '+str(total_l+1)+': reparent() requires exactly two parameters')
@@ -1177,12 +1197,131 @@ func executeFunction(line : Array,wait := false):
 				return
 			
 			params[0].value.reparent(params[1].value)
+		"createText":
+			if token.params.size() != 3 and token.params.size() != 4:
+				push_error('Line '+str(total_l+1)+': createText() requires between three and four parameters')
+				return
+			var params = await _convert_variables(token.params)
+			
+			if params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Text object name must be a string')
+				return
+			if params[1].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Starting text must be a string')
+				return
+			if params[2].type != Lexer.TokenType.VECTOR:
+				push_error('Line '+str(total_l+1)+': Object position must be a Vector2')
+				return
+			var font = preload("res://Fonts/DTM-Mono.otf")
+			if params.size() == 4:
+				if params[3].type != Lexer.TokenType.FONT:
+					push_error('Line '+str(total_l+1)+': Text font must be a Font')
+					return
+				font = params[3].value
+			
+			var text = TextObject.new()
+			text.font = font
+			text.name = params[0].value
+			text.text = params[1].value
+			text.position = params[2].value
+			node.add_child(text)
+			
+			return text
+		"playSound":
+			if token.params.size() != 1 and token.params.size() != 2:
+				push_error('Line '+str(total_l+1)+': playSound() requires between one and two parameters')
+				return
+			var params = await _convert_variables(token.params)
+			
+			if params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Sound name must be a string)')
+				return
+			
+			var audio = AudioStreamPlayer.new()
+			add_child(audio)
+			audio.stream = Loader.load_file("Audio/Sounds/"+params[0].value+".wav")
+			if audio.stream:
+				audio.play()
+				audio.finished.connect(audio.queue_free)
+			else:
+				audio.stream = Loader.load_file("Audio/Sounds/"+params[0].value+".ogg")
+				if audio.stream:
+					audio.play()
+					audio.finished.connect(audio.queue_free)
+				else:
+					push_error("Line "+str(total_l+1)+": Sound \"Audio/Sounds/"+params[0].value+"\" does not exist")
+					audio.queue_free()
+		"playBGM":
+			if token.params.size() != 1 and token.params.size() != 2:
+				push_error('Line '+str(total_l+1)+': playBGM() requires exactly one parameter')
+				return
+			var params = await _convert_variables(token.params)
+			
+			if params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': BGM name must be a string')
+				return
+			if !Loader.load_file("Audio/BGM/"+params[0].value+".ogg"):
+				push_error("Line "+str(total_l+1)+": Audio path must lead to a valid audio file (Path: "+"Audio/BGM/"+params[0]+".ogg)")
+				return
+			
+			BGM.playBGM(params[0].value)
+		"fadeInBGM":
+			if token.params.size() != 0:
+				push_error('Line '+str(total_l+1)+': fadeInBGM() takes no parameters')
+				return
+			BGM.fadeIn()
+		"fadeOutBGM":
+			if token.params.size() != 0:
+				push_error('Line '+str(total_l+1)+': fadeOutBGM() takes no parameters')
+				return
+			BGM.fadeOut()
+		"loadRoom":
+			if token.params.size() != 1:
+				push_error('Line '+str(total_l+1)+': loadRoom() requires exactly one parameter')
+				return
+			var params = await _convert_variables(token.params)
+			
+			if params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Room name must be a room')
+				return
+			
+			Undermaker.load_scene(params[0].value)
+			end_script = true
+		"loadAudio":
+			if token.params.size() != 1:
+				push_error('Line '+str(total_l+1)+': loadAudio() requires between exactly one parameter')
+				return
+			var params = await _convert_variables(token.params)
+			
+			if params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Audio filename must be a string')
+				return
+			var sound = Loader.load_file("Audio/Sounds/"+params[0].value+".wav")
+			if sound:
+				return sound
+			else:
+				sound = Loader.load_file("Audio/Sounds/"+params[0].value+".ogg")
+				if sound:
+					sound.looped = true
+					return sound
+				else:
+					push_error("Line "+str(total_l+1)+": Sound \"Audio/"+params[0].value+"\" does not exist")
+		#"template":
+			#if token.params.size() != 1 and token.params.size() != 2:
+				#push_error('Line '+str(total_l+1)+': template() requires between one and two parameters')
+				#return
+			#var params = await _convert_variables(token.params)
+			#
+			#if params[0].type != Lexer.TokenType.STRING:
+				#push_error('Line '+str(total_l+1)+': template()')
+				#return
 
 func executeCodeBlock(codeblock : Lexer.CodeToken,_node:Node) -> void:
 	# print("Started to execute code block")
 	# print(l)
 	var oldl = l
 	var oldt = t
+	print(total_l," ",t)
 	await runScript(codeblock.value.duplicate(true),_node,false)
 	l = oldl
 	t = oldt

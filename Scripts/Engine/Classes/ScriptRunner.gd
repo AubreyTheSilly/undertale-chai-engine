@@ -1430,7 +1430,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 						push_error("line "+str(line+1)+": BGM name must be a string")
 						continue
 					if !Loader.load_file("Audio/BGM/"+runscript.data[line].data[1].value+".ogg"):
-						push_error("line "+str(line+1)+": Audio path must lead to a valid audio file (Path: "+"Audio/BGM/"+runscript.data[line].data[2].value+".ogg)")
+						push_error("line "+str(line+1)+": Audio path must lead to a valid audio file (Path: "+"Audio/BGM/"+runscript.data[line].data[0].value+".ogg)")
 						continue
 					BGM.playBGM(runscript.data[line].data[1].value)
 				Token.TokenType.FADE_BGM_IN:
