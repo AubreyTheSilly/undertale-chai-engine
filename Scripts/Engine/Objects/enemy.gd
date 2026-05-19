@@ -74,11 +74,11 @@ func _ready():
 func getAttack() -> String:
 	if nextattack != "":
 		var attack = nextattack
-		return "Enemies/"+enemy_data.name+"/Attacks/"+attack+".utscript"
+		return "Enemies/"+enemy_data.name+"/Attacks/"+attack#+".utscript"
 	elif enemy_data.Attacks.size() == 0:
 		return ""
 	else:
-		return "Enemies/"+enemy_data.name+"/Attacks/"+enemy_data.Attacks.pick_random()+".utscript"
+		return "Enemies/"+enemy_data.name+"/Attacks/"+enemy_data.Attacks.pick_random()#+".utscript"
 
 func getAttackConfig(attack : String):
 	var attackPath : StringName = attack

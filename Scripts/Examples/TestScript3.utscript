@@ -1,0 +1,6 @@
+initvar(MovementArray,ARRAY,[DIR_LEFT,DIR_DOWN,DIR_UP,DIR_RIGHT]);
+initvar(char,NODE,getNode("Character"));
+
+while (true) {
+    await moveCharacter(char,get_at_index(MovementArray,randi(0,3)),2);
+};

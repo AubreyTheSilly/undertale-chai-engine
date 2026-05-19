@@ -1,52 +1,10 @@
-set_soulmode 1
-set_box_size 141 70.5
-slam "down"
-create_bone "bonejump1_2" RIGHT UP 40 -2.5 0 180
-create_bone "bonejump1_1" RIGHT DOWN 5 -2.5 0 0
-create_bone "bonejump1_3" LEFT DOWN 5 2.5 0 0
-create_bone "bonejump1_4" LEFT UP 40 2.5 0 180
-wait 0.5
-create_bone "bonejump2_1" RIGHT DOWN 5 -2.5 0 0
-create_bone "bonejump2_2" RIGHT UP 40 -2.5 0 180
-create_bone "bonejump2_3" LEFT DOWN 5 2.5 0 0
-create_bone "bonejump2_4" LEFT UP 40 2.5 0 180
-wait 0.5
-create_bone "bonejump3_1" RIGHT DOWN 5 -2.5 0 0
-create_bone "bonejump3_2" RIGHT UP 40 -2.5 0 180
-create_bone "bonejump3_3" LEFT DOWN 5 2.5 0 0
-create_bone "bonejump3_4" LEFT UP 40 2.5 0 180
-wait 0.5
-create_bone "bonejump4_1" RIGHT DOWN 5 -2.5 0 0
-create_bone "bonejump4_2" RIGHT UP 40 -2.5 0 180
-create_bone "bonejump4_3" LEFT DOWN 5 2.5 0 0
-create_bone "bonejump4_4" LEFT UP 40 2.5 0 180
-wait 0.5
-slam "up"
-create_bone "bonejump5_1" RIGHT DOWN 5 -2.5 0 0
-create_bone "bonejump5_2" RIGHT UP 40 -2.5 0 180
-create_bone "bonejump5_3" LEFT DOWN 5 2.5 0 0
-create_bone "bonejump5_4" LEFT UP 40 2.5 0 180
-wait 0.5
-create_bone "bonejump6_1" RIGHT DOWN 5 -2.5 0 0
-create_bone "bonejump6_2" RIGHT UP 40 -2.5 0 180
-create_bone "bonejump6_3" LEFT DOWN 5 2.5 0 0
-create_bone "bonejump6_4" LEFT UP 40 2.5 0 180
-wait 0.5
-create_bone "bonejump7_1" RIGHT DOWN 5 -2.5 0 0
-create_bone "bonejump7_2" RIGHT UP 40 -2.5 0 180
-create_bone "bonejump7_3" LEFT DOWN 5 2.5 0 0
-create_bone "bonejump7_4" LEFT UP 40 2.5 0 180
-wait 0.5
-create_bone "bonejump8_1" RIGHT DOWN 5 -2.5 0 0
-create_bone "bonejump8_2" RIGHT UP 40 -2.5 0 180
-create_bone "bonejump8_3" LEFT DOWN 5 2.5 0 0
-create_bone "bonejump8_4" LEFT UP 40 2.5 0 180
-wait 1.25
-set_soulmode 0
-create_blaster "blasterleft" -100 DOWN -90
-set_property "attacks/blasterleft" "scale:x" 1.5
-set_property "attacks/blasterleft" "scale:y" 1.5
-create_blaster "blasterright" 100 DOWN 90
-set_property "attacks/blasterright" "scale:x" 1.5
-set_property "attacks/blasterright" "scale:y" 1.5
-wait 3
+initvar(timer,NUMBER,0);
+
+while (timer <= 30) {
+    print(timer);
+    if (mod(timer,10) == 0) {createAttack("attack{timer}",vec2(0,-50),loadTexture("spr_heartsmall_0"),vec2(0,2),"blue",false);};
+
+    timer += 1;
+
+    await process_frame;
+};

@@ -28,6 +28,7 @@ enum TokenType {
 	NODE,
 	FONT,
 	AUDIO,
+	TEXTURE,
 	# end of unused lexer types
 	COMMENT
 }
@@ -157,10 +158,12 @@ func tokenize(code:String) -> Array:
 			"+","-","*":
 				if source[pos+1] == "=":
 					tokens.append(AdvancedToken.new(TokenType.ARITHMETIC_OPERATOR,c+"="))
-					pos += 1
+					pos += 2
+				elif is_digit(source[pos+1]):
+					tokens.append(read_number())
 				else:
 					tokens.append(AdvancedToken.new(TokenType.ARITHMETIC_OPERATOR,c))
-				pos += 1
+					pos += 1
 			# strings
 			'"':
 				tokens.append(read_string())
@@ -168,7 +171,7 @@ func tokenize(code:String) -> Array:
 			_:
 				if is_alpha(c):
 					tokens.append(read_identifier())
-				elif is_digit(c):
+				elif is_digit_beginning(c):
 					tokens.append(read_number())
 				else:
 					push_error("Unexpected character ("+c+")")
@@ -199,8 +202,9 @@ func read_string() -> AdvancedToken:
 
 func read_number() -> AdvancedToken:
 	var start = pos
+	pos += 1
 	
-	while pos < source.length() and is_digit(source[pos]):
+	while pos < source.length() and (is_digit(source[pos])):
 		pos += 1
 	
 	var value = source.substr(start,pos-start).to_float()
@@ -226,7 +230,11 @@ func read_identifier() -> AdvancedToken:
 func is_alpha(c:String) -> bool:
 	return c.is_subsequence_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_")
 
+# so that it can detect like. negative numbers
+func is_digit_beginning(c:String) -> bool:
+	return c.is_subsequence_of("0123456789.-")
 
+# we don't want -4-5 to be a valid number do we
 func is_digit(c:String) -> bool:
 	return c.is_subsequence_of("0123456789.")
 
@@ -442,7 +450,7 @@ func read_array() -> AdvancedToken:
 			parsertoken += 1
 			continue
 		elif token.type != TokenType.COMMA:
-			array.value.append(token.value)
+			array.value.append(token)
 		#print(TokenType.keys()[token.type]," ",token.value)
 		parsertoken += 1
 	

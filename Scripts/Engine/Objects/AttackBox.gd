@@ -1,3 +1,4 @@
+class_name AttackBox
 extends StaticBody2D
 
 @export var rect : Rect2 = Rect2(Vector2(0,0),Vector2(288,70.5))
@@ -30,18 +31,47 @@ func _process(_delta):
 	box_width = rect.size.x
 	box_height = rect.size.y
 	$attacks/bounding.polygon = [Vector2(-box_size.x/2,-box_size.y/2),Vector2(-box_size.x/2,box_size.y/2),Vector2(box_size.x/2,box_size.y/2),Vector2(box_size.x/2,-box_size.y/2)]
+#
+#func runScript(scr : String,enemy_data : EnemyData):
+	##if scr == "":
+		##attack_over.emit()
+	##await get_tree().process_frame
+	#var scriptrunner = preload("res://Scenes/Objects/attackscriptrunner.tscn").instantiate()
+	#scriptrunner.node = self
+	#scriptrunner.enemydata = enemy_data
+	#add_child(scriptrunner)
+	#scriptrunner.run_script(scr)
+	#await scriptrunner.script_finished
+	#attack_over.emit()
+#
+#func runAttack(attack : AttackData,enemy_data : EnemyData):
+	##if scr == "":
+		##attack_over.emit()
+	##await get_tree().process_frame
+	#frame = 0
+	#var scriptrunner = preload("res://Scenes/Objects/attackscriptrunner.tscn").instantiate()
+	#scriptrunner.node = self
+	#scriptrunner.enemydata = enemy_data
+	#scriptrunner.running = true
+	#add_child(scriptrunner)
+	#while scriptrunner.running:
+		#scriptrunner.frame += 1
+		#scriptrunner.run_script(attack.attack_script)
+		#await get_tree().process_frame
+	#attack_over.emit()
 
 func runScript(scr : String,enemy_data : EnemyData):
 	#if scr == "":
 		#attack_over.emit()
 	#await get_tree().process_frame
-	var scriptrunner = preload("res://Scenes/Objects/attackscriptrunner.tscn").instantiate()
-	scriptrunner.node = self
-	scriptrunner.enemydata = enemy_data
+	var scriptrunner := AdvancedScriptRunner.new()
+	scriptrunner.custom_constants["enemydata"] = enemy_data
 	add_child(scriptrunner)
-	scriptrunner.run_script(scr)
-	await scriptrunner.script_finished
+	scriptrunner.runScript(AdvancedScriptRunner.loadScriptFromFile(scr),self)
+	while scriptrunner.is_running:
+		await get_tree().process_frame
 	attack_over.emit()
+	scriptrunner.queue_free()
 
 func runAttack(attack : AttackData,enemy_data : EnemyData):
 	#if scr == "":
@@ -58,3 +88,4 @@ func runAttack(attack : AttackData,enemy_data : EnemyData):
 		scriptrunner.run_script(attack.attack_script)
 		await get_tree().process_frame
 	attack_over.emit()
+	scriptrunner.queue_free()

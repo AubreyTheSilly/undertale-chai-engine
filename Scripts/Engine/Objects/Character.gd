@@ -81,7 +81,7 @@ func move(steps : int,dir : Vector2) -> void:
 			velocity = dir*(30*Speed)
 			await get_tree().process_frame
 	velocity = Vector2.ZERO
-	await get_tree().process_frame
+	#await get_tree().process_frame
 	finished_moving.emit()
 
 func _process(_delta) -> void:

@@ -1,7 +1,8 @@
+class_name AdvancedScriptRunner
 extends Node
 
 enum VariableType {
-	STRING,NUMBER,BOOL,UNDEFINED,ARRAY,COLOR,VECTOR,STRUCT,NODE
+	STRING,NUMBER,BOOL,UNDEFINED,ARRAY,COLOR,VECTOR,STRUCT,NODE,AUDIO,TEXTURE
 }
 
 var variableTypes := {
@@ -14,6 +15,8 @@ var variableTypes := {
 	"VECTOR2":VariableType.VECTOR,
 	"STRUCT":VariableType.STRUCT,
 	"NODE":VariableType.NODE,
+	"AUDIO":VariableType.AUDIO,
+	"TEXTURE":VariableType.TEXTURE
 }
 
 class Variable:
@@ -26,8 +29,8 @@ class Variable:
 		type=t
 		value=v
 
-var variables : Dictionary[String,Dictionary] = {}
-var global_variables : Dictionary[String,Variable] = {}
+static var variables : Dictionary[String,Dictionary] = {}
+static var global_variables : Dictionary[String,Variable] = {}
 
 var l := 0
 var t := 0
@@ -42,6 +45,11 @@ var should_continue_while := false
 var should_break := false
 
 var end_script := false
+var is_running := false
+
+var custom_constants := {}
+
+signal script_ended
 
 func initConstants() -> void:
 	if !variables.has(str(node.get_instance_id())):
@@ -107,7 +115,7 @@ func updateConstants() -> void:
 		global_variables["DELTA"].value = dt
 		dt_changed = false
 
-func loadScriptFromFile(script : String) -> Array:
+static func loadScriptFromFile(script : String) -> Array:
 	var scr := Undermaker.loadFileAsString("Scripts/"+script+".utscript")
 	var lexer = Lexer.new()
 	return lexer.parse(lexer.tokenize(scr))
@@ -117,6 +125,7 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 		return ERR_LOCKED
 	node = _node
 	if reinit_vars:
+		is_running = true
 		initConstants()
 		total_l = 0
 		end_script = false
@@ -249,8 +258,11 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 			t += 1
 		l += 1
 	if reinit_vars:
+		await get_tree().process_frame
 		end_script = false
-		print("Script finished")
+		is_running = false
+		script_ended.emit()
+		#print("Script finished")
 	return OK
 
 func _get_variable(variable:String,verbose:=false):
@@ -285,7 +297,7 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 	
 	while index < param.size():
 		if param[index] is not Lexer.AdvancedToken:
-			print("default value (index:"+str(index)+")")
+			#print("default value (index:"+str(index)+")")
 			index += 1
 			continue
 		#print(param[index].value," ",param[index] is Lexer.FunctionToken)
@@ -315,6 +327,8 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 						param[index].type = Lexer.TokenType.FONT
 					elif param[index].value is AudioStream:
 						param[index].type = Lexer.TokenType.AUDIO
+					elif param[index].value is Texture2D:
+						param[index].type = Lexer.TokenType.TEXTURE
 		elif param[index] is Lexer.FunctionToken and !exceptions.has(index):
 			#print("function variable ",param[index].value)
 			var val = await executeFunction([param[index]])
@@ -343,6 +357,8 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 						param[index].type = Lexer.TokenType.FONT
 					elif param[index].value is AudioStream:
 						param[index].type = Lexer.TokenType.AUDIO
+					elif param[index].value is Texture2D:
+						param[index].type = Lexer.TokenType.TEXTURE
 		elif param[index].type == Lexer.TokenType.STRING:
 			var targettext := ""
 			var ignore := false
@@ -372,7 +388,7 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 					targettext += i
 			param[index].value = targettext
 		if param[index].type == Lexer.TokenType.ARRAY:
-			# print(param[index].value)
+			#print(param[index].value)
 			var has_tokens := false
 			for i in param[index].value:
 				if i is Lexer.AdvancedToken:
@@ -384,7 +400,8 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 
 func executeFunction(line : Array,wait := false):
 	updateConstants()
-	var token = line[t]
+	var token : Lexer.FunctionToken = line[t]
+	var validFunction = true
 	match token.value:
 		"print":
 			if token.params.size() == 0:
@@ -393,8 +410,14 @@ func executeFunction(line : Array,wait := false):
 				var params = await _convert_variables(token.params)
 				var output := ""
 				for i : Lexer.AdvancedToken in params:
-					output += str(i.value)
+					var val = i.value
+					if i.value is Array:
+						val = []
+						for j in i.value:
+							val.append(j.value)
+					output += str(val)
 				print(output)
+			return
 		"initvar":
 			if token.params.size() != 2 and token.params.size() != 3:
 				#for i in token.params:
@@ -612,7 +635,7 @@ func executeFunction(line : Array,wait := false):
 					await executeCodeBlock(line[t+1],node)
 				else:
 					total_l += line[t+1].value.size()+1
-			print("while loop ended")
+			#print("while loop ended")
 			t += 1
 		"if":
 			if token.params.size() != 1 and token.params.size() != 3:
@@ -881,7 +904,7 @@ func executeFunction(line : Array,wait := false):
 			return lerp(params[0].value,params[1].value,params[2].value)
 		"vec2":
 			if token.params.size() != 2:
-				push_error('Line '+str(total_l+1)+': vec2() requires exactly two parameters')
+				push_error('Line '+str(total_l+1)+': vec2() requires exactly two parameters (',token.params.size(),' were given)')
 				return
 			var params = await _convert_variables(token.params)
 			
@@ -1010,16 +1033,13 @@ func executeFunction(line : Array,wait := false):
 			if params[0].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': Sprite object name must be a string')
 				return
-			if params[1].type != Lexer.TokenType.STRING:
-				push_error('Line '+str(total_l+1)+': Sprite path must be a valid string')
-				return
-			if params[2].type != Lexer.TokenType.VECTOR:
-				push_error('Line '+str(total_l+1)+': Sprite position must be a vector')
+			if params[1].type != Lexer.TokenType.TEXTURE:
+				push_error('Line '+str(total_l+1)+': Sprite must be a texture')
 				return
 			
 			var sprite := Sprite2D.new()
 			sprite.name = params[0].value
-			sprite.texture = Loader.load_file("Sprites/"+params[1].value+".png")
+			sprite.texture = params[1].value
 			sprite.position = params[2].value
 			node.add_child(sprite)
 			
@@ -1306,6 +1326,116 @@ func executeFunction(line : Array,wait := false):
 					return sound
 				else:
 					push_error("Line "+str(total_l+1)+": Sound \"Audio/"+params[0].value+"\" does not exist")
+		"moveCharacter":
+			if token.params.size() != 3:
+				push_error('Line '+str(total_l+1)+': moveCharacter() requires exactly three parameters')
+				return
+			var params = await _convert_variables(token.params)
+			
+			if params[0].type != Lexer.TokenType.NODE:
+				push_error('Line '+str(total_l+1)+': Character object must be a Node')
+				return
+			if params[0].value is not Character:
+				push_error('Line '+str(total_l+1)+': Character object is not a Character')
+				return
+			
+			if params[1].type != Lexer.TokenType.VECTOR:
+				push_error('Line '+str(total_l+1)+': Movement direction must be a Vector2')
+				return
+			
+			if params[2].type != Lexer.TokenType.NUMBER:
+				push_error('Line '+str(total_l+1)+': Steps must be a number')
+				return
+			
+			var chara : Character = params[0].value
+			if wait:
+				await chara.move(int(floorf(params[2].value)),clamp(params[1].value,Vector2(-1,-1),Vector2(1,1)))
+			else:
+				chara.move(int(floorf(params[2].value)),clamp(params[1].value,Vector2(-1,-1),Vector2(1,1)))
+		"getFlag":
+			if token.params.size() != 1:
+				push_error('Line '+str(total_l+1)+': "getFlag":() requires exactly one parameter')
+				return
+			var params = await _convert_variables(token.params)
+			
+			if params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Flag name must be a string')
+				return
+			
+			if PlayerData.flags.has(params[0].value):
+				return PlayerData.flags[params[0].value]
+			else:
+				push_warning('Line '+str(total_l+1)+': Flag ',params[0].value,' does not exist, defaulting to false')
+				return false
+		"setFlag":
+			if token.params.size() != 2:
+				push_error('Line '+str(total_l+1)+': "setFlag":() requires exactly two parameters')
+				return
+			var params = await _convert_variables(token.params)
+			
+			if params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Flag name must be a string')
+				return
+			
+			PlayerData.flags[params[0].value] = params[1].value
+		"encounter":
+			if token.params.size() != 1 and token.params.size() != 2:
+				push_error('Line '+str(total_l+1)+': encounter() requires between one and two parameters')
+				return
+			var params = await _convert_variables(token.params)
+			
+			if params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Encounter name must be a string')
+				return
+			
+			var transition := true
+			
+			if params.size() == 2:
+				if params[1].type != Lexer.TokenType.BOOLEAN:
+					push_error('Line '+str(total_l+1)+': Encounter transition must be a bool')
+					return
+				transition = params[1].value
+			
+			Battle.Encounter(params[0].value,transition)
+		"getRoomNode":
+			if token.params.size() != 0:
+				push_error('Line '+str(total_l+1)+': getRoomNode() takes no parameters')
+				return
+			
+			return get_tree().current_scene
+		"loadTexture":
+			if token.params.size() != 1:
+				push_error('Line '+str(total_l+1)+': loadTexture() requires exactly one parameter')
+				return
+			var params = await _convert_variables(token.params)
+			
+			if params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Texture path must be a string')
+				return
+			
+			var tex = Loader.load_file("Sprites/"+params[0].value+".png")
+			if !tex:
+				push_error('Line '+str(total_l+1)+': Texture must exist')
+				return
+			
+			return tex
+		"mod":
+			if token.params.size() != 2:
+				push_error('Line '+str(total_l+1)+': mod() requires between exactly two parameters')
+				return
+			var params = await _convert_variables(token.params)
+			
+			if params[0].type != Lexer.TokenType.NUMBER:
+				push_error('Line '+str(total_l+1)+': Input must be a number')
+				return
+			if params[1].type != Lexer.TokenType.NUMBER:
+				push_error('Line '+str(total_l+1)+': Divider must be a number')
+				return
+			
+			return fmod(params[0].value,params[1].value)
+		_:
+			validFunction = false
+
 		#"template":
 			#if token.params.size() != 1 and token.params.size() != 2:
 				#push_error('Line '+str(total_l+1)+': template() requires between one and two parameters')
@@ -1315,13 +1445,83 @@ func executeFunction(line : Array,wait := false):
 			#if params[0].type != Lexer.TokenType.STRING:
 				#push_error('Line '+str(total_l+1)+': template()')
 				#return
+	if validFunction:
+		return
+	validFunction = false
+	
+	if node is Enemy:
+		# enemy scope!
+		validFunction = true
+		# so that it's easier to get the values
+		var enemy : Enemy = node
+		match token.value:
+			_:
+				validFunction = false
+		
+	if node is AttackBox:
+		# attack scope!
+		validFunction = true
+		# i DID have this.... then i realized there aren't really any variables i need to easily access like there are in the enemy object LMAO
+		# var attacker : AttackBox = node
+		match token.value:
+			"createAttack":
+				if token.params.size() < 3 or token.params.size() > 6:
+					push_error('Line '+str(total_l+1)+': makeAttack() requires between three and six parameters')
+					return
+				var params = await _convert_variables(token.params)
+				
+				if params[0].type != Lexer.TokenType.STRING:
+					push_error('Line '+str(total_l+1)+': Attack object name must be a string')
+					return
+				if params[1].type != Lexer.TokenType.VECTOR:
+					push_error('Line '+str(total_l+1)+': Attack object position must be a Vector2')
+					return
+				if params[2].type != Lexer.TokenType.TEXTURE:
+					push_error('Line '+str(total_l+1)+': Attack sprite must be a Texture')
+					return
+				var vel : Vector2 = Vector2.ZERO
+				var color : String = "white"
+				var bounding := true
+				if params.size() >= 4:
+					if params[3].type != Lexer.TokenType.VECTOR:
+						push_error('Line '+str(total_l+1)+': Attack velocity must be a Vector2')
+						return
+					vel = params[3].value
+				if params.size() >= 5:
+					if params[4].type != Lexer.TokenType.STRING:
+						push_error('Line '+str(total_l+1)+': Attack color must be a string')
+						return
+					color = params[4].value
+				if params.size() >= 6:
+					if params[5].type != Lexer.TokenType.BOOLEAN:
+						push_error('Line '+str(total_l+1)+': Bounding should be a bool')
+						return
+					bounding = params[5].value
+				
+				var attack = preload("res://Scenes/Objects/Attack.tscn").instantiate()
+				attack.name = params[0].value
+				attack.position = params[1].value
+				attack.texture = params[2].value
+				attack.velocity = vel
+				attack.attack_type = color
+				if bounding:
+					node.get_node("attacks/bounding").add_child(attack)
+				else:
+					node.get_node("attacks").add_child(attack)
+				return attack
+			
+			_:
+				validFunction = false
+	
+	if !validFunction:
+		push_error('Line ',str(total_l+1),': Function ',token.value,' does not exist in the current scope')
 
 func executeCodeBlock(codeblock : Lexer.CodeToken,_node:Node) -> void:
 	# print("Started to execute code block")
 	# print(l)
 	var oldl = l
 	var oldt = t
-	print(total_l," ",t)
+	#print(total_l," ",t)
 	await runScript(codeblock.value.duplicate(true),_node,false)
 	l = oldl
 	t = oldt

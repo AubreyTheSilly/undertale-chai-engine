@@ -1,8 +1,8 @@
 //createSprite("player","spr_heartsmall_0",vec2(40,120));
 //createSprite("enemy","spr_heartsmall_0",vec2(280,120));
 
-initvar(player,NODE,createSprite("player","spr_heartsmall_0",vec2(40,120)));
-initvar(enemy,NODE,createSprite("enemy","spr_heartsmall_0",vec2(280,120)));
+initvar(player,NODE,createSprite("player",loadTexture("spr_heartsmall_0"),vec2(40,120)));
+initvar(enemy,NODE,createSprite("enemy",loadTexture("spr_heartsmall_0"),vec2(280,120)));
 set(player,"modulate",C_BLUE);
 set(enemy,"modulate",C_RED);
 
@@ -22,7 +22,14 @@ initvar(enemysp,NUMBER,10);
 
 initvar(temppos,NUMBER,0);
 
-//setBorder("snow");
+//moveCharacter(getNode("Character"),DIR_DOWN,2);
+
+initvar(cam,NODE,createNode("cam","Camera2D",vec2(40,120)));
+set(cam,"position_smoothing_enabled",true);
+set(cam,"position_smoothing_speed",2.5);
+reparent(cam,player);
+
+setBorder("sepia");
 
 playBGM("mus_prebattle1");
 

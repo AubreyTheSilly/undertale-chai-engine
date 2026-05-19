@@ -121,7 +121,7 @@ func LoadRoom() -> void:
 	if FileAccess.file_exists(Undermaker.Path+"Scripts/Rooms/"+roomName+".utscript"):
 		# old scripting
 		# $ScriptRunner.run_script("Rooms/"+roomName+".utscript")
-		UTScriptAdvanced.runScript(UTScriptAdvanced.loadScriptFromFile("Rooms/"+roomName),self)
+		GlobalScriptRunner.runScript(AdvancedScriptRunner.loadScriptFromFile("Rooms/"+roomName),self)
 	visible = true
 
 func _on_line_edit_text_submitted(new_text):

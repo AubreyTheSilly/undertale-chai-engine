@@ -44,7 +44,7 @@ SaveMenu="*uid://cx0jyhh163q01"
 ShaderLayer="*uid://b4wr16oj43w4g"
 Borders="*uid://ih8bwe2ol1dt"
 DiscordRPCLoader="*uid://bfihk76p5kk7e"
-UTScriptAdvanced="*uid://celu5nym7wiia"
+GlobalScriptRunner="*uid://celu5nym7wiia"
 
 [display]
 

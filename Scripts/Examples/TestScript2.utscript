@@ -1,7 +1,7 @@
 createNode("sans","Node2D",vec2(160,120));
 
-createSprite("legs","Battle/Enemies/dustlegs",vec2(160,120));
-createSprite("body","Battle/Enemies/dustbody",vec2(160,120));
+createSprite("legs",loadTexture("Battle/Enemies/dustlegs"),vec2(160,120));
+createSprite("body",loadTexture("Battle/Enemies/dustbody"),vec2(160,120));
 
 initvar(legs,NODE,getNode("legs"));
 initvar(body,NODE,getNode("body"));
