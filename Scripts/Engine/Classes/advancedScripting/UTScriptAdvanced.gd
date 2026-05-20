@@ -617,9 +617,9 @@ func executeFunction(line : Array,wait := false):
 						"==":
 							should_continue_while = params[0].value == params[2].value
 						"<":
-							should_continue_block = params[0].value < params[2].value
+							should_continue_while = params[0].value < params[2].value
 						">":
-							should_continue_block = params[0].value > params[2].value
+							should_continue_while = params[0].value > params[2].value
 				
 				if t >= line.size()-1:
 					push_error('Line '+str(total_l+1)+': Code block expected for while')
@@ -986,8 +986,8 @@ func executeFunction(line : Array,wait := false):
 			
 			var params = await _convert_variables(token.params)
 			
-			if params[0].type != Lexer.TokenType.ARRAY and params[0].type != Lexer.TokenType.VECTOR:
-				push_error('Line '+str(total_l+1)+': Object to get value from must be a valid array or vector')
+			if params[0].type != Lexer.TokenType.ARRAY and params[0].type != Lexer.TokenType.VECTOR and params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Array must be a valid array, Vector2 or string')
 				return
 			if params[1].type != Lexer.TokenType.NUMBER:
 				push_error('Line '+str(total_l+1)+': Index must be a number')
@@ -1004,8 +1004,8 @@ func executeFunction(line : Array,wait := false):
 			
 			var params = await _convert_variables(token.params)
 			
-			if params[0].type != Lexer.TokenType.ARRAY:
-				push_error('Line '+str(total_l+1)+': Array must be a valid array')
+			if params[0].type != Lexer.TokenType.ARRAY and params[0].type != Lexer.TokenType.VECTOR and params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Array must be a valid array, Vector2 or string')
 				return
 			if params[1].type != Lexer.TokenType.NUMBER:
 				push_error('Line '+str(total_l+1)+': Array position must be a number')
@@ -1509,7 +1509,58 @@ func executeFunction(line : Array,wait := false):
 				else:
 					node.get_node("attacks").add_child(attack)
 				return attack
-			
+			"setBoxSize":
+				#if tokens.data.size() != 3:
+					#push_error("Invalid number of arguments for set_box_size")
+					#return
+				#if tokens.data[1].type != Token.TokenType.NUMBER:
+					#push_error("Box X scale must be a number")
+					#return
+				#if tokens.data[2].type != Token.TokenType.NUMBER:
+					#push_error("Box Y scale must be a number")
+					#return
+				#get_parent().rect.size = Vector2(float(tokens.data[1].value),float(tokens.data[2].value))
+				#await get_tree().process_frame
+				if token.params.size() != 1 and token.params.size() != 2:
+					push_error('Line '+str(total_l+1)+': setBoxSize() requires between one and two parameters')
+					return
+				var params = await _convert_variables(token.params)
+				if params[0].type != Lexer.TokenType.VECTOR:
+					push_error('Line '+str(total_l+1)+': Box size must be a Vector2')
+					return
+				var position : Vector2 = node.rect.position
+				if params.size() == 2:
+					if params[1].type != Lexer.TokenType.VECTOR:
+						push_error('Line '+str(total_l+1)+': Box offset must be a Vector2')
+						return
+					position = params[1].value
+				node.rect.size = params[0].value
+				node.rect.position = position
+			"setSoulMode":
+				if token.params.size() != 1:
+					push_error('Line '+str(total_l+1)+': setSoulMode() requires exactly one parameter')
+					return
+				var params = await _convert_variables(token.params)
+				if params[0].type != Lexer.TokenType.NUMBER:
+					push_error('Line '+str(total_l+1)+': Soul mode must be a number')
+					return
+				if get_parent().get_parent().soulMode != int(params[0].value):
+					get_parent().get_parent().soulMode = int(params[0].value)
+					var audio = AudioStreamPlayer.new()
+					add_child(audio)
+					audio.stream = preload("res://Audio/Sounds/snd_bell.wav")
+					audio.play()
+					audio.finished.connect(audio.queue_free)
+			"getBoxPos":
+				if token.params.size() != 1:
+					push_error('Line '+str(total_l+1)+': setSoulMode() requires exactly one parameter')
+					return
+				var params = await _convert_variables(token.params)
+				if params[0].type != Lexer.TokenType.VECTOR:
+					push_error('Line '+str(total_l+1)+': Direction must be a vector')
+					return
+				
+				
 			_:
 				validFunction = false
 	

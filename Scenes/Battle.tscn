@@ -157,13 +157,11 @@ sprite_frames = SubResource("SpriteFrames_mugwg")
 autoplay = "default"
 
 [node name="AttackBox" type="StaticBody2D" parent="." unique_id=1266161893]
-visible = false
-position = Vector2(15.5, 124.5)
+position = Vector2(15.499999, 124.5)
 script = ExtResource("5_dllax")
 
 [node name="AttackRect" type="NinePatchRect" parent="AttackBox" unique_id=1138071595]
-offset_left = 0.00294495
-offset_right = 287.997
+offset_right = 288.0
 offset_bottom = 70.5
 texture = ExtResource("3_mf2ya")
 patch_margin_left = 4
@@ -173,11 +171,11 @@ patch_margin_bottom = 4
 metadata/_edit_use_anchors_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackBox" unique_id=1180711141]
-position = Vector2(1.50294, 35.25)
+position = Vector2(1.5, 35.25)
 shape = SubResource("RectangleShape2D_iwfsq")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="AttackBox" unique_id=1733339271]
-position = Vector2(286.497, 35.25)
+position = Vector2(286.5, 35.25)
 shape = SubResource("RectangleShape2D_cxxln")
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="AttackBox" unique_id=80310908]
@@ -193,7 +191,7 @@ position = Vector2(144, 35.25)
 
 [node name="bounding" type="Polygon2D" parent="AttackBox/attacks" unique_id=1226847544]
 clip_children = 1
-polygon = PackedVector2Array(-144, -35.25, -144, 35.25, 144, 35.25, 144, -35.25)
+polygon = PackedVector2Array(-141, -32.25, -141, 32.25, 141, 32.25, 141, -32.25)
 uv = PackedVector2Array(-307, 4, -128, -14, -107, 40, -290, 51)
 
 [node name="ChoiceBox" type="Node2D" parent="." unique_id=1619216673]

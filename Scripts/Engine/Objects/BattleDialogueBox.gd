@@ -43,7 +43,7 @@ func StartFlavorDialogue(dialogue : String) -> void:
 					if !skiptext:
 						for k in range(speed):
 							await get_tree().process_frame
-							await get_tree().process_frame
+							#await get_tree().process_frame
 
 func StartBattleDialogue(dialogue : Array) -> void:
 	for i in dialogue:
@@ -79,7 +79,7 @@ func StartBattleDialogue(dialogue : Array) -> void:
 							soundplayer.play()
 						if !skiptext2:
 							await get_tree().process_frame
-							await get_tree().process_frame
+							#await get_tree().process_frame
 		while !Input.is_action_just_pressed("Select"):
 			await get_tree().process_frame
 

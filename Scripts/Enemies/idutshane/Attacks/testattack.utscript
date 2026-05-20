@@ -1,8 +1,12 @@
 initvar(timer,NUMBER,0);
 
-while (timer <= 30) {
-    print(timer);
-    if (mod(timer,10) == 0) {createAttack("attack{timer}",vec2(0,-50),loadTexture("spr_heartsmall_0"),vec2(0,2),"blue",false);};
+setSoulMode(1);
+
+while (timer < 240) {
+    setBoxSize(vec2(50,70.5),vec2(80,0));
+
+    //print(timer);
+    if (mod(timer,10) == 0) {createAttack("attack{timer}",vec2(randi(getBoxPos(DIR_LEFT),71),getBoxPos(DIR_RIGHT)),loadTexture("spr_heartsmall_0"),vec2(0,2),"blue");};
 
     timer += 1;
 

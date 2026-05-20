@@ -3,8 +3,6 @@
 [ext_resource type="Script" uid="uid://dbfnswshxvcxb" path="res://Scripts/Test.gd" id="1_ko2s7"]
 [ext_resource type="PackedScene" uid="uid://c500t7ga4syg2" path="res://Scenes/Objects/Character.tscn" id="2_gxb1y"]
 [ext_resource type="Script" uid="uid://celu5nym7wiia" path="res://Scripts/Engine/Classes/advancedScripting/UTScriptAdvanced.gd" id="3_0dy5s"]
-[ext_resource type="Script" uid="uid://dexqxqsprthju" path="res://Scripts/Engine/Objects/text.gd" id="4_efk68"]
-[ext_resource type="FontFile" uid="uid://decmshb7688st" path="res://Fonts/DTM-Mono.otf" id="5_06fis"]
 
 [node name="Node2D" type="Node2D" unique_id=204751250]
 script = ExtResource("1_ko2s7")
@@ -25,24 +23,3 @@ metadata/_custom_type_script = "uid://celu5nym7wiia"
 [node name="AdvancedScriptRunner3" type="Node" parent="." unique_id=296195602]
 script = ExtResource("3_0dy5s")
 metadata/_custom_type_script = "uid://celu5nym7wiia"
-
-[node name="Label" type="Label" parent="." unique_id=657404210]
-visible = false
-offset_right = 320.0
-offset_bottom = 80.0
-text = "gaming"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="TextObject" type="Node2D" parent="." unique_id=1677072768]
-position = Vector2(131, 30)
-script = ExtResource("4_efk68")
-text = "gaming"
-character_spacing = 10.0
-extra_font_spacing = Dictionary[String, float]({
-"a": -1.0,
-"n": -1.0
-})
-size = 16
-font = ExtResource("5_06fis")
-metadata/_custom_type_script = "uid://dexqxqsprthju"

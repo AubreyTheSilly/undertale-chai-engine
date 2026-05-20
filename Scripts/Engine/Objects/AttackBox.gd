@@ -1,3 +1,4 @@
+@tool
 class_name AttackBox
 extends StaticBody2D
 
@@ -16,6 +17,8 @@ var running = false
 signal attack_over
 
 func _process(_delta):
+	position = lerp(position,Vector2(15.5,124.5)+rect.position,0.4)
+	
 	frame += 1
 	$AttackRect.size = lerp($AttackRect.size,rect.size,0.4)
 	var offset = -$AttackRect.size/2.0
