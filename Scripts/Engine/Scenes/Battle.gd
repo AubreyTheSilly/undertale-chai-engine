@@ -413,7 +413,7 @@ func _process(_delta):
 					print("fuck")
 					return
 				$AttackBox.rect = Rect2(Vector2.ZERO,Vector2(288,70.5))
-				if $AttackBox/AttackRect.size != Vector2(288,70.5):
+				if $AttackBox/Node2D/AttackRect.size != Vector2(288,70.5):
 					if !get_tree():
 						return
 					await get_tree().create_timer(0.25).timeout

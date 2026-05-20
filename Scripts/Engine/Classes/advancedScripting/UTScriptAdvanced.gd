@@ -105,8 +105,16 @@ func initConstants() -> void:
 	global_variables["C_WHITE"] = Variable.new("C_WHITE",VariableType.COLOR,Color.from_rgba8(255,255,255))
 	global_variables["C_YELLOW"] = Variable.new("C_YELLOW",VariableType.COLOR,Color.from_rgba8(255,255,0))
 	
+	# soul modes
+	global_variables["MODE_RED"] = Variable.new("MODE_RED",VariableType.NUMBER,0)
+	global_variables["MODE_BLUE"] = Variable.new("MODE_BLUE",VariableType.NUMBER,1)
+	
 	# self
 	variables[str(node.get_instance_id())]["self"] = Variable.new("self",VariableType.NODE,node)
+	
+	# custom variables, these are only supposed to be used by functions. PLEASE DO NOT USE THESE THEY WON'T WORK PROPERLY LOL
+	for i in custom_constants:
+		variables[str(node.get_instance_id())]['_'+i] = Variable.new('_'+i,VariableType.UNDEFINED,custom_constants[i])
 
 func updateConstants() -> void:
 	# update timers
@@ -134,11 +142,23 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 	if !is_instance_valid(node):
 		return ERR_DOES_NOT_EXIST
 	while l < script.size() and !end_script:
+		if !is_inside_tree():
+			if reinit_vars:
+				end_script = false
+				is_running = false
+				script_ended.emit()
+			return ERR_SCRIPT_FAILED
 		#print(l)
 		total_l += 1
 		updateConstants()
 		t = 0
 		while t < script[l].size() and !end_script:
+			if !is_inside_tree():
+				if reinit_vars:
+					end_script = false
+					is_running = false
+					script_ended.emit()
+				return ERR_SCRIPT_FAILED
 			#print(t)
 			if !is_instance_valid(node):
 				return ERR_DOES_NOT_EXIST
@@ -258,7 +278,8 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 			t += 1
 		l += 1
 	if reinit_vars:
-		await get_tree().process_frame
+		if is_inside_tree():
+			await get_tree().process_frame
 		end_script = false
 		is_running = false
 		script_ended.emit()
@@ -553,7 +574,7 @@ func executeFunction(line : Array,wait := false):
 			if params[0].type != Lexer.TokenType.NUMBER:
 				push_error('Line '+str(total_l+1)+': Angle must be a number')
 				return
-			var output = sin(params[0].value)
+			var output = sin(deg_to_rad(params[0].value))
 			if token.params.size() == 2:
 				if params[1].type != Lexer.TokenType.NUMBER:
 					push_error('Line '+str(total_l+1)+': Output multiplier must be a number')
@@ -569,7 +590,7 @@ func executeFunction(line : Array,wait := false):
 			if params[0].type != Lexer.TokenType.NUMBER:
 				push_error('Line '+str(total_l+1)+': Angle must be a number')
 				return
-			var output = cos(params[0].value)
+			var output = cos	(deg_to_rad(params[0].value))
 			if token.params.size() == 2:
 				if params[1].type != Lexer.TokenType.NUMBER:
 					push_error('Line '+str(total_l+1)+': Output multiplier must be a number')
@@ -591,7 +612,7 @@ func executeFunction(line : Array,wait := false):
 			
 			should_continue_while = true
 			
-			while should_continue_while and !end_script:
+			while should_continue_while and !end_script and is_inside_tree():
 				total_l = ogline
 				params = []
 				for i in ogparams:
@@ -1500,6 +1521,7 @@ func executeFunction(line : Array,wait := false):
 				
 				var attack = preload("res://Scenes/Objects/Attack.tscn").instantiate()
 				attack.name = params[0].value
+				attack.damage = variables[str(node.get_instance_id())]["_enemydata"].value.ATK
 				attack.position = params[1].value
 				attack.texture = params[2].value
 				attack.velocity = vel
@@ -1559,8 +1581,253 @@ func executeFunction(line : Array,wait := false):
 				if params[0].type != Lexer.TokenType.VECTOR:
 					push_error('Line '+str(total_l+1)+': Direction must be a vector')
 					return
+				#vars["LEFT"].value = (-get_parent().box_width/2)+3
+				#vars["RIGHT"].value = (get_parent().box_width/2)-3
+				#vars["UP"].value = (-get_parent().box_height/2)+3
+				#vars["DOWN"].value = (get_parent().box_height/2)-3
+				match params[0].value:
+					Vector2.LEFT:
+						return ((-node.box_width/2)+3)+node.get_node("Node2D").position.x
+					Vector2.DOWN:
+						return ((node.box_height/2)-3)+node.get_node("Node2D").position.y
+					Vector2.UP:
+						return ((-node.box_height/2)+3)+node.get_node("Node2D").position.y
+					Vector2.RIGHT:
+						return ((node.box_width/2)-3)+node.get_node("Node2D").position.x
+					_:
+						push_error('Line '+str(total_l+1)+': Direction must be exactly up, down, left, or right')
+						return
+			#"create_bone":
+				#for i in tokens.data:
+					#if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+						#var variable = getVariable(i.lexeme)
+						#i.type = types[variable.type]
+						#i.value = variable.value
+				#if tokens.data[1].type != Token.TokenType.STRING:
+					#push_error("Bone name must be a string")
+					#return
+				#if tokens.data[2].type != Token.TokenType.NUMBER:
+					#push_error("Bone X position must be a number")
+					#return
+				#if tokens.data[3].type != Token.TokenType.NUMBER:
+					#push_error("Bone Y position must be a number")
+					#return
+				#if tokens.data[4].type != Token.TokenType.NUMBER:
+					#push_error("Bone length must be a number")
+					#return
+				#if tokens.data[5].type != Token.TokenType.NUMBER:
+					#push_error("Bone X velocity must be a number")
+					#return
+				#if tokens.data[6].type != Token.TokenType.NUMBER:
+					#push_error("Bone Y velocity must be a number")
+					#return
+				#if tokens.data[7].type != Token.TokenType.NUMBER:
+					#push_error("Bone direction must be a number")
+					#return
+				#if tokens.data.size() >= 9:
+					#if tokens.data[8].type != Token.TokenType.STRING:
+						#push_error("Bone color must be a string")
+						#return
+				#if tokens.data.size() >= 10:
+					#if tokens.data[9].type != Token.TokenType.BOOLEAN:
+						#push_error("Bone type must be a bool")
+						#return
+				#var attack = preload("res://Scenes/Objects/Bone.tscn").instantiate()
+				#attack.name = tokens.data[1].value
+				#attack.damage = enemydata.ATK
+				#var attackx = float(tokens.data[2].value)
+				#var attacky = float(tokens.data[3].value)
+				#attack.position = Vector2(attackx,attacky)
+				#attack.height = float(tokens.data[4].value)
+				#var velx = float(tokens.data[5].value)
+				#var vely = float(tokens.data[6].value)
+				#attack.velocity = Vector2(velx,vely)
+				#attack.rotation_degrees = tokens.data[7].value
+				#if tokens.data.size() >= 9:
+					#attack.attack_type = tokens.data[8].value
+				#if tokens.data.size() == 10:
+					#attack.pap = tokens.data[9].value
+				#node.get_node("attacks/bounding").add_child(attack)
+			"createBone":
+				if token.params.size() < 4 or token.params.size() > 8:
+					push_error('Line '+str(total_l+1)+': createBone() requires between four and eight parameters')
+					return
+				var params = await _convert_variables(token.params)
 				
+				if params[0].type != Lexer.TokenType.STRING:
+					push_error('Line '+str(total_l+1)+': Bone name must be a string')
+					return
+				if params[1].type != Lexer.TokenType.VECTOR:
+					push_error('Line '+str(total_l+1)+': Bone position must be a Vector2')
+					return
+				if params[2].type != Lexer.TokenType.NUMBER:
+					push_error('Line '+str(total_l+1)+': Bone length must be a number')
+					return
+				if params[2].value < 10:
+					params[2].value = 10
+				var vel = Vector2.ZERO
+				var col = "white"
+				var rot = 0
+				var pap = false
+				if params.size() >= 4:
+					if params[3].type != Lexer.TokenType.VECTOR:
+						push_error('Line '+str(total_l+1)+': Bone velocity must be a Vector2')
+						return
+					vel = params[3].value
+				if params.size() >= 5:
+					if params[4].type != Lexer.TokenType.STRING:
+						push_error('Line '+str(total_l+1)+': Bone color must be a string')
+						return
+					col = params[4].value
+				if params.size() >= 6:
+					if params[5].type != Lexer.TokenType.NUMBER:
+						push_error('Line '+str(total_l+1)+': Bone rotation must be a number')
+						return
+					rot = params[5].value
+				if params.size() >= 7:
+					if params[6].type != Lexer.TokenType.STRING:
+						push_error('Line '+str(total_l+1)+': Bone color must be a string')
+						return
+					rot = params[6].value
+				if params.size() >= 8:
+					if params[7].type != Lexer.TokenType.BOOLEAN:
+						push_error('Line '+str(total_l+1)+': Bone display type must be a boolean')
+						return
+					pap = params[7].value
 				
+				var attack = preload("res://Scenes/Objects/Bone.tscn").instantiate()
+				attack.name = params[0].value
+				attack.damage = variables[str(node.get_instance_id())]["_enemydata"].value.ATK
+				#var attackx = float(tokens.data[2].value)
+				#var attacky = float(tokens.data[3].value)
+				attack.position = params[1].value
+				attack.height = params[2].value
+				#var velx = float(tokens.data[5].value)
+				#var vely = float(tokens.data[6].value)
+				attack.velocity = vel
+				attack.rotation_degrees = rot
+				attack.attack_type = col
+				attack.pap = pap
+				
+				node.get_node("attacks/bounding").add_child(attack)
+				return attack
+			"createCenteredBone":
+				if token.params.size() < 4 or token.params.size() > 8:
+					push_error('Line '+str(total_l+1)+': createCenteredBone() requires between four and eight parameters')
+					return
+				var params = await _convert_variables(token.params)
+				
+				if params[0].type != Lexer.TokenType.STRING:
+					push_error('Line '+str(total_l+1)+': Bone name must be a string')
+					return
+				if params[1].type != Lexer.TokenType.VECTOR:
+					push_error('Line '+str(total_l+1)+': Bone position must be a Vector2')
+					return
+				if params[2].type != Lexer.TokenType.NUMBER:
+					push_error('Line '+str(total_l+1)+': Bone length must be a number')
+					return
+				if params[2].value < 10:
+					params[2].value = 10
+				var vel = Vector2.ZERO
+				var col = "white"
+				var rot = 0
+				var pap = false
+				if params.size() >= 4:
+					if params[3].type != Lexer.TokenType.VECTOR:
+						push_error('Line '+str(total_l+1)+': Bone velocity must be a Vector2')
+						return
+					vel = params[3].value
+				if params.size() >= 5:
+					if params[4].type != Lexer.TokenType.STRING:
+						push_error('Line '+str(total_l+1)+': Bone color must be a string')
+						return
+					col = params[4].value
+				if params.size() >= 6:
+					if params[5].type != Lexer.TokenType.NUMBER:
+						push_error('Line '+str(total_l+1)+': Bone rotation must be a number')
+						return
+					rot = params[5].value
+				if params.size() >= 7:
+					if params[6].type != Lexer.TokenType.STRING:
+						push_error('Line '+str(total_l+1)+': Bone color must be a string')
+						return
+					rot = params[6].value
+				if params.size() >= 8:
+					if params[7].type != Lexer.TokenType.BOOLEAN:
+						push_error('Line '+str(total_l+1)+': Bone display type must be a boolean')
+						return
+					pap = params[7].value
+				
+				var attack = preload("res://Scenes/Objects/Bone.tscn").instantiate()
+				attack.name = params[0].value
+				attack.damage = variables[str(node.get_instance_id())]["_enemydata"].value.ATK
+				#var attackx = float(tokens.data[2].value)
+				#var attacky = float(tokens.data[3].value)
+				attack.position = params[1].value
+				attack.height = params[2].value
+				#var velx = float(tokens.data[5].value)
+				#var vely = float(tokens.data[6].value)
+				attack.velocity = vel
+				attack.rotation_degrees = rot
+				attack.attack_type = col
+				attack.pap = pap
+				
+				node.get_node("attacks/bounding").add_child(attack)
+				return attack
+			#"create_blaster":
+				#for i in tokens.data:
+					#if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+						#var variable = getVariable(i.lexeme)
+						#i.type = types[variable.type]
+						#i.value = variable.value
+				#if tokens.data[1].type != Token.TokenType.STRING:
+					#push_error("Blaster name must be a string")
+					#return
+				#if tokens.data[2].type != Token.TokenType.NUMBER:
+					#push_error("Blaster X position must be a number")
+					#return
+				#if tokens.data[3].type != Token.TokenType.NUMBER:
+					#push_error("Blaster Y position must be a number")
+					#return
+				#if tokens.data[4].type != Token.TokenType.NUMBER:
+					#push_error("Blaster direction must be a number")
+					#return
+				#if tokens.data.size() >= 6:
+					#if tokens.data[5].type != Token.TokenType.STRING:
+						#push_error("Blaster color must be a string")
+						#return
+				#var attack = preload("res://Scenes/Objects/blaster.tscn").instantiate()
+				#attack.name = tokens.data[1].value
+				#var attackx = float(tokens.data[2].value)
+				#var attacky = float(tokens.data[3].value)
+				#attack.position = Vector2(attackx,attacky)
+				#attack.rotation_degrees = tokens.data[4].value
+				#if tokens.data.size() == 6:
+					#attack.attack_type = tokens.data[5].value
+				#node.get_node("attacks").add_child(attack)
+			"createBlaster":
+				if token.params.size() != 3 and token.params.size() != 4:
+					push_error('Line '+str(total_l+1)+': createBlaster() requires between three and four parameters')
+					return
+				var params = await _convert_variables(token.params)
+				
+				if params[0].type != Lexer.TokenType.STRING:
+					push_error('Line '+str(total_l+1)+': Blaster name must be a string')
+					return
+				if params[1].type != Lexer.TokenType.VECTOR:
+					push_error('Line '+str(total_l+1)+': Blaster position must be a Vector2')
+					return
+				if params[2].type != Lexer.TokenType.NUMBER:
+					push_error('Line '+str(total_l+1)+': Blaster direction must be a number')
+					return
+				
+				var attack = preload("res://Scenes/Objects/blaster.tscn").instantiate()
+				attack.name = params[0].value
+				attack.position = params[1].value
+				attack.rotation_degrees = -params[2].value
+				
+				node.get_node("attacks").add_child(attack)
+				return attack
 			_:
 				validFunction = false
 	

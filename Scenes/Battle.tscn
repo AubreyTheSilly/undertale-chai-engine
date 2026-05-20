@@ -157,10 +157,14 @@ sprite_frames = SubResource("SpriteFrames_mugwg")
 autoplay = "default"
 
 [node name="AttackBox" type="StaticBody2D" parent="." unique_id=1266161893]
+visible = false
 position = Vector2(15.499999, 124.5)
 script = ExtResource("5_dllax")
 
-[node name="AttackRect" type="NinePatchRect" parent="AttackBox" unique_id=1138071595]
+[node name="Node2D" type="Node2D" parent="AttackBox" unique_id=1728780599]
+position = Vector2(1e-45, 1e-45)
+
+[node name="AttackRect" type="NinePatchRect" parent="AttackBox/Node2D" unique_id=1138071595]
 offset_right = 288.0
 offset_bottom = 70.5
 texture = ExtResource("3_mf2ya")
@@ -191,6 +195,7 @@ position = Vector2(144, 35.25)
 
 [node name="bounding" type="Polygon2D" parent="AttackBox/attacks" unique_id=1226847544]
 clip_children = 1
+offset = Vector2(1e-45, 1e-45)
 polygon = PackedVector2Array(-141, -32.25, -141, 32.25, 141, 32.25, 141, -32.25)
 uv = PackedVector2Array(-307, 4, -128, -14, -107, 40, -290, 51)
 

@@ -79,7 +79,10 @@ func move(steps : int,dir : Vector2) -> void:
 	for i in range(steps):
 		for j in range(20.0/(Speed)):
 			velocity = dir*(30*Speed)
-			await get_tree().process_frame
+			if is_inside_tree():
+				await get_tree().process_frame
+			else:
+				return
 	velocity = Vector2.ZERO
 	#await get_tree().process_frame
 	finished_moving.emit()

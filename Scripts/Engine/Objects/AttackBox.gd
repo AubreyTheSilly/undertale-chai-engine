@@ -17,20 +17,26 @@ var running = false
 signal attack_over
 
 func _process(_delta):
-	position = lerp(position,Vector2(15.5,124.5)+rect.position,0.4)
+	$Node2D.position = lerp($Node2D.position,rect.position,0.4)
 	
 	frame += 1
-	$AttackRect.size = lerp($AttackRect.size,rect.size,0.4)
-	var offset = -$AttackRect.size/2.0
+	$Node2D/AttackRect.size = lerp($Node2D/AttackRect.size,rect.size,0.4)
+	var offset = -$Node2D/AttackRect.size/2.0
 	var targetPos = Vector2(144.0,35.25)
-	$AttackRect.position = targetPos+offset
+	$Node2D/AttackRect.position = targetPos+offset
 	
-	$CollisionShape2D.position.x = 144-float($AttackRect.size.x/2)+1.5
-	$CollisionShape2D2.position.x = 144+float($AttackRect.size.x/2)-1.5
-	$CollisionShape2D3.position.y = 35.25-float($AttackRect.size.y/2)+1.5
-	$CollisionShape2D4.position.y = 35.25+float($AttackRect.size.y/2)-1.5
+	$attacks/bounding.offset = $Node2D.position
 	
-	var box_size = Vector2(float($AttackRect.size.x),float($AttackRect.size.y))-Vector2(6.0,6.0)
+	$CollisionShape2D.position.x = 144-float($Node2D/AttackRect.size.x/2)+1.5+$Node2D.position.x
+	$CollisionShape2D.position.y = 35.25+$Node2D.position.y
+	$CollisionShape2D2.position.x = 144+float($Node2D/AttackRect.size.x/2)-1.5+$Node2D.position.x
+	$CollisionShape2D2.position.y = 35.25+$Node2D.position.y
+	$CollisionShape2D3.position.y = 35.25-float($Node2D/AttackRect.size.y/2)+1.5+$Node2D.position.y
+	$CollisionShape2D3.position.x = 144+$Node2D.position.x
+	$CollisionShape2D4.position.y = 35.25+float($Node2D/AttackRect.size.y/2)-1.5+$Node2D.position.y
+	$CollisionShape2D4.position.x = 144+$Node2D.position.x
+	
+	var box_size = Vector2(float($Node2D/AttackRect.size.x),float($Node2D/AttackRect.size.y))-Vector2(6.0,6.0)
 	box_width = rect.size.x
 	box_height = rect.size.y
 	$attacks/bounding.polygon = [Vector2(-box_size.x/2,-box_size.y/2),Vector2(-box_size.x/2,box_size.y/2),Vector2(box_size.x/2,box_size.y/2),Vector2(box_size.x/2,-box_size.y/2)]

@@ -50,8 +50,8 @@ func _ready() -> void:
 			soul_colors[int(colors[i]["id"])] = color
 
 func _process(_delta) -> void:
-	position.x = clampf(position.x,box.get_node("AttackRect").global_position.x,box.get_node("AttackRect").global_position.x+box.get_node("AttackRect").size.x)
-	position.y = clampf(position.y,box.get_node("AttackRect").global_position.y,box.get_node("AttackRect").global_position.y+box.get_node("AttackRect").size.y)
+	global_position.x = clampf(global_position.x,box.get_node("Node2D/AttackRect").global_position.x+3,box.get_node("Node2D/AttackRect").global_position.x+box.get_node("Node2D/AttackRect").size.x-3)
+	global_position.y = clampf(global_position.y,box.get_node("Node2D/AttackRect").global_position.y+3,box.get_node("Node2D/AttackRect").global_position.y+box.get_node("Node2D/AttackRect").size.y-3)
 	
 	$Soul.modulate = soul_colors[battle.soulMode]
 	match battle.state:
