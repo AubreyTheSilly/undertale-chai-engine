@@ -50,6 +50,8 @@ animations = [{
 [node name="Blaster" type="Node2D" unique_id=1166434054]
 z_index = 10
 z_as_relative = false
+position = Vector2(174, 131)
+rotation = 1.2025456
 script = ExtResource("1_h3y0l")
 
 [node name="attack" type="Area2D" parent="." unique_id=881211384]
@@ -61,8 +63,15 @@ shape = SubResource("RectangleShape2D_h3y0l")
 disabled = true
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2072918237]
+visible = false
 modulate = Color(1, 1, 1, 0)
-scale = Vector2(1e-05, 4)
+scale = Vector2(1e-05, 3)
+texture = ExtResource("2_h3y0l")
+offset = Vector2(0, 100)
+
+[node name="Sprite2D2" type="Sprite2D" parent="Sprite2D" unique_id=637495802]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(0, 180)
 texture = ExtResource("2_h3y0l")
 offset = Vector2(0, 100)
 

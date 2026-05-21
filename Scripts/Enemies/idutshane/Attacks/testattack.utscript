@@ -5,28 +5,27 @@ initvar(blastpos,VECTOR2,vec2(0,0));
 initvar(blastrot,NUMBER,0);
 initvar(plr,NODE,getNode("/root/BattleRoom/BattleHeart"));
 
-while (timer < 180) {
-    //if (mod(timer,60) == 0){setBoxSize(vec2(50,70.5),vec2(randi(-150,150),0));};
-
-    //print(timer);
-    if (mod(timer,20) == 0) {
-        createBone("bonel{timer}_1",vec2(getBoxPos(DIR_LEFT),getBoxPos(DIR_DOWN)),10,vec2(2,0));
-        createBone("bonel{timer}_2",vec2(getBoxPos(DIR_LEFT),getBoxPos(DIR_UP)),45,vec2(2,0),"white",180);
-        createBone("boner{timer}_1",vec2(getBoxPos(DIR_RIGHT),getBoxPos(DIR_DOWN)),10,vec2(-2,0));
-        createBone("boner{timer}_2",vec2(getBoxPos(DIR_RIGHT),getBoxPos(DIR_UP)),45,vec2(-2,0),"white",180);
-    };
-    
+function makeBlasters() {
     blastrot = randi(0,359);
-    blastpos = vec2(sin(blastrot),cos(blastrot));
-    blastpos *= 100;
-    blastpos += get(plr,"position");
-    blastpos -= vec2(159.5,159.75);
-    blastrot += 180;
-    set(createBlaster("blaster{timer}",blastpos,blastrot),"scale",vec2(0.5,1));
+    repeat (PARAM1)
+    {   
+        blastpos = vec2(sin(blastrot),cos(blastrot));
+        blastpos *= 45;
+        blastpos += get(plr,"position");
+        blastpos -= vec2(159.5,159.75);
+        blastrot += 180;
+        set(createBlaster("blaster{timer}",blastpos,blastrot),"scale",vec2(0.5,1));
+        blastrot -= 180;
+        blastrot += 15;
+        if (PARAM1 > 1) {
+            //wait_frames(1);
+        };
+    };
+};
 
-    timer += 1;
-
-    await process_frame;
+repeat ( 30 ) {
+    makeBlasters(24);
+    await slam(get_at_index([ANGLE_LEFT,ANGLE_RIGHT,ANGLE_UP,ANGLE_DOWN],randi(0,3)));
 };
 
 wait_frames(30);

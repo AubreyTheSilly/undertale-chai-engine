@@ -28,6 +28,8 @@ var battleOver := false
 var attackStarted := false
 var dialoguejustStarted = false
 
+var camerashake := 0.0
+
 func _ready():
 	fader.fadeIn()
 	$BGM.stream = Loader.load_file("Audio/BGM/"+Battle.loadedBattle["music"]+".ogg")
@@ -72,6 +74,12 @@ func _ready():
 	#visible = true
 
 func _process(_delta):
+	if camerashake < 1:
+		camerashake = 0
+	elif camerashake != 0:
+		camerashake *= 0.6
+	$Camera2D.offset = Vector2(randf_range(-camerashake,camerashake),randf_range(-camerashake,camerashake))
+	
 	if PlayerData.inventory.size() != 0:
 		$ItemButton.NormalSprite = preload("res://Sprites/Battle/Buttons/spr_itembt_0.png")
 		$ItemButton.SelectSprite = preload("res://Sprites/Battle/Buttons/spr_itembt_1.png")

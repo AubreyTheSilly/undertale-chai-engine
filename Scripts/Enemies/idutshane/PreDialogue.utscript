@@ -1,1 +1,8 @@
-set_property "self" "nextattack" "testattack"
+increment turns
+if turns == 1
+    set_property "self" "nextdialogue" "MY MEMORIES!!!!!!!!!!!"
+    set_property "self" "nextattack" "testingattack"
+end
+if turns == 2
+    set_property "self" "nextdialogue" "my memories :("
+end

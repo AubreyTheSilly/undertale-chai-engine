@@ -1,0 +1,38 @@
+initvar(timer,NUMBER,0);
+
+setSoulMode(MODE_RED);
+initvar(blastpos,VECTOR2,vec2(0,0));
+initvar(blastrot,NUMBER,0);
+initvar(plr,NODE,getNode("/root/BattleRoom/BattleHeart"));
+
+function makeBlasters() {
+    blastrot = randi(0,359);
+    repeat (PARAM1)
+    {   
+        blastpos = vec2(sin(blastrot),cos(blastrot));
+        blastpos *= 45;
+        blastpos += get(plr,"position");
+        blastpos -= vec2(159.5,159.75);
+        blastrot += 180;
+        set(createBlaster("blaster{timer}",blastpos,blastrot),"scale",vec2(0.5,1));
+        blastrot -= 180;
+        blastrot += 15;
+        if (PARAM1 > 1) {
+            wait_frames(5);
+        };
+    };
+};
+
+//repeat(8) {
+//    makeBlasters(randi(2,4));
+//
+//    wait_frames(30);
+//};
+
+wait_frames(60);
+
+repeat(10) {
+    repeat (10)
+    {makeBlasters(1);};
+    wait_frames(1);
+};

@@ -29,8 +29,15 @@ class Variable:
 		type=t
 		value=v
 
+class CustomFunction:
+	var code : Lexer.CodeToken
+	func _init(Code : Lexer.CodeToken):
+		code = Code
+
 static var variables : Dictionary[String,Dictionary] = {}
 static var global_variables : Dictionary[String,Variable] = {}
+static var custom_functions : Dictionary[String,Dictionary] = {}
+static var global_functions : Dictionary[String,CustomFunction] = {}
 
 var l := 0
 var t := 0
@@ -54,6 +61,8 @@ signal script_ended
 func initConstants() -> void:
 	if !variables.has(str(node.get_instance_id())):
 		variables[str(node.get_instance_id())] = {}
+	if !custom_functions.has(str(node.get_instance_id())):
+		custom_functions[str(node.get_instance_id())] = {}
 	
 	# timer stuff
 	global_variables["TIMER"] = Variable.new("TIMER",VariableType.NUMBER,0.0)
@@ -78,11 +87,17 @@ func initConstants() -> void:
 	global_variables["TRANS_BACK"] = Variable.new("TRANS_BACK",VariableType.NUMBER,10.0)
 	global_variables["TRANS_SPRING"] = Variable.new("TRANS_SPRING",VariableType.NUMBER,11.0)
 	
-	# direction constants
+	# vector constants
 	global_variables["DIR_LEFT"] = Variable.new("DIR_LEFT",VariableType.VECTOR,Vector2.LEFT)
 	global_variables["DIR_DOWN"] = Variable.new("DIR_DOWN",VariableType.VECTOR,Vector2.DOWN)
 	global_variables["DIR_UP"] = Variable.new("DIR_UP",VariableType.VECTOR,Vector2.UP)
 	global_variables["DIR_RIGHT"] = Variable.new("DIR_RIGHT",VariableType.VECTOR,Vector2.RIGHT)
+	
+	# angle constants
+	global_variables["ANGLE_LEFT"] = Variable.new("ANGLE_LEFT",VariableType.NUMBER,270.0)
+	global_variables["ANGLE_DOWN"] = Variable.new("ANGLE_DOWN",VariableType.NUMBER,180.0)
+	global_variables["ANGLE_UP"] = Variable.new("ANGLE_UP",VariableType.NUMBER,0.0)
+	global_variables["ANGLE_RIGHT"] = Variable.new("ANGLE_RIGHT",VariableType.NUMBER,90.0)
 	
 	# color constants (THESE ARE ALL FROM GAMEMAKER!!!!
 	global_variables["C_AQUA"] = Variable.new("C_AQUA",VariableType.COLOR,Color.from_rgba8(0,255,255))
@@ -164,8 +179,11 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 				return ERR_DOES_NOT_EXIST
 			var token = script[l][t]
 			var next_token = Lexer.AdvancedToken.new(Lexer.TokenType.IDENTIFIER)
-			if t != script[l].size()-1:
+			if t < script[l].size()-1:
 				next_token = script[l][t+1]
+			var next_next_token = Lexer.AdvancedToken.new(Lexer.TokenType.IDENTIFIER)
+			if t < script[l].size()-2:
+				next_next_token = script[l][t+2]
 			if token is Lexer.FunctionToken:
 				#print(token.value)
 				await executeFunction(script[l])
@@ -274,7 +292,26 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 						"break":
 							if should_continue_while:
 								should_continue_while = false
-					
+						"function":
+							if next_token is not Lexer.FunctionToken:
+								push_error('Line '+str(total_l+1)+': Function expected for function definition')
+								continue
+							if next_next_token is not Lexer.CodeToken:
+								push_error('Line '+str(total_l+1)+': Code block expected for function definition')
+								continue
+							custom_functions[str(node.get_instance_id())][next_token.value] = CustomFunction.new(next_next_token)
+							
+							t += 2
+						"globalfunction":
+							if next_token is not Lexer.FunctionToken:
+								push_error('Line '+str(total_l+1)+': Function expected for function definition')
+								continue
+							if next_next_token is not Lexer.CodeToken:
+								push_error('Line '+str(total_l+1)+': Code block expected for function definition')
+								continue
+							global_functions[next_token.value] = CustomFunction.new(next_next_token)
+							
+							t += 2
 			t += 1
 		l += 1
 	if reinit_vars:
@@ -323,13 +360,12 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 			continue
 		#print(param[index].value," ",param[index] is Lexer.FunctionToken)
 		if _get_variable(str(param[index].value),verbose) and param[index].type == Lexer.TokenType.IDENTIFIER and !exceptions.has(index):
-			#print("yeah")
+			#print("yeah")=
 			param[index].value = _get_variable(str(param[index].value)).value
-			#print(type_string(typeof(param[index].value)))
 			match type_string(typeof(param[index].value)):
 				"String":
 					param[index].type = Lexer.TokenType.STRING
-				"float":
+				"float","int":
 					param[index].type = Lexer.TokenType.NUMBER
 				"bool":
 					param[index].type = Lexer.TokenType.BOOLEAN
@@ -358,7 +394,7 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 			match type_string(typeof(param[index].value)):
 				"String":
 					param[index].type = Lexer.TokenType.STRING
-				"float":
+				"float","int":
 					param[index].type = Lexer.TokenType.NUMBER
 				"bool":
 					param[index].type = Lexer.TokenType.BOOLEAN
@@ -600,7 +636,7 @@ func executeFunction(line : Array,wait := false):
 			return output
 		"while":
 			if token.params.size() != 1 and token.params.size() != 3:
-				push_error('Line '+str(total_l+1)+': if requires exactly one or two parameters')
+				push_error('Line '+str(total_l+1)+': while requires exactly one or three parameters')
 				return
 			
 			var ogparams = []
@@ -658,9 +694,29 @@ func executeFunction(line : Array,wait := false):
 					total_l += line[t+1].value.size()+1
 			#print("while loop ended")
 			t += 1
+		"repeat":
+			if token.params.size() != 1 and token.params.size() != 3:
+				push_error('Line '+str(total_l+1)+': repeat requires exactly one parameter')
+				return
+			var params = await _convert_variables(token.params)
+			if params[0].type != Lexer.TokenType.NUMBER:
+				push_error('Line '+str(total_l+1)+': Repeat times must be a number')
+				return
+			if t >= line.size()-1:
+				push_error('Line '+str(total_l+1)+': Code block expected for repeat')
+				return
+			if line[t+1] is not Lexer.CodeToken:
+				push_error('Line '+str(total_l+1)+': Code block expected for repeat')
+				return
+			for i in range(params[0].value):
+				#print(l)
+				await executeCodeBlock(line[t+1],node)
+			total_l += line[t+1].value.size()+1
+			
+			t += 1
 		"if":
 			if token.params.size() != 1 and token.params.size() != 3:
-				push_error('Line '+str(total_l+1)+': if requires exactly one or two parameters')
+				push_error('Line '+str(total_l+1)+': if requires exactly one or three parameters')
 				return
 			
 			var params = await _convert_variables(token.params,[1])
@@ -717,7 +773,7 @@ func executeFunction(line : Array,wait := false):
 			t += 1
 		"elif":
 			if token.params.size() != 1 and token.params.size() != 3:
-				push_error('Line '+str(total_l+1)+': if requires exactly one or two parameters')
+				push_error('Line '+str(total_l+1)+': elif requires exactly one or three parameters')
 				return
 			
 			if should_continue_block:
@@ -1820,30 +1876,113 @@ func executeFunction(line : Array,wait := false):
 				if params[2].type != Lexer.TokenType.NUMBER:
 					push_error('Line '+str(total_l+1)+': Blaster direction must be a number')
 					return
+				var col = "white"
+				if params.size() >= 4:
+					if params[3].type != Lexer.TokenType.STRING:
+						push_error('Line '+str(total_l+1)+': Blaster color must be a string')
+						return
+					col = params[3].value
 				
 				var attack = preload("res://Scenes/Objects/blaster.tscn").instantiate()
 				attack.name = params[0].value
 				attack.position = params[1].value
 				attack.rotation_degrees = -params[2].value
+				attack.attack_type = col
 				
 				node.get_node("attacks").add_child(attack)
 				return attack
+			#"slam":
+				#if tokens.data[1].type != Token.TokenType.STRING:
+					#push_error("Slam direction must be a string")
+					#return
+				#match tokens.data[1].value:
+					#"left":
+						#get_parent().get_parent().get_node("BattleHeart").bluedir = 90
+						#get_parent().get_parent().get_node("BattleHeart").slamming = true
+						#get_parent().get_parent().get_node("BattleHeart").slamtimer = 1
+					#"right":
+						#get_parent().get_parent().get_node("BattleHeart").bluedir = 270
+						#get_parent().get_parent().get_node("BattleHeart").slamming = true
+						#get_parent().get_parent().get_node("BattleHeart").slamtimer = 1
+					#"down":
+						#get_parent().get_parent().get_node("BattleHeart").bluedir = 0
+						#get_parent().get_parent().get_node("BattleHeart").slamming = true
+						#get_parent().get_parent().get_node("BattleHeart").slamtimer = 1
+					#"up":
+						#get_parent().get_parent().get_node("BattleHeart").bluedir = 180
+						#get_parent().get_parent().get_node("BattleHeart").slamming = true
+						#get_parent().get_parent().get_node("BattleHeart").slamtimer = 1
+					#_:
+						#push_error("Slam direction must be \"left\", \"right\", \"up\", or \"down\". (case-sensitive)")
+			"slam":
+				if token.params.size() != 1:
+					push_error('Line '+str(total_l+1)+': slam() requires exactly one parameter')
+					return
+				var params = await _convert_variables(token.params)
+				
+				if params[0].type != Lexer.TokenType.NUMBER:
+					push_error('Line '+str(total_l+1)+': Soul angle must be a number')
+					return
+				if ![0.0,90.0,180.0,270.0].has(params[0].value):
+					push_error('Line '+str(total_l+1)+': Soul angle must be a cardinal direction. It is recommended to use ANGLE_LEFT, ANGLE_RIGHT, ANGLE_UP, or ANGLE_DOWN for this function.')
+					return
+				var heart = get_tree().current_scene.get_node("BattleHeart")
+				
+				heart.bluedir = params[0].value-180
+				heart.slamming = true
+				heart.slamtimer = 1
+				
+				if wait:
+					while heart.slamming:
+						if !is_inside_tree():
+							return
+						await get_tree().process_frame
 			_:
 				validFunction = false
+	
+	if custom_functions[str(node.get_instance_id())].has(token.value):
+		#print("running custom function ",token.value,"()")
+		validFunction = true
+		var index = 0
+		var params = await _convert_variables(token.params)
+		for i in params:
+			index += 1
+			variables[str(node.get_instance_id())]["PARAM"+str(index)] = Variable.new("PARAM"+str(index),VariableType.UNDEFINED,i.value)
+			
+		await executeCodeBlock(custom_functions[str(node.get_instance_id())][token.value].code,node)
+		index = 0
+		for i in token.params:
+			index += 1
+			variables[str(node.get_instance_id())].erase("PARAM"+str(index))
+	elif global_functions.has(token.value):
+		#print("running custom global function ",token.value,"()")
+		validFunction = true
+		var index = 0
+		var params = await _convert_variables(token.params)
+		for i in params:
+			index += 1
+			variables[str(node.get_instance_id())]["PARAM"+str(index)] = Variable.new("PARAM"+str(index),VariableType.UNDEFINED,i.value)
+			
+		await executeCodeBlock(global_functions[token.value].code,node)
+		
+		index = 0
+		for i in token.params:
+			index += 1
+			variables[str(node.get_instance_id())].erase("PARAM"+str(index))
 	
 	if !validFunction:
 		push_error('Line ',str(total_l+1),': Function ',token.value,' does not exist in the current scope')
 
 func executeCodeBlock(codeblock : Lexer.CodeToken,_node:Node) -> void:
-	# print("Started to execute code block")
-	# print(l)
+	#print("Started to execute code block")
+	#print(l)
 	var oldl = l
 	var oldt = t
 	#print(total_l," ",t)
-	await runScript(codeblock.value.duplicate(true),_node,false)
+	await runScript(codeblock.value,_node,false)
 	l = oldl
 	t = oldt
-	# print("Finished executing code block")
+	#print("Finished executing code block")
 
 func _process(_delta) -> void:
 	dt = _delta

@@ -11,6 +11,9 @@ var num $legs
 set body 0
 set legs 0
 
+var num $turns
+set turns 0
+
 //create animated background
 create_animated_sprite "bg" 0 0
 set_property "bg" "speed_scale" 3

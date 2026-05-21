@@ -108,6 +108,7 @@ func _process(_delta) -> void:
 					if is_on_floor():
 						if slamming == true and slamtimer == 0:
 							$SlamSound.play()
+							get_parent().camerashake = 10
 							slamming = false
 						bluevel.y = 0
 						if Input.is_action_just_pressed(jump):
