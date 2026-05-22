@@ -31,7 +31,7 @@ reparent(cam,player);
 
 setBorder("sepia");
 
-playBGM("mus_prebattle1");
+//playBGM("mus_snowy");
 
 while (true) {
     // PLAYER MOVEMENT

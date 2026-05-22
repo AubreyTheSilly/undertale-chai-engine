@@ -29,6 +29,7 @@ enum TokenType {
 	FONT,
 	AUDIO,
 	TEXTURE,
+	SIGNAL,
 	# end of unused lexer types
 	COMMENT
 }

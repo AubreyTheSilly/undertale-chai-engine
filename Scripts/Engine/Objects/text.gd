@@ -14,7 +14,7 @@ extends Node2D
 func get_processed_text() -> String:
 	var Text = ""
 	
-	var xoffset = 0
+	var _xoffset = 0
 	var _cmd = false
 	
 	var newlining = false
@@ -36,9 +36,9 @@ func get_processed_text() -> String:
 		else:
 			newlining = false
 		Text += i
-		xoffset += character_spacing
+		_xoffset += character_spacing
 		if extra_font_spacing.has(i):
-			xoffset += extra_font_spacing[i]
+			_xoffset += extra_font_spacing[i]
 	
 	return Text
 

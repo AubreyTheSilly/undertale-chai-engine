@@ -2,7 +2,7 @@ class_name AdvancedScriptRunner
 extends Node
 
 enum VariableType {
-	STRING,NUMBER,BOOL,UNDEFINED,ARRAY,COLOR,VECTOR,STRUCT,NODE,AUDIO,TEXTURE
+	STRING,NUMBER,BOOL,UNDEFINED,ARRAY,COLOR,VECTOR,STRUCT,NODE,AUDIO,TEXTURE,SIGNAL
 }
 
 var variableTypes := {
@@ -16,7 +16,8 @@ var variableTypes := {
 	"STRUCT":VariableType.STRUCT,
 	"NODE":VariableType.NODE,
 	"AUDIO":VariableType.AUDIO,
-	"TEXTURE":VariableType.TEXTURE
+	"TEXTURE":VariableType.TEXTURE,
+	"SIGNAL":VariableType.SIGNAL
 }
 
 class Variable:
@@ -220,6 +221,8 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 								_set_variable(token.value,vars[0].value)
 							elif variable.type == VariableType.NODE and vars[0].value is Node:
 								_set_variable(token.value,vars[0].value)
+							elif variable.type == VariableType.SIGNAL and vars[0].value is Signal:
+								_set_variable(token.value,vars[0].value)
 							elif type_string(typeof(variable.value)) == type_string(typeof(vars[0].value)):
 								_set_variable(token.value,vars[0].value)
 							else:
@@ -284,6 +287,13 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 									_:
 										if node.get_indexed(next_token.value) is Signal:
 											await node.get_indexed(next_token.value)
+											t += 1
+										elif _get_variable(str(next_token.value)):
+											var vari : Variable = _get_variable(next_token.value)
+											if vari.type == VariableType.SIGNAL:
+												#print("variable signal ",vari.value)
+												var _signal : Signal = vari.value
+												await _signal
 											t += 1
 						"else":
 							if next_token is Lexer.CodeToken and !should_continue_block and !end_script:
@@ -375,6 +385,8 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 					param[index].type = Lexer.TokenType.VECTOR
 				"Color":
 					param[index].type = Lexer.TokenType.COLOR
+				"Signal":
+					param[index].type = Lexer.TokenType.SIGNAL
 				_:
 					if param[index].value is SpriteFrames:
 						param[index].type = Lexer.TokenType.SPRITEFRAMES
@@ -404,6 +416,8 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 					param[index].type = Lexer.TokenType.VECTOR
 				"Color":
 					param[index].type = Lexer.TokenType.COLOR
+				"Signal":
+					param[index].type = Lexer.TokenType.SIGNAL
 				# for object classes like nodes
 				_:
 					if param[index].value is SpriteFrames:
@@ -490,6 +504,7 @@ func executeFunction(line : Array,wait := false):
 			var variab = Variable.new(params[0].value,variableTypes[params[1].value])
 			if params.size() == 3:
 				variab.value = params[2].value
+				#print(variab.value)
 			if variables.has(params[0].value):
 				push_warning('Line '+str(total_l+1)+': Variable '+params[0].value+' is already defined and will be overwritten')
 			
@@ -602,6 +617,52 @@ func executeFunction(line : Array,wait := false):
 				return
 			
 			return target.get_indexed(params[1].value)
+		"getSignal":
+			if token.params.size() != 2:
+				push_error('Line '+str(total_l+1)+': getSignal() requires two parameters')
+				return
+			var params = await _convert_variables(token.params)
+			if params[0].type != Lexer.TokenType.NODE:
+				push_error('Line '+str(total_l+1)+': Target node must be a Node')
+				return
+			if params[1].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Target node property must be a string')
+				return
+			var target : Node = params[0].value
+			if target.get_indexed(params[1].value) == null:
+				push_error('Line '+str(total_l+1)+': Target node property must exist')
+				return
+			
+			if !target.has_signal(params[1].value):
+				push_error('Line '+str(total_l+1)+': Node does not have signal',params[1].value)
+				return
+			
+			var signal_ref : Signal = Signal(target,params[1].value)
+			
+			return signal_ref
+		"waitForSignal":
+			if token.params.size() != 2:
+				push_error('Line '+str(total_l+1)+': waitForSignal() requires two parameters')
+				return
+			var params = await _convert_variables(token.params)
+			if params[0].type != Lexer.TokenType.NODE:
+				push_error('Line '+str(total_l+1)+': Target node must be a Node')
+				return
+			if params[1].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Target node property must be a string')
+				return
+			var target : Node = params[0].value
+			if target.get_indexed(params[1].value) == null:
+				push_error('Line '+str(total_l+1)+': Target node property must exist')
+				return
+			
+			if !target.has_signal(params[1].value):
+				push_error('Line '+str(total_l+1)+': Node does not have signal',params[1].value)
+				return
+			
+			var signal_ref : Signal = Signal(target,params[1].value)
+			
+			await signal_ref
 		"sin":
 			if token.params.size() <= 0 and token.params.size() >= 3:
 				push_error('Line '+str(total_l+1)+': sin() requires between one and two parameters')
@@ -1498,7 +1559,7 @@ func executeFunction(line : Array,wait := false):
 			return tex
 		"mod":
 			if token.params.size() != 2:
-				push_error('Line '+str(total_l+1)+': mod() requires between exactly two parameters')
+				push_error('Line '+str(total_l+1)+': mod() requires exactly two parameters')
 				return
 			var params = await _convert_variables(token.params)
 			
@@ -1510,6 +1571,49 @@ func executeFunction(line : Array,wait := false):
 				return
 			
 			return fmod(params[0].value,params[1].value)
+		"createMetronome":
+			if token.params.size() < 2 or token.params.size() > 6:
+				push_error('Line '+str(total_l+1)+': createMetronome() requires between two and six parameters.')
+				return
+			var params = await _convert_variables(token.params)
+			if params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Metronome object name must be a String')
+				return
+			if params[1].type != Lexer.TokenType.NUMBER:
+				push_error('Line '+str(total_l+1)+': BPM must be a number')
+				return
+			var bpm : float = params[1].value
+			var beats : int = 4
+			var steps : int = 4
+			var start := true
+			var sound := false
+			
+			if params.size() >= 3:
+				if params[2].type != Lexer.TokenType.NUMBER:
+					push_error('Line '+str(total_l+1)+': Beat count must be a number')
+					return
+				beats = int(params[2].value)
+			if params.size() >= 4:
+				if params[3].type != Lexer.TokenType.NUMBER:
+					push_error('Line '+str(total_l+1)+': Step count must be a number')
+					return
+				steps = int(params[3].value)
+			if params.size() >= 5:
+				if params[4].type != Lexer.TokenType.BOOLEAN:
+					push_error('Line '+str(total_l+1)+': Auto starting must be a boolean')
+					return
+				start = params[4].value
+			if params.size() >= 6:
+				if params[5].type != Lexer.TokenType.BOOLEAN:
+					push_error('Line '+str(total_l+1)+': Metronome sound enabling must be a boolean')
+					return
+				sound = params[5].value
+			
+			var metronome := Metronome.new(bpm,beats,steps,start,sound)
+			metronome.name = params[0].value
+			node.add_child(metronome)
+			
+			return metronome
 		_:
 			validFunction = false
 
@@ -1529,7 +1633,8 @@ func executeFunction(line : Array,wait := false):
 	if node is Enemy:
 		# enemy scope!
 		validFunction = true
-		# so that it's easier to get the values
+		# so that it's easier to get the values.
+		@warning_ignore("unused_variable") # TODO: remove when enemy functions are added
 		var enemy : Enemy = node
 		match token.value:
 			_:

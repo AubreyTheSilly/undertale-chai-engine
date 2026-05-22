@@ -1260,6 +1260,7 @@ func run_script(script : String = script_to_run,function_name : String = "",verb
 						continue
 					for i in runscript.data[line].data:
 						if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+							@warning_ignore("confusable_local_declaration")
 							var variable = getVariable(i.lexeme)
 							i.type = types[variable.type]
 							i.value = variable.value

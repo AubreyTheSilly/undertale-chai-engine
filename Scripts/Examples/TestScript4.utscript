@@ -1,0 +1,13 @@
+initvar(metronome,NODE,createMetronome("metronome",122,4,4,true,true));
+initvar(spin,NUMBER,0);
+initvar(spinarray,ARRAY,[DIR_DOWN,DIR_LEFT,DIR_UP,DIR_RIGHT])
+
+playBGM("mus_snowy");
+
+while (true) {
+    set(getNode("Character"),"scale",vec2(2,0.5));
+    tween_property(getNode("Character"),"scale",vec2(1,1),0.2);
+    moveCharacter(getNode("Character"),get_at_index(spinarray,mod(spin,4)),0);
+    spin += 1;
+    await getSignal(metronome,"beat");
+};

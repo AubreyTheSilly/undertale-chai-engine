@@ -8,7 +8,7 @@
 script = ExtResource("1_ko2s7")
 
 [node name="Character" parent="." unique_id=92183050 instance=ExtResource("2_gxb1y")]
-position = Vector2(40, 48)
+position = Vector2(160, 120)
 CharacterJson = "sans"
 Speed = 2
 
