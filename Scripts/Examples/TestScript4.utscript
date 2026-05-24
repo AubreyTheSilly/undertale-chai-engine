@@ -1,8 +1,7 @@
-initvar(metronome,NODE,createMetronome("metronome",122,4,4,true,true));
+playBGM("mus_vania");
+initvar(metronome,NODE,createMetronome("metronome",193,4,4,true,true));
 initvar(spin,NUMBER,0);
 initvar(spinarray,ARRAY,[DIR_DOWN,DIR_LEFT,DIR_UP,DIR_RIGHT])
-
-playBGM("mus_snowy");
 
 while (true) {
     set(getNode("Character"),"scale",vec2(2,0.5));

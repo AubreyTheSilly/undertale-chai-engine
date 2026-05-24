@@ -1,0 +1,37 @@
+function _ready() {
+	setPlayerData("LV",19);
+	setPlayerData("HP",92);
+	setPlayerData("MaxHP",92);
+
+	initvar(legs,NODE,createSprite("legs",loadTexture("Battle/Enemies/spr_sans_legs_0"),vec2(0,0)));
+	initvar(body,NODE,createSprite("body",loadTexture("Battle/Enemies/spr_sans_body_0"),vec2(0,0)));
+	initvar(head,NODE,createSprite("head",loadTexture("Battle/Enemies/spr_sans_head_0"),vec2(0,0)));
+
+	reparent(legs,getNode("Sprite2D"));
+	reparent(body,getNode("Sprite2D"));
+	reparent(head,getNode("Sprite2D"));
+
+	initvar(frametimer,NUMBER,0);
+	initvar(halftimer,NUMBER,0);=
+};
+
+function _update() {
+	set(head,"position",vec2(round(sin(halftimer,1),0.5),round(sin(frametimer,1),0.5)));
+	set(body,"position",vec2(round(sin(halftimer,1),0.5),round(sin(frametimer,0.5),0.5)));
+
+	frametimer += 16;
+	halftimer += 8;
+};
+
+function _damage() {
+	playSlashAnimation();
+	if (randi(0,1) == 0) {
+		await tween_property(getNode("Sprite2D"),"position:x",50,0.5,TRANS_CUBIC,EASE_OUT);
+	} else {
+		await tween_property(getNode("Sprite2D"),"position:x",-50,0.5,TRANS_CUBIC,EASE_OUT);
+	};
+	wait_frames(10);
+	damage(-1);
+	tween_property(getNode("Sprite2D"),"position:x",0,0.5,TRANS_CUBIC,EASE_IN);
+	wait_frames(15);
+};

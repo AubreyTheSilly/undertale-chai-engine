@@ -59,6 +59,45 @@ var custom_constants := {}
 
 signal script_ended
 
+func runSingleFunction(function : String,args := []) -> void:
+	var oldt = t
+	var functoken := Lexer.FunctionToken.new(Lexer.TokenType.IDENTIFIER,function)
+	for i in args:
+		var token := Lexer.AdvancedToken.new(Lexer.TokenType.IDENTIFIER,i)
+		
+		# code stolen from _convert_variables
+		match type_string(typeof(i)):
+			"String":
+				token.type = Lexer.TokenType.STRING
+			"float","int":
+				token.type = Lexer.TokenType.NUMBER
+			"bool":
+				token.type = Lexer.TokenType.BOOLEAN
+			"Array":
+				token.type = Lexer.TokenType.ARRAY
+			"Vector2":
+				token.type = Lexer.TokenType.VECTOR
+			"Color":
+				token.type = Lexer.TokenType.COLOR
+			"Signal":
+				token.type = Lexer.TokenType.SIGNAL
+			_:
+				if i is SpriteFrames:
+					token.type = Lexer.TokenType.SPRITEFRAMES
+				elif i is Node:
+					token.type = Lexer.TokenType.NODE
+				elif i is Font:
+					token.type = Lexer.TokenType.FONT
+				elif i is AudioStream:
+					token.type = Lexer.TokenType.AUDIO
+				elif i is Texture2D:
+					token.type = Lexer.TokenType.TEXTURE
+		
+		functoken.params.append(token)
+	t = 0
+	await executeFunction([functoken],false,true)
+	t = oldt
+
 func initConstants() -> void:
 	if !variables.has(str(node.get_instance_id())):
 		variables[str(node.get_instance_id())] = {}
@@ -128,7 +167,7 @@ func initConstants() -> void:
 	# self
 	variables[str(node.get_instance_id())]["self"] = Variable.new("self",VariableType.NODE,node)
 	
-	# custom variables, these are only supposed to be used by functions. PLEASE DO NOT USE THESE THEY WON'T WORK PROPERLY LOL
+	# custom variables, these are only supposed to be used by functions. PLEASE DO NOT TRY TO SET THESE THEY WON'T WORK PROPERLY LOL
 	for i in custom_constants:
 		variables[str(node.get_instance_id())]['_'+i] = Variable.new('_'+i,VariableType.UNDEFINED,custom_constants[i])
 
@@ -140,7 +179,10 @@ func updateConstants() -> void:
 		dt_changed = false
 
 static func loadScriptFromFile(script : String) -> Array:
-	var scr := Undermaker.loadFileAsString("Scripts/"+script+".utscript")
+	var scr := Undermaker.loadFileAsString("Scripts/"+script+".utscript",false)
+	if !scr:
+		push_warning("Script 'Scripts/"+script+".utscript' does not exist. Returning empty script.")
+		return []
 	var lexer = Lexer.new()
 	return lexer.parse(lexer.tokenize(scr))
 
@@ -469,7 +511,7 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 		index += 1
 	return param
 
-func executeFunction(line : Array,wait := false):
+func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=false):
 	updateConstants()
 	var token : Lexer.FunctionToken = line[t]
 	var validFunction = true
@@ -1614,6 +1656,16 @@ func executeFunction(line : Array,wait := false):
 			node.add_child(metronome)
 			
 			return metronome
+		"setPlayerData":
+			if token.params.size() != 2:
+				push_error('Line '+str(total_l+1)+': setPlayerData() requires exactly two parameters.')
+				return
+			var params = await _convert_variables(token.params)
+			if params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Player value name must be a String')
+				return
+			
+			PlayerData.set_indexed(params[0].value,params[1].value)
 		_:
 			validFunction = false
 
@@ -1637,6 +1689,46 @@ func executeFunction(line : Array,wait := false):
 		@warning_ignore("unused_variable") # TODO: remove when enemy functions are added
 		var enemy : Enemy = node
 		match token.value:
+			"playSlashAnimation":
+				if token.params.size() != 0:
+					push_error('Line '+str(total_l+1)+': playSlashAnimation() takes no parameters')
+					return
+				node.playSlashAnimation()
+			"miss":
+				if token.params.size() < 0 and token.params.size() > 1:
+					push_error('Line '+str(total_l+1)+': miss() requires between zero and one parameters')
+					return
+			"damage":
+				#for i in line.data:
+					#if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+						#print("set damage variable")
+						#var variable = getVariable(i.lexeme)
+						#i.type = types[variable.type]
+						#i.value = variable.value
+				#if line.data.size() != 2:
+					#push_error("Invalid amount of parameters for damage, must be 2")
+					#return
+				#elif line.data.size() >= 4:
+					#push_error("Too many parameters for damage, must be 2")
+					#return
+				#elif line.data[1].type == Token.TokenType.TYPE_NUM:
+					#push_error("Damage amount must be a number")
+					#return	
+				#var damag = line.data[1].value
+				if token.params.size() != 1:
+					push_error('Line '+str(total_l+1)+': damage() requires exactly one parameter')
+					return
+				var params = await _convert_variables(token.params)
+				
+				if token.params[0].type != Lexer.TokenType.NUMBER:
+					push_error('Line '+str(total_l+1)+': Damage amount must be a number')
+					return
+				
+				var damag = params[0].value
+				if wait:
+					await node._damage(damag,true)
+				else:
+					node._damage(damag,true)
 			_:
 				validFunction = false
 		
@@ -2075,7 +2167,7 @@ func executeFunction(line : Array,wait := false):
 			index += 1
 			variables[str(node.get_instance_id())].erase("PARAM"+str(index))
 	
-	if !validFunction:
+	if !validFunction and !ignore_invalid_function_error:
 		push_error('Line ',str(total_l+1),': Function ',token.value,' does not exist in the current scope')
 
 func executeCodeBlock(codeblock : Lexer.CodeToken,_node:Node) -> void:

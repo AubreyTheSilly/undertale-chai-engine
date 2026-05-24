@@ -46,15 +46,15 @@ func DictionaryToEnemyData(dict : Dictionary) -> EnemyData:
 	enemydata.EnemyName = dict["enemyName"]
 	enemydata.name = dict["name"]
 	if dict["sprite"] == "none":
-		enemydata.EnemySprite = null
+		enemydata.EnemySprite = preload('res://Sprites/empty.png')
 	else:
 		enemydata.EnemySprite = Loader.load_file("Sprites/Battle/Enemies/"+dict["sprite"]+".png")
 	if dict["hurtSprite"] == "none":
-		enemydata.EnemyHurtSprite = null
+		enemydata.EnemyHurtSprite = preload('res://Sprites/empty.png')
 	else:
 		enemydata.EnemyHurtSprite = Loader.load_file("Sprites/Battle/Enemies/"+dict["hurtSprite"]+".png")
 	if dict["spareSprite"] == "none":
-		enemydata.EnemySpareSprite = null
+		enemydata.EnemySpareSprite = preload('res://Sprites/empty.png')
 	else:
 		enemydata.EnemySpareSprite = Loader.load_file("Sprites/Battle/Enemies/"+dict["spareSprite"]+".png")
 	enemydata.HP = dict["hp"]

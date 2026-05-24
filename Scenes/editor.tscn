@@ -315,7 +315,6 @@ action_mode = 0
 text = "Next"
 
 [node name="Page1" type="Node2D" parent="EnemyEditor" unique_id=1257092869]
-visible = false
 
 [node name="EnemyName" type="LineEdit" parent="EnemyEditor/Page1" unique_id=1117540756]
 anchors_preset = -1
@@ -441,6 +440,7 @@ script = ExtResource("4_8howc")
 metadata/_edit_use_anchors_ = true
 
 [node name="Page2" type="Node2D" parent="EnemyEditor" unique_id=1300713260]
+visible = false
 
 [node name="Label" type="Label" parent="EnemyEditor/Page2" unique_id=101821840]
 offset_left = 156.0

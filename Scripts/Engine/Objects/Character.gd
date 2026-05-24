@@ -66,6 +66,7 @@ func _handleAnimation(dir : Vector2) -> String:
 		_sprite.play()
 	return target_animation
 
+@warning_ignore("unused_parameter") # i don't even know what the warning was for but like. this fixes it ig
 func move(steps : int,dir : Vector2) -> void:
 	match dir:
 		Vector2(-1,0):

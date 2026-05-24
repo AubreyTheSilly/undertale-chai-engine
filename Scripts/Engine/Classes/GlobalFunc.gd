@@ -179,9 +179,10 @@ func loadCustomObject(objname : String):
 		object.add_child(runner)
 	return object
 
-func loadFileAsString(path : String) -> String:
+func loadFileAsString(path : String,harsh:=true) -> String:
 	if !FileAccess.file_exists(Path+path):
-		push_error("File does not exist. Returning null.")
+		if harsh:
+			push_error("File does not exist. Returning null.")
 		return ""
 	var file = FileAccess.open(Path+path,FileAccess.READ)
 	if !file:

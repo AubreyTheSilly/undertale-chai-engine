@@ -6,7 +6,7 @@ extends Node2D
 # objects. self explanatory
 @onready var sprite = $Sprite2D
 @onready var flavorbox = get_parent().get_node("FlavorBox")
-@onready var scr : ScriptRunner = $ScriptRunner
+@onready var scr : AdvancedScriptRunner = $ScriptRunner
 
 # generic variables. can be altered and accessed via scripts
 var spare := false
@@ -18,9 +18,12 @@ var nextattack := ""
 var lastchoice := 0
 
 # important variables related to scripts
-var hasUpdateScript := false
-var hasPreDialogueScript := false
-var hasDamageScript := false
+var ReadyScript : Array
+var UpdateScript : Array
+var PreDialogueScript : Array
+var DamageScript : Array
+
+var EnemyScript : Array
 
 var predialogue = false
 var ready_for_next_turn = true
@@ -31,8 +34,10 @@ var has_hurt_sprite = false
 enum ENEMY_STATE {DEAD,ALIVE,SPARED}
 var state = ENEMY_STATE.ALIVE
 
-# variables for scripts (NOTE: this is a leftover from the old programming system)
+# variables for scripts (NOTE: this is a leftover from the old(er) programming system)
 var vars : Dictionary = {}
+
+var lastdamage := -450
 
 # fires when enemy has stopped shaking and/or dies
 signal damage_done
@@ -40,13 +45,24 @@ signal damage_done
 #signal next
 
 func _predialogue():
-	if hasPreDialogueScript:
-		scr.run_script("Enemies/"+enemy_data.name+"/PreDialogue.utscript")
+	if lastdamage != -450:
+		scr.custom_constants["DAMAGE"] = float(lastdamage)
+		lastdamage = -450
+	else:
+		scr.custom_constants["DAMAGE"] = 0
+	
+	scr.custom_constants["PLAYERCHOICE"] = get_parent().playerbuttonchoice
+	
+	if PreDialogueScript:
+		scr.runScript(PreDialogueScript,self)
+	elif EnemyScript:
+		scr.runSingleFunction("_predialogue")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	scr.persistentVars["damaging"] = UMVar.new()
-	scr.persistentVars["damaging"].type = Token.TokenType.TYPE_BOOL
+	scr.custom_constants["damaging"] = false
+	#scr.persistentVars["damaging"] = UMVar.new()
+	#scr.persistentVars["damaging"].type = Token.TokenType.TYPE_BOOL
 	# setup
 	position += enemy_data.offset
 	$SpeechBubble.pos = enemy_data.BubbleOffset
@@ -61,15 +77,19 @@ func _ready():
 		$GPUParticles2D.amount = (sprite_size.x*sprite_size.y)
 	$HPBar.max_value = enemy_data.HP
 	$HPBar.value = enemy_data.HP
-	if UTScript.loadScriptFromFile("Enemies/"+enemy_data.name+"/Create.utscript"):
-		scr.script_to_run = "Enemies/"+enemy_data.name+"/Create.utscript"
-		await scr.run_script()
-	if UTScript.loadScriptFromFile("Enemies/"+enemy_data.name+"/Update.utscript"):
-		hasUpdateScript = true
-	if UTScript.loadScriptFromFile("Enemies/"+enemy_data.name+"/PreDialogue.utscript"):
-		hasPreDialogueScript = true
-	if UTScript.loadScriptFromFile("Enemies/"+enemy_data.name+"/Damage.utscript"):
-		hasDamageScript = true
+	
+	ReadyScript = AdvancedScriptRunner.loadScriptFromFile("Enemies/"+enemy_data.name+"/Ready")
+	UpdateScript = AdvancedScriptRunner.loadScriptFromFile("Enemies/"+enemy_data.name+"/Update")
+	PreDialogueScript = AdvancedScriptRunner.loadScriptFromFile("Enemies/"+enemy_data.name+"/PreDialogue")
+	DamageScript = AdvancedScriptRunner.loadScriptFromFile("Enemies/"+enemy_data.name+"/Damage")
+	
+	EnemyScript = AdvancedScriptRunner.loadScriptFromFile("Enemies/"+enemy_data.name+"/Main")
+	
+	if ReadyScript:
+		scr.runScript(ReadyScript,self)
+	elif EnemyScript:
+		await scr.runScript(EnemyScript,self)
+		scr.runSingleFunction("_ready")
 
 func getAttack() -> String:
 	if nextattack != "":
@@ -121,7 +141,7 @@ func _dust():
 	$Sprite2D.visible = false
 	$GPUParticles2D.start()
 
-func Shudder():
+func Shudder(enddamage:=true):
 	# enemy shake
 	damaging = true
 	var shudder = 16
@@ -144,14 +164,14 @@ func Shudder():
 		# make it not hurt
 		sprite.texture = enemy_data.EnemySprite
 	damaging = false
-	damage_done.emit()
+	if enddamage:
+		damage_done.emit()
 
 func _spare():
 	if spare == true:
 		state = ENEMY_STATE.SPARED
-		if hasUpdateScript:
-			scr.script_to_run = "Enemies/"+enemy_data.name+"/Update.utscript"
-			scr.run_script()
+		if UpdateScript:
+			scr.runScript(UpdateScript,self)
 		modulate.a = 0.5
 		sprite.texture = enemy_data.EnemySpareSprite
 		for i in range(14):
@@ -160,20 +180,29 @@ func _spare():
 		$AudioStreamPlayer.stream = preload("res://Audio/Sounds/snd_vaporized.wav")
 		$AudioStreamPlayer.play()
 
-func _damage(damage : float):
-	if hasDamageScript:
-		scr.damage = damage
-		scr.run_script("Enemies/"+enemy_data.name+"/Damage.utscript")
-		return
+func playSlashAnimation() -> void:
+	$AudioStreamPlayer.stream = preload("res://Audio/Sounds/snd_laz_c.wav")
+	$AudioStreamPlayer.play()
+	$AnimatedSprite2D.play()
+
+func _damage(damage : float,forcedisablescript:=false):
+	if !forcedisablescript:
+		if DamageScript:
+			await scr.runScript(DamageScript,self)
+			damage_done.emit()
+			return
+		elif EnemyScript:
+			playSlashAnimation()
+			await scr.runSingleFunction("_damage")
+			damage_done.emit()
+			return
 	if damage >= 0:
 		# enemy hurt :(
-		$AudioStreamPlayer.stream = preload("res://Audio/Sounds/snd_laz_c.wav")
-		$AudioStreamPlayer.play()
-		$AnimatedSprite2D.play()
+		#playSlashAnimation()
 		await get_tree().create_timer(1.0).timeout
 		$AudioStreamPlayer.stream = preload("res://Audio/Sounds/snd_damage_c.wav")
 		$AudioStreamPlayer.play()
-		Shudder()
+		Shudder(!forcedisablescript)
 		$DamageText/Label.label_settings.font_color = Color.RED
 		$DamageText/Label.text = str(int(damage))
 		$DamageText.bounce()
@@ -196,7 +225,8 @@ func _damage(damage : float):
 			await get_tree().process_frame
 			await get_tree().process_frame
 		$DamageText.visible = false
-		damage_done.emit()
+		if !forcedisablescript:
+			damage_done.emit()
 
 func act(Act : String) -> void:
 	if Act == "Check":
@@ -204,9 +234,9 @@ func act(Act : String) -> void:
 		await flavorbox.StartBattleDialogue(enemy_data.Check)
 	else:
 		# run script
-		if UTScript.loadScriptFromFile("Enemies/"+enemy_data.name+"/Acts/"+Act+".utscript"):
-			scr.script_to_run = "Enemies/"+enemy_data.name+"/Acts/"+Act+".utscript"
-			await scr.run_script()
+		var actscript = AdvancedScriptRunner.loadScriptFromFile("Enemies/"+enemy_data.name+"/Acts/"+Act)
+		if actscript:
+			await scr.runScript(actscript,self)
 		else:
 			# uh oh!
 			await flavorbox.StartBattleDialogue(["* Error!"])
@@ -317,16 +347,16 @@ func dialogue() -> void:
 	talking = false
 
 func _process(_delta):
-	scr.persistentVars["damaging"].value = damaging
+	scr.custom_constants["damaging"] = damaging
 	
 	frame += 1
-	if hasUpdateScript and state == 1:
-		scr.script_to_run = "Enemies/"+enemy_data.name+"/Update.utscript"
 	#if predialogue:
 		#scr.script_to_run = "Enemies/"+enemy_data.name+"/PreDialogue.utscript"
 	#if hasUpdateScript or predialogue:
-	if hasUpdateScript:
-		scr.run_script()
+	if UpdateScript and state == 1:
+		scr.runScript(UpdateScript,self)
+	elif EnemyScript:
+		scr.runSingleFunction("_update",[_delta])
 		#if predialogue:
 			#predialogue = false
 			#await scr.script_finished

@@ -16,7 +16,7 @@
 [ext_resource type="FontFile" uid="uid://cvrg1o3nedg0c" path="res://Fonts/undertale-dotumche.otf" id="16_fvwyc"]
 [ext_resource type="Texture2D" uid="uid://81hi2vabuvw8" path="res://Sprites/Battle/SpeechBubbles/spr_blconabove_0.png" id="16_xmk3q"]
 [ext_resource type="Script" uid="uid://l4x4f6y1ba4e" path="res://Scripts/Engine/Objects/SpeechBubble.gd" id="17_fvwyc"]
-[ext_resource type="Script" uid="uid://xdj537rg68ks" path="res://Scripts/Engine/Objects/EnemyScriptRunner.gd" id="18_fvwyc"]
+[ext_resource type="Script" uid="uid://celu5nym7wiia" path="res://Scripts/Engine/Classes/advancedScripting/UTScriptAdvanced.gd" id="18_fvwyc"]
 [ext_resource type="Script" uid="uid://dexqxqsprthju" path="res://Scripts/Engine/Objects/text.gd" id="18_xmk3q"]
 
 [sub_resource type="Gradient" id="Gradient_vxur4"]
@@ -547,13 +547,12 @@ bubbleType = "Above"
 [node name="TextObject" type="Node2D" parent="SpeechBubble" unique_id=768976146]
 position = Vector2(-78, -39)
 script = ExtResource("18_xmk3q")
-text = "[color:0:0:0]Test dialogue.[newline]Lol"
+text = "[color:0:0:0]i'm going to[newline]gargle your balls"
 character_spacing = 10.0
 size = 12
 font = ExtResource("16_fvwyc")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
-[node name="ScriptRunner" type="Node" parent="." unique_id=1539374326 node_paths=PackedStringArray("node")]
+[node name="ScriptRunner" type="Node" parent="." unique_id=651749940]
 script = ExtResource("18_fvwyc")
-node = NodePath("..")
-metadata/_custom_type_script = "uid://b6m6ndh7u38dl"
+metadata/_custom_type_script = "uid://celu5nym7wiia"

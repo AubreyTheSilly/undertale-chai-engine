@@ -98,12 +98,12 @@ func _process(_delta):
 	if PlayerData.HP == 0:
 		get_tree().change_scene_to_file("res://Scenes/gameover.tscn")
 	
-	$ChoiceBox/Choice0.label_settings.font_color = Color(255,255,255)
-	$ChoiceBox/Choice1.label_settings.font_color = Color(255,255,255)
-	$ChoiceBox/Choice2.label_settings.font_color = Color(255,255,255)
-	$ChoiceBox/Choice3.label_settings.font_color = Color(255,255,255)
-	$ChoiceBox/Choice4.label_settings.font_color = Color(255,255,255)
-	$ChoiceBox/Choice5.label_settings.font_color = Color(255,255,255)
+	$ChoiceBox/Choice0.modulate = Color(255,255,255)
+	$ChoiceBox/Choice1.modulate = Color(255,255,255)
+	$ChoiceBox/Choice2.modulate = Color(255,255,255)
+	$ChoiceBox/Choice3.modulate = Color(255,255,255)
+	$ChoiceBox/Choice4.modulate = Color(255,255,255)
+	$ChoiceBox/Choice5.modulate = Color(255,255,255)
 	
 	$ChoiceBox/EnemyHealth1.visible = false
 	$ChoiceBox/EnemyHealth2.visible = false
@@ -153,7 +153,7 @@ func _process(_delta):
 			$ChoiceBox/HeartChoice.position = $ChoiceBox.get_node("Choice"+str(playerenemychoice*2)).position+Vector2(-13.5,9)
 			$ChoiceBox/Choice0.text = "* "+enemies[0].enemy_data.EnemyName
 			if enemies[0].spare == true:
-				$ChoiceBox/Choice0.label_settings.font_color = Color(255,255,0)
+				$ChoiceBox/Choice0.modulate = Color(255,255,0)
 			if enemies[0].state != 1:
 				$ChoiceBox/Choice0.visible = false
 			$ChoiceBox/Choice1.visible = false
@@ -166,13 +166,13 @@ func _process(_delta):
 					$ChoiceBox/Choice2.text = "* "+enemies[1].enemy_data.EnemyName
 					$ChoiceBox/Choice2.visible = true
 					if enemies[1].spare == true:
-						$ChoiceBox/Choice2.label_settings.font_color = Color(255,255,0)
+						$ChoiceBox/Choice2.modulate = Color(255,255,0)
 			if enemies.size() == 3:
 				if enemies[2].state == 1:
 					$ChoiceBox/Choice4.text = "* "+enemies[2].enemy_data.EnemyName
 					$ChoiceBox/Choice4.visible = true
 					if enemies[2].spare == true:
-						$ChoiceBox/Choice4.label_settings.font_color = Color(255,255,0)
+						$ChoiceBox/Choice4.modulate = Color(255,255,0)
 			if enemies[playerenemychoice].state != 1:
 				playerenemychoice+= 1
 			if Input.is_action_just_pressed("Move Up") and playerenemychoice != 0 and enemies[playerenemychoice-1].state == 1:
@@ -195,7 +195,7 @@ func _process(_delta):
 			$ChoiceBox/HeartChoice.position = $ChoiceBox.get_node("Choice"+str(playerenemychoice*2)).position+Vector2(-13.5,9)
 			$ChoiceBox/Choice0.text = "* "+enemies[0].enemy_data.EnemyName
 			if enemies[0].spare == true:
-				$ChoiceBox/Choice0.label_settings.font_color = Color(255,255,0)
+				$ChoiceBox/Choice0.modulate = Color(255,255,0)
 			if enemies[0].state != 1:
 				$ChoiceBox/Choice0.visible = false
 			else:
@@ -217,7 +217,7 @@ func _process(_delta):
 					$ChoiceBox/EnemyHealth2.value = enemies[1].get_node("HPBar").value
 					$ChoiceBox/EnemyHealth2.max_value = enemies[1].get_node("HPBar").max_value
 					if enemies[1].spare == true:
-						$ChoiceBox/Choice2.label_settings.font_color = Color(255,255,0)
+						$ChoiceBox/Choice2.modulate = Color(255,255,0)
 			if enemies.size() == 3:
 				if enemies[2].state == 1:
 					$ChoiceBox/Choice4.text = "* "+enemies[2].enemy_data.EnemyName
@@ -227,7 +227,7 @@ func _process(_delta):
 					$ChoiceBox/EnemyHealth3.value = enemies[2].get_node("HPBar").value
 					$ChoiceBox/EnemyHealth3.max_value = enemies[2].get_node("HPBar").max_value
 					if enemies[2].spare == true:
-						$ChoiceBox/Choice4.label_settings.font_color = Color(255,255,0)
+						$ChoiceBox/Choice4.modulate = Color(255,255,0)
 			if enemies[playerenemychoice].state != 1:
 				playerenemychoice+= 1
 			if Input.is_action_just_pressed("Move Up") and playerenemychoice != 0 and enemies[playerenemychoice-1].state == 1:
@@ -259,7 +259,7 @@ func _process(_delta):
 			$ChoiceBox/HeartChoice.position = $ChoiceBox.get_node("Choice"+str(playermercychoice)).position+Vector2(-13.5,9)
 			$ChoiceBox/Choice0.text = "* Spare"
 			if canspare:
-				$ChoiceBox/Choice0.label_settings.font_color = Color(255,255,0)
+				$ChoiceBox/Choice0.modulate = Color(255,255,0)
 			$ChoiceBox/Choice2.text = "* Flee"
 			$ChoiceBox/Choice2.visible = true
 			$ChoiceBox/Choice1.visible = false
@@ -342,7 +342,7 @@ func _process(_delta):
 				var attackconfigs : Array[AttackData] = []
 				var attack_exists = false
 				for i in enemies:
-					if i.state == 1 and i.hasPreDialogueScript:
+					if i.state == 1 and i.PreDialogueScript:
 						i.lastchoice = playerbuttonchoice
 						i._predialogue()
 						await get_tree().process_frame

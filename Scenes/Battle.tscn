@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://bhyupb4bxnm4f" path="res://Sprites/Battle/spr_targetchoice_1.png" id="8_1s3yx"]
 [ext_resource type="PackedScene" uid="uid://51lu7uaohc4j" path="res://Scenes/Objects/BattleButton.tscn" id="8_j2fg1"]
 [ext_resource type="Texture2D" uid="uid://d35dhp0c418nn" path="res://Sprites/Battle/spr_enemyhealth_0.png" id="12_mugwg"]
+[ext_resource type="FontFile" uid="uid://decmshb7688st" path="res://Fonts/DTM-Mono.otf" id="13_mugwg"]
 [ext_resource type="FontFile" uid="uid://oijfl8puq15f" path="res://Fonts/undertale-mars-needs-cunnilingus.otf" id="15_wceb6"]
 [ext_resource type="Texture2D" uid="uid://bhwyf8lqg06du" path="res://Sprites/Battle/spr_hpname_0.png" id="16_itjnc"]
 [ext_resource type="Texture2D" uid="uid://cjxulcjcodig0" path="res://Sprites/Battle/spr_health_1.png" id="17_sx1gs"]
@@ -51,24 +52,6 @@ size = Vector2(320, 3)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_28qgs"]
 size = Vector2(320, 3)
-
-[sub_resource type="LabelSettings" id="LabelSettings_1s3yx"]
-font_size = 13
-
-[sub_resource type="LabelSettings" id="LabelSettings_mugwg"]
-font_size = 13
-
-[sub_resource type="LabelSettings" id="LabelSettings_d13iw"]
-font_size = 13
-
-[sub_resource type="LabelSettings" id="LabelSettings_4nbmx"]
-font_size = 13
-
-[sub_resource type="LabelSettings" id="LabelSettings_3quo0"]
-font_size = 13
-
-[sub_resource type="LabelSettings" id="LabelSettings_d5dbc"]
-font_size = 13
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1s3yx"]
 load_path = "res://.godot/imported/spr_fightbt_0.png-fc608f55a2cfc42824bd4c406c2a61e6.ctex"
@@ -216,7 +199,6 @@ polygon = PackedVector2Array(-141, -32.25, -141, 32.25, 141, 32.25, 141, -32.25)
 uv = PackedVector2Array(-307, 4, -128, -14, -107, 40, -290, 51)
 
 [node name="ChoiceBox" type="Node2D" parent="." unique_id=1619216673]
-visible = false
 position = Vector2(15.5, 124.5)
 
 [node name="DialogueRect" type="NinePatchRect" parent="ChoiceBox" unique_id=401769076]
@@ -229,56 +211,50 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 metadata/_edit_use_anchors_ = true
 
-[node name="Choice0" type="Label" parent="ChoiceBox" unique_id=1672015899]
-offset_left = 33.5
-offset_top = 9.5
-offset_right = 88.5
-offset_bottom = 29.5
+[node name="Choice0" type="Node2D" parent="ChoiceBox" unique_id=1406900235]
+position = Vector2(33.5, 9.5)
+script = ExtResource("6_ybx13")
 text = "* Check"
-label_settings = SubResource("LabelSettings_1s3yx")
+font = ExtResource("13_mugwg")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
 
-[node name="Choice1" type="Label" parent="ChoiceBox" unique_id=233369172]
-offset_left = 161.5
-offset_top = 9.5
-offset_right = 255.5
-offset_bottom = 29.5
+[node name="Choice1" type="Node2D" parent="ChoiceBox" unique_id=1982408308]
+position = Vector2(161.5, 9.5)
+script = ExtResource("6_ybx13")
 text = "* Compliment
 "
-label_settings = SubResource("LabelSettings_mugwg")
+font = ExtResource("13_mugwg")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
 
-[node name="Choice2" type="Label" parent="ChoiceBox" unique_id=900444018]
-offset_left = 33.5
-offset_top = 25.5
-offset_right = 88.5
-offset_bottom = 45.5
+[node name="Choice2" type="Node2D" parent="ChoiceBox" unique_id=579888181]
+position = Vector2(33.5, 25.5)
+script = ExtResource("6_ybx13")
 text = "* Threat"
-label_settings = SubResource("LabelSettings_d13iw")
+font = ExtResource("13_mugwg")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
 
-[node name="Choice3" type="Label" parent="ChoiceBox" unique_id=533965258]
-offset_left = 161.5
-offset_top = 25.5
-offset_right = 255.5
-offset_bottom = 45.5
+[node name="Choice3" type="Node2D" parent="ChoiceBox" unique_id=1954163921]
+position = Vector2(161.5, 25.5)
+script = ExtResource("6_ybx13")
 text = "* Ribbit
 "
-label_settings = SubResource("LabelSettings_4nbmx")
+font = ExtResource("13_mugwg")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
 
-[node name="Choice4" type="Label" parent="ChoiceBox" unique_id=1217966787]
-offset_left = 33.5
-offset_top = 41.5
-offset_right = 96.5
-offset_bottom = 61.5
+[node name="Choice4" type="Node2D" parent="ChoiceBox" unique_id=1359581230]
+position = Vector2(33.5, 41.5)
+script = ExtResource("6_ybx13")
 text = "* Flirt"
-label_settings = SubResource("LabelSettings_3quo0")
+font = ExtResource("13_mugwg")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
 
-[node name="Choice5" type="Label" parent="ChoiceBox" unique_id=1274164534]
-offset_left = 161.5
-offset_top = 41.5
-offset_right = 255.5
-offset_bottom = 61.5
+[node name="Choice5" type="Node2D" parent="ChoiceBox" unique_id=214453241]
+position = Vector2(161.5, 41.5)
+script = ExtResource("6_ybx13")
 text = "* Die
 "
-label_settings = SubResource("LabelSettings_d5dbc")
+font = ExtResource("13_mugwg")
+metadata/_custom_type_script = "uid://dexqxqsprthju"
 
 [node name="HeartChoice" type="Sprite2D" parent="ChoiceBox" unique_id=662717678]
 modulate = Color(1, 0, 0, 1)
