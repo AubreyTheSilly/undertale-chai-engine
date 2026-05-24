@@ -185,6 +185,20 @@ func playSlashAnimation() -> void:
 	$AudioStreamPlayer.play()
 	$AnimatedSprite2D.play()
 
+func miss(text := "miss"):
+	$DamageText/Label.label_settings.font_color = Color.GRAY
+	$DamageText/Label.text = text.to_upper()
+	$DamageText.bounce()
+	var shudder = 16
+	while shudder != 0:
+		if (shudder < 0):
+			shudder = (-((shudder + 2)))
+		else:
+			shudder = (-shudder)
+		await get_tree().process_frame
+		await get_tree().process_frame
+	$DamageText.visible = false
+
 func _damage(damage : float,forcedisablescript:=false):
 	if !forcedisablescript:
 		if DamageScript:
@@ -213,18 +227,7 @@ func _damage(damage : float,forcedisablescript:=false):
 			await get_tree().process_frame
 	else:
 		# you missed dumbass
-		$DamageText/Label.label_settings.font_color = Color.GRAY
-		$DamageText/Label.text = "MISS"
-		$DamageText.bounce()
-		var shudder = 16
-		while shudder != 0:
-			if (shudder < 0):
-				shudder = (-((shudder + 2)))
-			else:
-				shudder = (-shudder)
-			await get_tree().process_frame
-			await get_tree().process_frame
-		$DamageText.visible = false
+		await miss()
 		if !forcedisablescript:
 			damage_done.emit()
 

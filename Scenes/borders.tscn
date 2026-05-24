@@ -8,6 +8,7 @@
 shader = ExtResource("1_1r7dd")
 
 [node name="Borders" type="CanvasLayer" unique_id=42077459]
+process_priority = -10
 layer = 127
 script = ExtResource("1_p8jor")
 

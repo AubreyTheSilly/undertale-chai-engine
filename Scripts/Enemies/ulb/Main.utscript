@@ -31,7 +31,8 @@ function _damage() {
 		await tween_property(getNode("Sprite2D"),"position:x",-50,0.5,TRANS_CUBIC,EASE_OUT);
 	};
 	wait_frames(10);
-	damage(-1);
+	// silly :3
+	miss(get_at_index(["get better aim","you suck!","skill issue","L+ratio","nuh uh"],randi(0,4)));
 	tween_property(getNode("Sprite2D"),"position:x",0,0.5,TRANS_CUBIC,EASE_IN);
 	wait_frames(15);
 };

@@ -1686,8 +1686,9 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 		# enemy scope!
 		validFunction = true
 		# so that it's easier to get the values.
-		@warning_ignore("unused_variable") # TODO: remove when enemy functions are added
-		var enemy : Enemy = node
+		#@warning_ignore("unused_variable") # todo: remove when enemy functions are added
+		# ERM ACTUALLY... i dont even NEED this because of the "if node is Enemy" autotyping it. 1000 iq move ma'am
+		# var enemy : Enemy = node
 		match token.value:
 			"playSlashAnimation":
 				if token.params.size() != 0:
@@ -1698,6 +1699,14 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				if token.params.size() < 0 and token.params.size() > 1:
 					push_error('Line '+str(total_l+1)+': miss() requires between zero and one parameters')
 					return
+				var params = await _convert_variables(token.params)
+				var text = "miss"
+				if params.size() == 1:
+					if params[0].type != Lexer.TokenType.STRING:
+						push_error('Line '+str(total_l+1)+': damage() requires exactly one parameter')
+						return
+					text = params[0].value
+				node.miss(text)
 			"damage":
 				#for i in line.data:
 					#if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):

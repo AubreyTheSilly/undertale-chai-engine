@@ -522,7 +522,7 @@ texture_progress = ExtResource("7_pcqe5")
 [node name="DamageText" parent="." unique_id=1364014123 instance=ExtResource("8_1o3so")]
 visible = false
 z_index = 1
-position = Vector2(-48.5, -53)
+position = Vector2(-320, -53)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1104510035]
 z_index = 1

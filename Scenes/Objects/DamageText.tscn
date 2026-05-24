@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://7vrentaetxo2"]
+[gd_scene format=3 uid="uid://7vrentaetxo2"]
 
 [ext_resource type="FontFile" uid="uid://j7iofu0jkpk3" path="res://Fonts/undertale-hachicro.otf" id="1_hsmpt"]
 [ext_resource type="Script" uid="uid://d1mlb0ewpir74" path="res://Scripts/Engine/Objects/DamageText.gd" id="1_t0f14"]
@@ -16,11 +16,11 @@ stacked_shadow_3/offset = Vector2(0, -2)
 stacked_shadow_4/offset = Vector2(-2, -2)
 stacked_shadow_5/offset = Vector2(-2, 2)
 
-[node name="DamageText" type="Node2D"]
+[node name="DamageText" type="Node2D" unique_id=2128303901]
 script = ExtResource("1_t0f14")
 
-[node name="Label" type="Label" parent="."]
-offset_right = 100.0
+[node name="Label" type="Label" parent="." unique_id=1999886983]
+offset_right = 640.0
 offset_bottom = 20.0
 text = "999999"
 label_settings = SubResource("LabelSettings_ypfi4")
