@@ -64,16 +64,17 @@ func _process(_delta) -> void:
 					var left = "Move Left"
 					var right = "Move Right"
 					var jump = "Move Up"
-					match bluedir:
-						90:
+					#print(bluedir)
+					match abs(bluedir):
+						90.0:
 							jump = "Move Right"
 							left = "Move Up"
 							right = "Move Down"
-						180:
+						180.0:
 							left = "Move Right"
 							right = "Move Left"
 							jump = "Move Down"
-						270:
+						270.0:
 							left = "Move Down"
 							right = "Move Up"
 							jump = "Move Left"

@@ -152,7 +152,8 @@ func loadSpriteFramesFromFile(json : String) -> SpriteFrames:
 	var spriteframes := SpriteFrames.new()
 	for anim in animationDict:
 		var animation = animationDict[anim]
-		spriteframes.add_animation(anim)
+		if !spriteframes.has_animation(anim):
+			spriteframes.add_animation(anim)
 		for i in animation["frames"]:
 			var frame = Loader.load_file("Sprites/"+i+".png")
 			if frame:

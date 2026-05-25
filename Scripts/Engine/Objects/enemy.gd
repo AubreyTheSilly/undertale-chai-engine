@@ -207,7 +207,7 @@ func _damage(damage : float,forcedisablescript:=false):
 			damage_done.emit()
 			return
 		elif EnemyScript:
-			playSlashAnimation()
+			#playSlashAnimation()
 			await scr.runSingleFunction("_damage")
 			damage_done.emit()
 			return
@@ -303,18 +303,17 @@ func dialogue() -> void:
 						$SpeechBubble/TextObject.size = int(cmand[1])
 						$SpeechBubble/TextObject.character_spacing = float(cmand[2])
 						$SpeechBubble/TextObject.line_spacing = float(cmand[3])
-					"set":
-						var variable = $ScriptRunner.getVariable(cmand[1])
-						if variable:
-							if variable.type == Token.TokenType.TYPE_STRING:
-								variable.value = cmand[2]
-							elif variable.type == Token.TokenType.TYPE_NUM:
-								variable.value = float(cmand[2])
-							elif variable.type == Token.TokenType.TYPE_BOOL:
-								if cmand[2] == "true":
-									variable.value = true
-								elif cmand[2] == "false":
-									variable.value = false
+					"func":
+						var args = []
+						var ci = -1
+						for j in cmand:
+							ci += 1
+							if ci >= 2:
+								if str_to_var(j):
+									args.append(str_to_var(j))
+								else:
+									args.append(j)
+						await scr.runSingleFunction(cmand[1],args)
 					"playsnd":
 						var audio = AudioStreamPlayer.new()
 						audio.stream = Loader.load_file("Audio/Sounds/"+cmand[1]+".wav")

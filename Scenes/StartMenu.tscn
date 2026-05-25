@@ -81,6 +81,7 @@ label_settings = SubResource("LabelSettings_ujd4t")
 horizontal_alignment = 1
 
 [node name="loadmenu" type="Node2D" parent="." unique_id=676569409]
+visible = false
 
 [node name="Label3" type="Label" parent="loadmenu" unique_id=404585125]
 offset_left = -160.0
@@ -104,10 +105,10 @@ position = Vector2(84, 105)
 script = ExtResource("7_o6asp")
 text = "Continue"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "m": 1.0
-})
+}
 font = ExtResource("8_o42a4")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -116,10 +117,10 @@ position = Vector2(194, 105)
 script = ExtResource("7_o6asp")
 text = "Reset"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "m": 1.0
-})
+}
 font = ExtResource("8_o42a4")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -128,10 +129,10 @@ position = Vector2(131, 125)
 script = ExtResource("7_o6asp")
 text = "Settings"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "m": 1.0
-})
+}
 font = ExtResource("8_o42a4")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -140,10 +141,10 @@ position = Vector2(69, 80)
 script = ExtResource("7_o6asp")
 text = "Last Corridor"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "m": 1.0
-})
+}
 font = ExtResource("8_o42a4")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -152,10 +153,10 @@ position = Vector2(69, 62)
 script = ExtResource("7_o6asp")
 text = "AAAAAA"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "m": 1.0
-})
+}
 font = ExtResource("8_o42a4")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -164,10 +165,10 @@ position = Vector2(156, 62)
 script = ExtResource("7_o6asp")
 text = "LV 2"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "m": 1.0
-})
+}
 font = ExtResource("8_o42a4")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -176,9 +177,9 @@ position = Vector2(225, 62)
 script = ExtResource("7_o6asp")
 text = "2 57"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0
-})
+}
 font = ExtResource("8_o42a4")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -199,13 +200,13 @@ scale = Vector2(2, 2)
 script = ExtResource("7_o6asp")
 text = "SETTINGS"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "M": 1.0,
 "W": 1.0,
 "m": 1.0,
 "w": 1.0
-})
+}
 font = ExtResource("8_o42a4")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -214,10 +215,10 @@ position = Vector2(19, 40)
 script = ExtResource("7_o6asp")
 text = "EXIT"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "m": 1.0
-})
+}
 font = ExtResource("8_o42a4")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -228,13 +229,13 @@ position = Vector2(19, 70)
 script = ExtResource("7_o6asp")
 text = "LANGUAGE"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "M": 1.0,
 "W": 1.0,
 "m": 1.0,
 "w": 1.0
-})
+}
 font = ExtResource("8_o42a4")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -243,13 +244,13 @@ position = Vector2(72, 0)
 script = ExtResource("7_o6asp")
 text = "ENGLISH"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "M": 1.0,
 "W": 1.0,
 "m": 1.0,
 "w": 1.0
-})
+}
 font = ExtResource("8_o42a4")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -268,10 +269,10 @@ position = Vector2(88.5, 30)
 script = ExtResource("7_o6asp")
 text = "Name the fallen human."
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "m": 1.0
-})
+}
 font = ExtResource("8_o42a4")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -279,13 +280,13 @@ metadata/_custom_type_script = "uid://dexqxqsprthju"
 position = Vector2(138.5, 55)
 script = ExtResource("7_o6asp")
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "M": 1.0,
 "W": 1.0,
 "m": 1.0,
 "w": 1.0
-})
+}
 font = ExtResource("8_o42a4")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -660,10 +661,10 @@ position = Vector2(58.5, 200)
 script = ExtResource("7_o6asp")
 text = "Quit"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "m": 1.0
-})
+}
 font = ExtResource("8_o42a4")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -672,10 +673,10 @@ position = Vector2(118.5, 200)
 script = ExtResource("7_o6asp")
 text = "Backspace"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "m": 1.0
-})
+}
 font = ExtResource("8_o42a4")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -684,10 +685,10 @@ position = Vector2(218.5, 200)
 script = ExtResource("7_o6asp")
 text = "Done"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "m": 1.0
-})
+}
 font = ExtResource("8_o42a4")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -700,10 +701,10 @@ scale = Vector2(3.5, 3.5)
 script = ExtResource("7_o6asp")
 text = "any"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "m": 1.0
-})
+}
 font = ExtResource("8_o42a4")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -712,11 +713,11 @@ position = Vector2(88.5, 30)
 script = ExtResource("7_o6asp")
 text = "Not very creative...?"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 ".": -2.0,
 "m": 1.0
-})
+}
 font = ExtResource("8_o42a4")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -725,10 +726,10 @@ position = Vector2(68.5, 200)
 script = ExtResource("7_o6asp")
 text = "No"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "m": 1.0
-})
+}
 font = ExtResource("8_o42a4")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -737,10 +738,10 @@ position = Vector2(208.5, 200)
 script = ExtResource("7_o6asp")
 text = "Yes"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "m": 1.0
-})
+}
 font = ExtResource("8_o42a4")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 

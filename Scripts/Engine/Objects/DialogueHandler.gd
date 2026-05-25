@@ -14,10 +14,7 @@ signal dialogue_finished
 
 func StartDialogue(dialogue : Array,position : int = DOWN) -> void:
 	visible = true
-	textobject.font = preload("res://Fonts/DTM-Mono.otf")
-	textobject.size = 13
-	textobject.character_spacing = 8
-	textobject.line_spacing = 18
+	textobject.load_font_data("default")
 	var face = "none"
 	facesprite.texture = null
 	textobject.position.x = 8
@@ -62,14 +59,7 @@ func StartDialogue(dialogue : Array,position : int = DOWN) -> void:
 								#textobject.font = Loader.load_file("Fonts/"+".otf")
 							#elif Loader.load_file("Fonts/"+".ttf"):
 								#textobject.font = Loader.load_file("Fonts/"+".ttf")
-							var font = FontFile.new()
-							font.load_dynamic_font(Undermaker.Path+"Fonts/"+cmand[1])
-							if font:
-								textobject.font = font
-						"font_size":
-							textobject.size = int(cmand[1])
-							textobject.character_spacing = float(cmand[2])
-							textobject.line_spacing = float(cmand[3])
+							textobject.load_font_data(cmand[1])
 						"sound":
 							$DialoguePlayer.stream = Loader.load_file("Audio/Sounds/"+cmand[1]+".wav")
 						"clear":

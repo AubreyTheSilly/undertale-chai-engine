@@ -1,0 +1,30 @@
+{
+	"default":{
+		"frames":["Battle/Enemies/spr_sans_body_0"],
+		"fps":0.0
+	},
+	"shrug":{
+		"frames":["Battle/Enemies/spr_sans_body_1"],
+		"fps":0.0
+	},
+	"fists":{
+		"frames":["Battle/Enemies/spr_sans_body_2"],
+		"fps":0.0
+	},
+	"holduphand":{
+		"frames":["Battle/Enemies/spr_sans_body_3"],
+		"fps":0.0
+	},
+	"fist":{
+		"frames":["Battle/Enemies/spr_sans_body_4"],
+		"fps":0.0
+	},
+	"whuh":{
+		"frames":["Battle/Enemies/spr_sans_body_5"],
+		"fps":0.0
+	},
+	"armsdown":{
+		"frames":["Battle/Enemies/spr_sans_body_6"],
+		"fps":0.0
+	}
+}

@@ -1,11 +1,13 @@
 function _ready() {
+	setBorder("castle");
+
 	setPlayerData("LV",19);
 	setPlayerData("HP",92);
 	setPlayerData("MaxHP",92);
 
 	initvar(legs,NODE,createSprite("legs",loadTexture("Battle/Enemies/spr_sans_legs_0"),vec2(0,0)));
-	initvar(body,NODE,createSprite("body",loadTexture("Battle/Enemies/spr_sans_body_0"),vec2(0,0)));
-	initvar(head,NODE,createSprite("head",loadTexture("Battle/Enemies/spr_sans_head_0"),vec2(0,0)));
+	initvar(body,NODE,createAnimatedSprite("body",vec2(0,0),getAnimation("sansbody")));
+	initvar(head,NODE,createAnimatedSprite("head",vec2(0,0),getAnimation("sanshead")));
 
 	reparent(legs,getNode("Sprite2D"));
 	reparent(body,getNode("Sprite2D"));
@@ -16,15 +18,27 @@ function _ready() {
 
 	initvar(turn,NUMBER,-1);
 	initvar(phase,NUMBER,1);
-	initvar(attackcount,NUMBER,10);
+	initvar(attackcount,NUMBER,9);
 
-	initvar(dialogs,ARRAY,["what?[wait:10][newline]i'm not just gonna[newline]stand there and take[newline]it.[pause][clear]you should know this[newline]by now.","our reports showed a[newline]massive anomaly in the[newline]timespace continnuum"]);
+	initvar(dialogs,ARRAY,["[func:setFace:wink][func:setBody:shrug]what?[wait:10][newline]i'm not just gonna[newline]stand there and take[newline]it.[pause][clear][func:setFace:mbgng]you should know this[newline]by now.","[func:setBody:default][func:setFace:default]i'm gonna be real honest[newline]here.[pause][clear][func:setFace:wink]i have no idea what to[newline]say.[pause][clear][func:setFace:fuckyou]you've probably heard[newline]it all anyways,[wait:5][newline]haven't you...?","i guess i'll just[newline]explain a bit more what[newline]my plan here is.[pause][clear]no matter if you[newline]get bored,[wait:10] or you're[newline]finally satisfied...[pause][clear]hopefully, you'll[newline]leave for good after[newline]that.","it's not like i fully[newline]believe you'll do that,[newline]though.","you're unpredictable.[wait:10][newline][color:255:0:0]enigmatic[color:0:0:0],[wait:4] even.[pause][clear]so i'm really putting[newline]all my eggs in one[newline]basket here.","but,[wait:2] i have to[newline]consider.[pause][clear]will it matter[newline]in the end?"]);
 	initvar(dialog,STRING,"");
 
 	initvar(progression,NUMBER,-1);
+
+	initvar(facesprite,STRING,"default");
+	initvar(bodysprite,STRING,"default");
+
+	initvar(temp,NUMBER,0);
 };
 
 function _update() {
+	if (get(head,"animation") != facesprite) {
+		set(head,"animation",facesprite);
+	};
+	if (get(body,"animation") != bodysprite) {
+		set(body,"animation",bodysprite);
+	};
+
 	set(head,"position",vec2(round(sin(halftimer,1),0.5),round(sin(frametimer,1),0.5)));
 	set(body,"position",vec2(round(sin(halftimer,1),0.5),round(sin(frametimer,0.5),0.5)));
 
@@ -34,11 +48,12 @@ function _update() {
 
 function _damage() {
 	playSlashAnimation();
+
 	if (randi(0,1) == 0) {
 		await tween_property(getNode("Sprite2D"),"position:x",50,0.5,TRANS_CUBIC,EASE_OUT);
 	} else {
 		await tween_property(getNode("Sprite2D"),"position:x",-50,0.5,TRANS_CUBIC,EASE_OUT);
-	};	
+	};
 	wait_frames(10);
 	miss();
 	tween_property(getNode("Sprite2D"),"position:x",0,0.5,TRANS_CUBIC,EASE_IN);
@@ -59,4 +74,12 @@ function _predialogue() {
 
 	set(self,"nextattack","phase{phase}_{turn}");
 	print("phase{phase}_{turn}");
+};
+
+function setFace() {
+	facesprite = PARAM1;
+};
+
+function setBody() {
+	bodysprite = PARAM1;
 };

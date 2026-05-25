@@ -343,10 +343,10 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 												var _signal : Signal = vari.value
 												await _signal
 											t += 1
-						"else":
-							if next_token is Lexer.CodeToken and !should_continue_block and !end_script:
-								await executeCodeBlock(next_token,node)
-							t += 1
+						#"else":
+							#if next_token is Lexer.CodeToken and !should_continue_block and !end_script:
+								#await executeCodeBlock(next_token,node)
+							#t += 1
 						"break":
 							if should_continue_while:
 								should_continue_while = false
@@ -853,11 +853,11 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				if params[2].value == null:
 					push_error('Line '+str(total_l+1)+': Cannot compare nil (',str(params[0].value),' and ',(params[2].value),')')
 					return
-				if params[0].type == Lexer.TokenType.IDENTIFIER:
+				if params[0].type == Lexer.TokenType.IDENTIFIER and token.params[0] is not Lexer.FunctionToken:
 					push_error('Line '+str(total_l+1)+': Variable ',token.params[0].value,' does not exist or has not been initialized properly')
 					return
-				if params[2].type == Lexer.TokenType.IDENTIFIER:
-					push_error('Line '+str(total_l+1)+': Variable ',token.params[0].value,' does not exist or has not been initialized properly')
+				if params[2].type == Lexer.TokenType.IDENTIFIER and token.params[2] is not Lexer.FunctionToken:
+					push_error('Line '+str(total_l+1)+': Variable ',token.params[2].value,' does not exist or has not been initialized properly')
 					return
 				match params[1].value:
 					"<=":
@@ -879,11 +879,19 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if line[t+1] is not Lexer.CodeToken:
 				push_error('Line '+str(total_l+1)+': Code block expected for if')
 				return
-			
-			if should_continue_block:
+			var curshouldcontinue = should_continue_block
+			if curshouldcontinue:
 				await executeCodeBlock(line[t+1],node)
 			else:
+				#print("else")
 				total_l += line[t+1].value.size()+1
+				
+				if line.size() >= t+4:
+					if line[t+2].value == "else":
+						var next_token = line[t+3]
+						if next_token is Lexer.CodeToken and !end_script:
+							await executeCodeBlock(next_token,node)
+				t += 1
 			
 			t += 1
 		"elif":
@@ -1265,7 +1273,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				push_error('Line '+str(total_l+1)+': font() requires exactly one parameter')
 				return
 			var font = FontFile.new()
-			font.load_dynamic_font(Undermaker.Path+"Fonts/"+token.params[0].value)
+			font.load_dynamic_font(Undermaker.Path+"Fonts/"+str(token.params[0].value))
 			
 			if font:
 				return font
@@ -1426,13 +1434,16 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				return
 			var font = preload("res://Fonts/DTM-Mono.otf")
 			if params.size() == 4:
-				if params[3].type != Lexer.TokenType.FONT:
-					push_error('Line '+str(total_l+1)+': Text font must be a Font')
+				if params[3].type != Lexer.TokenType.FONT and params[3].type != Lexer.TokenType.STRING:
+					push_error('Line '+str(total_l+1)+': Text font must be a Font or String')
 					return
 				font = params[3].value
 			
 			var text = TextObject.new()
-			text.font = font
+			if font is String:
+				text.load_font_data(font)
+			else:
+				text.font = font
 			text.name = params[0].value
 			text.text = params[1].value
 			text.position = params[2].value

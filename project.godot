@@ -67,7 +67,7 @@ enabled=PackedStringArray("res://addons/discord-rpc-gd/plugin.cfg")
 
 common/snap_controls_to_pixels=false
 theme/default_font_antialiasing=0
-theme/default_font_hinting=0
+theme/default_font_subpixel_positioning=3
 theme/custom_font="res://Fonts/DTM-Mono.otf"
 
 [input]

@@ -2,14 +2,26 @@ setSoulMode(MODE_BLUE);
 
 initvar(i,NUMBER,0);
 
-repeat (10) {
+repeat (6) {
     createBone("boneleft1_{i}",vec2(getBoxPos(DIR_LEFT),getBoxPos(DIR_DOWN)),10,vec2(2,0));
-    createBone("boneleft2_{i}",vec2(getBoxPos(DIR_LEFT),getBoxPos(DIR_UP)),45,vec2(2,0),"white",180);
+    createBone("boneleft2_{i}",vec2(getBoxPos(DIR_LEFT),getBoxPos(DIR_UP)),42,vec2(2,0),"white",180);
     createBone("boneright1_{i}",vec2(getBoxPos(DIR_RIGHT),getBoxPos(DIR_DOWN)),10,vec2(-2,0));
-    createBone("boneright2_{i}",vec2(getBoxPos(DIR_RIGHT),getBoxPos(DIR_UP)),45,vec2(-2,0),"white",180);
+    createBone("boneright2_{i}",vec2(getBoxPos(DIR_RIGHT),getBoxPos(DIR_UP)),42,vec2(-2,0),"white",180);
 
     i += 1;
     wait_frames(20);
+};
+i = 0;
+wait_frames(30);
+slam(ANGLE_UP);
+repeat (8) {
+    createBone("boneleft1_{i}",vec2(getBoxPos(DIR_LEFT),getBoxPos(DIR_DOWN)),42,vec2(3,0));
+    createBone("boneleft2_{i}",vec2(getBoxPos(DIR_LEFT),getBoxPos(DIR_UP)),10,vec2(3,0),"white",180);
+    createBone("boneright1_{i}",vec2(getBoxPos(DIR_RIGHT),getBoxPos(DIR_DOWN)),42,vec2(-3,0));
+    createBone("boneright2_{i}",vec2(getBoxPos(DIR_RIGHT),getBoxPos(DIR_UP)),10,vec2(-3,0),"white",180);
+
+    i += 1;
+    wait_frames(18);
 };
 
 wait_frames(45);

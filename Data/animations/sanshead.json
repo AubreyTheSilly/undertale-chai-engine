@@ -1,0 +1,34 @@
+{
+	"default":{
+		"frames":["Battle/Enemies/spr_sans_head_0"],
+		"fps":0.0
+	},
+	"wink":{
+		"frames":["Battle/Enemies/spr_sans_head_1"],
+		"fps":0.0
+	},
+	"fuckyou":{
+		"frames":["Battle/Enemies/spr_sans_head_2"],
+		"fps":0.0
+	},
+	"eyesclosed":{
+		"frames":["Battle/Enemies/spr_sans_head_3"],
+		"fps":0.0
+	},
+	"wh":{
+		"frames":["Battle/Enemies/spr_sans_head_4"],
+		"fps":0.0
+	},
+	"confuzzled":{
+		"frames":["Battle/Enemies/spr_sans_head_5"],
+		"fps":0.0
+	},
+	"youbastard":{
+		"frames":["Battle/Enemies/spr_sans_head_6"],
+		"fps":0.0
+	},
+	"mbgng":{
+		"frames":["Battle/Enemies/spr_sans_head_7"],
+		"fps":0.0
+	}
+}

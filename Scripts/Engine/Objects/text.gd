@@ -4,12 +4,36 @@ extends Node2D
 
 @export var text : String
 @export var character_spacing : float = 8
-@export var extra_font_spacing : Dictionary[String,float]
+@export var extra_font_spacing : Dictionary
 @export var line_spacing : float = 16
 @export var size : int = 13
 @export var font : Font
 
 @export var centered := false
+
+func load_font_data(fontname:String) -> void:
+	var data = {
+		"font":"DTM-Mono.otf",
+		"line_spacing":16.0,
+		"character_spacing":8.0,
+		"size":13,
+		"extra_character_spacing":{}
+	}
+	var fontdict = Undermaker.loadJsonAsDictionary("/Data/fontdata/"+fontname+".json")
+	if fontdict:
+		for i in fontdict:
+			data[i] = fontdict[i]
+	
+	var newfont := FontFile.new()
+	newfont.load_dynamic_font(Undermaker.Path+"/Fonts/"+str(data["font"]))
+	font.antialiasing = 0
+	font.subpixel_positioning = 1
+	
+	font = newfont
+	line_spacing = float(data["line_spacing"])
+	character_spacing = float(data["character_spacing"])
+	size = int(data["size"])
+	extra_font_spacing = data["extra_character_spacing"]
 
 func get_processed_text() -> String:
 	var Text = ""
