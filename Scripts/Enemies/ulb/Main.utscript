@@ -12,7 +12,16 @@ function _ready() {
 	reparent(head,getNode("Sprite2D"));
 
 	initvar(frametimer,NUMBER,0);
-	initvar(halftimer,NUMBER,0);=
+	initvar(halftimer,NUMBER,0);
+
+	initvar(turn,NUMBER,-1);
+	initvar(phase,NUMBER,1);
+	initvar(attackcount,NUMBER,10);
+
+	initvar(dialogs,ARRAY,["what?[wait:10][newline]i'm not just gonna[newline]stand there and take[newline]it.[pause][clear]you should know this[newline]by now.","our reports showed a[newline]massive anomaly in the[newline]timespace continnuum"]);
+	initvar(dialog,STRING,"");
+
+	initvar(progression,NUMBER,-1);
 };
 
 function _update() {
@@ -29,10 +38,25 @@ function _damage() {
 		await tween_property(getNode("Sprite2D"),"position:x",50,0.5,TRANS_CUBIC,EASE_OUT);
 	} else {
 		await tween_property(getNode("Sprite2D"),"position:x",-50,0.5,TRANS_CUBIC,EASE_OUT);
-	};
+	};	
 	wait_frames(10);
-	// silly :3
-	miss(get_at_index(["get better aim","you suck!","skill issue","L+ratio","nuh uh"],randi(0,4)));
+	miss();
 	tween_property(getNode("Sprite2D"),"position:x",0,0.5,TRANS_CUBIC,EASE_IN);
 	wait_frames(15);
+};
+
+function _predialogue() {
+	turn += 1;
+	if (turn >=attackcount) {
+		turn = 0
+	};
+
+	if (playerchoice == 0) {
+		progression += 1;
+		dialog = get_at_index(dialogs,progression);
+		set(self,"nextdialogue","[sound:snd_txtsans][font:Comic Sans UT.ttf][font_size:16:8:18]{dialog}");
+	};
+
+	set(self,"nextattack","phase{phase}_{turn}");
+	print("phase{phase}_{turn}");
 };

@@ -80,12 +80,13 @@ func _process(_delta):
 		camerashake *= 0.6
 	$Camera2D.offset = Vector2(randf_range(-camerashake,camerashake),randf_range(-camerashake,camerashake))
 	
-	if PlayerData.inventory.size() != 0:
-		$ItemButton.NormalSprite = preload("res://Sprites/Battle/Buttons/spr_itembt_0.png")
-		$ItemButton.SelectSprite = preload("res://Sprites/Battle/Buttons/spr_itembt_1.png")
-	else:
-		$ItemButton.NormalSprite = preload("res://Sprites/Battle/Buttons/spr_itembt_empty_0.png")
-		$ItemButton.SelectSprite = preload("res://Sprites/Battle/Buttons/spr_itembt_empty_1.png")
+	if Undermaker.grey_empty:
+		if PlayerData.inventory.size() != 0:
+			$ItemButton.NormalSprite = preload("res://Sprites/Battle/Buttons/spr_itembt_0.png")
+			$ItemButton.SelectSprite = preload("res://Sprites/Battle/Buttons/spr_itembt_1.png")
+		else:
+			$ItemButton.NormalSprite = preload("res://Sprites/Battle/Buttons/spr_itembt_empty_0.png")
+			$ItemButton.SelectSprite = preload("res://Sprites/Battle/Buttons/spr_itembt_empty_1.png")
 	
 	$PlayerName.text = PlayerData.Name
 	$LV.text = "LV "+str(PlayerData.LV)
@@ -342,10 +343,7 @@ func _process(_delta):
 				var attackconfigs : Array[AttackData] = []
 				var attack_exists = false
 				for i in enemies:
-					if i.state == 1 and i.PreDialogueScript:
-						i.lastchoice = playerbuttonchoice
-						i._predialogue()
-						await get_tree().process_frame
+					await i._predialogue()
 					var attack = i.getAttack()
 					if attack != "":
 						attack_exists = true
@@ -602,4 +600,4 @@ func _PlayerTurn():
 		enem = enemies.pick_random()
 		while enem.state != 1:
 			enem = enemies.pick_random()
-		FlavorBox.StartFlavorDialogue(enem.enemy_data.FlavorText.pick_random())
+		FlavorBox.StartFlavorDialogue(enem.getFlavorText())

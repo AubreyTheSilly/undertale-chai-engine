@@ -16,6 +16,7 @@ var frame := 0
 var damaging = false
 var nextattack := ""
 var lastchoice := 0
+var nextflavortext := ""
 
 # important variables related to scripts
 var ReadyScript : Array
@@ -46,12 +47,12 @@ signal damage_done
 
 func _predialogue():
 	if lastdamage != -450:
-		scr.custom_constants["DAMAGE"] = float(lastdamage)
+		scr.custom_variables["damage"] = float(lastdamage)
 		lastdamage = -450
 	else:
-		scr.custom_constants["DAMAGE"] = 0
+		scr.custom_variables["damage"] = 0
 	
-	scr.custom_constants["PLAYERCHOICE"] = get_parent().playerbuttonchoice
+	scr.custom_variables["playerchoice"] = get_parent().playerbuttonchoice
 	
 	if PreDialogueScript:
 		scr.runScript(PreDialogueScript,self)
@@ -60,7 +61,7 @@ func _predialogue():
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	scr.custom_constants["damaging"] = false
+	scr.custom_variables["damaging"] = false
 	#scr.persistentVars["damaging"] = UMVar.new()
 	#scr.persistentVars["damaging"].type = Token.TokenType.TYPE_BOOL
 	# setup
@@ -231,6 +232,14 @@ func _damage(damage : float,forcedisablescript:=false):
 		if !forcedisablescript:
 			damage_done.emit()
 
+func getFlavorText() -> String:
+	if nextflavortext != "":
+		var f = nextflavortext
+		nextflavortext = ""
+		return f
+	else:
+		return enemy_data.FlavorText.pick_random()
+
 func act(Act : String) -> void:
 	if Act == "Check":
 		# constant for all enemies
@@ -335,12 +344,12 @@ func dialogue() -> void:
 						$AudioStreamPlayer2.play()
 					if skip == 0:
 						await get_tree().process_frame
-						await get_tree().process_frame
+						#await get_tree().process_frame
 					else:
 						skip -= 1
 						if skip == 0:
 							await get_tree().process_frame
-							await get_tree().process_frame
+							#await get_tree().process_frame
 	if enemy_data.autodialog:
 		await get_tree().create_timer(0.5).timeout
 	else:
@@ -350,7 +359,7 @@ func dialogue() -> void:
 	talking = false
 
 func _process(_delta):
-	scr.custom_constants["damaging"] = damaging
+	scr.custom_variables["damaging"] = damaging
 	
 	frame += 1
 	#if predialogue:

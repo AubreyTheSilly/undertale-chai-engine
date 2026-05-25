@@ -1,0 +1,15 @@
+setSoulMode(MODE_BLUE);
+
+initvar(i,NUMBER,0);
+
+repeat (10) {
+    createBone("boneleft1_{i}",vec2(getBoxPos(DIR_LEFT),getBoxPos(DIR_DOWN)),10,vec2(2,0));
+    createBone("boneleft2_{i}",vec2(getBoxPos(DIR_LEFT),getBoxPos(DIR_UP)),45,vec2(2,0),"white",180);
+    createBone("boneright1_{i}",vec2(getBoxPos(DIR_RIGHT),getBoxPos(DIR_DOWN)),10,vec2(-2,0));
+    createBone("boneright2_{i}",vec2(getBoxPos(DIR_RIGHT),getBoxPos(DIR_UP)),45,vec2(-2,0),"white",180);
+
+    i += 1;
+    wait_frames(20);
+};
+
+wait_frames(45);

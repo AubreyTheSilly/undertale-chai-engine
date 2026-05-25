@@ -4,8 +4,8 @@ var Name = "Chara"
 var HP : int = 20
 var MaxHP : int = 20
 var LV : int = 1
-var EXP = 0
-var GOLD = 0
+var EXP := 0
+var GOLD := 0
 var ATK : int = 0
 var DEF : int = 0
 var INV : int = 30
@@ -23,15 +23,15 @@ var count_time : bool = false
 var save_name := ""
 
 var obj : Player
-var player_can_move = true
-var player_teleporting = false
+var player_can_move := true
+var player_teleporting := false
 var player_teleport_position = null
 var player_position : Vector2
 var player_dir : Vector2 = Vector2.DOWN
 var battle_soul_pos : Vector2 = Vector2(160,120)
 var can_move_internal := false
 
-var settings = {}
+var settings := {}
 
 func get_save_file() -> Dictionary:
 	var save := {"name":"EMPTY","lv":0,"time":0,"save_name":"---"}

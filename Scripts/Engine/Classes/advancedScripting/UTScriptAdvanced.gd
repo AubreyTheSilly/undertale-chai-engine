@@ -56,10 +56,12 @@ var end_script := false
 var is_running := false
 
 var custom_constants := {}
+var custom_variables := {}
 
 signal script_ended
 
 func runSingleFunction(function : String,args := []) -> void:
+	initConstants()
 	var oldt = t
 	var functoken := Lexer.FunctionToken.new(Lexer.TokenType.IDENTIFIER,function)
 	for i in args:
@@ -107,6 +109,7 @@ func initConstants() -> void:
 	# timer stuff
 	global_variables["TIMER"] = Variable.new("TIMER",VariableType.NUMBER,0.0)
 	global_variables["DELTA"] = Variable.new("DELTA",VariableType.NUMBER,dt)
+	global_variables["GLOBALTIMER"] = Variable.new("GLOBALTIMER",VariableType.NUMBER,Undermaker.timer)
 	
 	# tween eases
 	global_variables["EASE_IN"] = Variable.new("EASE_IN",VariableType.NUMBER,0.0)
@@ -170,6 +173,8 @@ func initConstants() -> void:
 	# custom variables, these are only supposed to be used by functions. PLEASE DO NOT TRY TO SET THESE THEY WON'T WORK PROPERLY LOL
 	for i in custom_constants:
 		variables[str(node.get_instance_id())]['_'+i] = Variable.new('_'+i,VariableType.UNDEFINED,custom_constants[i])
+	for i in custom_variables:
+		variables[str(node.get_instance_id())][i] = Variable.new(i,VariableType.UNDEFINED,custom_variables[i])
 
 func updateConstants() -> void:
 	# update timers
@@ -177,6 +182,7 @@ func updateConstants() -> void:
 		global_variables["TIMER"].value += dt
 		global_variables["DELTA"].value = dt
 		dt_changed = false
+	global_variables["GLOBALTIMER"].value = Undermaker.timer
 
 static func loadScriptFromFile(script : String) -> Array:
 	var scr := Undermaker.loadFileAsString("Scripts/"+script+".utscript",false)
@@ -489,9 +495,9 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 					variable_ing = true
 					variablename = ""
 				elif i == "}" and variable_ing:
-					var varible = _get_variable(variablename)
+					var varible : Variable = _get_variable(variablename)
 					if varible:
-						targettext += str(varible.value)
+						targettext += str(varible.value).trim_suffix(".0")
 					else:
 						targettext += "[null]"
 					variable_ing = false
@@ -846,6 +852,12 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 					return
 				if params[2].value == null:
 					push_error('Line '+str(total_l+1)+': Cannot compare nil (',str(params[0].value),' and ',(params[2].value),')')
+					return
+				if params[0].type == Lexer.TokenType.IDENTIFIER:
+					push_error('Line '+str(total_l+1)+': Variable ',token.params[0].value,' does not exist or has not been initialized properly')
+					return
+				if params[2].type == Lexer.TokenType.IDENTIFIER:
+					push_error('Line '+str(total_l+1)+': Variable ',token.params[0].value,' does not exist or has not been initialized properly')
 					return
 				match params[1].value:
 					"<=":
@@ -1221,7 +1233,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			sprite.name = params[0].value
 			sprite.texture = params[1].value
 			sprite.position = params[2].value
-			node.add_child(sprite)
+			node.add_child(sprite,true)
 			
 			return sprite
 		"createAnimatedSprite":
@@ -1245,7 +1257,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 					push_error('Line '+str(total_l+1)+': Sprite animation must be a SpriteFrames')
 					return
 				sprite.sprite_frames = params[2].value
-			node.add_child(sprite)
+			node.add_child(sprite,true)
 			
 			return sprite
 		"font":
@@ -1380,7 +1392,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			var obj = ClassDB.instantiate(params[1].value)
 			obj.name = params[0].value
 			obj.position = params[2].value
-			node.add_child(obj)
+			node.add_child(obj,true)
 			
 			return obj
 		"reparent":
@@ -1424,7 +1436,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			text.name = params[0].value
 			text.text = params[1].value
 			text.position = params[2].value
-			node.add_child(text)
+			node.add_child(text,true)
 			
 			return text
 		"playSound":
@@ -1438,7 +1450,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				return
 			
 			var audio = AudioStreamPlayer.new()
-			add_child(audio)
+			add_child(audio,true)
 			audio.stream = Loader.load_file("Audio/Sounds/"+params[0].value+".wav")
 			if audio.stream:
 				audio.play()
@@ -1653,7 +1665,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			
 			var metronome := Metronome.new(bpm,beats,steps,start,sound)
 			metronome.name = params[0].value
-			node.add_child(metronome)
+			node.add_child(metronome,true)
 			
 			return metronome
 		"setPlayerData":
@@ -1789,9 +1801,9 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				attack.velocity = vel
 				attack.attack_type = color
 				if bounding:
-					node.get_node("attacks/bounding").add_child(attack)
+					node.get_node("attacks/bounding").add_child(attack,true)
 				else:
-					node.get_node("attacks").add_child(attack)
+					node.get_node("attacks").add_child(attack,true)
 				return attack
 			"setBoxSize":
 				#if tokens.data.size() != 3:
@@ -1831,7 +1843,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				if get_parent().get_parent().soulMode != int(params[0].value):
 					get_parent().get_parent().soulMode = int(params[0].value)
 					var audio = AudioStreamPlayer.new()
-					add_child(audio)
+					add_child(audio,true)
 					audio.stream = preload("res://Audio/Sounds/snd_bell.wav")
 					audio.play()
 					audio.finished.connect(audio.queue_free)
@@ -1971,7 +1983,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				attack.attack_type = col
 				attack.pap = pap
 				
-				node.get_node("attacks/bounding").add_child(attack)
+				node.get_node("attacks/bounding").add_child(attack,true)
 				return attack
 			"createCenteredBone":
 				if token.params.size() < 4 or token.params.size() > 8:
@@ -2034,7 +2046,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				attack.attack_type = col
 				attack.pap = pap
 				
-				node.get_node("attacks/bounding").add_child(attack)
+				node.get_node("attacks/bounding").add_child(attack,true)
 				return attack
 			#"create_blaster":
 				#for i in tokens.data:
@@ -2095,7 +2107,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				attack.rotation_degrees = -params[2].value
 				attack.attack_type = col
 				
-				node.get_node("attacks").add_child(attack)
+				node.get_node("attacks").add_child(attack,true)
 				return attack
 			#"slam":
 				#if tokens.data[1].type != Token.TokenType.STRING:

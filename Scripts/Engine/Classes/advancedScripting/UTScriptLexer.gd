@@ -197,6 +197,7 @@ func read_string() -> AdvancedToken:
 		pos += 1
 	
 	var value = source.substr(start,pos-start)
+	value = value.replace("\\n","\n")
 	pos += 1
 	
 	return AdvancedToken.new(TokenType.STRING,value)

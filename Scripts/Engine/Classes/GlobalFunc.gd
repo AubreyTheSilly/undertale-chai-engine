@@ -14,6 +14,8 @@ var discord_working := false
 
 var font_glyphs = {}
 
+var grey_empty := false
+
 func get_mods_list(directory : String) -> Array[Dictionary]:
 	var mods : Array[Dictionary] = []
 	

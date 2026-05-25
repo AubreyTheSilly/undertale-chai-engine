@@ -2,10 +2,15 @@
 
 [ext_resource type="Shader" uid="uid://cao2q8s7n450p" path="res://BorderShader.gdshader" id="1_1r7dd"]
 [ext_resource type="Script" uid="uid://ctwqv3k4exqv5" path="res://Scripts/borders.gd" id="1_p8jor"]
-[ext_resource type="Texture2D" uid="uid://bgwc1dmt408yw" path="res://Sprites/Borders/bg_border_line.png" id="3_p8jor"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a7e48"]
 shader = ExtResource("1_1r7dd")
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_a7e48"]
+load_path = "res://.godot/imported/bg_border_line.png-fd8c3672de96b735dc9087f4a3eee838.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_p8jor"]
+load_path = "res://.godot/imported/bg_border_line.png-fd8c3672de96b735dc9087f4a3eee838.ctex"
 
 [node name="Borders" type="CanvasLayer" unique_id=42077459]
 process_priority = -10
@@ -26,12 +31,12 @@ offset_bottom = 285.0
 [node name="Border" type="Sprite2D" parent="." unique_id=2113663632]
 z_as_relative = false
 scale = Vector2(0.25, 0.25)
-texture = ExtResource("3_p8jor")
+texture = SubResource("CompressedTexture2D_a7e48")
 centered = false
 
 [node name="FakeBorder" type="Sprite2D" parent="." unique_id=1574633915]
 modulate = Color(1, 1, 1, 0)
 z_as_relative = false
 scale = Vector2(0.25, 0.25)
-texture = ExtResource("3_p8jor")
+texture = SubResource("CompressedTexture2D_p8jor")
 centered = false
