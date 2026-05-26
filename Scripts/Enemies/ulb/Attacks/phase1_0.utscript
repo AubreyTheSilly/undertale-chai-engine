@@ -14,6 +14,8 @@ repeat (6) {
 i = 0;
 wait_frames(30);
 slam(ANGLE_UP);
+setvar(getNode("/root/BattleRoom/Enemy0"),"bodysprite","gravityup");
+setvar(getNode("/root/BattleRoom/Enemy0"),"facesprite","evil");
 repeat (8) {
     createBone("boneleft1_{i}",vec2(getBoxPos(DIR_LEFT),getBoxPos(DIR_DOWN)),42,vec2(3,0));
     createBone("boneleft2_{i}",vec2(getBoxPos(DIR_LEFT),getBoxPos(DIR_UP)),10,vec2(3,0),"white",180);
@@ -21,6 +23,12 @@ repeat (8) {
     createBone("boneright2_{i}",vec2(getBoxPos(DIR_RIGHT),getBoxPos(DIR_UP)),10,vec2(-3,0),"white",180);
 
     i += 1;
+
+    if (i == 3) {
+        setvar(getNode("/root/BattleRoom/Enemy0"),"bodysprite","gravityleft");
+        setvar(getNode("/root/BattleRoom/Enemy0"),"facesprite","default");
+    };
+
     wait_frames(18);
 };
 

@@ -17,6 +17,7 @@ var damaging = false
 var nextattack := ""
 var lastchoice := 0
 var nextflavortext := ""
+var should_skip_dialogue := false
 
 # important variables related to scripts
 var ReadyScript : Array
@@ -254,6 +255,8 @@ func act(Act : String) -> void:
 			await flavorbox.StartBattleDialogue(["* Error!"])
 
 func dialogue() -> void:
+	should_skip_dialogue = false
+	
 	var Dialogue = enemy_data.RandomDialogs.pick_random()
 	if nextdialogue != "":
 		Dialogue = nextdialogue
@@ -282,8 +285,11 @@ func dialogue() -> void:
 				var cmand = command.split(":",false)
 				match cmand[0]:
 					"wait":
-						for k in range(int(cmand[1])):
-							await get_tree().process_frame
+						if !should_skip_dialogue:
+							for k in range(int(cmand[1])):
+								if should_skip_dialogue:
+									break
+								await get_tree().process_frame
 					"sound":
 						if cmand[1] == "mettaton":
 							mettaton = true
@@ -291,6 +297,7 @@ func dialogue() -> void:
 							mettaton = false
 							$AudioStreamPlayer2.stream = Loader.load_file("Audio/Sounds/"+cmand[1]+".wav")
 					"pause":
+						should_skip_dialogue = false
 						while !Input.is_action_just_pressed("Select"):
 							await get_tree().process_frame
 					"clear":
@@ -342,11 +349,12 @@ func dialogue() -> void:
 							$AudioStreamPlayer2.stream = load("res://Audio/Sounds/snd_mtt"+str(randi_range(1,9))+".wav")
 						$AudioStreamPlayer2.play()
 					if skip == 0:
-						await get_tree().process_frame
+						if !should_skip_dialogue:
+							await get_tree().process_frame
 						#await get_tree().process_frame
 					else:
 						skip -= 1
-						if skip == 0:
+						if skip == 0 and !should_skip_dialogue:
 							await get_tree().process_frame
 							#await get_tree().process_frame
 	if enemy_data.autodialog:
@@ -378,3 +386,10 @@ func _process(_delta):
 		sprite.texture = enemy_data.EnemySpareSprite
 	else:
 		sprite.texture = enemy_data.EnemySprite
+	
+	if Input.is_action_just_pressed("Back"):
+		should_skip_dialogue = true
+
+func _preattack() -> void:
+	if EnemyScript:
+		scr.runSingleFunction("_preattack")

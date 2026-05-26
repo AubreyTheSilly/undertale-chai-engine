@@ -1,0 +1,30 @@
+km values
+bone = 6
+blaster = 10
+bone stabs = 6
+boneloop = 6
+button bones = 1
+choice bones = 2
+
+attacks increase km by their km value with no invincibility frames triggered. DO NOT DEPLETE HP! ONLY INCREASE KARMA
+
+notes
+karma must always be one less than the player's HP and cannot be more than 40!!
+
+if inv is 45 or more, km_bonus has a 1 in 2 chance to be 1
+if inv is 60 or more, km_bonus has a 2 in 3 chance to be 1
+if inv is 75 or more, km_bonus is force set to 1
+
+km_requirement is 1 by default
+if km is 40 or more, km_requirement should be 1
+if km is 30 or more, km_requirement should be 2 and multiply km_bonus by 2
+if km is 20 or more, km_requirement should be 5 and multiply km_bonus by 5
+if km is 10 or more, km_requirement should be 15 and multiply km_bonus by 5
+OTHERWISE SET KM_REQUIREMENT TO 30 AND MULTIPLY KM_BONUS BY 10!!!
+
+km_t increments every frame
+if km_t is more than km_requirement+km_bonus, and hp is same as prevhp (not sure why that check is here but it's in the code so i'm noting it!), then reset km_t and remove 1 hp and 1 km
+
+if HP will be 0 after km depletes, set hp to 1 and reset km!
+
+at end of frame set prevhp to current hp

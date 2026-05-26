@@ -1,0 +1,17 @@
+setSoulMode(MODE_BLUE);
+
+initvar(i,NUMBER,0);
+
+repeat (6) {
+    createBone("boneleft_{i}",vec2(getBoxPos(DIR_LEFT),getBoxPos(DIR_DOWN)),30,vec2(1,0));
+    createBone("boneright_{i}",vec2(getBoxPos(DIR_RIGHT),getBoxPos(DIR_UP)),30,vec2(-1,0),"white",180);
+
+    i += 1;
+
+    if (i == 3) {
+        createBlaster("uh oh!",vec2(120,0),ANGLE_LEFT);
+    };
+    wait_frames(35);
+};
+
+wait_frames(120);

@@ -1,0 +1,28 @@
+initvar(plr,NODE,getNode("/root/BattleRoom/BattleHeart"));
+
+setSoulMode(MODE_RED);
+
+initvar(height,NUMBER);
+initvar(upheight,NUMBER);
+initvar(downheight,NUMBER);
+
+initvar(i,NUMBER);
+
+repeat (6) {
+    height = randi(-20,20);
+    upheight = 25
+    upheight -= height;
+    downheight = 25
+    downheight += height;
+
+    createBone("boneleft1_{i}",vec2(getBoxPos(DIR_LEFT),getBoxPos(DIR_DOWN)),downheight,vec2(2,0));
+    createBone("boneleft2_{i}",vec2(getBoxPos(DIR_LEFT),getBoxPos(DIR_UP)),upheight,vec2(2,0),"white",180);
+    createBone("boneright1_{i}",vec2(getBoxPos(DIR_RIGHT),getBoxPos(DIR_DOWN)),downheight,vec2(-2,0));
+    createBone("boneright2_{i}",vec2(getBoxPos(DIR_RIGHT),getBoxPos(DIR_UP)),upheight,vec2(-2,0),"white",180);
+
+    i += 1;
+
+    wait_frames(30);
+};
+
+wait_frames(15);

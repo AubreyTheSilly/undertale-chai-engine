@@ -26,5 +26,29 @@
 	"armsdown":{
 		"frames":["Battle/Enemies/spr_sans_body_6"],
 		"fps":0.0
+	},
+	"armdown":{
+		"frames":["Battle/Enemies/spr_sans_body_7"],
+		"fps":0.0
+	},
+	"gravitydown":{
+		"frames":["Battle/Enemies/spr_sans_body_9","Battle/Enemies/spr_sans_body_10"],
+		"fps":15.0,
+		"loop":false
+	},
+	"gravityup":{
+		"frames":["Battle/Enemies/spr_sans_body_9","Battle/Enemies/spr_sans_body_8"],
+		"fps":15.0,
+		"loop":false
+	},
+	"gravityright":{
+		"frames":["Battle/Enemies/spr_sans_body_12","Battle/Enemies/spr_sans_body_11"],
+		"fps":15.0,
+		"loop":false
+	},
+	"gravityleft":{
+		"frames":["Battle/Enemies/spr_sans_body_12","Battle/Enemies/spr_sans_body_0"],
+		"fps":15.0,
+		"loop":false
 	}
 }

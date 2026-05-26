@@ -365,6 +365,7 @@ func read_codeblock() -> CodeToken:
 			parserline += 1
 			parsertoken = 0
 			token = parsersource[parserline][parsertoken]
+	parsertoken += 1
 	
 	#print("finished reading codeblock, parsing")
 	if line.size() != 0:

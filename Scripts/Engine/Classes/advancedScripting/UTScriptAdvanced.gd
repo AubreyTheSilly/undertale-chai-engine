@@ -381,10 +381,10 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 		#print("Script finished")
 	return OK
 
-func _get_variable(variable:String,verbose:=false):
-	if variables.has(str(node.get_instance_id())):
-		if variables[str(node.get_instance_id())].has(variable):
-			return variables[str(node.get_instance_id())][variable]
+func _get_variable(variable:String,verbose:=false,target:=node):
+	if variables.has(str(target.get_instance_id())):
+		if variables[str(target.get_instance_id())].has(variable):
+			return variables[str(target.get_instance_id())][variable]
 		elif global_variables.has(variable):
 			return global_variables[variable]
 	elif global_variables.has(variable):
@@ -393,10 +393,10 @@ func _get_variable(variable:String,verbose:=false):
 		push_warning("Variable \""+variable+"\" does not exist, returning null")
 	return
 
-func _set_variable(variable:String,value:Variant):
-	if variables.has(str(node.get_instance_id())):
-		if variables[str(node.get_instance_id())].has(variable):
-			variables[str(node.get_instance_id())][variable].value = value
+func _set_variable(variable:String,value:Variant,target:=node):
+	if variables.has(str(target.get_instance_id())):
+		if variables[str(target.get_instance_id())].has(variable):
+			variables[str(target.get_instance_id())][variable].value = value
 	elif global_variables.has(variable):
 		global_variables[variable].value = value
 	else:
@@ -612,6 +612,26 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				return
 			# print("setting ",target.name,"'s property ",params[1].value," to ",params[2].value)
 			target.set_indexed(params[1].value,params[2].value)
+		"setvar":
+			if token.params.size() != 3:
+				push_error('Line '+str(total_l+1)+': set() requires three parameters')
+				return
+			var params = await _convert_variables(token.params)
+			if params[0].type != Lexer.TokenType.NODE:
+				push_error('Line '+str(total_l+1)+': Target node must be a Node')
+				return
+			if params[1].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Target node variable must be a string')
+				return
+			var target : Node = params[0].value
+			if !variables.has(str(target.get_instance_id())):
+				push_error('Line '+str(total_l+1)+': Target node does not have any variables')
+				return
+			if !variables[str(target.get_instance_id())].has(params[1].value):
+				push_error('Line '+str(total_l+1)+': Target node does not have variable ',params[1].value)
+				return
+			# print("setting ",target.name,"'s property ",params[1].value," to ",params[2].value)
+			_set_variable(params[1].value,params[2].value,target)
 		"tween_property":
 			if token.params.size() < 4 and token.params.size() > 6:
 				push_error('Line '+str(total_l+1)+': tween_property() requires between four and five parameters')
@@ -886,12 +906,13 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				#print("else")
 				total_l += line[t+1].value.size()+1
 				
-				if line.size() >= t+4:
-					if line[t+2].value == "else":
-						var next_token = line[t+3]
-						if next_token is Lexer.CodeToken and !end_script:
-							await executeCodeBlock(next_token,node)
-				t += 1
+			if line.size() >= 4:
+				print(line[t+2].type)
+				if line[t+2].value == "else":
+					var next_token = line[t+3]
+					if next_token is Lexer.CodeToken and !end_script and !curshouldcontinue:
+						await executeCodeBlock(next_token,node)
+					t += 2
 			
 			t += 1
 		"elif":
@@ -1191,6 +1212,9 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				return
 			if params[1].type != Lexer.TokenType.NUMBER:
 				push_error('Line '+str(total_l+1)+': Index must be a number')
+				return
+			if params[1].value >= params[0].value.size():
+				push_error('Line '+str(total_l+1)+': Index out of range')
 				return
 			var val = params[0].value[params[1].value]
 			if val is Lexer.AdvancedToken:

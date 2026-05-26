@@ -30,5 +30,17 @@
 	"mbgng":{
 		"frames":["Battle/Enemies/spr_sans_head_7"],
 		"fps":0.0
+	},
+	"evil":{
+		"frames":["Battle/Enemies/spr_sans_head_8","Battle/Enemies/spr_sans_head_9","Battle/Enemies/spr_sans_head_10","Battle/Enemies/spr_sans_head_9"],
+		"fps":15.0
+	},
+	"lookleft":{
+		"frames":["Battle/Enemies/spr_sans_head_11"],
+		"fps":0.0
+	},
+	"heheh":{
+		"frames":["Battle/Enemies/spr_sans_head_12"],
+		"fps":0.0
 	}
 }
