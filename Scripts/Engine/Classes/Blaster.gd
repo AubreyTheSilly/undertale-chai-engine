@@ -11,7 +11,7 @@ extends Node2D
 @export var damage := 1
 @export var kr_damage := 10
 
-var blast_cooldown := 5
+var blast_cooldown := 20
 var blast_duration := 50
 var blast := false
 
@@ -26,7 +26,7 @@ var follow:=false
 var alpha_is_ready:= false
 var can_continue:=false
 
-var BlasterDuration := 30
+var BlasterDuration := 50
 
 @onready var charge = $ChargeSound
 @onready var fire = $FireSound
@@ -39,7 +39,7 @@ func _process(_delta) -> void:
 	if counter == 1 and stage == "coming":
 		charge.play()
 		create_tween().tween_property(self,"position",target_position,float(BlasterDuration)/30.0).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
-		create_tween().tween_property(self,"rotation_degrees",target_rotation,float(BlasterDuration)/30.0).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+		create_tween().tween_property(self,"rotation_degrees",target_rotation+180,float(BlasterDuration)/30.0).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	
 	if BlasterDuration == -1:
 		stage = "blast cooldown"
@@ -66,3 +66,9 @@ func _process(_delta) -> void:
 		if sprite.frame == 4:
 			stage = "shoot!"
 			fire.play()
+	
+	if stage == "beam end":
+		if beam:
+			if beam.modulate.a < 0.1:
+				follow = false
+				beam.queue_free()

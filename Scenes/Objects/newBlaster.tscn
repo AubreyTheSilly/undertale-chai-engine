@@ -47,5 +47,8 @@ stream = ExtResource("2_ree8m")
 stream = ExtResource("3_lyksr")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=53081794]
-rotation = 3.1415927
 sprite_frames = SubResource("SpriteFrames_lyksr")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1682022999]
+offset_right = 40.0
+offset_bottom = 40.0
