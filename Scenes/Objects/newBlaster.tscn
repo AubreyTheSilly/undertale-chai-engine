@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://bqgyqphpl7i0n"]
+
+[ext_resource type="Script" uid="uid://dl0jc2sx3i2uf" path="res://Scripts/Engine/Classes/Blaster.gd" id="1_n4d0g"]
+[ext_resource type="AudioStream" uid="uid://dq84g5py8lduv" path="res://Audio/Sounds/mus_sfx_segapower.wav" id="2_ree8m"]
+[ext_resource type="Texture2D" uid="uid://tkht7wxmrrks" path="res://Sprites/Battle/Attacks/blaster/spr_gasterblaster_0.png" id="2_yfvnt"]
+[ext_resource type="Texture2D" uid="uid://b3xfn53mbjem2" path="res://Sprites/Battle/Attacks/blaster/spr_gasterblaster_4.png" id="3_cvysa"]
+[ext_resource type="AudioStream" uid="uid://568i1h42p47c" path="res://Audio/Sounds/mus_sfx_rainbowbeam_1.wav" id="3_lyksr"]
+[ext_resource type="Texture2D" uid="uid://b4lewsqwl4mh8" path="res://Sprites/Battle/Attacks/blaster/spr_gasterblaster_5.png" id="4_ree8m"]
+[ext_resource type="Texture2D" uid="uid://ulh2enfu6wmp" path="res://Sprites/Battle/Attacks/blaster/spr_gasterblaster_1.png" id="5_lyksr"]
+[ext_resource type="Texture2D" uid="uid://bajo6qvwetoxa" path="res://Sprites/Battle/Attacks/blaster/spr_gasterblaster_2.png" id="6_u517m"]
+[ext_resource type="Texture2D" uid="uid://btei4aodcq4ae" path="res://Sprites/Battle/Attacks/blaster/spr_gasterblaster_3.png" id="9_lyksr"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lyksr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_yfvnt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_lyksr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_u517m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_lyksr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_cvysa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_ree8m")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Blaster" type="Node2D" unique_id=463863855]
+script = ExtResource("1_n4d0g")
+metadata/_custom_type_script = "uid://dl0jc2sx3i2uf"
+
+[node name="ChargeSound" type="AudioStreamPlayer" parent="." unique_id=1369348416]
+stream = ExtResource("2_ree8m")
+
+[node name="FireSound" type="AudioStreamPlayer" parent="." unique_id=760851536]
+stream = ExtResource("3_lyksr")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=53081794]
+rotation = 3.1415927
+sprite_frames = SubResource("SpriteFrames_lyksr")

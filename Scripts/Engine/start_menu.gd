@@ -171,7 +171,7 @@ func _process(_delta):
 				pos.y += randf_range(-1,1)/1.9
 				i.position = pos
 			
-			name_chars[char_choice].text = "[color:255:255:0]"+name_chars[char_choice].text
+			name_chars[char_choice].text = Undermaker.colorToFunction(Undermaker.accents["selected"])+""+name_chars[char_choice].text
 			if Input.is_action_just_pressed("Move Left"):
 				match char_choice:
 					0,52:
@@ -274,11 +274,11 @@ func _process(_delta):
 			if can_pick:
 				$confirm/Yes.visible = true
 				if confirm_choice == 0:
-					$confirm/No.text = "[color:255:255:0]No"
+					$confirm/No.text = Undermaker.colorToFunction(Undermaker.accents["selected"])+"No"
 					$confirm/Yes.text = "Yes"
 				else:
 					$confirm/No.text = "No"
-					$confirm/Yes.text = "[color:255:255:0]Yes"
+					$confirm/Yes.text = Undermaker.colorToFunction(Undermaker.accents["selected"])+"Yes"
 				if Input.is_action_just_pressed("Move Right"):
 					confirm_choice = 1
 				if Input.is_action_just_pressed("Move Left"):
@@ -294,7 +294,7 @@ func _process(_delta):
 							new_game()
 			else:
 				$confirm/Yes.visible = false
-				$confirm/No.text = "[color:255:255:0]Go back"
+				$confirm/No.text = Undermaker.colorToFunction(Undermaker.accents["selected"])+"Go back"
 				if Input.is_action_just_pressed("Select"):
 					section = NAMING_SCREEN
 		MAIN_MENU:

@@ -41,6 +41,9 @@ func get_phone_dialogue(caller : String) -> Array:
 	return dialogue
 
 func _ready() -> void:
+	for i in $Menu.get_children():
+		if i is CanvasItem:
+			i.modulate = Undermaker.accents["primary"]
 	$Menu.visible = false
 	PlayerData.obj = self
 	reload_sprite()
@@ -166,12 +169,16 @@ func _process(_delta) -> void:
 				if PlayerData.inventory.size() != 0:
 					$Menu/MenuChoices/Item.text = "ITEM"
 				else:
-					$Menu/MenuChoices/Item.text = "[color:128:128:128]ITEM"
+					var color := Undermaker.accents["empty"]
+					var colorstring = "["+str(color.r8)+":"+str(color.g8)+":"+str(color.b8)+":"+"]"
+					$Menu/MenuChoices/Item.text = colorstring+"ITEM"
 				
 				if PlayerData.callers.size() != 0:
 					$Menu/MenuChoices/Cell.text = "CELL"
 				else:
-					$Menu/MenuChoices/Cell.text = "[color:128:128:128]CELL"
+					var color := Undermaker.accents["empty"]
+					var colorstring = "["+str(color.r8)+":"+str(color.g8)+":"+str(color.b8)+":"+"]"
+					$Menu/MenuChoices/Cell.text = colorstring+"CELL"
 				
 				$Menu/heart.position = Vector2(32.5,$Menu/MenuChoices.get_children()[menu_choice1].global_position.y+8.5)
 				$Menu/heart.visible = true

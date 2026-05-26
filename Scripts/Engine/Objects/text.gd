@@ -99,6 +99,8 @@ func _draw():
 	var mode = "normal"
 	var drawposition = Vector2.ZERO
 	var color = Color.WHITE
+	if !Engine.is_editor_hint():
+		color = Undermaker.accents["primary"]
 	var cmd = false
 	var command = ""
 	var index = -1
@@ -121,6 +123,9 @@ func _draw():
 								color.r = float(commandlist[1])/255
 								color.g = float(commandlist[2])/255
 								color.b = float(commandlist[3])/255
+							elif commandlist.size() == 2:
+								if Undermaker.accents.has(commandlist[1]):
+									color = Undermaker.accents[commandlist[1]]
 						"mode":
 							mode = commandlist[1]
 			_:

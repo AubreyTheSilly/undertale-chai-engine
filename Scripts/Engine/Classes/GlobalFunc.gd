@@ -11,9 +11,9 @@ var timer : float = 0
 @onready var editor_fun := randi_range(1,100)
 
 var accents : Dictionary[String,Color] = {
-	"primary":Color.WHITE,
+	"primary":Color.RED,
 	"empty":Color.GRAY,
-	"selected":Color.YELLOW,
+	"selected":Color.DARK_RED,
 	"hp":Color.YELLOW,
 	"emptyhp":Color.RED,
 	"kr":Color.FUCHSIA,
@@ -25,7 +25,12 @@ var discord_working := false
 
 var font_glyphs = {}
 
-var grey_empty := false
+var grey_empty := true
+
+func colorToFunction(col : Color) -> String:
+	var color := col
+	var colorstring = "["+str(color.r8)+":"+str(color.g8)+":"+str(color.b8)+":"+"]"
+	return colorstring
 
 func get_mods_list(directory : String) -> Array[Dictionary]:
 	var mods : Array[Dictionary] = []
