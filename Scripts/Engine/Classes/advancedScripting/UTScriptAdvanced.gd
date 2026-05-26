@@ -1713,6 +1713,20 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				return
 			
 			PlayerData.set_indexed(params[0].value,params[1].value)
+		"giveItem":
+			if token.params.size() != 1:
+				push_error('Line '+str(total_l+1)+': giveItem() requires exactly one parameter.')
+				return
+			var params = await _convert_variables(token.params)
+			if params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Item name must be a String')
+				return
+			
+			var items = Item.GetItemList()
+			if items.has(params[0].value):
+				PlayerData.inventory.append(items[params[0].value])
+			else:
+				push_error('Line '+str(total_l+1)+": Item does not exist. Valid item list is: "+str(items))
 		_:
 			validFunction = false
 

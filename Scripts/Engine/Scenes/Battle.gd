@@ -32,10 +32,16 @@ var camerashake := 0.0
 
 func _ready():
 	fader.fadeIn()
+	if Battle.loadedBattle.has("karma"):
+		Battle.kr_enabled = Battle.loadedBattle["karma"]
+	else:
+		Battle.kr_enabled = false
 	$BGM.stream = Loader.load_file("Audio/BGM/"+Battle.loadedBattle["music"]+".ogg")
 	$BGM.play()
-	if !Battle.loadedBattle["bg"]:
+	if Battle.loadedBattle["bg"] == "none":
 		$background.visible = false
+	else:
+		$background.texture = Loader.load_file("Sprites/"+Battle.loadedBattle["bg"]+".png")
 	var enemyindex = -1
 	var occurences = {}
 	for i in Battle.loadedBattle["enemies"]:
@@ -88,13 +94,13 @@ func _process(_delta):
 			$ItemButton.NormalSprite = preload("res://Sprites/Battle/Buttons/spr_itembt_empty_0.png")
 			$ItemButton.SelectSprite = preload("res://Sprites/Battle/Buttons/spr_itembt_empty_1.png")
 	
-	$PlayerName.text = PlayerData.Name
-	$LV.text = "LV "+str(PlayerData.LV)
-	$HP.text = str(PlayerData.HP)+" / "+str(PlayerData.MaxHP)
-	$HPBar.size.x = (12.5/20)*PlayerData.MaxHP
-	$HPBar.value = PlayerData.HP
-	$HPBar.max_value = PlayerData.MaxHP
-	$HP.position.x = (137+$HPBar.size.x)+6.5
+	#$PlayerName.text = PlayerData.Name
+	#$LV.text = "LV "+str(PlayerData.LV)
+	#$HP.text = str(PlayerData.HP)+" / "+str(PlayerData.MaxHP)
+	#$HPBar.size.x = (12.5/20)*PlayerData.MaxHP
+	#$HPBar.value = PlayerData.HP
+	#$HPBar.max_value = PlayerData.MaxHP
+	#$HP.position.x = (137+$HPBar.size.x)+6.5
 	
 	if PlayerData.HP == 0:
 		get_tree().change_scene_to_file("res://Scenes/gameover.tscn")
@@ -530,7 +536,16 @@ func _process(_delta):
 				state = PLAYER_ITEM_USE
 				match PlayerData.inventory[playeritemchoice+(4*itemmenu)].type:
 					Item.HEALING:
-						PlayerData.HP += PlayerData.inventory[playeritemchoice+(4*itemmenu)].value
+						if PlayerData.KR > 0:
+							var heal = PlayerData.inventory[playeritemchoice+(4*itemmenu)].value
+							if PlayerData.KR < heal:
+								heal -= PlayerData.KR
+								PlayerData.KR -= PlayerData.inventory[playeritemchoice+(4*itemmenu)].value
+								PlayerData.HP += heal
+							else:
+								PlayerData.KR -= PlayerData.inventory[playeritemchoice+(4*itemmenu)].value
+						else:
+							PlayerData.HP += PlayerData.inventory[playeritemchoice+(4*itemmenu)].value
 						PlayerData.HP = clamp(PlayerData.HP,0,PlayerData.MaxHP)
 						$Sounds.stream = preload("res://Audio/Sounds/snd_heal_c.wav")
 						$Sounds.play()

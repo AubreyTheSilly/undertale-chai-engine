@@ -10,6 +10,17 @@ var timer : float = 0
 
 @onready var editor_fun := randi_range(1,100)
 
+var accents : Dictionary[String,Color] = {
+	"primary":Color.WHITE,
+	"empty":Color.GRAY,
+	"selected":Color.YELLOW,
+	"hp":Color.YELLOW,
+	"emptyhp":Color.RED,
+	"kr":Color.FUCHSIA,
+	"enemy_hp":Color.GREEN,
+	"enemy_emptyhp":Color.LIME,
+}
+
 var discord_working := false
 
 var font_glyphs = {}

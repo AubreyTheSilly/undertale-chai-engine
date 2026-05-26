@@ -3,6 +3,7 @@ extends Node2D
 
 @export_enum("White","Blue","Orange","Green") var attack_type : String = "White"
 @export var damage := 1
+@export var kr_damage := 6
 @export_range(10,100,1,"or_greater") var height : float = 10
 var velocity : Vector2 = Vector2.ZERO
 var rotation_velocity : float = 0

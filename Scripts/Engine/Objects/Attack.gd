@@ -3,6 +3,7 @@ extends Sprite2D
 
 @export_enum("White","Blue","Orange","Green") var attack_type : String = "White"
 @export var damage := 1
+@export var kr_damage := 1
 @export var hitbox_override_enabled := false
 @export var hitbox_override := Vector2.ZERO
 var velocity : Vector2 = Vector2.ZERO

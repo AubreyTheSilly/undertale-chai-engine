@@ -50,8 +50,6 @@ animations = [{
 [node name="Blaster" type="Node2D" unique_id=1166434054]
 z_index = 10
 z_as_relative = false
-position = Vector2(174, 131)
-rotation = 1.2025456
 script = ExtResource("1_h3y0l")
 
 [node name="attack" type="Area2D" parent="." unique_id=881211384]

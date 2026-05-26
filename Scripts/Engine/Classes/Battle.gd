@@ -7,9 +7,14 @@ var loadedBattle = {
 	"enemies":["idutshane"],
 	"state":0,
 	"music":"mus_dusttale2",
-	"bg":false,
+	"bg":"none",
 	"serious":true
 }
+
+var kr_enabled := true
+
+var km_t := 0
+var prevhp := 0
 
 func Encounter(id : String,transition : bool = true):
 	PlayerData.player_can_move = false
@@ -26,15 +31,19 @@ func Encounter(id : String,transition : bool = true):
 			loadedBattle["enemies"].append(encounter[i+1])
 	loadedBattle["state"] = int(encounter[4])
 	loadedBattle["music"] = encounter[5]
-	if encounter[6] == "yes":
-		loadedBattle["bg"] = true
-	else:
-		loadedBattle["bg"] = false
+	loadedBattle["bg"] = encounter[6]
 	if encounter.size() >= 8:
 		if encounter[7] == "yes":
 			loadedBattle["serious"] = true
 		else:
 			loadedBattle["serious"] = false
+	else:
+		loadedBattle["serious"] = false
+	if encounter.size() >= 9:
+		if encounter[7] == "yes":
+			loadedBattle["karma"] = true
+		else:
+			loadedBattle["karma"] = false
 	await get_tree().process_frame
 	if transition:
 		get_tree().get_root().add_child(preload("res://Scenes/Objects/BattleStarter.tscn").instantiate())
@@ -109,3 +118,44 @@ func EnemyDataToDictionary(enemydata : EnemyData) -> Dictionary:
 	dict["bubbleoffsety"] = enemydata.BubbleOffset.y
 	dict["attacks"] = enemydata.Attacks
 	return dict
+
+func _process(_delta) -> void:
+	# handling karma! pretty much all of this code is ported from obj_sansb_body_Draw_0
+	if PlayerData.KR > 0:
+		km_t += 1
+		var k_bonus := 0
+		
+		if PlayerData.INV >= 45:
+			k_bonus = [0,1].pick_random()
+		if PlayerData.INV >= 60:
+			k_bonus = [0,1,1].pick_random()
+		if PlayerData.INV >= 75:
+			k_bonus = 1
+		
+		if km_t >= (1 + (k_bonus)) and PlayerData.KR >= 40:
+			km_t = 0
+			PlayerData.HP -= 1
+			PlayerData.KR -= 1
+		if km_t >= (2 + (k_bonus*2)) and PlayerData.KR >= 30:
+			km_t = 0
+			PlayerData.HP -= 1
+			PlayerData.KR -= 1
+		if km_t >= (5 + (k_bonus*3)) and PlayerData.KR >= 20:
+			km_t = 0
+			PlayerData.HP -= 1
+			PlayerData.KR -= 1
+		if km_t >= (15 + (k_bonus*5)) and PlayerData.KR >= 10:
+			km_t = 0
+			PlayerData.HP -= 1
+			PlayerData.KR -= 1
+		if km_t >= (30 + (k_bonus*10)):
+			km_t = 0
+			PlayerData.HP -= 1
+			PlayerData.KR -= 1
+		
+		if PlayerData.HP <= 0:
+			PlayerData.HP = 1
+		
+		prevhp = PlayerData.HP
+	else:
+		km_t = 0

@@ -1,4 +1,6 @@
 function _ready() {
+	giveItem("MonsterCandy");
+
 	setBorder("castle");
 
 	setPlayerData("LV",19);
@@ -56,13 +58,13 @@ function _update() {
 
 function _damage() {
 	playSlashAnimation();
-
 	if (randi(0,1) == 0) {
 		await tween_property(getNode("Sprite2D"),"position:x",50,0.5,TRANS_CUBIC,EASE_OUT);
 	} else {
 		await tween_property(getNode("Sprite2D"),"position:x",-50,0.5,TRANS_CUBIC,EASE_OUT);
 	};
 	wait_frames(10);
+	miss();
 	tween_property(getNode("Sprite2D"),"position:x",0,0.5,TRANS_CUBIC,EASE_IN);
 	wait_frames(15);
 };

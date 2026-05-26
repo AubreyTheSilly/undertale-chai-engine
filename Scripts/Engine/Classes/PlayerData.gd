@@ -2,6 +2,7 @@ extends Node
 
 var Name = "Chara"
 var HP : int = 20
+var KR : int = 0
 var MaxHP : int = 20
 var LV : int = 1
 var EXP := 0

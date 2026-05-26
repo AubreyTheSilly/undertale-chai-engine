@@ -23,6 +23,7 @@
 [ext_resource type="Texture2D" uid="uid://b0rk7jclh5ydd" path="res://Sprites/Battle/spr_heart_0.png" id="21_hn3x6"]
 [ext_resource type="Script" uid="uid://cqf0y3fl2hdwj" path="res://Scripts/Engine/Objects/BattleHeart.gd" id="25_1s3yx"]
 [ext_resource type="AudioStream" uid="uid://bn7lvw3vdfvte" path="res://Audio/Sounds/snd_squeak.wav" id="27_3quo0"]
+[ext_resource type="Script" uid="uid://3tsh6ot7mett" path="res://Scripts/Engine/Classes/BattleInfoDrawer.gd" id="27_d13iw"]
 [ext_resource type="AudioStream" uid="uid://di26ul27gbb4m" path="res://Audio/Sounds/snd_hurt1_c.wav" id="29_3quo0"]
 [ext_resource type="Script" uid="uid://celyhudjtygjf" path="res://Scenes/heart_button_choice.gd" id="29_xtlnh"]
 [ext_resource type="AudioStream" uid="uid://b527fdbu40pfr" path="res://Audio/Sounds/snd_impact.wav" id="32_ybx13"]
@@ -100,9 +101,9 @@ offset_bottom = 240.0
 color = Color(0, 0, 0, 1)
 
 [node name="background" type="Sprite2D" parent="." unique_id=448204415]
-position = Vector2(159.25, 63.5)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("3_is2k6")
+centered = false
 
 [node name="DialoguePlayer" type="AudioStreamPlayer" parent="." unique_id=351399004]
 stream = ExtResource("3_4nbmx")
@@ -319,16 +320,19 @@ position = Vector2(277, 226.5)
 NormalSprite = SubResource("CompressedTexture2D_hoytp")
 SelectSprite = SubResource("CompressedTexture2D_ybx13")
 
-[node name="PlayerName" type="Label" parent="." unique_id=794341697]
+[node name="Info" type="Node2D" parent="." unique_id=1781420334]
+visible = false
+
+[node name="PlayerName" type="Label" parent="Info" unique_id=794341697]
 offset_left = 15.0
 offset_top = 200.0
-offset_right = 63.0
+offset_right = 75.0
 offset_bottom = 220.0
 scale = Vector2(0.74, 0.74)
 text = "AAAAAA"
 label_settings = SubResource("LabelSettings_kfxkq")
 
-[node name="LV" type="Label" parent="." unique_id=788477839]
+[node name="LV" type="Label" parent="Info" unique_id=788477839]
 offset_left = 73.0
 offset_top = 200.0
 offset_right = 121.0
@@ -337,21 +341,21 @@ scale = Vector2(0.74, 0.74)
 text = "LV 1"
 label_settings = SubResource("LabelSettings_kfxkq")
 
-[node name="HP" type="Label" parent="." unique_id=598435459]
+[node name="HP" type="Label" parent="Info" unique_id=598435459]
 offset_left = 156.0
 offset_top = 200.0
-offset_right = 204.0
+offset_right = 218.0
 offset_bottom = 220.0
 scale = Vector2(0.74, 0.74)
 text = "20 / 20"
 label_settings = SubResource("LabelSettings_kfxkq")
 
-[node name="HPText" type="Sprite2D" parent="." unique_id=487300858]
+[node name="HPText" type="Sprite2D" parent="Info" unique_id=487300858]
 position = Vector2(127.25, 205)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("16_itjnc")
 
-[node name="HPBar" type="TextureProgressBar" parent="." unique_id=1231069744]
+[node name="HPBar" type="TextureProgressBar" parent="Info" unique_id=1231069744]
 offset_left = 137.0
 offset_top = 200.0
 offset_right = 149.5
@@ -402,3 +406,7 @@ stream = ExtResource("32_ybx13")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=776764751]
 position = Vector2(160, 120)
+
+[node name="BattleInfoDrawer" type="Node2D" parent="." unique_id=766592817]
+script = ExtResource("27_d13iw")
+metadata/_custom_type_script = "uid://3tsh6ot7mett"

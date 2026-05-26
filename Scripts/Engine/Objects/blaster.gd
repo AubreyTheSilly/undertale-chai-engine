@@ -2,6 +2,7 @@ extends Node2D
 
 @export_enum("White","Blue","Orange","Green") var attack_type : String = "White"
 @export var damage := 1
+@export var kr_damage := 10
 
 var transition : Tween.TransitionType = Tween.TRANS_QUAD
 

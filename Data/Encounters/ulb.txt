@@ -1,1 +1,9 @@
-* Here we are again.:ulb:none:none:0:mus_nasa:no
+* Here we are again.
+ulb
+none
+none
+0
+mus_nasa
+Battle/spr_sansbg
+yes
+yes

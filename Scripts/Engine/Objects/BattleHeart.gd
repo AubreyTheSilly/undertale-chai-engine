@@ -144,6 +144,8 @@ func _process(_delta) -> void:
 				if i.name == "attack" and !invincible:
 					var attack = i.get_parent()
 					var dmg = calculateDamage(attack.damage)
+					if Battle.kr_enabled:
+						dmg = attack.kr_damage
 					var dir = Input.get_vector("Move Left","Move Right","Move Up","Move Down")
 					if attack.modulate == Color(1,1,1):
 						damage(dmg)
@@ -154,6 +156,7 @@ func _process(_delta) -> void:
 						damage(dmg)
 					elif attack.modulate == Color(1,0.65,0) and dir == Vector2.ZERO:
 						damage(dmg)
+					break
 		_:
 			position = Vector2(159.5,159.75)
 			velocity = Vector2.ZERO
@@ -172,14 +175,23 @@ func _process(_delta) -> void:
 func damage(dmg : int):
 	$AudioStreamPlayer.stream = preload("res://Audio/Sounds/snd_hurt1_c.wav")
 	$AudioStreamPlayer.play()
-	PlayerData.HP -= dmg
-	invincible = true
-	for i in range(PlayerData.INV/2.0):
-		$Soul.visible = false
-		await get_tree().process_frame
-		$Soul.visible = true
-		await get_tree().process_frame
-	invincible = false
+	if Battle.kr_enabled:
+		if PlayerData.HP-PlayerData.KR <= 1:
+			PlayerData.KR -= dmg
+			PlayerData.HP -= dmg
+		elif PlayerData.KR >= 40:
+			PlayerData.HP -= dmg
+		else:
+			PlayerData.KR += dmg
+	else:
+		PlayerData.HP -= dmg
+		invincible = true
+		for i in range(floor(PlayerData.INV/2.0)):
+			$Soul.visible = false
+			await get_tree().process_frame
+			$Soul.visible = true
+			await get_tree().process_frame
+		invincible = false
 
 func heal():
 	$AudioStreamPlayer.stream = preload("res://Audio/Sounds/snd_heal_c.wav")
