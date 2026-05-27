@@ -1,11 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://51lu7uaohc4j"]
+[gd_scene format=3 uid="uid://51lu7uaohc4j"]
 
 [ext_resource type="Script" uid="uid://crbt0bhbaxfm0" path="res://Scripts/Engine/Objects/BattleButton.gd" id="1_vo1yi"]
 [ext_resource type="Texture2D" uid="uid://bky2jtllx2sm2" path="res://Sprites/Battle/Buttons/spr_emptybt_0.png" id="2_xcq4v"]
 
-[node name="BattleButton" type="Node2D"]
+[node name="BattleButton" type="Node2D" unique_id=597372941]
 script = ExtResource("1_vo1yi")
+use_modulate_override = null
+modulate_override = null
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1094575769]
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_xcq4v")

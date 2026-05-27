@@ -11,14 +11,20 @@ var timer : float = 0
 @onready var editor_fun := randi_range(1,100)
 
 var accents : Dictionary[String,Color] = {
-	"primary":Color.RED,
-	"empty":Color.GRAY,
-	"selected":Color.DARK_RED,
+	"primary":Color.WHITE,
+	"empty":Color(0.5,0.5,0.5),
+	"emptyselected":Color.LIGHT_GRAY,
+	"selected":Color.YELLOW,
 	"hp":Color.YELLOW,
 	"emptyhp":Color.RED,
 	"kr":Color.FUCHSIA,
 	"enemy_hp":Color.GREEN,
 	"enemy_emptyhp":Color.LIME,
+	"blueattack":Color(0.251,1,1),
+	"orangeattack":Color(1,0.65,0),
+	"greenattack":Color.LIME,
+	"battlebutton":Color.from_rgba8(255,127,39),
+	"battlebuttonselect":Color.YELLOW
 }
 
 var discord_working := false

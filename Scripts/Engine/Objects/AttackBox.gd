@@ -17,6 +17,9 @@ var running = false
 signal attack_over
 
 func _process(_delta):
+	if !Engine.is_editor_hint():
+		$Node2D/AttackRect.modulate = Undermaker.accents["primary"]
+	
 	$Node2D.position = lerp($Node2D.position,rect.position,0.4)
 	
 	frame += 1

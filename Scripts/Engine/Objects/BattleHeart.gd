@@ -147,14 +147,15 @@ func _process(_delta) -> void:
 					if Battle.kr_enabled:
 						dmg = attack.kr_damage
 					var dir = Input.get_vector("Move Left","Move Right","Move Up","Move Down")
-					if attack.modulate == Color(1,1,1):
+					var color = Color(attack.modulate.r,attack.modulate.g,attack.modulate.b)
+					if color == Undermaker.accents["primary"]:
 						damage(dmg)
-					elif attack.modulate == Color(0,1,0):
+					elif color == Undermaker.accents["greenattack"]:
 						heal()
 						attack.queue_free()
-					elif attack.modulate == Color(0.251,1,1) and dir != Vector2.ZERO:	
+					elif color == Undermaker.accents["blueattack"] and dir != Vector2.ZERO:
 						damage(dmg)
-					elif attack.modulate == Color(1,0.65,0) and dir == Vector2.ZERO:
+					elif color == Undermaker.accents["orangeattack"] and dir == Vector2.ZERO:
 						damage(dmg)
 					break
 		_:

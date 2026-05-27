@@ -2150,10 +2150,11 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 						return
 					col = params[3].value
 				
-				var attack = preload("res://Scenes/Objects/blaster.tscn").instantiate()
+				var attack = preload("res://Scenes/Objects/newBlaster.tscn").instantiate()
 				attack.name = params[0].value
-				attack.position = params[1].value
-				attack.rotation_degrees = -params[2].value
+				attack.initial_position = Vector2.ZERO
+				attack.target_position = params[1].value
+				attack.target_rotation = params[2].value
 				attack.attack_type = col
 				
 				node.get_node("attacks").add_child(attack,true)

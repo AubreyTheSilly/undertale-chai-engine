@@ -20,6 +20,8 @@
 [ext_resource type="Texture2D" uid="uid://bhwyf8lqg06du" path="res://Sprites/Battle/spr_hpname_0.png" id="16_itjnc"]
 [ext_resource type="Texture2D" uid="uid://cjxulcjcodig0" path="res://Sprites/Battle/spr_health_1.png" id="17_sx1gs"]
 [ext_resource type="Texture2D" uid="uid://c6gy64rfkuyaq" path="res://Sprites/Battle/spr_health_0.png" id="18_hioeg"]
+[ext_resource type="Texture2D" uid="uid://db3xb8pxayasp" path="res://Sprites/Battle/Buttons/spr_fightbt_0.png" id="20_3quo0"]
+[ext_resource type="Texture2D" uid="uid://c462oie8gqmdf" path="res://Sprites/Battle/Buttons/spr_fightbt_1.png" id="21_d5dbc"]
 [ext_resource type="Texture2D" uid="uid://b0rk7jclh5ydd" path="res://Sprites/Battle/spr_heart_0.png" id="21_hn3x6"]
 [ext_resource type="Script" uid="uid://cqf0y3fl2hdwj" path="res://Scripts/Engine/Objects/BattleHeart.gd" id="25_1s3yx"]
 [ext_resource type="AudioStream" uid="uid://bn7lvw3vdfvte" path="res://Audio/Sounds/snd_squeak.wav" id="27_3quo0"]
@@ -54,28 +56,22 @@ size = Vector2(320, 3)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_28qgs"]
 size = Vector2(320, 3)
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1s3yx"]
-load_path = "res://.godot/imported/spr_fightbt_0.png-fc608f55a2cfc42824bd4c406c2a61e6.ctex"
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_mugwg"]
-load_path = "res://.godot/imported/spr_fightbt_1.png-6a4cf8b772266bc7c39fd5636f99722c.ctex"
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_d13iw"]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_3quo0"]
 load_path = "res://.godot/imported/spr_actbt_0.png-905d655d709565737b1d58e0ae95ab92.ctex"
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_4nbmx"]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_d5dbc"]
 load_path = "res://.godot/imported/spr_actbt_1.png-e8ebbfaac5dd196da94be0d932ee1b92.ctex"
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_3quo0"]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_hoytp"]
 load_path = "res://.godot/imported/spr_itembt_0.png-1f8845f4fc41d5e4381550c1f011e3e6.ctex"
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_d5dbc"]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ybx13"]
 load_path = "res://.godot/imported/spr_itembt_1.png-81619600616aaf20a6e392f98572edbc.ctex"
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_hoytp"]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_xtlnh"]
 load_path = "res://.godot/imported/spr_mercybt_0.png-7f3a07d695a4938cc58fc98918757881.ctex"
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ybx13"]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_hibfo"]
 load_path = "res://.godot/imported/spr_mercybt_1.png-c6b35494fb2aeb70588bf400b1cf033a.ctex"
 
 [sub_resource type="FontVariation" id="FontVariation_gind8"]
@@ -301,24 +297,32 @@ parameters/looping = true
 
 [node name="FightButton" parent="." unique_id=983695603 instance=ExtResource("8_j2fg1")]
 position = Vector2(43, 226.5)
-NormalSprite = SubResource("CompressedTexture2D_1s3yx")
-SelectSprite = SubResource("CompressedTexture2D_mugwg")
+NormalSprite = ExtResource("20_3quo0")
+SelectSprite = ExtResource("21_d5dbc")
 selected = true
+use_modulate_override = false
+modulate_override = Color(1, 1, 1, 1)
 
 [node name="ActButton" parent="." unique_id=1931831872 instance=ExtResource("8_j2fg1")]
 position = Vector2(119.5, 226.5)
-NormalSprite = SubResource("CompressedTexture2D_d13iw")
-SelectSprite = SubResource("CompressedTexture2D_4nbmx")
+NormalSprite = SubResource("CompressedTexture2D_3quo0")
+SelectSprite = SubResource("CompressedTexture2D_d5dbc")
+use_modulate_override = false
+modulate_override = Color(1, 1, 1, 1)
 
 [node name="ItemButton" parent="." unique_id=237190904 instance=ExtResource("8_j2fg1")]
 position = Vector2(199.5, 226.5)
-NormalSprite = SubResource("CompressedTexture2D_3quo0")
-SelectSprite = SubResource("CompressedTexture2D_d5dbc")
+NormalSprite = SubResource("CompressedTexture2D_hoytp")
+SelectSprite = SubResource("CompressedTexture2D_ybx13")
+use_modulate_override = false
+modulate_override = Color(1, 1, 1, 1)
 
 [node name="MercyButton" parent="." unique_id=2120984517 instance=ExtResource("8_j2fg1")]
 position = Vector2(277, 226.5)
-NormalSprite = SubResource("CompressedTexture2D_hoytp")
-SelectSprite = SubResource("CompressedTexture2D_ybx13")
+NormalSprite = SubResource("CompressedTexture2D_xtlnh")
+SelectSprite = SubResource("CompressedTexture2D_hibfo")
+use_modulate_override = false
+modulate_override = Color(1, 1, 1, 1)
 
 [node name="Info" type="Node2D" parent="." unique_id=1781420334]
 visible = false

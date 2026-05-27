@@ -40,10 +40,10 @@ func _process(_delta):
 	
 	match attack_type.to_lower():
 		"blue":
-			modulate = Color(0.251,1,1)
+			modulate = Undermaker.accents["blueattack"]
 		"orange":
-			modulate = Color(1,0.65,0)
+			modulate = Undermaker.accents["orangeattack"]
 		"green":
-			modulate = Color(0,1,0)
+			modulate = Undermaker.accents["greenattack"]
 		_:
-			modulate = Color(1,1,1)
+			modulate = Undermaker.accents["primary"]

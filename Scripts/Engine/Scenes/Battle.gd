@@ -31,6 +31,10 @@ var dialoguejustStarted = false
 var camerashake := 0.0
 
 func _ready():
+	$FlavorBox/DialogueRect.modulate = Undermaker.accents["primary"]
+	$ChoiceBox/DialogueRect.modulate = Undermaker.accents["primary"]
+	$FightBox/Rect.modulate = Undermaker.accents["primary"]
+	$ItemButton.modulate_override = Undermaker.accents["empty"]
 	fader.fadeIn()
 	if Battle.loadedBattle.has("karma"):
 		Battle.kr_enabled = Battle.loadedBattle["karma"]
@@ -86,13 +90,18 @@ func _process(_delta):
 		camerashake *= 0.6
 	$Camera2D.offset = Vector2(randf_range(-camerashake,camerashake),randf_range(-camerashake,camerashake))
 	
+	#$FightBox.modulate = Undermaker.accents["battlebutton"]
+	#$ActButton.modulate = Undermaker.accents["battlebutton"]
+	#$ItemButton.modulate = Undermaker.accents["battlebutton"]
+	#$MercyButton.modulate = Undermaker.accents["battlebutton"]
+	
+	if playerbuttonchoice == 2:
+		$ItemButton.modulate_override = Undermaker.accents["emptyselected"]
+	else:
+		$ItemButton.modulate_override = Undermaker.accents["empty"]
+	
 	if Undermaker.grey_empty:
-		if PlayerData.inventory.size() != 0:
-			$ItemButton.NormalSprite = preload("res://Sprites/Battle/Buttons/spr_itembt_0.png")
-			$ItemButton.SelectSprite = preload("res://Sprites/Battle/Buttons/spr_itembt_1.png")
-		else:
-			$ItemButton.NormalSprite = preload("res://Sprites/Battle/Buttons/spr_itembt_empty_0.png")
-			$ItemButton.SelectSprite = preload("res://Sprites/Battle/Buttons/spr_itembt_empty_1.png")
+		$ItemButton.use_modulate_override = (PlayerData.inventory.size() == 0)
 	
 	#$PlayerName.text = PlayerData.Name
 	#$LV.text = "LV "+str(PlayerData.LV)

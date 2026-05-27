@@ -30,12 +30,13 @@ func _process(_delta):
 	position += velocity
 	rotation_degrees += rotation_velocity
 	
-	match attack_type.to_lower():
-		"blue":
-			modulate = Color(0.251,1,1)
-		"orange":
-			modulate = Color(1,0.65,0)
-		"green":
-			modulate = Color(0,1,0)
-		_:
-			modulate = Color(1,1,1)
+	if !Engine.is_editor_hint():
+		match attack_type.to_lower():
+			"blue":
+				modulate = Undermaker.accents["blueattack"]
+			"orange":
+				modulate = Undermaker.accents["orangeattack"]
+			"green":
+				modulate = Undermaker.accents["greenattack"]
+			_:
+				modulate = Undermaker.accents["primary"]
