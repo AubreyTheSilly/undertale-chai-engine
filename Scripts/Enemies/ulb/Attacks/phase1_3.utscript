@@ -7,6 +7,7 @@ initvar(blastrot,NUMBER,0);
 
 function makeBlasters() {
     blastrot = randi(0,360);
+    //blastpos = vec2(sin(blastrot),cos(blastrot));
     blastpos = angle_as_vector(blastrot);
     blastpos *= 45;
     blastpos += get(plr,"position");

@@ -20,6 +20,20 @@ var variableTypes := {
 	"SIGNAL":VariableType.SIGNAL
 }
 
+enum SCOPE_TYPE {
+	SCRIPT,
+	BLOCK,
+	SINGLE,
+	ATTACK,
+	ENEMY
+}
+
+class Scope:
+	var should_continue_block := false
+	var should_continue_while := false
+	var should_break := false
+	var type : SCOPE_TYPE = SCOPE_TYPE.SCRIPT
+
 class Variable:
 	var name : String
 	var type : VariableType
@@ -48,6 +62,7 @@ var node : Node
 var dt := 0.0
 var dt_changed := false
 
+# once scope stuff is implemented hopefully these should like. become unnecessary but yeah
 var should_continue_block := false
 var should_continue_while := false
 var should_break := false
@@ -97,7 +112,7 @@ func runSingleFunction(function : String,args := []) -> void:
 		
 		functoken.params.append(token)
 	t = 0
-	await executeFunction([functoken],false,true)
+	await executeFunction([functoken],Scope.new(),false,true)
 	t = oldt
 
 func initConstants() -> void:
@@ -203,6 +218,7 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 		end_script = false
 	l = 0
 	t = 0
+	var scriptscope := Scope.new()
 	if !is_instance_valid(node):
 		return ERR_DOES_NOT_EXIST
 	while l < script.size() and !end_script:
@@ -235,7 +251,7 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 				next_next_token = script[l][t+2]
 			if token is Lexer.FunctionToken:
 				#print(token.value)
-				await executeFunction(script[l])
+				await executeFunction(script[l],scriptscope)
 			elif token is Lexer.CodeToken:
 				#var oldl = l
 				#var oldt = t
@@ -251,7 +267,7 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 					match next_token.type:
 						Lexer.TokenType.EQUALS:
 							# handle loading the value if it's a function lol
-							var vars = await _convert_variables([script[l][t+2]])
+							var vars = await _convert_variables([script[l][t+2]],scriptscope)
 							#script[l][t+2] = vars[0]
 							
 							# handle setting the variable
@@ -278,7 +294,7 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 							t += 2
 						Lexer.TokenType.ARITHMETIC_OPERATOR:
 							# handle loading the value if it's a function lol
-							var vars = await _convert_variables([script[l][t+2]])
+							var vars = await _convert_variables([script[l][t+2]],scriptscope)
 							#print(script[l][t+2].value)
 							#print(vars[0].value)
 							
@@ -325,7 +341,7 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 						"await":
 							#print("performing await")
 							if next_token is Lexer.FunctionToken:
-								await executeFunction([next_token],true)
+								await executeFunction([next_token],scriptscope,true)
 								t += 1
 							elif next_token.type == Lexer.TokenType.IDENTIFIER:
 								match next_token.value:
@@ -343,13 +359,13 @@ func runScript(script : Array,_node : Node,reinit_vars:=true) -> Error:
 												var _signal : Signal = vari.value
 												await _signal
 											t += 1
-						#"else":
-							#if next_token is Lexer.CodeToken and !should_continue_block and !end_script:
-								#await executeCodeBlock(next_token,node)
-							#t += 1
+						"else":
+							if next_token is Lexer.CodeToken and !scriptscope.should_continue_block and !end_script:
+								await executeCodeBlock(next_token,node)
+							t += 1
 						"break":
-							if should_continue_while:
-								should_continue_while = false
+							if scriptscope.should_continue_while:
+								scriptscope.should_continue_while = false
 						"function":
 							if next_token is not Lexer.FunctionToken:
 								push_error('Line '+str(total_l+1)+': Function expected for function definition')
@@ -402,7 +418,7 @@ func _set_variable(variable:String,value:Variant,target:=node):
 	else:
 		push_error("Variable \""+variable+"\" does not exist")
 
-func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=false) -> Array:
+func _convert_variables(parameters : Array,scope : Scope,exceptions : Array = [],verbose:=false) -> Array:
 	var param = []
 	for i in parameters:
 		if i is Lexer.AdvancedToken:
@@ -448,7 +464,7 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 						param[index].type = Lexer.TokenType.TEXTURE
 		elif param[index] is Lexer.FunctionToken and !exceptions.has(index):
 			#print("function variable ",param[index].value)
-			var val = await executeFunction([param[index]])
+			var val = await executeFunction([param[index]],scope)
 			param[index] = Lexer.AdvancedToken.new(Lexer.TokenType.IDENTIFIER,val)
 			#print(type_string(typeof(param[index].value)))
 			match type_string(typeof(param[index].value)):
@@ -513,11 +529,11 @@ func _convert_variables(parameters : Array,exceptions : Array = [],verbose:=fals
 				if i is Lexer.AdvancedToken:
 					has_tokens = true
 			if has_tokens:
-				param[index].value = await _convert_variables(param[index].value)
+				param[index].value = await _convert_variables(param[index].value,scope)
 		index += 1
 	return param
 
-func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=false):
+func executeFunction(line : Array,scope : Scope,wait := false,ignore_invalid_function_error:=false):
 	updateConstants()
 	var token : Lexer.FunctionToken = line[t]
 	var validFunction = true
@@ -526,7 +542,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() == 0:
 				push_error('Line '+str(total_l+1)+': print() requires at least one parameter')
 			else:
-				var params = await _convert_variables(token.params)
+				var params = await _convert_variables(token.params,scope)
 				var output := ""
 				for i : Lexer.AdvancedToken in params:
 					var val = i.value
@@ -543,7 +559,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 					#print(i.value)
 				push_error('Line '+str(total_l+1)+': initvar() requires between two and three parameters')
 				return
-			var params = await _convert_variables(token.params,[0,1])
+			var params = await _convert_variables(token.params,scope,[0,1])
 			
 			if params[0].type != Lexer.TokenType.IDENTIFIER:
 				push_error('Line '+str(total_l+1)+': Variable name requires at least one parameter')
@@ -561,7 +577,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 2 and token.params.size() != 3:
 				push_error('Line '+str(total_l+1)+': initglobal() requires between two and three parameters')
 				return
-			var params = await _convert_variables(token.params,[0,1])
+			var params = await _convert_variables(token.params,scope,[0,1])
 			
 			if params[0].type != Lexer.TokenType.IDENTIFIER:
 				push_error('Line '+str(total_l+1)+': Variable name requires at least one parameter')
@@ -596,7 +612,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 3:
 				push_error('Line '+str(total_l+1)+': set() requires three parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			if params[0].type != Lexer.TokenType.NODE:
 				push_error('Line '+str(total_l+1)+': Target node must be a Node')
 				return
@@ -616,7 +632,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 3:
 				push_error('Line '+str(total_l+1)+': set() requires three parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			if params[0].type != Lexer.TokenType.NODE:
 				push_error('Line '+str(total_l+1)+': Target node must be a Node')
 				return
@@ -636,7 +652,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() < 4 and token.params.size() > 6:
 				push_error('Line '+str(total_l+1)+': tween_property() requires between four and five parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			if params[0].type != Lexer.TokenType.NODE:
 				push_error('Line '+str(total_l+1)+': Target node name must be a string')
 				return
@@ -672,7 +688,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 2:
 				push_error('Line '+str(total_l+1)+': get() requires two parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			if params[0].type != Lexer.TokenType.NODE:
 				push_error('Line '+str(total_l+1)+': Target node must be a Node')
 				return
@@ -689,7 +705,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 2:
 				push_error('Line '+str(total_l+1)+': getSignal() requires two parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			if params[0].type != Lexer.TokenType.NODE:
 				push_error('Line '+str(total_l+1)+': Target node must be a Node')
 				return
@@ -712,7 +728,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 2:
 				push_error('Line '+str(total_l+1)+': waitForSignal() requires two parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			if params[0].type != Lexer.TokenType.NODE:
 				push_error('Line '+str(total_l+1)+': Target node must be a Node')
 				return
@@ -735,7 +751,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() <= 0 and token.params.size() >= 3:
 				push_error('Line '+str(total_l+1)+': sin() requires between one and two parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			if params[0].type != Lexer.TokenType.NUMBER:
 				push_error('Line '+str(total_l+1)+': Angle must be a number')
 				return
@@ -751,7 +767,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() <= 0 and token.params.size() >= 3:
 				push_error('Line '+str(total_l+1)+': cos() requires between one and two parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			if params[0].type != Lexer.TokenType.NUMBER:
 				push_error('Line '+str(total_l+1)+': Angle must be a number')
 				return
@@ -775,19 +791,19 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			
 			var ogline = total_l
 			
-			should_continue_while = true
+			scope.should_continue_while = true
 			
-			while should_continue_while and !end_script and is_inside_tree():
+			while scope.should_continue_while and !end_script and is_inside_tree():
 				total_l = ogline
 				params = []
 				for i in ogparams:
 					params.append(i.duplicate())
 				
-				params = await _convert_variables(params,[1])
+				params = await _convert_variables(params,scope,[1])
 			
 				if params.size() == 1:
 					# one parameter version
-					should_continue_while = bool(params[0].value)
+					scope.should_continue_while = bool(params[0].value)
 				else:
 					# comparison version
 					if params[1].type != Lexer.TokenType.OPERATOR:
@@ -795,29 +811,29 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 						return
 					match params[1].value:
 						"<=":
-							should_continue_while = params[0].value <= params[2].value
+							scope.should_continue_while = params[0].value <= params[2].value
 						">=":
-							should_continue_while = params[0].value >= params[2].value
+							scope.should_continue_while = params[0].value >= params[2].value
 						"!=":
-							should_continue_while = params[0].value != params[2].value
+							scope.should_continue_while = params[0].value != params[2].value
 						"==":
-							should_continue_while = params[0].value == params[2].value
+							scope.should_continue_while = params[0].value == params[2].value
 						"<":
-							should_continue_while = params[0].value < params[2].value
+							scope.should_continue_while = params[0].value < params[2].value
 						">":
-							should_continue_while = params[0].value > params[2].value
+							scope.should_continue_while = params[0].value > params[2].value
 				
 				if t >= line.size()-1:
 					push_error('Line '+str(total_l+1)+': Code block expected for while')
-					should_continue_while = false
+					scope.should_continue_while = false
 					#return
 				if line[t+1] is not Lexer.CodeToken:
 					#print(Lexer.TokenType.keys()[line[t+1].type])
 					#print(t+1)
 					push_error('Line '+str(total_l+1)+': Code block expected for while')
-					should_continue_while = false
+					scope.should_continue_while = false
 					#return
-				if should_continue_while:
+				if scope.should_continue_while:
 					await executeCodeBlock(line[t+1],node)
 				else:
 					total_l += line[t+1].value.size()+1
@@ -827,7 +843,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 1 and token.params.size() != 3:
 				push_error('Line '+str(total_l+1)+': repeat requires exactly one parameter')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			if params[0].type != Lexer.TokenType.NUMBER:
 				push_error('Line '+str(total_l+1)+': Repeat times must be a number')
 				return
@@ -848,20 +864,20 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				push_error('Line '+str(total_l+1)+': if requires exactly one or three parameters')
 				return
 			
-			var params = await _convert_variables(token.params,[1])
+			var params = await _convert_variables(token.params,scope,[1])
 			#for i in params:
 				#print(i.value)
 			
-			should_continue_block = true
+			scope.should_continue_block = true
 			
 			if params.size() == 1:
 				# one parameter version
 				if params[0].value is String:
-					should_continue_block = params[0].value != ""
+					scope.should_continue_block = params[0].value != ""
 				elif params[0].value is float or params[0].value is bool:
-					should_continue_block = bool(params[0].value)
+					scope.should_continue_block = bool(params[0].value)
 				else:
-					should_continue_block = params[0].value != null
+					scope.should_continue_block = params[0].value != null
 			else:
 				# comparison version
 				if params[1].type != Lexer.TokenType.OPERATOR:
@@ -881,17 +897,17 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 					return
 				match params[1].value:
 					"<=":
-						should_continue_block = params[0].value <= params[2].value
+						scope.should_continue_block = params[0].value <= params[2].value
 					">=":
-						should_continue_block = params[0].value >= params[2].value
+						scope.should_continue_block = params[0].value >= params[2].value
 					"!=":
-						should_continue_block = params[0].value != params[2].value
+						scope.should_continue_block = params[0].value != params[2].value
 					"==":
-						should_continue_block = params[0].value == params[2].value
+						scope.should_continue_block = params[0].value == params[2].value
 					"<":
-						should_continue_block = params[0].value < params[2].value
+						scope.should_continue_block = params[0].value < params[2].value
 					">":
-						should_continue_block = params[0].value > params[2].value
+						scope.should_continue_block = params[0].value > params[2].value
 			
 			if t >= line.size()-1:
 				push_error('Line '+str(total_l+1)+': Code block expected for if')
@@ -899,20 +915,20 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if line[t+1] is not Lexer.CodeToken:
 				push_error('Line '+str(total_l+1)+': Code block expected for if')
 				return
-			var curshouldcontinue = should_continue_block
+			var curshouldcontinue = scope.should_continue_block
 			if curshouldcontinue:
 				await executeCodeBlock(line[t+1],node)
-			else:
-				#print("else")
-				total_l += line[t+1].value.size()+1
+			#else:
+				##print("else")
+				#total_l += line[t+1].value.size()+1
 				
-			if line.size() >= 4:
-				print(line[t+2].type)
-				if line[t+2].value == "else":
-					var next_token = line[t+3]
-					if next_token is Lexer.CodeToken and !end_script and !curshouldcontinue:
-						await executeCodeBlock(next_token,node)
-					t += 2
+			#if line.size() >= 4:
+				#print(line[t+2].type)
+				#if line[t+2].value == "else":
+					#var next_token = line[t+3]
+					#if next_token is Lexer.CodeToken and !end_script and !curshouldcontinue:
+						#await executeCodeBlock(next_token,node)
+					#t += 2
 			
 			t += 1
 		"elif":
@@ -920,14 +936,14 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				push_error('Line '+str(total_l+1)+': elif requires exactly one or three parameters')
 				return
 			
-			if should_continue_block:
+			if scope.should_continue_block:
 				return
 			
-			var params = await _convert_variables(token.params,[1])
+			var params = await _convert_variables(token.params,scope,[1])
 			
 			if token.params.size() == 1:
 				# one parameter version
-				should_continue_block = bool(params[0].value)
+				scope.should_continue_block = bool(params[0].value)
 			else:
 				# comparison
 				if params[1].type != Lexer.TokenType.OPERATOR:
@@ -935,17 +951,17 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 					return
 				match params[1].value:
 					"<=":
-						should_continue_block = params[0].value <= params[2].value
+						scope.should_continue_block = params[0].value <= params[2].value
 					">=":
-						should_continue_block = params[0].value >= params[2].value
+						scope.should_continue_block = params[0].value >= params[2].value
 					"!=":
-						should_continue_block = params[0].value != params[2].value
+						scope.should_continue_block = params[0].value != params[2].value
 					"==":
-						should_continue_block = params[0].value == params[2].value
+						scope.should_continue_block = params[0].value == params[2].value
 					"<":
-						should_continue_block = params[0].value < params[2].value
+						scope.should_continue_block = params[0].value < params[2].value
 					">":
-						should_continue_block = params[0].value > params[2].value
+						scope.should_continue_block = params[0].value > params[2].value
 			
 			if t >= line.size()-1:
 				push_error('Line '+str(total_l+1)+': Code block expected for elif')
@@ -954,7 +970,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				push_error('Line '+str(total_l+1)+': Code block expected for elif')
 				return
 			
-			if should_continue_block:
+			if scope.should_continue_block:
 				await executeCodeBlock(line[t+1],node)
 			else:
 				total_l += line[t+1].value.size()+1
@@ -983,7 +999,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 2:
 				push_error('Line '+str(total_l+1)+': randi() requires exactly two parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.NUMBER:
 				push_error('Line '+str(total_l+1)+': Minimum value for randi() must be a number')
@@ -997,7 +1013,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 2:
 				push_error('Line '+str(total_l+1)+': randf() requires exactly two parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.NUMBER:
 				push_error('Line '+str(total_l+1)+': Minimum value for randf() must be a number')
@@ -1011,7 +1027,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 1 and token.params.size() != 2:
 				push_error('Line '+str(total_l+1)+': round() requires between one and two parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.NUMBER:
 				push_error('Line '+str(total_l+1)+': Input for round() must be a number')
@@ -1071,7 +1087,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 1:
 				push_error('Line '+str(total_l+1)+': expr() requires exactly one parameter')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			if params[0].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': Expression must be a string')
 				return
@@ -1116,7 +1132,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 3:
 				push_error('Line '+str(total_l+1)+': lerp() requires exactly three parameters')
 				return
-			var params = await _convert_variables(token.params,[2])
+			var params = await _convert_variables(token.params,scope,[2])
 			
 			if params[2].type != Lexer.TokenType.NUMBER:
 				push_error('Line '+str(total_l+1)+': Weight must be a number')
@@ -1127,7 +1143,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 2:
 				push_error('Line '+str(total_l+1)+': vec2() requires exactly two parameters (',token.params.size(),' were given)')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.NUMBER:
 				#print(params[0].type)
@@ -1142,7 +1158,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 3 and token.params.size() != 4:
 				push_error('Line '+str(total_l+1)+': vec2() requires between three and four parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.NUMBER:
 				push_error('Line '+str(total_l+1)+': R must be a number')
@@ -1205,7 +1221,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				push_error('Line '+str(total_l+1)+': get_at_index() requires exactly two parameters')
 				return
 			
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.ARRAY and params[0].type != Lexer.TokenType.VECTOR and params[0].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': Array must be a valid array, Vector2 or string')
@@ -1226,7 +1242,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				push_error('Line '+str(total_l+1)+': set_at_index() requires exactly two parameters')
 				return
 			
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.ARRAY and params[0].type != Lexer.TokenType.VECTOR and params[0].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': Array must be a valid array, Vector2 or string')
@@ -1252,7 +1268,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 3:
 				push_error('Line '+str(total_l+1)+': createSprite() requires exactly three parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': Sprite object name must be a string')
@@ -1272,7 +1288,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 2 and token.params.size() != 3:
 				push_error('Line '+str(total_l+1)+': createAnimatedSprite() requires between two an three parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': Sprite object name must be a string')
@@ -1318,7 +1334,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 1:
 				push_error('Line '+str(total_l+1)+': stopAnimation() requires exactly one parameter')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			if params[0].type != Lexer.TokenType.NODE:
 				push_error('Line '+str(total_l+1)+': Node must be a Node type')
 				return
@@ -1333,7 +1349,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 1 and token.params.size() != 2:
 				push_error('Line '+str(total_l+1)+': playAnimation() requires between one and two parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			if params[0].type != Lexer.TokenType.NODE:
 				push_error('Line '+str(total_l+1)+': Sprite must be a node')
 				return
@@ -1357,7 +1373,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 1:
 				push_error('Line '+str(total_l+1)+': getNode() requires exactly one parameter')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			if params[0].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': Node name must be a string')
 				return
@@ -1407,7 +1423,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 3:
 				push_error('Line '+str(total_l+1)+': createNode() requires exactly three parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': Node name must be a String')
@@ -1431,7 +1447,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 2:
 				push_error('Line '+str(total_l+1)+': reparent() requires exactly two parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.NODE:
 				push_error('Line '+str(total_l+1)+': Child node must be a Node')
@@ -1445,7 +1461,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 3 and token.params.size() != 4:
 				push_error('Line '+str(total_l+1)+': createText() requires between three and four parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': Text object name must be a string')
@@ -1478,7 +1494,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 1 and token.params.size() != 2:
 				push_error('Line '+str(total_l+1)+': playSound() requires between one and two parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': Sound name must be a string)')
@@ -1502,7 +1518,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 1 and token.params.size() != 2:
 				push_error('Line '+str(total_l+1)+': playBGM() requires exactly one parameter')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': BGM name must be a string')
@@ -1526,7 +1542,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 1:
 				push_error('Line '+str(total_l+1)+': loadRoom() requires exactly one parameter')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': Room name must be a room')
@@ -1538,7 +1554,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 1:
 				push_error('Line '+str(total_l+1)+': loadAudio() requires between exactly one parameter')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': Audio filename must be a string')
@@ -1557,7 +1573,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 3:
 				push_error('Line '+str(total_l+1)+': moveCharacter() requires exactly three parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.NODE:
 				push_error('Line '+str(total_l+1)+': Character object must be a Node')
@@ -1583,7 +1599,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 1:
 				push_error('Line '+str(total_l+1)+': "getFlag":() requires exactly one parameter')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': Flag name must be a string')
@@ -1598,7 +1614,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 2:
 				push_error('Line '+str(total_l+1)+': "setFlag":() requires exactly two parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': Flag name must be a string')
@@ -1609,7 +1625,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 1 and token.params.size() != 2:
 				push_error('Line '+str(total_l+1)+': encounter() requires between one and two parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': Encounter name must be a string')
@@ -1634,7 +1650,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 1:
 				push_error('Line '+str(total_l+1)+': loadTexture() requires exactly one parameter')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': Texture path must be a string')
@@ -1650,7 +1666,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 2:
 				push_error('Line '+str(total_l+1)+': mod() requires exactly two parameters')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.NUMBER:
 				push_error('Line '+str(total_l+1)+': Input must be a number')
@@ -1664,7 +1680,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() < 2 or token.params.size() > 6:
 				push_error('Line '+str(total_l+1)+': createMetronome() requires between two and six parameters.')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			if params[0].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': Metronome object name must be a String')
 				return
@@ -1707,7 +1723,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 2:
 				push_error('Line '+str(total_l+1)+': setPlayerData() requires exactly two parameters.')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			if params[0].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': Player value name must be a String')
 				return
@@ -1717,7 +1733,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 1:
 				push_error('Line '+str(total_l+1)+': giveItem() requires exactly one parameter.')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			if params[0].type != Lexer.TokenType.STRING:
 				push_error('Line '+str(total_l+1)+': Item name must be a String')
 				return
@@ -1731,7 +1747,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if token.params.size() != 1:
 				push_error('Line '+str(total_l+1)+': angle_as_vector() requires exactly one parameter')
 				return
-			var params = await _convert_variables(token.params)
+			var params = await _convert_variables(token.params,scope)
 			
 			if params[0].type != Lexer.TokenType.NUMBER:
 				push_error('Line '+str(total_l+1)+': Angle must be a number')
@@ -1745,7 +1761,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			#if token.params.size() != 1 and token.params.size() != 2:
 				#push_error('Line '+str(total_l+1)+': template() requires between one and two parameters')
 				#return
-			#var params = await _convert_variables(token.params)
+			#var params = await _convert_variables(token.params,scope)
 			#
 			#if params[0].type != Lexer.TokenType.STRING:
 				#push_error('Line '+str(total_l+1)+': template()')
@@ -1771,7 +1787,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				if token.params.size() < 0 and token.params.size() > 1:
 					push_error('Line '+str(total_l+1)+': miss() requires between zero and one parameters')
 					return
-				var params = await _convert_variables(token.params)
+				var params = await _convert_variables(token.params,scope)
 				var text = "miss"
 				if params.size() == 1:
 					if params[0].type != Lexer.TokenType.STRING:
@@ -1799,7 +1815,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				if token.params.size() != 1:
 					push_error('Line '+str(total_l+1)+': damage() requires exactly one parameter')
 					return
-				var params = await _convert_variables(token.params)
+				var params = await _convert_variables(token.params,scope)
 				
 				if token.params[0].type != Lexer.TokenType.NUMBER:
 					push_error('Line '+str(total_l+1)+': Damage amount must be a number')
@@ -1823,7 +1839,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				if token.params.size() < 3 or token.params.size() > 6:
 					push_error('Line '+str(total_l+1)+': makeAttack() requires between three and six parameters')
 					return
-				var params = await _convert_variables(token.params)
+				var params = await _convert_variables(token.params,scope)
 				
 				if params[0].type != Lexer.TokenType.STRING:
 					push_error('Line '+str(total_l+1)+': Attack object name must be a string')
@@ -1880,7 +1896,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				if token.params.size() != 1 and token.params.size() != 2:
 					push_error('Line '+str(total_l+1)+': setBoxSize() requires between one and two parameters')
 					return
-				var params = await _convert_variables(token.params)
+				var params = await _convert_variables(token.params,scope)
 				if params[0].type != Lexer.TokenType.VECTOR:
 					push_error('Line '+str(total_l+1)+': Box size must be a Vector2')
 					return
@@ -1896,7 +1912,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				if token.params.size() != 1:
 					push_error('Line '+str(total_l+1)+': setSoulMode() requires exactly one parameter')
 					return
-				var params = await _convert_variables(token.params)
+				var params = await _convert_variables(token.params,scope)
 				if params[0].type != Lexer.TokenType.NUMBER:
 					push_error('Line '+str(total_l+1)+': Soul mode must be a number')
 					return
@@ -1908,29 +1924,33 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 					audio.play()
 					audio.finished.connect(audio.queue_free)
 			"getBoxPos":
-				if token.params.size() != 1:
-					push_error('Line '+str(total_l+1)+': setSoulMode() requires exactly one parameter')
+				if token.params.size() != 1 and token.params.size() != 2:
+					push_error('Line '+str(total_l+1)+': setSoulMode() requires between one and two parameters')
 					return
-				var params = await _convert_variables(token.params)
+				var params = await _convert_variables(token.params,scope)
 				if params[0].type != Lexer.TokenType.VECTOR:
 					push_error('Line '+str(total_l+1)+': Direction must be a vector')
 					return
-				#vars["LEFT"].value = (-get_parent().box_width/2)+3
-				#vars["RIGHT"].value = (get_parent().box_width/2)-3
-				#vars["UP"].value = (-get_parent().box_height/2)+3
-				#vars["DOWN"].value = (get_parent().box_height/2)-3
+				# IGNORE THE FACT IT'S CALLED VECTOR. WHEN I UPDATED THIS FUNCTION I FORGOT ITS A NUMBER AND NOT A VECTOR IM JUST TOO LAZY TO CHANGE IT PLEASE KILL ME
+				var vector : float
 				match params[0].value:
 					Vector2.LEFT:
-						return ((-node.box_width/2)+3)+node.get_node("Node2D").position.x
+						vector = ((-node.box_width/2)+3)+node.get_node("Node2D").position.x
 					Vector2.DOWN:
-						return ((node.box_height/2)-3)+node.get_node("Node2D").position.y
+						vector = ((node.box_height/2)-3)+node.get_node("Node2D").position.y
 					Vector2.UP:
-						return ((-node.box_height/2)+3)+node.get_node("Node2D").position.y
+						vector = ((-node.box_height/2)+3)+node.get_node("Node2D").position.y
 					Vector2.RIGHT:
-						return ((node.box_width/2)-3)+node.get_node("Node2D").position.x
+						vector = ((node.box_width/2)-3)+node.get_node("Node2D").position.x
 					_:
 						push_error('Line '+str(total_l+1)+': Direction must be exactly up, down, left, or right')
 						return
+				if params.size() == 2:
+					if params[1].type != Lexer.TokenType.NUMBER:
+						push_error('Line '+str(total_l+1)+': Position offset must be a number')
+						return
+					vector += params[1].value
+				return vector
 			#"create_bone":
 				#for i in tokens.data:
 					#if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
@@ -1986,7 +2006,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				if token.params.size() < 4 or token.params.size() > 8:
 					push_error('Line '+str(total_l+1)+': createBone() requires between four and eight parameters')
 					return
-				var params = await _convert_variables(token.params)
+				var params = await _convert_variables(token.params,scope)
 				
 				if params[0].type != Lexer.TokenType.STRING:
 					push_error('Line '+str(total_l+1)+': Bone name must be a string')
@@ -2049,7 +2069,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				if token.params.size() < 4 or token.params.size() > 8:
 					push_error('Line '+str(total_l+1)+': createCenteredBone() requires between four and eight parameters')
 					return
-				var params = await _convert_variables(token.params)
+				var params = await _convert_variables(token.params,scope)
 				
 				if params[0].type != Lexer.TokenType.STRING:
 					push_error('Line '+str(total_l+1)+': Bone name must be a string')
@@ -2143,7 +2163,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				if token.params.size() != 3 and token.params.size() != 4:
 					push_error('Line '+str(total_l+1)+': createBlaster() requires between three and four parameters')
 					return
-				var params = await _convert_variables(token.params)
+				var params = await _convert_variables(token.params,scope)
 				
 				if params[0].type != Lexer.TokenType.STRING:
 					push_error('Line '+str(total_l+1)+': Blaster name must be a string')
@@ -2197,7 +2217,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				if token.params.size() != 1:
 					push_error('Line '+str(total_l+1)+': slam() requires exactly one parameter')
 					return
-				var params = await _convert_variables(token.params)
+				var params = await _convert_variables(token.params,scope)
 				
 				if params[0].type != Lexer.TokenType.NUMBER:
 					push_error('Line '+str(total_l+1)+': Soul angle must be a number')
@@ -2216,6 +2236,66 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 						if !is_inside_tree():
 							return
 						await get_tree().process_frame
+			#"create_platform":
+				#for i in tokens.data:
+					#if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+						#var variable = getVariable(i.lexeme)
+						#i.type = types[variable.type]
+						#i.value = variable.value
+				#if tokens.data[1].type != Token.TokenType.STRING:
+					#push_error("Platform name must be a string")
+					#return
+				#if tokens.data[2].type != Token.TokenType.NUMBER:
+					#push_error("Platform X position must be a number")
+					#return
+				#if tokens.data[3].type != Token.TokenType.NUMBER:
+					#push_error("Platform Y position must be a number")
+					#return
+				#if tokens.data[4].type != Token.TokenType.NUMBER:
+					#push_error("Platform width must be a number")
+					#return
+				#if tokens.data[5].type != Token.TokenType.NUMBER:
+					#push_error("Platform X velocity must be a number")
+					#return
+				#if tokens.data[6].type != Token.TokenType.NUMBER:
+					#push_error("Platform Y velocity must be a number")
+					#return
+				#var attack = preload("res://Scenes/Objects/SansPlatform.tscn").instantiate()
+				#attack.name = tokens.data[1].value
+				#var attackx = float(tokens.data[2].value)
+				#var attacky = float(tokens.data[3].value)
+				#attack.position = Vector2(attackx,attacky)
+				#attack.width = float(tokens.data[4].value)
+				#var velx = float(tokens.data[5].value)
+				#var vely = float(tokens.data[6].value)
+				#attack.velocity = Vector2(velx,vely)
+				#node.get_node("attacks/bounding").add_child(attack)
+			"createPlatform":
+				if token.params.size() != 4:
+					push_error('Line '+str(total_l+1)+': createPlatform() requires exactly four parameters')
+					return
+				var params = await _convert_variables(token.params,scope)
+				
+				if params[0].type != Lexer.TokenType.STRING:
+					push_error('Line '+str(total_l+1)+': Platform object name must be a string')
+					return
+				if params[1].type != Lexer.TokenType.NUMBER:
+					push_error('Line '+str(total_l+1)+': Platform width must be a number')
+					return
+				if params[2].type != Lexer.TokenType.VECTOR:
+					push_error('Line '+str(total_l+1)+': Platform position must be a vector')
+					return
+				if params[3].type != Lexer.TokenType.VECTOR:
+					push_error('Line '+str(total_l+1)+': Platform velocity must be a vector')
+					return
+				
+				var platform = preload("res://Scenes/Objects/SansPlatform.tscn").instantiate()
+				platform.name = params[0].value
+				platform.width = params[1].value
+				platform.position = params[2].value
+				platform.velocity = params[3].value
+				
+				node.get_node("attacks/bounding").add_child(platform,true)
 			_:
 				validFunction = false
 	
@@ -2223,7 +2303,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 		#print("running custom function ",token.value,"()")
 		validFunction = true
 		var index = 0
-		var params = await _convert_variables(token.params)
+		var params = await _convert_variables(token.params,scope)
 		for i in params:
 			index += 1
 			variables[str(node.get_instance_id())]["PARAM"+str(index)] = Variable.new("PARAM"+str(index),VariableType.UNDEFINED,i.value)
@@ -2237,7 +2317,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 		#print("running custom global function ",token.value,"()")
 		validFunction = true
 		var index = 0
-		var params = await _convert_variables(token.params)
+		var params = await _convert_variables(token.params,scope)
 		for i in params:
 			index += 1
 			variables[str(node.get_instance_id())]["PARAM"+str(index)] = Variable.new("PARAM"+str(index),VariableType.UNDEFINED,i.value)

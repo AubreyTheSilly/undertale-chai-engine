@@ -1,0 +1,20 @@
+setSoulMode(MODE_BLUE);
+
+initvar(i,NUMBER,0)
+initvar(blasty,NUMBER,0)
+
+repeat(10) {
+    i += 1;
+    createPlatform("platform",70,vec2(getBoxPos(DIR_LEFT,-35),-12),vec2(1.5,0));
+    createPlatform("platform",70,vec2(getBoxPos(DIR_RIGHT,35),12),vec2(-1.5,0));
+
+    if mod(i,2) == 1 {
+        blasty = randi(-1,1);
+        blasty *= 20;
+        set(createBlaster("blaster",vec2(70,blasty),ANGLE_LEFT),"scale",vec2(0.5,1));
+    };
+
+    wait_frames(40);
+};
+
+wait_frames(60);
