@@ -37,8 +37,8 @@ animations = [{
 }]
 
 [node name="Blaster" type="Node2D" unique_id=463863855]
+z_index = 20
 script = ExtResource("1_n4d0g")
-attack_type = "Blue"
 metadata/_custom_type_script = "uid://dl0jc2sx3i2uf"
 
 [node name="ChargeSound" type="AudioStreamPlayer" parent="." unique_id=1369348416]

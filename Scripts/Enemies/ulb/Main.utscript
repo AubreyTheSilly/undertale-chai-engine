@@ -18,7 +18,7 @@ function _ready() {
 	initvar(frametimer,NUMBER,0);
 	initvar(halftimer,NUMBER,0);
 
-	initvar(turn,NUMBER,-1);
+	initvar(turn,NUMBER,2);
 	initvar(phase,NUMBER,1);
 	initvar(attackcount,NUMBER,9);
 

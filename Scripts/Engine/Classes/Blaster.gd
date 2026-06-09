@@ -75,7 +75,7 @@ func _process(_delta) -> void:
 			stage = "shoot!"
 			fire.play()
 			beam = preload("res://Scenes/Objects/blasterBeam.tscn").instantiate()
-			beam.position = Vector2.from_angle(deg_to_rad(-rotation_degrees))*40
+			beam.position = Vector2(0,40)
 			beam.scale.y = 0
 			beam.modulate.a = 0
 			beam.damage = damage

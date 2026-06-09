@@ -755,7 +755,7 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 			if params[0].type != Lexer.TokenType.NUMBER:
 				push_error('Line '+str(total_l+1)+': Angle must be a number')
 				return
-			var output = cos	(deg_to_rad(params[0].value))
+			var output = cos(deg_to_rad(params[0].value))
 			if token.params.size() == 2:
 				if params[1].type != Lexer.TokenType.NUMBER:
 					push_error('Line '+str(total_l+1)+': Output multiplier must be a number')
@@ -1727,6 +1727,17 @@ func executeFunction(line : Array,wait := false,ignore_invalid_function_error:=f
 				PlayerData.inventory.append(items[params[0].value])
 			else:
 				push_error('Line '+str(total_l+1)+": Item does not exist. Valid item list is: "+str(items))
+		"angle_as_vector":
+			if token.params.size() != 1:
+				push_error('Line '+str(total_l+1)+': angle_as_vector() requires exactly one parameter')
+				return
+			var params = await _convert_variables(token.params)
+			
+			if params[0].type != Lexer.TokenType.NUMBER:
+				push_error('Line '+str(total_l+1)+': Angle must be a number')
+				return
+			
+			return Vector2(cos(deg_to_rad(params[0].value-90)),sin(deg_to_rad(params[0].value-90)))
 		_:
 			validFunction = false
 

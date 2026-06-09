@@ -5,3 +5,4 @@
 [node name="BlasterTest" type="Node2D" unique_id=1743661075]
 
 [node name="Blaster" parent="." unique_id=463863855 instance=ExtResource("1_yxgqr")]
+position = Vector2(289, 147)

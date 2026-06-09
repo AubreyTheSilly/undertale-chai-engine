@@ -1,0 +1,26 @@
+initvar(plr,NODE,getNode("/root/BattleRoom/BattleHeart"));
+setSoulMode(MODE_RED);
+
+initvar(timer,NUMBER,0);
+initvar(blastpos,VECTOR2,vec2(0,0));
+initvar(blastrot,NUMBER,0);
+
+function makeBlasters() {
+    blastrot = randi(0,360);
+    blastpos = angle_as_vector(blastrot);
+    blastpos *= 45;
+    blastpos += get(plr,"position");
+    blastpos -= vec2(159.5,159.75);
+    blastrot += 180;
+    set(createBlaster("blaster{timer}",blastpos,blastrot),"scale",vec2(0.5,1));
+    blastrot -= 180;
+    //blastrot += 15;
+};
+
+repeat(8) {
+   makeBlasters();
+
+   wait_frames(15);
+};
+
+wait_frames(90);
