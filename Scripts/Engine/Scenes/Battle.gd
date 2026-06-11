@@ -405,7 +405,7 @@ func _process(_delta):
 				attackStarted = true
 				EnemyDialogStarted = false
 				var attacksLeft := 0
-				for i in enemies:
+				for i : Enemy in enemies:
 					i._preattack()
 					var attack = i.getAttack()
 					var attack_config : AttackData = i.getAttackConfig(attack)

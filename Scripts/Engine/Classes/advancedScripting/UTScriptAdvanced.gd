@@ -185,9 +185,12 @@ func initConstants() -> void:
 	# self
 	variables[str(node.get_instance_id())]["self"] = Variable.new("self",VariableType.NODE,node)
 	
-	# custom variables, these are only supposed to be used by functions. PLEASE DO NOT TRY TO SET THESE THEY WON'T WORK PROPERLY LOL
+	# custom variables, these are only supposed to be used by engine functions
+	
+	# constants are used by the engine (start with _) e.g. to get the enemy's data
 	for i in custom_constants:
 		variables[str(node.get_instance_id())]['_'+i] = Variable.new('_'+i,VariableType.UNDEFINED,custom_constants[i])
+	# variables are meant to be used in their scripts, e.g. a frame timer
 	for i in custom_variables:
 		variables[str(node.get_instance_id())][i] = Variable.new(i,VariableType.UNDEFINED,custom_variables[i])
 
@@ -2296,6 +2299,11 @@ func executeFunction(line : Array,scope : Scope,wait := false,ignore_invalid_fun
 				platform.velocity = params[3].value
 				
 				node.get_node("attacks/bounding").add_child(platform,true)
+			"endAttack":
+				if token.params.size() != 0:
+					push_error('Line '+str(total_l+1)+': endAttack() takes no parameters')
+					return
+				node.running = false
 			_:
 				validFunction = false
 	

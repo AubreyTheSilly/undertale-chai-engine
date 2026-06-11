@@ -89,15 +89,17 @@ func runAttack(attack : AttackData,enemy_data : EnemyData):
 	#if scr == "":
 		#attack_over.emit()
 	#await get_tree().process_frame
-	frame = 0
-	var scriptrunner = preload("res://Scenes/Objects/attackscriptrunner.tscn").instantiate()
-	scriptrunner.node = self
-	scriptrunner.enemydata = enemy_data
-	scriptrunner.running = true
+	frame = -1
+	running = true
+	var scriptrunner := AdvancedScriptRunner.new()
+	scriptrunner.custom_constants["enemydata"] = enemy_data
 	add_child(scriptrunner)
-	while scriptrunner.running:
-		scriptrunner.frame += 1
-		scriptrunner.run_script(attack.attack_script)
+	scriptrunner.runScript(AdvancedScriptRunner.loadScriptFromFile(attack.attack_script),self)
+	scriptrunner.runSingleFunction("_ready")
+	while running:
+		frame += 1
+		scriptrunner.custom_variables["ATTACK_TIMER"] = frame
+		scriptrunner.runSingleFunction("_update")
 		await get_tree().process_frame
 	attack_over.emit()
 	scriptrunner.queue_free()

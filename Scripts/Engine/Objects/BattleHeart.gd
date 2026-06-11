@@ -67,17 +67,17 @@ func _process(_delta) -> void:
 					#print(bluedir)
 					match abs(bluedir):
 						90.0:
-							jump = "Move Right"
-							left = "Move Up"
-							right = "Move Down"
+							jump = "Move Left"
+							left = "Move Down"
+							right = "Move Up"
 						180.0:
 							left = "Move Right"
 							right = "Move Left"
 							jump = "Move Down"
 						270.0:
-							left = "Move Down"
-							right = "Move Up"
-							jump = "Move Left"
+							left = "Move Up"
+							right = "Move Down"
+							jump = "Move Right"
 					bluevel.x = Input.get_axis(left,right)*SPEED
 					
 					up_direction = Vector2(0,-1).rotated(deg_to_rad(bluedir))

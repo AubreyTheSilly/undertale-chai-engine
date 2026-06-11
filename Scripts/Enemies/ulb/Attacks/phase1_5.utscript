@@ -1,0 +1,40 @@
+setSoulMode(MODE_BLUE);
+
+initvar(i,NUMBER,0);
+
+repeat (6) {
+    createBone("boneleft1_{i}",vec2(getBoxPos(DIR_LEFT),getBoxPos(DIR_DOWN)),10,vec2(2,0));
+    createBone("boneleft2_{i}",vec2(getBoxPos(DIR_LEFT),getBoxPos(DIR_UP)),42,vec2(2,0),"white",180);
+    createBone("boneright1_{i}",vec2(getBoxPos(DIR_RIGHT),getBoxPos(DIR_DOWN)),10,vec2(-2,0));
+    createBone("boneright2_{i}",vec2(getBoxPos(DIR_RIGHT),getBoxPos(DIR_UP)),42,vec2(-2,0),"white",180);
+
+    i += 1;
+    wait_frames(20);
+};
+i = 0;
+wait_frames(30);
+slam(ANGLE_UP);
+setvar(getNode("/root/BattleRoom/Enemy0"),"bodysprite","gravityup");
+setvar(getNode("/root/BattleRoom/Enemy0"),"facesprite","evil");
+wait_frames(15);
+slam(ANGLE_RIGHT);
+//wait(1200);
+setvar(getNode("/root/BattleRoom/Enemy0"),"bodysprite","gravityright");
+wait_frames(15);
+repeat (8) {
+    createBone("boneleft1_{i}",vec2(getBoxPos(DIR_LEFT),getBoxPos(DIR_DOWN)),120,vec2(0,-2),"white",90);
+    createBone("boneleft2_{i}",vec2(getBoxPos(DIR_RIGHT),getBoxPos(DIR_DOWN)),10,vec2(0,-2),"white",-90);
+    createBone("boneright1_{i}",vec2(getBoxPos(DIR_LEFT),getBoxPos(DIR_UP)),120,vec2(0,2),"white",90);
+    createBone("boneright2_{i}",vec2(getBoxPos(DIR_RIGHT),getBoxPos(DIR_UP)),10,vec2(0,2),"white",-90);
+
+    i += 1;
+
+    if (i == 3) {
+        setvar(getNode("/root/BattleRoom/Enemy0"),"bodysprite","gravityleft");
+        setvar(getNode("/root/BattleRoom/Enemy0"),"facesprite","default");
+    };
+
+    wait_frames(18);
+};
+
+wait_frames(45);
