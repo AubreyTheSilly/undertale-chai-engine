@@ -4,6 +4,7 @@ extends CanvasLayer
 @onready var soundplayer : AudioStreamPlayer = $DialoguePlayer
 @onready var textobject : TextObject = $Box/TextObject
 @onready var facesprite : Sprite2D = $Box/Face
+@onready var animatedfacesprite : AnimatedSprite2D = $Box/Face2
 
 var skiptext = false
 var can_skip = true
@@ -30,7 +31,9 @@ func StartDialogue(dialogue : Array,position : int = DOWN) -> void:
 		var speed = 1
 		skiptext = false
 		$Box/TextObject.text = ""
+		var index := -1
 		for j in i:
+			index += 1
 			match j:
 				"[":
 					cmd = true
@@ -42,17 +45,32 @@ func StartDialogue(dialogue : Array,position : int = DOWN) -> void:
 						"wait":
 							if skiptext:
 								continue
+							animatedfacesprite.frame = 0
 							for k in range(int(cmand[1])):
 								if !skiptext:
 									await get_tree().process_frame
 						"face":
 							face = cmand[1]
 							if face == "empty":
-								facesprite.texture = null
+								facesprite.visible = false
+								animatedfacesprite.visible = false
 								textobject.position.x = 8
 							else:
-								facesprite.texture = Loader.load_file("Sprites/Dialogue Faces/"+face+".png")
+								if FileAccess.file_exists(Undermaker.Path+"Sprites/Dialogue Faces/"+face+".png"):
+									facesprite.texture = Loader.load_file("Sprites/Dialogue Faces/"+face+".png")
+									print("Loading image face")
+									animatedfacesprite.visible = false
+									facesprite.visible = true
+								elif FileAccess.file_exists(Undermaker.Path+"Data/animations/"+face+".json"):
+									print("Loading animated face")
+									animatedfacesprite.visible = true
+									facesprite.visible = false
+									animatedfacesprite.sprite_frames = Undermaker.loadSpriteFramesFromFile(face)
+									animatedfacesprite.play(animatedfacesprite.sprite_frames.get_animation_names()[0])
 								textobject.position.x = 72
+						"facesprite":
+							if !animatedfacesprite.visible:
+								continue
 						"speed":
 							speed = int(cmand[1])
 						"font":
@@ -78,9 +96,12 @@ func StartDialogue(dialogue : Array,position : int = DOWN) -> void:
 						if j != " " and !skiptext:
 							soundplayer.play()
 						if !skiptext:
+							if index % 2 == 0:
+								animatedfacesprite.frame = (animatedfacesprite.frame+1) % 2
 							for k in range(speed):
 								await get_tree().process_frame
 								#await get_tree().process_frame
+		animatedfacesprite.frame = 0
 		while !Input.is_action_just_pressed("Select"):
 			await get_tree().process_frame
 	visible = false

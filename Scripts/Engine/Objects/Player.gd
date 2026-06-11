@@ -10,6 +10,8 @@ enum MENU_STATE {
 	DIALOGUE
 }
 
+var soul_colors = [Color(1,0,0),Color(0,0,1)]
+
 var menu_state : MENU_STATE = MENU_STATE.CHOICE
 var menu_choice1 : int = 0
 var menu_choice2 : int = 0
@@ -41,6 +43,25 @@ func get_phone_dialogue(caller : String) -> Array:
 	return dialogue
 
 func _ready() -> void:
+	# copied from BattleHeart.gd
+	var colors = Undermaker.loadJsonAsDictionary("Data/soul_colors.json")
+	if colors != {}:
+		for i in colors:
+			var color : Color = Color.WHITE
+			if not colors[i].has("id"):
+				return
+			if colors[i].has("r"):
+				color.r8 =  colors[i]["r"]
+			if colors[i].has("g"):
+				color.g8 = colors[i]["g"]
+			if colors[i].has("b"):
+				color.b8 = colors[i]["b"]
+			if soul_colors.size()-1 < int(colors[i]["id"]):
+				for j in range(int(colors[i]["id"])-soul_colors.size()+1):
+					soul_colors.append(Color.WHITE)
+			soul_colors[int(colors[i]["id"])] = color
+	
+	$Menu/heart.modulate = soul_colors[0]
 	for i in $Menu.get_children():
 		if i is CanvasItem:
 			i.modulate = Undermaker.accents["primary"]
@@ -169,16 +190,12 @@ func _process(_delta) -> void:
 				if PlayerData.inventory.size() != 0:
 					$Menu/MenuChoices/Item.text = "ITEM"
 				else:
-					var color := Undermaker.accents["empty"]
-					var colorstring = "["+str(color.r8)+":"+str(color.g8)+":"+str(color.b8)+":"+"]"
-					$Menu/MenuChoices/Item.text = colorstring+"ITEM"
+					$Menu/MenuChoices/Item.text = Undermaker.colorToFunction(Undermaker.accents["empty"])+"ITEM"
 				
 				if PlayerData.callers.size() != 0:
 					$Menu/MenuChoices/Cell.text = "CELL"
 				else:
-					var color := Undermaker.accents["empty"]
-					var colorstring = "["+str(color.r8)+":"+str(color.g8)+":"+str(color.b8)+":"+"]"
-					$Menu/MenuChoices/Cell.text = colorstring+"CELL"
+					$Menu/MenuChoices/Cell.text = Undermaker.colorToFunction(Undermaker.accents["empty"])+"CELL"
 				
 				$Menu/heart.position = Vector2(32.5,$Menu/MenuChoices.get_children()[menu_choice1].global_position.y+8.5)
 				$Menu/heart.visible = true

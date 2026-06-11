@@ -5,8 +5,6 @@
 [ext_resource type="Script" uid="uid://dexqxqsprthju" path="res://Scripts/Engine/Objects/text.gd" id="3_vsrq0"]
 [ext_resource type="FontFile" uid="uid://decmshb7688st" path="res://Fonts/DTM-Mono.otf" id="4_w3k6v"]
 [ext_resource type="FontFile" uid="uid://bwv20uaopj4hd" path="res://Fonts/undertale-crypt-of-tommorow.otf" id="5_kgsvj"]
-[ext_resource type="Texture2D" uid="uid://bfnmjyg1ca1vu" path="res://Images/Items.png" id="6_d83tg"]
-[ext_resource type="Texture2D" uid="uid://db2wfrqjdtawi" path="res://Images/CMenuDown.png" id="7_ff814"]
 [ext_resource type="AudioStream" uid="uid://bn7lvw3vdfvte" path="res://Audio/Sounds/snd_squeak.wav" id="7_w3k6v"]
 [ext_resource type="AudioStream" uid="uid://ct3x682yh2rfm" path="res://Audio/Sounds/snd_select.wav" id="8_kgsvj"]
 [ext_resource type="AudioStream" uid="uid://hmqbidb0qgpa" path="res://Audio/Sounds/snd_item.wav" id="10_ff814"]
@@ -210,9 +208,9 @@ position = Vector2(13, 16)
 script = ExtResource("3_vsrq0")
 text = "\"AAAAAA\""
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 "\"": -1.0
-})
+}
 font = ExtResource("4_w3k6v")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -221,9 +219,9 @@ position = Vector2(13, 46)
 script = ExtResource("3_vsrq0")
 text = "LV 1"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -1.0
-})
+}
 font = ExtResource("4_w3k6v")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -232,11 +230,11 @@ position = Vector2(13, 62)
 script = ExtResource("3_vsrq0")
 text = "HP 20/ 20"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -1.0,
 "/": -3.0,
 "0": 3.0
-})
+}
 font = ExtResource("4_w3k6v")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -245,9 +243,9 @@ position = Vector2(13, 94)
 script = ExtResource("3_vsrq0")
 text = "AT 0"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -1.0
-})
+}
 font = ExtResource("4_w3k6v")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -256,9 +254,9 @@ position = Vector2(41, 94)
 script = ExtResource("3_vsrq0")
 text = "(0)"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -1.0
-})
+}
 font = ExtResource("4_w3k6v")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -267,9 +265,9 @@ position = Vector2(41, 110)
 script = ExtResource("3_vsrq0")
 text = "(0)"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -1.0
-})
+}
 font = ExtResource("4_w3k6v")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -278,9 +276,9 @@ position = Vector2(13, 110)
 script = ExtResource("3_vsrq0")
 text = "DF 0"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -1.0
-})
+}
 font = ExtResource("4_w3k6v")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -289,11 +287,11 @@ position = Vector2(97, 94)
 script = ExtResource("3_vsrq0")
 text = "EXP: 0"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -1.0,
 ":": -5.0,
 "P": -2.0
-})
+}
 font = ExtResource("4_w3k6v")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -302,11 +300,11 @@ position = Vector2(97, 110)
 script = ExtResource("3_vsrq0")
 text = "NEXT:10"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -1.0,
 ":": 1.0,
 "T": -2.0
-})
+}
 font = ExtResource("4_w3k6v")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -315,12 +313,12 @@ position = Vector2(13, 140)
 script = ExtResource("3_vsrq0")
 text = "WEAPON: Stick"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -1.0,
 ":": -5.0,
 "N": -2.0,
 "W": 1.0
-})
+}
 font = ExtResource("4_w3k6v")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -329,11 +327,11 @@ position = Vector2(13, 156)
 script = ExtResource("3_vsrq0")
 text = "ARMOR"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -1.0,
 ":": -5.0,
 "M": 1.0
-})
+}
 font = ExtResource("4_w3k6v")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -342,10 +340,10 @@ position = Vector2(47, 156)
 script = ExtResource("3_vsrq0")
 text = ": Bandage"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -1.0,
 ":": -5.0
-})
+}
 font = ExtResource("4_w3k6v")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -354,11 +352,11 @@ position = Vector2(13, 176)
 script = ExtResource("3_vsrq0")
 text = "GOLD: 0"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -1.0,
 ":": -5.0,
 "D": -2.0
-})
+}
 font = ExtResource("4_w3k6v")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -379,12 +377,12 @@ position = Vector2(21, 14)
 script = ExtResource("3_vsrq0")
 text = "Stick[newline]Bandage[newline]Monster Candy[newline]Monster Candy[newline]Monster Candy[newline]Monster Candy"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "\"": -1.0,
 "M": 1.0,
 "m": 1.0
-})
+}
 font = ExtResource("4_w3k6v")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -393,10 +391,10 @@ position = Vector2(21, 154)
 script = ExtResource("3_vsrq0")
 text = "USE"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "M": 1.0
-})
+}
 font = ExtResource("4_w3k6v")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -405,10 +403,10 @@ position = Vector2(69, 154)
 script = ExtResource("3_vsrq0")
 text = "INFO"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "M": 1.0
-})
+}
 font = ExtResource("4_w3k6v")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -417,10 +415,10 @@ position = Vector2(126, 154)
 script = ExtResource("3_vsrq0")
 text = "DROP"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "M": 1.0
-})
+}
 font = ExtResource("4_w3k6v")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
 
@@ -442,29 +440,14 @@ position = Vector2(21, 14)
 script = ExtResource("3_vsrq0")
 text = "Say Hello[newline]About Yourself[newline]Call Her \"Mom\"[newline]Flirt"
 character_spacing = 7.0
-extra_font_spacing = Dictionary[String, float]({
+extra_font_spacing = {
 " ": -4.0,
 "\"": -1.0,
 "M": 1.0,
 "m": 1.0
-})
+}
 font = ExtResource("4_w3k6v")
 metadata/_custom_type_script = "uid://dexqxqsprthju"
-
-[node name="Sprite2D" type="Sprite2D" parent="Menu" unique_id=311237820]
-visible = false
-modulate = Color(1, 1, 1, 0.24700001)
-position = Vector2(-0.5, -16)
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("6_d83tg")
-centered = false
-
-[node name="Sprite2D2" type="Sprite2D" parent="Menu" unique_id=456988761]
-visible = false
-modulate = Color(1, 1, 1, 0.24700001)
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("7_ff814")
-centered = false
 
 [node name="Move" type="AudioStreamPlayer" parent="Menu" unique_id=868442897]
 stream = ExtResource("7_w3k6v")

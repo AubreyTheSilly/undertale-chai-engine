@@ -26,7 +26,13 @@ patch_margin_bottom = 4
 metadata/_edit_use_anchors_ = true
 
 [node name="Face" type="Sprite2D" parent="Box" unique_id=1626299127]
+visible = false
 position = Vector2(36.5, 35)
+
+[node name="Face2" type="AnimatedSprite2D" parent="Box" unique_id=1817754465]
+visible = false
+position = Vector2(36.5, 35)
+speed_scale = 0.0
 
 [node name="TextObject" type="Node2D" parent="Box" unique_id=1380433347]
 position = Vector2(14, 10)

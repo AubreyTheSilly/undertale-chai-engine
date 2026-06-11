@@ -1,5 +1,5 @@
 {
-	"Animation1":{
+	"default":{
 		"frames":["spr_savepoint_0","spr_savepoint_1"],
 		"fps":7.5
 	}
