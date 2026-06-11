@@ -43,7 +43,8 @@ func StartDialogue(dialogue : Array,position : int = DOWN) -> void:
 							if skiptext:
 								continue
 							for k in range(int(cmand[1])):
-								await get_tree().process_frame
+								if !skiptext:
+									await get_tree().process_frame
 						"face":
 							face = cmand[1]
 							if face == "empty":

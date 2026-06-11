@@ -26,8 +26,11 @@ func load_font_data(fontname:String) -> void:
 	
 	var newfont := FontFile.new()
 	newfont.load_dynamic_font(Undermaker.Path+"/Fonts/"+str(data["font"]))
-	font.antialiasing = 0
-	font.subpixel_positioning = 1
+	if !FileAccess.file_exists(Undermaker.Path+"/Fonts/"+str(data["font"])):
+		push_error("Font \"Fonts/"+str(data["font"])+"\" does not exist")
+		return
+	newfont.antialiasing = TextServer.FontAntialiasing.FONT_ANTIALIASING_NONE
+	newfont.subpixel_positioning = TextServer.SUBPIXEL_POSITIONING_DISABLED
 	
 	font = newfont
 	line_spacing = float(data["line_spacing"])

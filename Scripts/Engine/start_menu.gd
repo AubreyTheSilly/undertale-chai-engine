@@ -130,8 +130,8 @@ func _process(_delta):
 		$name.visible = false
 		$confirm.visible = false
 		$loadmenu.visible = false
-	$controls/start.label_settings.font_color = Color.WHITE
-	$controls/settings.label_settings.font_color = Color.WHITE
+	$controls/start.label_settings.font_color = Undermaker.accents["primary"]
+	$controls/settings.label_settings.font_color = Undermaker.accents["primary"]
 	$controls/Label3.text = Undermaker.Project["gameName"]+" BY "+Undermaker.Project["creator"]+"\nUSING UNDERTALE CHAI ENGINE (ALPHA)"
 	match section:
 		START_MENU:
@@ -139,9 +139,9 @@ func _process(_delta):
 			$controls.visible = true
 			match start_choice:
 				0:
-					$controls/start.label_settings.font_color = Color.YELLOW
+					$controls/start.label_settings.font_color = Undermaker.accents["selected"]
 				1:
-					$controls/settings.label_settings.font_color = Color.YELLOW
+					$controls/settings.label_settings.font_color = Undermaker.accents["selected"]
 			if Input.is_action_just_pressed("Move Up"):
 				start_choice = 0
 			if Input.is_action_just_pressed("Move Down"):
@@ -313,8 +313,8 @@ func _process(_delta):
 				menuchoice = 0
 			
 			for i in loadmenu_choices:
-				i.modulate = Color.WHITE
-			loadmenu_choices[menuchoice].modulate = Color.YELLOW
+				i.modulate = Undermaker.accents["primary"]
+			loadmenu_choices[menuchoice].modulate = Undermaker.accents["selected"]
 			
 			if Input.is_action_just_pressed("Select"):
 				match menuchoice:
@@ -336,8 +336,8 @@ func _process(_delta):
 		SETTINGS:
 			$settings.visible = true
 			for i in settings:
-				i.modulate = Color.WHITE
-			settings[setting].modulate = Color.YELLOW
+				i.modulate = Undermaker.accents["primary"]
+			settings[setting].modulate = Undermaker.accents["selected"]
 			if Input.is_action_just_pressed("Move Down"):
 				if setting == settings.size()-1:
 					setting = 0

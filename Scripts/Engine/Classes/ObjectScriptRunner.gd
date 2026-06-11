@@ -13,11 +13,11 @@ func _ready():
 
 func _process(_delta):
 	if script_to_run:
-		run_script(script_to_run,"process")
+		run_script(script_to_run,"_process")
 
 func _physics_process(_delta):
 	if script_to_run:
-		run_script(script_to_run,"physics_process")
+		run_script(script_to_run,"_physics_process")
 
 func _on_signal(signal_name):
 	if script_to_run:

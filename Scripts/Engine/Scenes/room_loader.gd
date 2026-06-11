@@ -60,7 +60,7 @@ func LoadRoom() -> void:
 		add_child(layerobj)
 		
 		layerobj.name = "Layer"+str(layernum)
-		layerobj.z_index = layer.depth
+		layerobj.z_index = layernum
 		
 		if layer is RoomTileLayer:
 			var tex = layer.tilemap

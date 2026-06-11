@@ -75,7 +75,7 @@ var custom_variables := {}
 
 signal script_ended
 
-func runSingleFunction(function : String,args := []) -> void:
+func runSingleFunction(function : String,args := []) -> Variant:
 	initConstants()
 	var oldt = t
 	var functoken := Lexer.FunctionToken.new(Lexer.TokenType.IDENTIFIER,function)
@@ -112,8 +112,9 @@ func runSingleFunction(function : String,args := []) -> void:
 		
 		functoken.params.append(token)
 	t = 0
-	await executeFunction([functoken],Scope.new(),false,true)
+	var val = await executeFunction([functoken],Scope.new(),false,true)
 	t = oldt
+	return val
 
 func initConstants() -> void:
 	if !variables.has(str(node.get_instance_id())):

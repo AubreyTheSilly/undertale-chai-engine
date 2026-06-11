@@ -1,5 +1,18 @@
-function process
-  var num floaty
-  send_sin floaty 0.2 2
-  set_property "Sprite" "position:y" floaty
-end
+// function process
+//   var num floaty
+//   send_sin floaty 0.2 2
+//   set_property "Sprite" "position:y" floaty
+// end
+
+function _ready() {
+  initvar(floaty,NUMBER,0);
+  initvar(temptimer,NUMBER,0);
+};
+
+function _update() {
+  temptimer = FRAME_TIMER;
+  temptimer *= 5;
+  floaty = sin(temptimer,2);
+  floaty -= 10;
+  set(getNode("Sprite"),"position",vec2(0,floaty));
+};

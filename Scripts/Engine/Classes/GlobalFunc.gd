@@ -35,7 +35,8 @@ var grey_empty := true
 
 func colorToFunction(col : Color) -> String:
 	var color := col
-	var colorstring = "["+str(color.r8)+":"+str(color.g8)+":"+str(color.b8)+":"+"]"
+	var colorstring = "[color:"+str(color.r8)+":"+str(color.g8)+":"+str(color.b8)+"]"
+	#print(colorstring)
 	return colorstring
 
 func get_mods_list(directory : String) -> Array[Dictionary]:
@@ -196,11 +197,10 @@ func loadCustomObject(objname : String):
 		for j in objectdata:
 			if j != "extends" and j != "editor_image":
 				object.set(j,objectdata[j])
-	var script = UTScript.loadScriptFromFile("Objects/"+objname+".utscript")
+	var script := AdvancedScriptRunner.loadScriptFromFile("Objects/"+objname)
 	if script:
-		var runner = preload("res://Scenes/Objects/object_script_runner.tscn").instantiate()
-		runner.script_to_run = "Objects/"+objname+".utscript"
-		runner.node = object
+		var runner := AdvancedObjectScriptRunner.new()
+		runner.objname = objname
 		object.add_child(runner)
 	return object
 
