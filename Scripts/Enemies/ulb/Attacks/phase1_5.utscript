@@ -17,15 +17,15 @@ slam(ANGLE_UP);
 setvar(getNode("/root/BattleRoom/Enemy0"),"bodysprite","gravityup");
 setvar(getNode("/root/BattleRoom/Enemy0"),"facesprite","evil");
 wait_frames(15);
-slam(ANGLE_RIGHT);
+slam(ANGLE_DOWN);
 //wait(1200);
-setvar(getNode("/root/BattleRoom/Enemy0"),"bodysprite","gravityright");
-wait_frames(15);
+setvar(getNode("/root/BattleRoom/Enemy0"),"bodysprite","gravitydown");
+//wait_frames(15);
 repeat (8) {
-    createBone("boneleft1_{i}",vec2(getBoxPos(DIR_LEFT),getBoxPos(DIR_DOWN)),120,vec2(0,-2),"white",90);
-    createBone("boneleft2_{i}",vec2(getBoxPos(DIR_RIGHT),getBoxPos(DIR_DOWN)),10,vec2(0,-2),"white",-90);
-    createBone("boneright1_{i}",vec2(getBoxPos(DIR_LEFT),getBoxPos(DIR_UP)),120,vec2(0,2),"white",90);
-    createBone("boneright2_{i}",vec2(getBoxPos(DIR_RIGHT),getBoxPos(DIR_UP)),10,vec2(0,2),"white",-90);
+    createBone("boneleft1_{i}",vec2(getBoxPos(DIR_LEFT),getBoxPos(DIR_DOWN)),10,vec2(3,0));
+    createBone("boneleft2_{i}",vec2(getBoxPos(DIR_LEFT),getBoxPos(DIR_UP)),42,vec2(3,0),"white",180);
+    createBone("boneright1_{i}",vec2(getBoxPos(DIR_RIGHT),getBoxPos(DIR_DOWN)),10,vec2(-3,0));
+    createBone("boneright2_{i}",vec2(getBoxPos(DIR_RIGHT),getBoxPos(DIR_UP)),42,vec2(-3,0),"white",180);
 
     i += 1;
 

@@ -61,10 +61,12 @@ func _ready() -> void:
 					soul_colors.append(Color.WHITE)
 			soul_colors[int(colors[i]["id"])] = color
 	
-	$Menu/heart.modulate = soul_colors[0]
 	for i in $Menu.get_children():
 		if i is CanvasItem:
 			i.modulate = Undermaker.accents["primary"]
+	
+	$Menu/heart.modulate = soul_colors[0]
+	
 	$Menu.visible = false
 	PlayerData.obj = self
 	reload_sprite()

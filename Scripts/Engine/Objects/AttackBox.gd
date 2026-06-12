@@ -20,10 +20,12 @@ func _process(_delta):
 	if !Engine.is_editor_hint():
 		$Node2D/AttackRect.modulate = Undermaker.accents["primary"]
 	
-	$Node2D.position = lerp($Node2D.position,rect.position,0.4)
+	#$Node2D.position = lerp($Node2D.position,rect.position,0.4)
+	$Node2D.position = Vector2(move_toward($Node2D.position.x,rect.position.x,7.5),move_toward($Node2D.position.y,rect.position.y,7.5))
 	
 	frame += 1
-	$Node2D/AttackRect.size = lerp($Node2D/AttackRect.size,rect.size,0.4)
+	#$Node2D/AttackRect.size = lerp($Node2D/AttackRect.size,rect.size,0.4)
+	$Node2D/AttackRect.size = Vector2(move_toward($Node2D/AttackRect.size.x,rect.size.x,15),move_toward($Node2D/AttackRect.size.y,rect.size.y,15))
 	var offset = -$Node2D/AttackRect.size/2.0
 	var targetPos = Vector2(144.0,35.25)
 	$Node2D/AttackRect.position = targetPos+offset
