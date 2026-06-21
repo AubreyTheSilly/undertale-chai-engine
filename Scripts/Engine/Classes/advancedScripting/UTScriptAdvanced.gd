@@ -1359,7 +1359,7 @@ func executeFunction(line : Array,scope : Scope,wait := false,ignore_invalid_fun
 			
 			var sprite = params[0].value
 			if sprite is not AnimatedSprite:
-				push_error('Line '+str(total_l+1)+': Node is not an AnimationFrame')
+				push_error('Line '+str(total_l+1)+': Node is not an AnimatedSprite')
 				return
 			
 			sprite.stop()
