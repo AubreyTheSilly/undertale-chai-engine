@@ -207,14 +207,14 @@ func _damage(damage : float,forcedisablescript:=false):
 			await scr.runScript(DamageScript,self)
 			damage_done.emit()
 			return
-		elif EnemyScript:
+		elif EnemyScript and scr.custom_functions[str(get_instance_id())].has("_damage"):
 			#playSlashAnimation()
 			await scr.runSingleFunction("_damage")
 			damage_done.emit()
 			return
 	if damage >= 0:
 		# enemy hurt :(
-		#playSlashAnimation()
+		playSlashAnimation()
 		await get_tree().create_timer(1.0).timeout
 		$AudioStreamPlayer.stream = preload("res://Audio/Sounds/snd_damage_c.wav")
 		$AudioStreamPlayer.play()

@@ -79,6 +79,13 @@ func savefile_to_dictionary() -> Dictionary:
 func save_game() -> void:
 	Undermaker.createJsonFromDictionary_absolute("user://save_"+Undermaker.Project["projectName"]+".json",savefile_to_dictionary())
 
+func load_custom_stats() -> void:
+	var prestats := Undermaker.loadJsonAsDictionary("Data/stats.json")
+	if prestats:
+		for i in prestats:
+			if get_indexed(i):
+				set_indexed(i,prestats[i])
+
 func loadFile(newgame : bool = false):
 	if newgame:
 		HP = 20
@@ -105,6 +112,7 @@ func loadFile(newgame : bool = false):
 		callers = []
 		time = 0
 		save_name = ""
+		load_custom_stats()
 	else:
 		var save = get_save_file()
 		Name = save["name"]

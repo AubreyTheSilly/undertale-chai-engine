@@ -30,6 +30,17 @@ func load_shader(shaderName : String,parameters : Dictionary = {}) -> void:
 	
 	shaderObj.get_node("ColorRect").material = material
 
+func set_shader_property(shaderName : String,value : Variant) -> void:
+	if shaderName == "ShaderTemplate":
+		push_error("No")
+		return
+	if get_node_or_null(shaderName):
+		var rect : Node2D = get_node(shaderName).get_node("ColorRect")
+		rect.material.set_shader_parameter(shaderName,value)
+	else:
+		push_error(shaderName+" has not been loaded yet.")
+		return
+
 func remove_shader(shaderName : String) -> void:
 	if shaderName == "ShaderTemplate":
 		push_error("YOU CANNOT DELETE THE SHADER TEMPLATE. WHAT THE FUCK ARE YOU DOING.")

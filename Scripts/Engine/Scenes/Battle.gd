@@ -274,19 +274,20 @@ func _process(_delta):
 			$ChoiceBox.visible = true
 			$ChoiceBox/HeartChoice.position = $ChoiceBox.get_node("Choice"+str(playermercychoice)).position+Vector2(-13.5,9)
 			$ChoiceBox/Choice0.text = "* Spare"
+			$ChoiceBox/Choice0.visible = true
 			if canspare:
 				$ChoiceBox/Choice0.modulate = Color(255,255,0)
 			$ChoiceBox/Choice2.text = "* Flee"
-			$ChoiceBox/Choice2.visible = true
+			$ChoiceBox/Choice2.visible = Battle.loadedBattle["can_flee"]
 			$ChoiceBox/Choice1.visible = false
 			$ChoiceBox/Choice3.visible = false
 			$ChoiceBox/Choice4.visible = false
 			$ChoiceBox/Choice5.visible = false
-			if Input.is_action_just_pressed("Move Up") and playermercychoice == 2:
+			if Input.is_action_just_pressed("Move Up") and playermercychoice == 2 and Battle.loadedBattle["can_flee"]:
 				MenuSound.stream = preload("res://Audio/Sounds/snd_squeak.wav")
 				MenuSound.play()
 				playermercychoice = 0
-			if Input.is_action_just_pressed("Move Down") and playermercychoice == 0:
+			if Input.is_action_just_pressed("Move Down") and playermercychoice == 0 and Battle.loadedBattle["can_flee"]:
 				MenuSound.stream = preload("res://Audio/Sounds/snd_squeak.wav")
 				MenuSound.play()
 				playermercychoice = 2
@@ -436,15 +437,15 @@ func _process(_delta):
 					return
 				$AttackBox.rect = Rect2(Vector2.ZERO,Vector2(288,70.5))
 				if $AttackBox/Node2D/AttackRect.size != Vector2(288,70.5):
-					if !get_tree():
+					if !is_inside_tree():
 						return
-					await get_tree().create_timer(0.25).timeout
+					while is_inside_tree() and $AttackBox/Node2D/AttackRect.size != Vector2(288,70.5):
+						await get_tree().process_frame
 				var can_playerturn = false
 				for i in enemies:
 					if i.state == 1:
 						can_playerturn = true
 				if can_playerturn and state == ENEMY_ATTACK_END:
-					print("player turn")
 					_PlayerTurn()
 		BATTLE_END:
 			if !battleOver:

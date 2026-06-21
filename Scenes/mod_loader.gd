@@ -79,6 +79,7 @@ func _process(_delta) -> void:
 		if flags.has("--creator"):
 			get_tree().change_scene_to_packed(preload("res://Scenes/editor.tscn"))
 		elif flags.has("--battle"):
+			PlayerData.load_custom_stats()
 			get_tree().change_scene_to_packed(preload("res://Scenes/NewBattleLoader.tscn"))
 		else:
 			get_tree().change_scene_to_packed(preload("res://Scenes/intro.tscn"))

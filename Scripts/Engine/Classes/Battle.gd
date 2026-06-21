@@ -40,10 +40,19 @@ func Encounter(id : String,transition : bool = true):
 	else:
 		loadedBattle["serious"] = false
 	if encounter.size() >= 9:
-		if encounter[7] == "yes":
+		if encounter[8] == "yes":
 			loadedBattle["karma"] = true
 		else:
 			loadedBattle["karma"] = false
+	else:
+		loadedBattle["karma"] = false
+	if encounter.size() >= 10:
+		if encounter[9] == "yes":
+			loadedBattle["can_flee"] = true
+		else:
+			loadedBattle["can_flee"] = false
+	else:
+		loadedBattle["can_flee"] = false
 	await get_tree().process_frame
 	if transition:
 		get_tree().get_root().add_child(preload("res://Scenes/Objects/BattleStarter.tscn").instantiate())

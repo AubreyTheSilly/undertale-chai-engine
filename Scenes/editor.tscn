@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://c2ebhge3ajuhj" path="res://Scenes/Objects/object_display.tscn" id="8_eo2o7"]
 [ext_resource type="Texture2D" uid="uid://b7pomd4af6px0" path="res://Sprites/cambounds.png" id="9_1k58v"]
 [ext_resource type="Texture2D" uid="uid://dfbqolhxt1nts" path="res://Sprites/Backgrounds/room_start.png" id="9_l4kvy"]
+[ext_resource type="Texture2D" uid="uid://caogtecxffsqr" path="res://Sprites/Tilemaps/ruins.png" id="12_0l4bc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7wlcy"]
 bg_color = Color(1, 1, 1, 0)
@@ -836,6 +837,22 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_7wlcy")
 placeholder_text = "Filename"
 metadata/_edit_use_anchors_ = true
 
+[node name="TileDisplay" type="Control" parent="CanvasLayer/RoomEditor/PanelContainer/TileMode" unique_id=244768930]
+clip_contents = true
+anchors_preset = 0
+offset_top = 111.0
+offset_right = 103.0
+offset_bottom = 159.0
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/RoomEditor/PanelContainer/TileMode/TileDisplay" unique_id=1889367215]
+texture = ExtResource("12_0l4bc")
+centered = false
+offset = Vector2(39, 1)
+
+[node name="Tileicon1" type="Sprite2D" parent="CanvasLayer/RoomEditor/PanelContainer/TileMode/TileDisplay" unique_id=607219197]
+position = Vector2(49, 11)
+texture = ExtResource("6_yl2l4")
+
 [node name="ObjMode" type="Control" parent="CanvasLayer/RoomEditor/PanelContainer" unique_id=1898401371]
 layout_mode = 2
 mouse_filter = 1
@@ -1320,7 +1337,6 @@ texture = ExtResource("9_1k58v")
 centered = false
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1116815674]
-enabled = false
 
 [node name="FakeTile" type="Sprite2D" parent="." unique_id=902088625]
 visible = false
@@ -1355,6 +1371,7 @@ autowrap_mode = 3
 [connection signal="pressed" from="CharacterEditor/AddSprite" to="CharacterEditor" method="_on_add_sprite_pressed"]
 [connection signal="pressed" from="CharacterEditor/SaveChar" to="CharacterEditor" method="_on_save_pressed"]
 [connection signal="pressed" from="CharacterEditor/LoadChar" to="CharacterEditor" method="_on_load_pressed"]
+[connection signal="item_selected" from="CanvasLayer/RoomEditor/OptionButton" to="CanvasLayer/RoomEditor" method="_on_option_button_item_selected"]
 [connection signal="pressed" from="CanvasLayer/RoomEditor/PanelContainer/ObjMode/Prev" to="CanvasLayer/RoomEditor" method="_on_prev_objdata_pressed"]
 [connection signal="pressed" from="CanvasLayer/RoomEditor/PanelContainer/ObjMode/Next" to="CanvasLayer/RoomEditor" method="_on_next_objdata_pressed"]
 [connection signal="pressed" from="CanvasLayer/RoomEditor/PanelContainer/ObjMode/Add" to="CanvasLayer/RoomEditor" method="_on_add_objdata_pressed"]

@@ -34,6 +34,9 @@ class Scope:
 	var should_break := false
 	var type : SCOPE_TYPE = SCOPE_TYPE.SCRIPT
 
+	func _init(sctype : SCOPE_TYPE = SCOPE_TYPE.SCRIPT) -> void:
+		type = sctype
+
 class Variable:
 	var name : String
 	var type : VariableType
@@ -74,6 +77,15 @@ var custom_constants := {}
 var custom_variables := {}
 
 signal script_ended
+
+func tokenarray_to_array(tokenarray : Array) -> Array:
+	var array = []
+	for i in tokenarray:
+		if i is Lexer.AdvancedToken:
+			array.append(i.value)
+		else:
+			array.append(i)
+	return array
 
 func runSingleFunction(function : String,args := []) -> Variant:
 	initConstants()
@@ -526,13 +538,15 @@ func _convert_variables(parameters : Array,scope : Scope,exceptions : Array = []
 				else:
 					targettext += i
 			param[index].value = targettext
+		#print(param[index].type)
 		if param[index].type == Lexer.TokenType.ARRAY:
-			#print(param[index].value)
+			print(param[index].value)
 			var has_tokens := false
 			for i in param[index].value:
 				if i is Lexer.AdvancedToken:
 					has_tokens = true
 			if has_tokens:
+				#print("converting array")
 				param[index].value = await _convert_variables(param[index].value,scope)
 		index += 1
 	return param
@@ -609,7 +623,7 @@ func executeFunction(line : Array,scope : Scope,wait := false,ignore_invalid_fun
 					return
 				down = int(token.params[1].value)
 			
-			DialogueHandler.StartDialogue(token.params[0].value,down)
+			DialogueHandler.StartDialogue(tokenarray_to_array(token.params[0].value),down)
 			if wait:
 				await DialogueHandler.dialogue_finished
 		"set":
@@ -1160,7 +1174,7 @@ func executeFunction(line : Array,scope : Scope,wait := false,ignore_invalid_fun
 			return Vector2(params[0].value,params[1].value)
 		"color":
 			if token.params.size() != 3 and token.params.size() != 4:
-				push_error('Line '+str(total_l+1)+': vec2() requires between three and four parameters')
+				push_error('Line '+str(total_l+1)+': color() requires between three and four parameters')
 				return
 			var params = await _convert_variables(token.params,scope)
 			
@@ -1180,7 +1194,7 @@ func executeFunction(line : Array,scope : Scope,wait := false,ignore_invalid_fun
 					return
 				a = params[3].value
 			
-			return Color.from_rgba8(params[0].value,params[1].value,a)
+			return Color.from_rgba8(params[0].value,params[1].value,params[2].value,a)
 		# temporarily removed functions. these were originally for like. vectors? but vectors don't have get and set_indexed. sooo
 		#"getVariableProperty":
 			#if token.params.size() != 2:
@@ -1758,6 +1772,81 @@ func executeFunction(line : Array,scope : Scope,wait := false,ignore_invalid_fun
 				return
 			
 			return Vector2(cos(deg_to_rad(params[0].value-90)),sin(deg_to_rad(params[0].value-90)))
+		"loadShader":
+			#if runscript.data[line].data.size() % 2 != 0 or runscript.data[line].data.size() == 0:
+				#push_error("line "+str(line+1)+": Invalid number of arguments")
+				#continue
+			#for i in runscript.data[line].data:
+				#if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+					#var variable = getVariable(i.lexeme)
+					#i.type = types[variable.type]
+					#i.value = variable.value
+					#reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
+			#if runscript.data[line].data[1].type != Token.TokenType.STRING:
+				#push_error("line "+str(line+1)+": Shader name must be a string")
+				#continue
+			#
+			#ShaderLayer.load_shader(runscript.data[line].data[1].value)
+			if token.params.size() != 1:
+				push_error('Line '+str(total_l+1)+': loadShader() requires exactly one parameter')
+				return
+			var params = await _convert_variables(token.params,scope)
+			
+			if params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Shader name must be a string')
+				return
+			
+			ShaderLayer.load_shader(params[0].value)
+		"removeShader":
+			#if runscript.data[line].data.size() % 2 != 0 or runscript.data[line].data.size() == 0:
+				#push_error("line "+str(line+1)+": Invalid number of arguments")
+				#continue
+			#for i in runscript.data[line].data:
+				#if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+					#var variable = getVariable(i.lexeme)
+					#i.type = types[variable.type]
+					#i.value = variable.value
+					#reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
+			#if runscript.data[line].data[1].type != Token.TokenType.STRING:
+				#push_error("line "+str(line+1)+": Shader name must be a string")
+				#continue
+			#
+			#ShaderLayer.load_shader(runscript.data[line].data[1].value)
+			if token.params.size() != 1:
+				push_error('Line '+str(total_l+1)+': loadShader() requires exactly one parameter')
+				return
+			var params = await _convert_variables(token.params,scope)
+			
+			if params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Shader name must be a string')
+				return
+			
+			ShaderLayer.remove_shader(params[0].value)
+		"setShaderProperty":
+			#if runscript.data[line].data.size() % 2 != 0 or runscript.data[line].data.size() == 0:
+				#push_error("line "+str(line+1)+": Invalid number of arguments")
+				#continue
+			#for i in runscript.data[line].data:
+				#if i.type == Token.TokenType.IDENTIFIER and getVariable(i.lexeme):
+					#var variable = getVariable(i.lexeme)
+					#i.type = types[variable.type]
+					#i.value = variable.value
+					#reset = true # (this caused lag so i moved it to only be in end) (WE MIGHT BE BRINGING THIS BACK IDFK
+			#if runscript.data[line].data[1].type != Token.TokenType.STRING:
+				#push_error("line "+str(line+1)+": Shader name must be a string")
+				#continue
+			#
+			#ShaderLayer.load_shader(runscript.data[line].data[1].value)
+			if token.params.size() != 2:
+				push_error('Line '+str(total_l+1)+': setShaderProperty() requires exactly two parameters')
+				return
+			var params = await _convert_variables(token.params,scope)
+			
+			if params[0].type != Lexer.TokenType.STRING:
+				push_error('Line '+str(total_l+1)+': Shader name must be a string')
+				return
+			
+			ShaderLayer.set_shader_property(params[0].value,params[1].value)
 		_:
 			validFunction = false
 
@@ -1830,6 +1919,35 @@ func executeFunction(line : Array,scope : Scope,wait := false,ignore_invalid_fun
 					await node._damage(damag,true)
 				else:
 					node._damage(damag,true)
+			"battleDialogue":
+				#var dialogarray = []
+				#var first = true
+				#if line.data.size() == 0:
+					#push_error("You must have at least one dialogue string")
+					#return
+				#for i in line.data:
+					#if first:
+						#first = false
+						#continue
+					#if i.type != Token.TokenType.STRING:
+						#push_error("Dialogue must be a string")
+					#else:
+						#dialogarray.append(i.value)
+				#await get_parent().flavorbox.StartBattleDialogue(dialogarray)
+				
+				if token.params.size() != 1:
+					push_error('Line '+str(total_l+1)+': battleDialogue() requires exactly one parameter')
+					return
+				var params = await _convert_variables(token.params,scope)
+				
+				if params[0].type != Lexer.TokenType.ARRAY:
+					push_error('Line '+str(total_l+1)+': Dialogue must be an array')
+					return
+				
+				if wait:
+					await node.flavorbox.StartBattleDialogue(tokenarray_to_array(token.params[0].value))
+				else:
+					node.flavorbox.StartBattleDialogue(tokenarray_to_array(token.params[0].value))
 			_:
 				validFunction = false
 		

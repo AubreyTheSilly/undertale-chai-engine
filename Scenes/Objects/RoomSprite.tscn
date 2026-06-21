@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bgauysd77rxyp"]
+
+[ext_resource type="Script" uid="uid://tq0u463dgaes" path="res://Scripts/Engine/Classes/StringSprite.gd" id="1_2kuve"]
+
+[node name="RoomSprite" type="Sprite2D" unique_id=159933191]
+script = ExtResource("1_2kuve")
+metadata/_custom_type_script = "uid://tq0u463dgaes"

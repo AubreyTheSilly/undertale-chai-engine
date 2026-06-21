@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cwgnjfq77w5rq"]
 
-[ext_resource type="Script" uid="uid://dpo3ailqwy5wo" path="res://scripts/Engine/test_2.gd" id="1_86vov"]
+[ext_resource type="Script" uid="uid://dpo3ailqwy5wo" path="res://Scripts/Engine/test_2.gd" id="1_86vov"]
 [ext_resource type="Script" uid="uid://dexqxqsprthju" path="res://Scripts/Engine/Objects/text.gd" id="1_qk15c"]
 
 [node name="Node2D" type="Node2D" unique_id=1639438760]
@@ -9,4 +9,5 @@ script = ExtResource("1_86vov")
 [node name="TextObject" type="Node2D" parent="." unique_id=1134162228]
 script = ExtResource("1_qk15c")
 text = "abcdefghijklmnopqrstuvwxyz[newline]ABCDEFGHIJKLMNOPQRSTUVWXYZ[newline]1234567890[newline]!@#$%^&*()"
+size = 20
 metadata/_custom_type_script = "uid://dexqxqsprthju"

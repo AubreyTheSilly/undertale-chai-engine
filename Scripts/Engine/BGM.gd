@@ -28,9 +28,8 @@ func _process(_delta) -> void:
 func playBGM(bgm : String) -> void:
 	var audio = Loader.load_file("Audio/BGM/"+bgm+".ogg")
 	volume_db = 0
-	currentbgm = bgm
 	if audio:
-		if !(audio == stream and playing):
+		if !(currentbgm == bgm and playing):
 			stream = audio
 			stream.loop = true
 			play()
@@ -38,3 +37,4 @@ func playBGM(bgm : String) -> void:
 			stream_paused = false
 	else:
 		stop()
+	currentbgm = bgm

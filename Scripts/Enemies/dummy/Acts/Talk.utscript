@@ -1,3 +1,3 @@
-set_property "self" "spare" true
-dialog "* you can spare the enemy[newline]  now!"
-set_property "self" "nextdialogue" "hey that's cool[newline]you can spare me[newline]now"
+set(self,"spare",true); // Enable sparing.
+set(self,"nextdialogue","hey that's cool[newline]you can spare me[newline]now :)"); // Set dialogue for after act finishes.
+await battleDialogue(["* you can spare the enemy[newline]  now!"]); // Display battle text.

@@ -143,6 +143,7 @@ func get_optionbutton_items(optionbutton : OptionButton) -> Array[String]:
 	return output
 
 func _process(_delta):
+	$PanelContainer/TileMode/TileDisplay/Sprite2D.position = -Vector2(int($PanelContainer/TileMode/TileX.text),int($PanelContainer/TileMode/TileY.text))*20
 	$"/root/editor/RoomDisplay".room["bgm"] = $PanelContainer/Settings/BGM.text
 	$PanelContainer/ObjMode/Label5.text = str(curobjdata+1)+"/"+str(objdata.size())
 	objdata[curobjdata][0] = $PanelContainer/ObjMode/Property.text
@@ -206,7 +207,9 @@ func _process(_delta):
 			
 			$"/root/editor/FakeTile".position = (get_tree().current_scene.get_global_mouse_position()-Vector2(10,10)).snapped(Vector2(20,20))
 			if prevtilemap != "Sprites/Tilemaps/"+$PanelContainer/TileMode/Tilemap.text+".png":
-				$"/root/editor/FakeTile".texture = Loader.load_file("Sprites/Tilemaps/"+$PanelContainer/TileMode/Tilemap.text+".png")
+				var tilemap = Loader.load_file("Sprites/Tilemaps/"+$PanelContainer/TileMode/Tilemap.text+".png")
+				$PanelContainer/TileMode/TileDisplay/Sprite2D.texture = tilemap
+				$"/root/editor/FakeTile".texture = tilemap
 				prevtilemap = "Sprites/Tilemaps/"+$PanelContainer/TileMode/Tilemap.text+".png"
 			$"/root/editor/FakeTile".region_rect.position.x = int($PanelContainer/TileMode/TileX.text)*20
 			$"/root/editor/FakeTile".region_rect.position.y = int($PanelContainer/TileMode/TileY.text)*20
@@ -294,6 +297,12 @@ func _on_load_pressed():
 			$PanelContainer/Settings/BGM.text = ""
 		print("loaded room "+$LineEdit.text)
 		redraw_room()
+		await get_tree().process_frame
+		var tile = ($"/root/editor/RoomDisplay".room[$OptionButton.get_item_text(0)]["type"] == "tile")
+		
+		if tile:
+			var layer = $"/root/editor/RoomDisplay".room[$OptionButton.get_item_text(0)]
+			$PanelContainer/TileMode/Tilemap.text = layer["tilemap"]
 	else:
 		print("That room doesn't exist, dumbass ("+"Data/rooms/"+$LineEdit.text+".json"+")")
 
@@ -383,3 +392,11 @@ func _on_remove_objdata_pressed():
 	objdata.remove_at(oldobjdata)
 	$PanelContainer/ObjMode/Property.text = objdata[curobjdata][0]
 	$PanelContainer/ObjMode/PropertyValue.text = objdata[curobjdata][1]
+
+func _on_option_button_item_selected(index):
+	#await get_tree().process_frame
+	var tile = ($"/root/editor/RoomDisplay".room[$OptionButton.get_item_text(index)]["type"] == "tile")
+	
+	if tile:
+		var layer = $"/root/editor/RoomDisplay".room[$OptionButton.get_item_text(index)]
+		$PanelContainer/TileMode/Tilemap.text = layer["tilemap"]

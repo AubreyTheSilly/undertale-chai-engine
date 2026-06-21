@@ -12,6 +12,11 @@ signal finisheddialogue
 
 func _ready():
 	$AudioStreamPlayer2.stream = Loader.load_file("Audio/BGM/mus_story.ogg")
+	var globalscript := AdvancedScriptRunner.loadScriptFromFile("global")
+	if globalscript:
+		GlobalScriptRunner.runScript(globalscript,get_tree().get_root())
+	else:
+		print("No global script detected")
 	if FileAccess.file_exists(Undermaker.Path+"Data/intro.txt"):
 		image.texture = Loader.load_file("Sprites/Intro/spr_introimage_"+str(imageindex)+".png")
 		var introtext = FileAccess.open(Undermaker.Path+"Data/intro.txt",FileAccess.READ)

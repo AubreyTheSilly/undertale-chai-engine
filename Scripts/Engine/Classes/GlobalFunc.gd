@@ -128,7 +128,7 @@ func get_list_of_files_in_folder_absolute(folder : String) -> Array[String]:
 	
 	return files
 
-func get_object_image(objtype : String):
+func get_object_image(objtype : String,obj:RoomInstance):
 	if objtype == "Character" or objtype == "NPC":
 		return preload("res://Sprites/npc1.png")
 	elif objtype == "Player":
@@ -149,6 +149,12 @@ func get_object_image(objtype : String):
 			return preload("res://Sprites/wall1.png")
 	elif objtype == "SavePoint":
 		return preload("res://Sprites/spr_savepoint_0.png")
+	elif objtype == "RoomSprite":
+		if obj.data.has("path") and FileAccess.file_exists(Undermaker.Path+"Sprites/"+obj.data["path"]+".png"):
+			var sprite = Loader.load_file("Sprites/"+obj.data["path"]+".png")
+			if sprite:
+				return sprite
+		return preload("res://Sprites/editor-image.png")
 	elif objtype != "" and FileAccess.file_exists(Path+"Data/Objects/"+objtype+".txt"):
 		if Undermaker.loadTextAsObjectData(objtype):
 			return Undermaker.loadTextAsObjectData(objtype)["editor_image"]
