@@ -5,6 +5,14 @@ extends Resource
 @export var Layers : Array[RoomLayer] = []
 @export var CameraBounds : Rect2
 
+static func sort_layers(layers : Array[RoomLayer]) -> Array[RoomLayer]:
+	var sorted_layers = layers
+	sorted_layers.sort_custom(func(a, b):
+		return layers[a].depth < layers[b].depth
+	)
+	
+	return sorted_layers
+
 static func loadRoomFromDictionary(dict : Dictionary) -> Room:
 	var room = Room.new()
 	var json = dict
@@ -42,6 +50,8 @@ static func loadRoomFromDictionary(dict : Dictionary) -> Room:
 					var data = objarray["data"][k]
 					obj.data[k] = data
 				layer.Objects.append(obj)
+		if layerjson.has("z_index"):
+			layer.depth = layerjson["z_index"]
 		room.Layers.append(layer)
 	
 	return room

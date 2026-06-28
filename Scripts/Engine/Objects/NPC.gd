@@ -6,6 +6,7 @@ var extra_dialogs := []
 var interactions := -1
 
 signal interacted
+signal finished_interacting
 
 func _on_interact():
 	interacted.emit()
@@ -19,5 +20,6 @@ func _on_interact():
 		print(extra_dialogs[clamp(interactions,1,extra_dialogs.size())-1])
 		DialogueHandler.StartDialogue(extra_dialogs[clamp(interactions,1,extra_dialogs.size())-1])
 	await DialogueHandler.dialogue_finished
+	finished_interacting.emit()
 	await get_tree().process_frame
 	PlayerData.player_can_move = true
